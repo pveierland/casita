@@ -1,0 +1,26 @@
+{
+  "casita-lib-test": {
+    "path": "/tmp/casita-delta-admission-all-smoke/bin/casita-lib-test",
+    "sha256": "9ee8bc9ba6da3b460468868c48430e9985853c658e73d4ed7e5a2db4e9c72796",
+    "source": "/tmp/casita-delta-admission-bin/casita-lib-test",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/9ee8bc9ba6da3b460468868c48430e9985853c658e73d4ed7e5a2db4e9c72796"
+  },
+  "casita-lib-test.build.json": {
+    "path": "/tmp/casita-delta-admission-all-smoke/bin/casita-lib-test.build.json",
+    "sha256": "b063c394ec0f24ba894bf0632c5957fb5a5ec65395d5b4de4f0c377d46f3df04",
+    "source": "/tmp/casita-delta-admission-bin/casita-lib-test.build.json",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/b063c394ec0f24ba894bf0632c5957fb5a5ec65395d5b4de4f0c377d46f3df04"
+  },
+  "git_closure_import.build.json": {
+    "path": "/tmp/casita-delta-admission-all-smoke/bin/git_closure_import.build.json",
+    "sha256": "582a7e6329d1ea32246e38af812f646f99d23ad6b7f94f53c946b635e9108e7d",
+    "source": "/tmp/casita-delta-admission-bin/git_closure_import.build.json",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/582a7e6329d1ea32246e38af812f646f99d23ad6b7f94f53c946b635e9108e7d"
+  },
+  "git_closure_import": {
+    "path": "/tmp/casita-delta-admission-all-smoke/bin/git_closure_import",
+    "sha256": "c3e6c0ef1180a3bca6b21a456a80174ba95e4c57180e90c11d15d3f18314e3a0",
+    "source": "/tmp/casita-delta-admission-bin/git_closure_import",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/c3e6c0ef1180a3bca6b21a456a80174ba95e4c57180e90c11d15d3f18314e3a0"
+  }
+}

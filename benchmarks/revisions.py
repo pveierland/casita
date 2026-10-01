@@ -182,6 +182,9 @@ SUITE_BUILD_SPECS["cdcs-corpus"] = SuiteBuildSpec(
     ("bench", "--features", "experimental", "--bench", "cdcs", "--no-run", "--message-format=json"),
     "--benchmark-bin", "cdcs", cargo_json_bench="cdcs",
 )
+SUITE_BUILD_SPECS["git-delta-spill"] = SUITE_BUILD_SPECS["git-object-workers"]
+SUITE_BUILD_SPECS["git-delta-disabled"] = SUITE_BUILD_SPECS["git-object-workers"]
+SUITE_BUILD_SPECS["git-delta-limits"] = SUITE_BUILD_SPECS["git-source-locator"]
 SUITE_BUILD_SPECS["git-ingest-scheduling"] = SuiteBuildSpec(
     ("test", "--release", "--features", "cli,git", "--lib", "--no-run", "--message-format=json"),
     "--probe-binary", "casita-lib-test", cargo_json_test="casita",

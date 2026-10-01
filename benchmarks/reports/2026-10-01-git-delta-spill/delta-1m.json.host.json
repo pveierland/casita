@@ -1,0 +1,3338 @@
+{
+  "samples": [
+    {
+      "external_cpu_fraction": 0.43159116238322204,
+      "kernel_worker_cpu_fraction": 0.005415719219094485,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 614
+        },
+        {
+          "pid": 4109902,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 95
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 34
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 33
+        },
+        {
+          "pid": 46940,
+          "name": "code",
+          "ticks": 31
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 20
+        },
+        {
+          "pid": 3805096,
+          "name": "codex",
+          "ticks": 13
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0001749439979903
+    },
+    {
+      "external_cpu_fraction": 0.37286487354947345,
+      "kernel_worker_cpu_fraction": 0.0020154858029701266,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 612
+        },
+        {
+          "pid": 4109902,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 102
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 27
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0336631149984896
+    },
+    {
+      "external_cpu_fraction": 0.3670328655059207,
+      "kernel_worker_cpu_fraction": 0.006049992288559132,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 615
+        },
+        {
+          "pid": 4109902,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 98
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 10
+        },
+        {
+          "pid": 39203,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.033059167995816
+    },
+    {
+      "external_cpu_fraction": 0.31146628731294707,
+      "kernel_worker_cpu_fraction": 0.002417590845896096,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 624
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 28
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 10
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 4
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0340873039967846
+    },
+    {
+      "external_cpu_fraction": 0.3590185127439853,
+      "kernel_worker_cpu_fraction": 0.013793246922107007,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 616
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 73
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 34
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 11
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 7
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.057280668988824
+    },
+    {
+      "external_cpu_fraction": 0.32775450070761,
+      "kernel_worker_cpu_fraction": 0.004041362524138224,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 616
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 57
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 57
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 12
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 3180246,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0310054200235754
+    },
+    {
+      "external_cpu_fraction": 0.3510170760103656,
+      "kernel_worker_cpu_fraction": 0.005227058405652638,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 616
+        },
+        {
+          "pid": 4110271,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 51
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 46
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 10
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 7
+        },
+        {
+          "pid": 67274,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0362743719888385
+    },
+    {
+      "external_cpu_fraction": 0.3712257543316955,
+      "kernel_worker_cpu_fraction": 0.003608025690048877,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 615
+        },
+        {
+          "pid": 4110271,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 67
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 50
+        },
+        {
+          "pid": 3805096,
+          "name": "codex",
+          "ticks": 18
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 9
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.039349583996227
+    },
+    {
+      "external_cpu_fraction": 0.38084879962857027,
+      "kernel_worker_cpu_fraction": 0.0016069569604581023,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 631
+        },
+        {
+          "pid": 4110271,
+          "name": "addr2line",
+          "ticks": 106
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 84
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 41
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 10
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 8
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.037157004000619
+    },
+    {
+      "external_cpu_fraction": 0.33807366168426833,
+      "kernel_worker_cpu_fraction": 0.012477920615797678,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 616
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 100
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 31
+        },
+        {
+          "pid": 3805096,
+          "name": "codex",
+          "ticks": 14
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 12
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 8
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0685541080019902
+    },
+    {
+      "external_cpu_fraction": 0.3275838106206026,
+      "kernel_worker_cpu_fraction": 0.0028379785573567056,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 614
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 74
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 38
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 11
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 8
+        },
+        {
+          "pid": 39203,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 5
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0277268160134554
+    },
+    {
+      "external_cpu_fraction": 0.3622278020495575,
+      "kernel_worker_cpu_fraction": 0.0040292302786380145,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 613
+        },
+        {
+          "pid": 4110512,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 69
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 47
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 11
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0341098369972315
+    },
+    {
+      "external_cpu_fraction": 0.37619582162669746,
+      "kernel_worker_cpu_fraction": 0.002020385723022006,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 617
+        },
+        {
+          "pid": 4110512,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 37
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 12
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 11
+        },
+        {
+          "pid": 3805096,
+          "name": "codex",
+          "ticks": 11
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 10
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0311562339775264
+    },
+    {
+      "external_cpu_fraction": 0.3401992195314711,
+      "kernel_worker_cpu_fraction": 0.0048141398990302516,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 609
+        },
+        {
+          "pid": 4110512,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 62
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 3180246,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0386071250250097
+    },
+    {
+      "external_cpu_fraction": 0.3770000155218925,
+      "kernel_worker_cpu_fraction": 0.01258019427468102,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 626
+        },
+        {
+          "pid": 4110512,
+          "name": "addr2line",
+          "ticks": 105
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 95
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 37
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 13
+        },
+        {
+          "pid": 67274,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.026746199990157
+    },
+    {
+      "external_cpu_fraction": 0.3378957101941313,
+      "kernel_worker_cpu_fraction": 0.001182832124366854,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 612
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 62
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 61
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 48
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 8
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0567856369889341
+    },
+    {
+      "external_cpu_fraction": 0.36530900241146314,
+      "kernel_worker_cpu_fraction": 0.003247191132546339,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 612
+        },
+        {
+          "pid": 4110741,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 50
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 9
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 6
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0265282200125512
+    },
+    {
+      "external_cpu_fraction": 0.37050596081058584,
+      "kernel_worker_cpu_fraction": 0.002426894939807331,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 609
+        },
+        {
+          "pid": 4110741,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 93
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 53
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 9
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 6
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0301228780008387
+    },
+    {
+      "external_cpu_fraction": 0.39921714219296406,
+      "kernel_worker_cpu_fraction": 0.0028399593448686466,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 635
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 105
+        },
+        {
+          "pid": 4110741,
+          "name": "addr2line",
+          "ticks": 105
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 61
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 13
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0270100070047192
+    },
+    {
+      "external_cpu_fraction": 0.3007186986697332,
+      "kernel_worker_cpu_fraction": 0.013986916217196894,
+      "top_external_processes": [
+        {
+          "pid": 4105376,
+          "name": "rustc",
+          "ticks": 400
+        },
+        {
+          "pid": 4110741,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 85
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 37
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 26
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 26
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 24
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0724308179924265
+    },
+    {
+      "external_cpu_fraction": 0.09283929380769249,
+      "kernel_worker_cpu_fraction": 0.005202201808189665,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 41
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 27
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 19
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 17
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 9
+        },
+        {
+          "pid": 3782,
+          "name": "cosmic-panel",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.041225786000723
+    },
+    {
+      "external_cpu_fraction": 0.18647896546296716,
+      "kernel_worker_cpu_fraction": 0.02446283202847526,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 115
+        },
+        {
+          "pid": 4111241,
+          "name": "addr2line",
+          "ticks": 99
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 71
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 46
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 18
+        },
+        {
+          "pid": 3996935,
+          "name": ".claude-wrapped",
+          "ticks": 15
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 14
+        },
+        {
+          "pid": 208751,
+          "name": ".claude-wrapped",
+          "ticks": 11
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 4104337,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 4105376,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0389911780075636
+    },
+    {
+      "external_cpu_fraction": 0.20586376260418165,
+      "kernel_worker_cpu_fraction": 0.025632842036318337,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 115
+        },
+        {
+          "pid": 4111241,
+          "name": "addr2line",
+          "ticks": 96
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 71
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 52
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 51
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 30
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 29
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 9
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0403320329787675
+    },
+    {
+      "external_cpu_fraction": 0.16280196759517995,
+      "kernel_worker_cpu_fraction": 0.27053265232482987,
+      "top_external_processes": [
+        {
+          "pid": 4111241,
+          "name": "addr2line",
+          "ticks": 97
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 95
+        },
+        {
+          "pid": 4111518,
+          "name": "cp",
+          "ticks": 62
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 40
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 30
+        },
+        {
+          "pid": 3789,
+          "name": "cosmic-launcher",
+          "ticks": 8
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0365353840170428
+    },
+    {
+      "external_cpu_fraction": 0.14771284048998026,
+      "kernel_worker_cpu_fraction": 0.02819250450211989,
+      "top_external_processes": [
+        {
+          "pid": 4111241,
+          "name": "addr2line",
+          "ticks": 100
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 78
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 65
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 28
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 27
+        },
+        {
+          "pid": 3789,
+          "name": "cosmic-launcher",
+          "ticks": 11
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 11
+        },
+        {
+          "pid": 3996935,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0493332839978393
+    },
+    {
+      "external_cpu_fraction": 0.07351029915869685,
+      "kernel_worker_cpu_fraction": 0.0024368054969733763,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 18
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 16
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.025933338998584
+    },
+    {
+      "external_cpu_fraction": 0.15417654481910534,
+      "kernel_worker_cpu_fraction": 0.004868732994287537,
+      "top_external_processes": [
+        {
+          "pid": 4111703,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 46
+        },
+        {
+          "pid": 9736,
+          "name": "Privileged Cont",
+          "ticks": 34
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 27
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.026961224997649
+    },
+    {
+      "external_cpu_fraction": 0.11421161662159443,
+      "kernel_worker_cpu_fraction": 0.006885097455911721,
+      "top_external_processes": [
+        {
+          "pid": 4111703,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 23
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 19
+        },
+        {
+          "pid": 4106842,
+          "name": "Isolated Web Co",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.028792021999834
+    },
+    {
+      "external_cpu_fraction": 0.17056508478401106,
+      "kernel_worker_cpu_fraction": 0.071944514434962,
+      "top_external_processes": [
+        {
+          "pid": 4111703,
+          "name": "addr2line",
+          "ticks": 106
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 76
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 37
+        },
+        {
+          "pid": 9736,
+          "name": "Privileged Cont",
+          "ticks": 37
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 30
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 4106842,
+          "name": "Isolated Web Co",
+          "ticks": 9
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0308870279986877
+    },
+    {
+      "external_cpu_fraction": 0.13119803551887227,
+      "kernel_worker_cpu_fraction": 0.012847285377218945,
+      "top_external_processes": [
+        {
+          "pid": 4111703,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 72
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 41
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 34
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 22
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 12
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 9736,
+          "name": "Privileged Cont",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.070265009009745
+    },
+    {
+      "external_cpu_fraction": 0.14656342078511192,
+      "kernel_worker_cpu_fraction": 0.007671363622361231,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 74
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 60
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 45
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 41
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 35
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 26
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 24
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0319764589949045
+    },
+    {
+      "external_cpu_fraction": 0.12217951949252828,
+      "kernel_worker_cpu_fraction": 0.004854815344073972,
+      "top_external_processes": [
+        {
+          "pid": 4111840,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 67
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 25
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 23
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 23
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0299052890040912
+    },
+    {
+      "external_cpu_fraction": 0.14389271102911352,
+      "kernel_worker_cpu_fraction": 0.004041930085087458,
+      "top_external_processes": [
+        {
+          "pid": 4111840,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 67
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 49
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 37
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 36
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 24
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 3996935,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0308606479957234
+    },
+    {
+      "external_cpu_fraction": 0.18546987140106674,
+      "kernel_worker_cpu_fraction": 0.014918228786607543,
+      "top_external_processes": [
+        {
+          "pid": 4111840,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 92
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 75
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 63
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 52
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 28
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0334113310091197
+    },
+    {
+      "external_cpu_fraction": 0.16710559850523843,
+      "kernel_worker_cpu_fraction": 0.006054550670479654,
+      "top_external_processes": [
+        {
+          "pid": 4111840,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 55
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 37
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 9736,
+          "name": "Privileged Cont",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.032281392981531
+    },
+    {
+      "external_cpu_fraction": 0.12305424416482277,
+      "kernel_worker_cpu_fraction": 0.006012422353330103,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 60
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 48
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 41
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 27
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 18
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 3822212,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0395144640060607
+    },
+    {
+      "external_cpu_fraction": 0.08082694876361897,
+      "kernel_worker_cpu_fraction": 0.007640358340839604,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 67
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 35
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 28
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0361643150099553
+    },
+    {
+      "external_cpu_fraction": 0.11602458299659177,
+      "kernel_worker_cpu_fraction": 0.0196719881205294,
+      "top_external_processes": [
+        {
+          "pid": 4111965,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 65
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 31
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 22
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0378547679865733
+    },
+    {
+      "external_cpu_fraction": 0.15858577583059075,
+      "kernel_worker_cpu_fraction": 0.006842533474923966,
+      "top_external_processes": [
+        {
+          "pid": 4111965,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 99
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 72
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 38
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 24
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 3180246,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.035191622999264
+    },
+    {
+      "external_cpu_fraction": 0.30179909319965376,
+      "kernel_worker_cpu_fraction": 0.010434543115945476,
+      "top_external_processes": [
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 268
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 135
+        },
+        {
+          "pid": 4111965,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 87
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 39
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 36
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 10
+        },
+        {
+          "pid": 1964,
+          "name": ".maestral-wrapp",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0382182729954366
+    },
+    {
+      "external_cpu_fraction": 0.13661910061905078,
+      "kernel_worker_cpu_fraction": 0.005608995333333463,
+      "top_external_processes": [
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 73
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 45
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 39
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 30
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 951,
+          "name": "systemd-udevd",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0399961110088043
+    },
+    {
+      "external_cpu_fraction": 0.10126790180933729,
+      "kernel_worker_cpu_fraction": 0.004420424285328215,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 63
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 29
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 26
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 25
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 9869,
+          "name": "Isolated Web Co",
+          "ticks": 18
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 10
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0368537130125333
+    },
+    {
+      "external_cpu_fraction": 0.20692158285644088,
+      "kernel_worker_cpu_fraction": 0.01046685049468378,
+      "top_external_processes": [
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 106
+        },
+        {
+          "pid": 4112155,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 81
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 74
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 32
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 29
+        },
+        {
+          "pid": 4106842,
+          "name": "Isolated Web Co",
+          "ticks": 25
+        },
+        {
+          "pid": 4097338,
+          "name": "Isolated Web Co",
+          "ticks": 11
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0350136689958163
+    },
+    {
+      "external_cpu_fraction": 0.12071937242961221,
+      "kernel_worker_cpu_fraction": 0.02887639473399362,
+      "top_external_processes": [
+        {
+          "pid": 4112155,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 35
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 22
+        },
+        {
+          "pid": 4106842,
+          "name": "Isolated Web Co",
+          "ticks": 8
+        },
+        {
+          "pid": 3822212,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0389108569943346
+    },
+    {
+      "external_cpu_fraction": 0.1767593329029772,
+      "kernel_worker_cpu_fraction": 0.006039612741559585,
+      "top_external_processes": [
+        {
+          "pid": 4112155,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 86
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 69
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 65
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 22
+        },
+        {
+          "pid": 1391,
+          "name": "avahi-daemon",
+          "ticks": 7
+        },
+        {
+          "pid": 4106842,
+          "name": "Isolated Web Co",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0348345609963872
+    },
+    {
+      "external_cpu_fraction": 0.19315919177470098,
+      "kernel_worker_cpu_fraction": 0.004818940335335575,
+      "top_external_processes": [
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 131
+        },
+        {
+          "pid": 4112155,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 74
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 26
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0375725060002878
+    },
+    {
+      "external_cpu_fraction": 0.08626912394472087,
+      "kernel_worker_cpu_fraction": 0.005617524349888801,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 69
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 22
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 21
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 17
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 13
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.038417097995989
+    },
+    {
+      "external_cpu_fraction": 0.1297450112434231,
+      "kernel_worker_cpu_fraction": 0.0036040280900950863,
+      "top_external_processes": [
+        {
+          "pid": 4112324,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 27
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 26
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 26
+        },
+        {
+          "pid": 3180246,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 8
+        },
+        {
+          "pid": 39203,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0405024340143427
+    },
+    {
+      "external_cpu_fraction": 0.1504432507428749,
+      "kernel_worker_cpu_fraction": 0.014078913839573855,
+      "top_external_processes": [
+        {
+          "pid": 4112324,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 55
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 35
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 24
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 13
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.03582801198354
+    },
+    {
+      "external_cpu_fraction": 0.14596517001740894,
+      "kernel_worker_cpu_fraction": 0.005227402782992606,
+      "top_external_processes": [
+        {
+          "pid": 4112324,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 69
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 57
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 29
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 25
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 23
+        },
+        {
+          "pid": 3996935,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0362061030173209
+    },
+    {
+      "external_cpu_fraction": 0.12191569646615953,
+      "kernel_worker_cpu_fraction": 0.00441142322739393,
+      "top_external_processes": [
+        {
+          "pid": 4112324,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 26
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 25
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 11
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 11
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 7
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0389693069737405
+    },
+    {
+      "external_cpu_fraction": 0.09013959682722765,
+      "kernel_worker_cpu_fraction": 0.0036216802296653965,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 43
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 25
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 21
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 15
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 951,
+          "name": "systemd-udevd",
+          "ticks": 3
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.035431005002465
+    },
+    {
+      "external_cpu_fraction": 0.11377318449618055,
+      "kernel_worker_cpu_fraction": 0.004020253869122988,
+      "top_external_processes": [
+        {
+          "pid": 4112566,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 74
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 20
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 9
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0364187940140255
+    },
+    {
+      "external_cpu_fraction": 0.10537983054772063,
+      "kernel_worker_cpu_fraction": 0.010457540436033344,
+      "top_external_processes": [
+        {
+          "pid": 4112566,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 51
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 21
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 19
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 17
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 9
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.035935113002779
+    },
+    {
+      "external_cpu_fraction": 0.11943306211253192,
+      "kernel_worker_cpu_fraction": 0.0028149206558509207,
+      "top_external_processes": [
+        {
+          "pid": 4112566,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 67
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 25
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 24
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 21
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 20
+        },
+        {
+          "pid": 39203,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 67274,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0361452499928419
+    },
+    {
+      "external_cpu_fraction": 0.13962273754651014,
+      "kernel_worker_cpu_fraction": 0.004426081017324529,
+      "top_external_processes": [
+        {
+          "pid": 4112566,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 72
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 69
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 24
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 19
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 3180246,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 6
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0355285670084413
+    },
+    {
+      "external_cpu_fraction": 0.08041263459083649,
+      "kernel_worker_cpu_fraction": 0.0032165053836334598,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 66
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 31
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 21
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 20
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 13
+        },
+        {
+          "pid": 3646439,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 1917815,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 4106954,
+          "name": "Isolated Web Co",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.036321391002275
+    },
+    {
+      "external_cpu_fraction": 0.09973175843911809,
+      "kernel_worker_cpu_fraction": 0.0032171534980360676,
+      "top_external_processes": [
+        {
+          "pid": 4112728,
+          "name": "addr2line",
+          "ticks": 104
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 65
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 20
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 19
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 6
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 4
+        },
+        {
+          "pid": 3791,
+          "name": "cosmic-workspac",
+          "ticks": 2
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0361126179923303
+    },
+    {
+      "external_cpu_fraction": 0.10294314645667477,
+      "kernel_worker_cpu_fraction": 0.008444554982774102,
+      "top_external_processes": [
+        {
+          "pid": 4112728,
+          "name": "addr2line",
+          "ticks": 102
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 23
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 17
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 3996935,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 951,
+          "name": "systemd-udevd",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0361706469848286
+    },
+    {
+      "external_cpu_fraction": 0.10998536696394874,
+      "kernel_worker_cpu_fraction": 0.003625891218591717,
+      "top_external_processes": [
+        {
+          "pid": 4112728,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 72
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 21
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 19
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 9
+        },
+        {
+          "pid": 4106852,
+          "name": "Isolated Web Co",
+          "ticks": 9
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 4
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0342284900252707
+    },
+    {
+      "external_cpu_fraction": 0.10541917166385192,
+      "kernel_worker_cpu_fraction": 0.002816542754377723,
+      "top_external_processes": [
+        {
+          "pid": 4112728,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 19
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 18
+        },
+        {
+          "pid": 4112275,
+          "name": "Isolated Web Co",
+          "ticks": 11
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 12360,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0355485149775632
+    },
+    {
+      "external_cpu_fraction": 0.07037150103924064,
+      "kernel_worker_cpu_fraction": 0.004825474356976501,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 70
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 20
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 20
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 14
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 39203,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 3822212,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 4089212,
+          "name": ".perf-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.036167562007904
+    },
+    {
+      "external_cpu_fraction": 0.10594001218066085,
+      "kernel_worker_cpu_fraction": 0.003611591324340711,
+      "top_external_processes": [
+        {
+          "pid": 4112830,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 71
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 21
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 19
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 9
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 7
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0383234600012656
+    },
+    {
+      "external_cpu_fraction": 0.10484353724624924,
+      "kernel_worker_cpu_fraction": 0.006025490646336164,
+      "top_external_processes": [
+        {
+          "pid": 4112830,
+          "name": "addr2line",
+          "ticks": 103
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 68
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 22
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 19
+        },
+        {
+          "pid": 9584,
+          "name": ".firefox-wrappe",
+          "ticks": 7
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 7
+        },
+        {
+          "pid": 67274,
+          "name": ".claude-wrapped",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 5
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0372599289985374
+    }
+  ]
+}

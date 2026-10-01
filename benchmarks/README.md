@@ -2877,3 +2877,18 @@ See [the focused guide](git-source-inflation.md) for commands and memory limits.
 [The historical report](reports/2026-10-01-git-source-inflation/README.md) retains
 the original combined loose/packed experiment; its timings are not measurements
 of this extracted branch.
+
+## Git delta reconstruction
+
+`git-delta-spill` measures opt-in file-backed blob delta reconstruction with
+streamed fixture generation, independent payload audits, observed delta counts,
+spill reservations and import I/O. `git-delta-disabled` retains the default-path
+control; `git-delta-limits` exercises both sides of chain, work, spill-capacity
+and source-handle limits, including recovery after a full planning window.
+All three suites are registered in `benchmark all`. The retained-buffer suite
+explicitly disables delta spilling to preserve its buffered control.
+
+See [the focused guide](git-delta-spill.md) for commands and resource semantics.
+[The historical report](reports/2026-10-01-git-delta-spill/README.md) retains the
+original experiment and rejected candidates as evidence; its timings do not
+measure this extracted branch with updated dependencies and reordered commits.

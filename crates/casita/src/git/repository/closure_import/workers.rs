@@ -21,12 +21,18 @@ use std::sync::{
 };
 
 mod streaming;
+use crate::spill::SpillArea;
+use streaming::delta::Plan as DeltaPlan;
 
 const PACK_CACHE_BYTES: usize = 16 * 1024 * 1024;
 
 pub(super) struct SourcePool {
     sources: Vec<gix::odb::Handle>,
     decoded_bytes: u64,
+    spill_area: SpillArea,
+    delta_spilling: bool,
+    payload_limit: u64,
+    source_files: Arc<tokio::sync::Semaphore>,
     locator: Arc<OnceLock<streaming::Locator>>,
     slots: Arc<tokio::sync::Semaphore>,
 }
@@ -36,6 +42,7 @@ struct Pending {
     oid: gix::ObjectId,
     kind: GitObjectKind,
     size: u64,
+    delta: Option<DeltaPlan>,
 }
 
 struct Decoded {
@@ -94,6 +101,7 @@ pub(super) struct StagedWindow<'hold> {
     pub objects: Vec<StagedObject<'hold>>,
     pub bytes: u64,
     pub peak_workers: usize,
+    pub spilled_delta_objects: usize,
 }
 
 #[derive(Default)]
@@ -101,6 +109,7 @@ struct Control {
     cancelled: AtomicBool,
     active: AtomicUsize,
     peak: AtomicUsize,
+    spilled_delta_objects: AtomicUsize,
 }
 struct Cancellation(Arc<Control>);
 impl Drop for Cancellation {
@@ -123,7 +132,14 @@ impl Drop for Active<'_> {
 }
 
 impl SourcePool {
-    fn open(path: PathBuf, format: GitObjectFormat, limit: u64, workers: usize) -> Result<Self> {
+    fn open(
+        path: PathBuf,
+        format: GitObjectFormat,
+        limit: u64,
+        workers: usize,
+        spill_area: SpillArea,
+        delta_spilling: bool,
+    ) -> Result<Self> {
         let options = gix::odb::store::init::Options {
             object_hash: match format {
                 GitObjectFormat::Sha1 => gix::hash::Kind::Sha1,
@@ -146,9 +162,44 @@ impl SourcePool {
         Ok(Self {
             sources,
             decoded_bytes: 0,
+            spill_area,
+            delta_spilling,
+            payload_limit: limit,
+            source_files: Arc::new(tokio::sync::Semaphore::new(
+                streaming::delta::MAX_SOURCE_FILES,
+            )),
             locator: Arc::new(OnceLock::new()),
             slots: Arc::new(tokio::sync::Semaphore::new(workers)),
         })
+    }
+
+    fn probe(
+        &self,
+        kind: GitObjectKind,
+        oid: &gix::ObjectId,
+        control: &Arc<Control>,
+    ) -> std::io::Result<(u64, Option<DeltaPlan>)> {
+        if self.delta_spilling && kind == GitObjectKind::Blob {
+            let locator = self
+                .locator
+                .get_or_init(|| streaming::Locator::open(self.sources[0].store_ref()));
+            if let Some(plan) = DeltaPlan::probe(
+                locator,
+                oid,
+                self.payload_limit,
+                control.clone(),
+                self.source_files.clone(),
+            )? {
+                return Ok((plan.size(), Some(plan)));
+            }
+        }
+        Ok((
+            self.sources[0]
+                .header(oid)
+                .map_err(std::io::Error::other)?
+                .size(),
+            None,
+        ))
     }
 
     fn decode_serial(
@@ -166,8 +217,7 @@ impl SourcePool {
             let Some(key) = pending.front() else { break };
             let (_, kind, oid) = git_key_parts(key)?;
             let oid = gix::ObjectId::from_bytes_or_panic(oid);
-            let header = self.sources[0].header(oid).map_err(source_error)?;
-            let size = header.size();
+            let (size, delta) = self.probe(kind, &oid, control).map_err(delta_error)?;
             let limit = if kind == GitObjectKind::Blob {
                 payload_limit
             } else {
@@ -181,6 +231,18 @@ impl SourcePool {
             }
             if !decoded.is_empty() && (bytes > budget || size > budget.saturating_sub(bytes)) {
                 break;
+            }
+            if let Some(delta) = delta {
+                let body = spill_delta(delta, &oid, &self.spill_area, &self.slots, control)?;
+                bytes = bytes
+                    .checked_add(size)
+                    .ok_or_else(|| source_error("decoded byte count overflow"))?;
+                decoded.push(Decoded {
+                    key: pending.pop_front().expect("front exists"),
+                    body,
+                    seal: None,
+                });
+                continue;
             }
             if let Some(body) = stream_blob(
                 &self.sources[0],
@@ -235,6 +297,7 @@ impl SourcePool {
         count: usize,
         budget: u64,
         limits: &FormatLimits,
+        control: &Arc<Control>,
     ) -> Result<Vec<Pending>> {
         let mut plan = Vec::new();
         let mut bytes = 0u64;
@@ -242,7 +305,15 @@ impl SourcePool {
             let Some(key) = missing.front() else { break };
             let (_, kind, oid) = git_key_parts(key)?;
             let oid = gix::ObjectId::from_bytes_or_panic(oid);
-            let size = self.sources[0].header(oid).map_err(source_error)?.size();
+            let (size, delta) = match self.probe(kind, &oid, control) {
+                Ok(probed) => probed,
+                // Planned readers own their handles until decoding. Drain this
+                // window instead of waiting while its descriptors remain held.
+                Err(error) if streaming::delta::handle_window_full(&error) && !plan.is_empty() => {
+                    break;
+                }
+                Err(error) => return Err(delta_error(error)),
+            };
             let limit = if kind == GitObjectKind::Blob {
                 limits.max_payload_bytes
             } else {
@@ -265,21 +336,68 @@ impl SourcePool {
                 oid,
                 kind,
                 size,
+                delta,
             });
         }
         Ok(plan)
     }
 }
 
+fn delta_error(error: std::io::Error) -> super::GitClosureImportError {
+    if let Some(crate::error::Error::LimitExceeded(message)) = error
+        .get_ref()
+        .and_then(|inner| inner.downcast_ref::<crate::error::Error>())
+    {
+        return RepositoryError::LimitExceeded(message.clone()).into();
+    }
+    source_error(error)
+}
+
+fn spill_delta(
+    plan: DeltaPlan,
+    oid: &gix::ObjectId,
+    area: &SpillArea,
+    slots: &Arc<tokio::sync::Semaphore>,
+    control: &Arc<Control>,
+) -> Result<Body> {
+    let size = plan.size();
+    let spool = plan.reconstruct(area).map_err(delta_error)?;
+    control
+        .spilled_delta_objects
+        .fetch_add(1, Ordering::Relaxed);
+    Ok(Body::Stream {
+        reader: streaming::SourceReader::from_spill(
+            spool,
+            size,
+            slots.clone(),
+            control.clone(),
+            oid,
+        ),
+        size,
+    })
+}
+
+// Borrow the window-owned resources independently; the worker retains no session.
+struct DecodeResources<'a> {
+    control: &'a Arc<Control>,
+    locator: &'a OnceLock<streaming::Locator>,
+    slots: &'a Arc<tokio::sync::Semaphore>,
+    area: &'a SpillArea,
+}
+
 fn decode(
     source: &mut gix::odb::Handle,
     batch: Vec<Pending>,
     verifier: Option<&NativeVerifier>,
-    control: &Arc<Control>,
-    locator: &OnceLock<streaming::Locator>,
-    slots: &Arc<tokio::sync::Semaphore>,
+    resources: DecodeResources<'_>,
     mut emit: impl FnMut(Decoded) -> Result<()>,
 ) -> Result<()> {
+    let DecodeResources {
+        control,
+        locator,
+        slots,
+        area,
+    } = resources;
     let _active = Active::new(control);
     for pending in batch {
         if control.cancelled.load(Ordering::Relaxed) {
@@ -287,6 +405,16 @@ fn decode(
         }
         #[cfg(test)]
         tests::pause_before_decode(&pending.key);
+        if let Some(delta) = pending.delta {
+            let body = spill_delta(delta, &pending.oid, area, slots, control)?;
+            emit(Decoded {
+                key: pending.key,
+                body,
+                seal: None,
+            })?;
+            continue;
+        }
+
         if let Some(body) = stream_blob(
             source,
             locator,
@@ -353,6 +481,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     request: &GitClosureImport,
     format: GitObjectFormat,
     limits: FormatLimits,
+    spill_area: SpillArea,
 ) -> Result<StagedWindow<'hold>> {
     let verifier = session.native_verifier();
     let count = request
@@ -364,6 +493,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     let path = request.objects_dir.clone();
     let budget = request.max_buffered_bytes.get();
     let serial = request.decode_workers.get() == 1;
+    let delta_spilling = request.delta_spilling;
     let control = Arc::new(Control::default());
     // Dropping the import cancels parallel decoding between objects and
     // streamed inflation between bounded steps. An in-flight gix decode or
@@ -379,7 +509,14 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
             {
                 source
             }
-            _ => SourcePool::open(path, format, limits.max_payload_bytes, workers)?,
+            _ => SourcePool::open(
+                path,
+                format,
+                limits.max_payload_bytes,
+                workers,
+                spill_area,
+                delta_spilling,
+            )?,
         };
         if serial {
             // Keep the existing one-worker path: interleave headers and
@@ -403,7 +540,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 groups: Vec::new(),
             });
         }
-        let plan = source.plan(&mut pending, count, budget, &limits)?;
+        let plan = source.plan(&mut pending, count, budget, &limits, &first_control)?;
         let bytes = plan.iter().map(|object| object.size).sum();
         source.decoded_bytes = source.decoded_bytes.saturating_add(bytes);
         let mut decoded = Vec::new();
@@ -414,9 +551,12 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 &mut source.sources[0],
                 plan,
                 first_verifier.as_ref(),
-                &first_control,
-                &source.locator,
-                &source.slots,
+                DecodeResources {
+                    control: &first_control,
+                    locator: &source.locator,
+                    slots: &source.slots,
+                    area: &source.spill_area,
+                },
                 |object| {
                     decoded.push(object);
                     Ok(())
@@ -463,6 +603,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 let sender = sender.clone();
                 let locator = window.source.locator.clone();
                 let slots = window.source.slots.clone();
+                let area = window.source.spill_area.clone();
                 // No staging reader is polled until all jobs are spawned, so
                 // one slot per nonempty group is available here. CPU jobs own
                 // the slot through cancellation and release it before readers
@@ -477,9 +618,12 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                         &mut source,
                         batch,
                         verifier.as_ref(),
-                        &control,
-                        &locator,
-                        &slots,
+                        DecodeResources {
+                            control: &control,
+                            locator: &locator,
+                            slots: &slots,
+                            area: &area,
+                        },
                         |object| {
                             sender
                                 .blocking_send(Ok(object))
@@ -544,6 +688,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
         source: window.source,
         pending: window.pending,
         objects,
+        spilled_delta_objects: control.spilled_delta_objects.load(Ordering::Relaxed),
         bytes: window.bytes,
         peak_workers: window
             .peak_workers

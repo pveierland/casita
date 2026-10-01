@@ -300,6 +300,8 @@ fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
         GitObjectFormat::Sha1,
         16,
         1,
+        crate::spill::SpillArea::new(None, crate::spill::SpillLimits::default()),
+        false,
     )
     .unwrap();
     let control = Arc::new(Control::default());

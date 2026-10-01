@@ -26,6 +26,7 @@ pub struct GitClosureImport {
     pub(crate) concurrency: NonZeroUsize,
     pub(crate) decode_workers: NonZeroUsize,
     pub(crate) max_buffered_bytes: NonZeroU64,
+    pub(crate) delta_spilling: bool,
 }
 
 impl GitClosureImport {
@@ -45,6 +46,7 @@ impl GitClosureImport {
             concurrency: DEFAULT_GIT_IMPORT_CONCURRENCY,
             decode_workers: NonZeroUsize::MIN,
             max_buffered_bytes: DEFAULT_GIT_IMPORT_BUFFERED_BYTES,
+            delta_spilling: false,
         }
     }
 
@@ -66,6 +68,21 @@ impl GitClosureImport {
     /// workspace are additional to the admitted source-body byte count.
     pub fn with_decode_workers(mut self, workers: NonZeroUsize) -> Self {
         self.decode_workers = workers;
+        self
+    }
+
+    /// Reconstruct located blob deltas in temporary files instead of complete
+    /// in-memory base/result buffers. Disabled by default. Reservations share
+    /// this import's spill quota with traversal state and live until reads end.
+    /// Each selected chain permits at most 64 deltas and 64 GiB of aggregate
+    /// compressed input, inflated bytes, probing and reconstructed results.
+    /// Delta plans retain at most 128 stable source files, plus one transient read
+    /// handle per active source job. Full windows drain before admitting more.
+    /// Repository payload limits apply to each base, result and instruction stream.
+    /// Missing optional locator hints still use gix; this is not a universal
+    /// source-memory bound. Invalid or over-limit selected chains fail closed.
+    pub fn with_delta_spilling(mut self, enabled: bool) -> Self {
+        self.delta_spilling = enabled;
         self
     }
 
@@ -98,6 +115,10 @@ pub struct GitClosureImportReport {
     /// Peak concurrently executing source jobs, excluding async verification
     /// and destination storage work.
     pub peak_decode_workers: usize,
+    /// Imported blob deltas reconstructed through temporary files.
+    pub spilled_delta_objects: usize,
+    /// Peak reserved spill bytes for payloads and traversal state combined.
+    pub peak_spill_bytes: u64,
 }
 
 /// A completed import and the reader protecting its selected closures.

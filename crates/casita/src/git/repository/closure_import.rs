@@ -66,7 +66,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     let area = repository.spill_area();
     let mut visited = SpillSet::new(area.clone(), "git-import-visited");
     let mut unsettled = SpillSet::new(area.clone(), "git-import-unsettled");
-    let mut queue = TraversalQueue::new(area);
+    let mut queue = TraversalQueue::new(area.clone());
     for root in &request.roots {
         queue
             .push((None, root.clone()))
@@ -145,6 +145,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
                 request,
                 format,
                 limits.clone(),
+                area.clone(),
             )
             .await?;
             source = Some(window.source);
@@ -152,6 +153,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             report.peak_source_bytes = report.peak_source_bytes.max(window.bytes);
             report.peak_decode_workers = report.peak_decode_workers.max(window.peak_workers);
             report.imported_objects += window.objects.len();
+            report.spilled_delta_objects += window.spilled_delta_objects;
             report.source_bytes = report
                 .source_bytes
                 .checked_add(window.bytes)
@@ -202,5 +204,6 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
         }
         session.publish_git_closure_witnesses(batch).await?;
     }
+    report.peak_spill_bytes = area.metrics().peak_bytes;
     Ok(report)
 }

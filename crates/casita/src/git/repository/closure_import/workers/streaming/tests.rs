@@ -520,3 +520,220 @@ fn benchmark_git_source_locator() {
         }
     }
 }
+
+#[tokio::test]
+async fn cancelled_spool_reader_keeps_quota_until_submitted_job_stops() {
+    use crate::spill::{SpillArea, SpillLimits};
+    let (_source, oid, _) = fixture();
+    let area = SpillArea::new(
+        None,
+        SpillLimits {
+            max_memory_objects: 1,
+            max_spill_bytes: 4,
+        },
+    );
+    let slots = Arc::new(Semaphore::new(1));
+    let registration = Registration::new(oid);
+    let make_reader = || {
+        let mut payload = area.payload(4).unwrap();
+        payload.append(b"test").unwrap();
+        payload.rewind().unwrap();
+        SourceReader::from_spill(
+            payload,
+            4,
+            slots.clone(),
+            Arc::new(Control::default()),
+            &oid,
+        )
+    };
+    let occupied = slots.clone().acquire_owned().await.unwrap();
+    let mut waiting = make_reader();
+    let mut buffer = [0; 4];
+    assert!(waiting.read(&mut buffer).now_or_never().is_none());
+    assert!(area.payload(1).is_err());
+    drop(waiting);
+    assert!(area.payload(4).is_ok());
+    assert!(!registration.gate.entered.load(Ordering::Acquire));
+    drop(occupied);
+    let mut submitted = make_reader();
+    assert!(submitted.read(&mut buffer).now_or_never().is_none());
+    tokio::time::timeout(Duration::from_secs(10), registration.gate.entered())
+        .await
+        .unwrap();
+    drop(submitted);
+    assert!(
+        area.payload(1).is_err(),
+        "running job must keep its file reservation"
+    );
+    registration.gate.release();
+    let _drained = tokio::time::timeout(Duration::from_secs(10), slots.acquire())
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(
+        area.payload(4).is_ok(),
+        "drained job must release its file reservation"
+    );
+}
+
+#[test]
+fn completed_unreceived_spool_keeps_its_source_slot() {
+    use crate::spill::{SpillArea, SpillLimits};
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(1)
+        .build()
+        .unwrap()
+        .block_on(async {
+            let (_source, oid, _) = fixture();
+            let area = SpillArea::new(
+                None,
+                SpillLimits {
+                    max_memory_objects: 1,
+                    max_spill_bytes: 4,
+                },
+            );
+            let mut payload = area.payload(4).unwrap();
+            payload.append(b"test").unwrap();
+            payload.rewind().unwrap();
+            let slots = Arc::new(Semaphore::new(1));
+            let control = Arc::new(Control::default());
+            let registration = Registration::new(oid);
+            let mut reader =
+                SourceReader::from_spill(payload, 4, slots.clone(), control.clone(), &oid);
+            let mut buffer = [0; 4];
+            assert!(reader.read(&mut buffer).now_or_never().is_none());
+            tokio::time::timeout(Duration::from_secs(10), registration.gate.entered())
+                .await
+                .unwrap();
+            assert_eq!(control.active.load(Ordering::Relaxed), 1);
+            registration.gate.release();
+            // A fence on the sole blocking thread proves that the preceding job has
+            // stored its output. An activity counter reaching zero is too early.
+            tokio::time::timeout(Duration::from_secs(10), tokio::task::spawn_blocking(|| ()))
+                .await
+                .unwrap()
+                .unwrap();
+            // The blocking operation has returned, but its output has not been
+            // received. Its file remains live and must still participate in draining.
+            assert!(area.payload(1).is_err());
+            assert_eq!(slots.available_permits(), 0);
+            drop(reader);
+            let _drained = tokio::time::timeout(Duration::from_secs(10), slots.acquire())
+                .await
+                .unwrap()
+                .unwrap();
+            assert!(area.payload(4).is_ok());
+        });
+}
+
+#[test]
+fn cancelled_queued_spool_job_keeps_quota_until_it_runs() {
+    use crate::spill::{SpillArea, SpillLimits};
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(1)
+        .build()
+        .unwrap()
+        .block_on(async {
+            let area = SpillArea::new(
+                None,
+                SpillLimits {
+                    max_memory_objects: 1,
+                    max_spill_bytes: 4,
+                },
+            );
+            let mut payload = area.payload(4).unwrap();
+            payload.append(b"test").unwrap();
+            payload.rewind().unwrap();
+            let slots = Arc::new(Semaphore::new(1));
+            let (release, blocked) = std::sync::mpsc::channel::<()>();
+            let (entered, started) = tokio::sync::oneshot::channel();
+            let blocker = tokio::task::spawn_blocking(move || {
+                entered.send(()).unwrap();
+                let _ = blocked.recv();
+            });
+            started.await.unwrap();
+            let oid = gix::ObjectId::from_bytes_or_panic(&[9; 20]);
+            let mut reader = SourceReader::from_spill(
+                payload,
+                4,
+                slots.clone(),
+                Arc::new(Control::default()),
+                &oid,
+            );
+            assert!(reader.read(&mut [0; 4]).now_or_never().is_none());
+            drop(reader);
+            assert_eq!(slots.available_permits(), 0);
+            assert!(area.payload(1).is_err());
+            drop(release);
+            blocker.await.unwrap();
+            let _drained = tokio::time::timeout(Duration::from_secs(10), slots.acquire())
+                .await
+                .unwrap()
+                .unwrap();
+            assert!(area.payload(4).is_ok());
+        });
+}
+
+#[tokio::test]
+async fn failed_spool_read_releases_quota_before_the_drain_barrier() {
+    use crate::spill::{SpillArea, SpillLimits};
+    let area = SpillArea::new(
+        None,
+        SpillLimits {
+            max_memory_objects: 1,
+            max_spill_bytes: 4,
+        },
+    );
+    let slots = Arc::new(Semaphore::new(1));
+    let mut payload = area.payload(4).unwrap();
+    payload.append(b"test").unwrap();
+    payload.rewind().unwrap();
+    let oid = gix::ObjectId::from_bytes_or_panic(&[8; 20]);
+    let mut reader = SourceReader::from_spill(
+        payload,
+        3,
+        slots.clone(),
+        Arc::new(Control::default()),
+        &oid,
+    );
+    assert!(reader.read(&mut [0; 4]).await.is_err());
+    let _drained = slots.acquire().await.unwrap();
+    assert!(area.payload(4).is_ok());
+}
+
+#[test]
+fn unreceived_compressed_result_does_not_block_another_reader() {
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(1)
+        .build()
+        .unwrap()
+        .block_on(async {
+            let (source, oid, bytes) = fixture();
+            let slots = Arc::new(Semaphore::new(1));
+            let registration = Registration::new(oid);
+            let mut first = reader(source.path(), &oid, bytes.len() as u64, slots.clone());
+            let mut buffer = [0; 32];
+            assert!(first.read(&mut buffer).now_or_never().is_none());
+            tokio::time::timeout(Duration::from_secs(10), registration.gate.entered())
+                .await
+                .unwrap();
+            registration.gate.release();
+            // The first result is stored but deliberately not received. Its CPU
+            // step is done, so another ordinary reader must be able to advance.
+            tokio::time::timeout(Duration::from_secs(10), tokio::task::spawn_blocking(|| ()))
+                .await
+                .unwrap()
+                .unwrap();
+            let mut second = reader(source.path(), &oid, bytes.len() as u64, slots);
+            tokio::time::timeout(Duration::from_secs(10), second.read_exact(&mut buffer))
+                .await
+                .expect("completed ordinary work must not retain execution admission")
+                .unwrap();
+            assert_eq!(&buffer, &bytes[..32]);
+            first.read_exact(&mut buffer).await.unwrap();
+            assert_eq!(&buffer, &bytes[..32]);
+        });
+}

@@ -347,6 +347,10 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         .parse()
         .unwrap();
     let packed = std::env::var("CASITA_GIT_CLOSURE_PACKED").unwrap() == "1";
+    let delta_spilling = std::env::var("CASITA_GIT_CLOSURE_DELTA_SPILL").as_deref() == Ok("1");
+    let cpu_metrics = std::env::var("CASITA_GIT_CLOSURE_CPU_METRICS").as_deref() == Ok("1");
+    let delta_metrics = std::env::var("CASITA_GIT_CLOSURE_DELTA_METRICS").as_deref() == Ok("1");
+    let mut fixture_blob_deltas = 0;
     let bounded = std::env::var("CASITA_GIT_CLOSURE_BOUNDED_FIXTURE").as_deref() == Ok("1");
     let pack_window: usize = std::env::var("CASITA_GIT_CLOSURE_PACK_WINDOW")
         .unwrap_or("16".into())
@@ -398,8 +402,11 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             b"",
         );
         source.git(&["repack", "-adf", &format!("--window={pack_window}")], b"");
-        if content == "clustered" && count > 8 && file_bytes >= 65536 {
-            let deltas: usize = std::fs::read_dir(source.0.path().join("objects/pack"))
+        if delta_metrics
+            || delta_spilling
+            || (content == "clustered" && count > 8 && file_bytes >= 65536)
+        {
+            fixture_blob_deltas = std::fs::read_dir(source.0.path().join("objects/pack"))
                 .unwrap()
                 .map(|entry| entry.unwrap().path())
                 .filter(|path| path.extension().is_some_and(|ext| ext == "idx"))
@@ -414,10 +421,12 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
                         .count()
                 })
                 .sum();
-            assert!(
-                deltas > 0,
-                "clustered packed fixture must contain blob deltas"
-            );
+            if content == "clustered" && count > 8 && file_bytes >= 65536 {
+                assert!(
+                    fixture_blob_deltas > 0,
+                    "clustered packed fixture must contain blob deltas"
+                );
+            }
         }
     }
     let mut holds = Vec::new();
@@ -440,11 +449,18 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             .request(vec![root.clone()])
             .with_max_buffered_bytes(budget.try_into().unwrap())
             .with_concurrency(concurrency.try_into().unwrap())
-            .with_decode_workers(decode_workers.try_into().unwrap());
+            .with_decode_workers(decode_workers.try_into().unwrap())
+            .with_delta_spilling(delta_spilling);
         let hwm_before = bounded.then(bounded_fixture::parent_hwm).flatten();
+        let io_before = delta_metrics.then(bounded_fixture::process_io).flatten();
+        let cpu_before = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
         let start = std::time::Instant::now();
         let imported = repository.import(request).await.unwrap();
         let nanos = start.elapsed().as_nanos();
+        let cpu_after = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
+        let process_cpu = bounded_fixture::io_delta(cpu_before, cpu_after);
+        let io_after = delta_metrics.then(bounded_fixture::process_io).flatten();
+        let process_io = bounded_fixture::io_delta(io_before, io_after);
         let hwm_after = bounded.then(bounded_fixture::parent_hwm).flatten();
         if bounded {
             bounded_fixture::audit(&imported.reader, &expected).await;
@@ -462,6 +478,15 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             repository.verify_closure(&root).await.unwrap(),
             ClosureStatus::Complete { objects: reachable }
         );
+        let expected_spilled = if delta_spilling && operation == "cold" {
+            fixture_blob_deltas
+        } else {
+            0
+        };
+        assert_eq!(imported.report.spilled_delta_objects, expected_spilled);
+        if expected_spilled > 0 {
+            assert!(imported.report.peak_spill_bytes > 0);
+        }
         println!(
             "git_closure_sample {}",
             serde_json::json!({
@@ -477,6 +502,12 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
                 "reused_objects": imported.report.reused_objects,
                 "source_bytes": imported.report.source_bytes,
                 "decode_workers": decode_workers,
+                "delta_spilling": delta_spilling,
+                "fixture_blob_deltas": fixture_blob_deltas,
+                "import_process_io": process_io,
+                "import_process_cpu": process_cpu,
+                "spilled_delta_objects": imported.report.spilled_delta_objects,
+                "peak_spill_bytes": imported.report.peak_spill_bytes,
                 "peak_source_bytes": imported.report.peak_source_bytes,
                 "peak_decode_workers": imported.report.peak_decode_workers,
                 "root": root.to_string(),
@@ -905,3 +936,18 @@ mod inflation;
 
 #[path = "git_closure_import/bounded_fixture.rs"]
 mod bounded_fixture;
+
+#[path = "git_closure_import/delta_spill.rs"]
+mod delta_spill;
+
+// Keep the matched predecessor fixture identical; its importer ignores this
+// opt-in option, and its report compatibility fields remain zero.
+#[allow(dead_code)]
+trait BaselineDeltaSpilling {
+    fn with_delta_spilling(self, enabled: bool) -> Self;
+}
+impl BaselineDeltaSpilling for GitClosureImport {
+    fn with_delta_spilling(self, _enabled: bool) -> Self {
+        self
+    }
+}
