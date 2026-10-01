@@ -217,3 +217,49 @@ async fn benchmark_chunk_upload_completion() {
         elapsed.as_nanos()
     );
 }
+
+#[test]
+fn paused_source_still_drives_admitted_chunk_uploads() {
+    use futures::TryStreamExt;
+    use object_store::ObjectStore;
+    use tokio::io::AsyncWriteExt;
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .max_blocking_threads(1)
+        .enable_all()
+        .build()
+        .unwrap();
+    runtime.block_on(async {
+        let objects = Arc::new(object_store::memory::InMemory::new());
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 1024)
+            .with_chunk_upload_concurrency(16.try_into().unwrap())
+            .with_chunk_memory_budget_bytes(1024 * 1024);
+        let bytes: Vec<u8> = (0..2048).map(|i| (i * 71) as u8).collect();
+        let mut writer = store.open_write().await;
+        writer.write_all(&bytes).await.unwrap();
+        // Leave the source open below the concurrency limit. Drive
+        // flush while a producer waits for an earlier chunk to reach storage.
+        let uploaded = tokio::time::timeout(std::time::Duration::from_secs(3), async {
+            loop {
+                writer.flush().await.unwrap();
+                if !objects
+                    .list(Some(&Path::from("chunks")))
+                    .try_collect::<Vec<_>>()
+                    .await
+                    .unwrap()
+                    .is_empty()
+                {
+                    break;
+                }
+                tokio::task::yield_now().await;
+            }
+        })
+        .await;
+        assert!(
+            uploaded.is_ok(),
+            "paused input must not strand already-admitted chunk work"
+        );
+        let (id, size) = writer.close().await.unwrap();
+        assert_eq!(id, BlobId::new(blake3::hash(&bytes).into()));
+        assert_eq!(size, bytes.len() as u64);
+    });
+}

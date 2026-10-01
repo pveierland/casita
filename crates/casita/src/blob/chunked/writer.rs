@@ -189,7 +189,24 @@ async fn chunk_and_upload(
                     }
                 }
             };
-            let Some(chunk) = stream.next().await else {
+            // A producer can pause below the upload window. Keep driving
+            // admitted storage work while waiting for its next source chunk.
+            let chunk = {
+                let next = stream.next();
+                futures::pin_mut!(next);
+                match futures::poll!(next.as_mut()) {
+                    Poll::Ready(chunk) => chunk,
+                    Poll::Pending => loop {
+                        tokio::select! {
+                            chunk = &mut next => break chunk,
+                            completed = uploads.next(), if !uploads.is_empty() => {
+                                chunks.push(completed.expect("nonempty uploads")?);
+                            }
+                        }
+                    },
+                }
+            };
+            let Some(chunk) = chunk else {
                 drop(permit);
                 break;
             };
