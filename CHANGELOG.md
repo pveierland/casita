@@ -13,6 +13,10 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Added
 
+- `MutationSession::stage_git_blob_file` registers a stored verified native Git
+  blob as an ordinary file without reading or writing its payload again. The
+  receiving mutation pins the reused bytes and rechecks metadata after admission.
+
 - `RepositoryGeneration` orders the logical states of one repository.
   `MetadataReader::generation` and `RetainedReader::generation` report a
   reader's position in the commit order, so an application holding several

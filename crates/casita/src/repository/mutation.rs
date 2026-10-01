@@ -583,6 +583,64 @@ where
         Ok(())
     }
 
+    /// Register a stored, repository-verified native Git blob as an ordinary
+    /// file without reading or writing its payload again. Git blob bodies are
+    /// exactly file contents; their verified records already authenticate the
+    /// raw payload digest and length. Other Git kinds are rejected.
+    #[cfg(feature = "git")]
+    pub async fn stage_git_blob_file<'hold>(
+        &'hold self,
+        key: &ObjectKey,
+    ) -> Result<StagedObject<'hold>, RepositoryError> {
+        let (_, kind, _) = crate::git::git_key_parts(key)
+            .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        if kind != crate::git::GitObjectKind::Blob {
+            return Err(RepositoryError::InvalidInput(
+                "plain files require a native Git blob".into(),
+            ));
+        }
+        self.write_scope()
+            .run(async {
+                // Read metadata first to discover all required protections.
+                // Recheck after admission: collection may have removed this
+                // candidate before the receiving mutation could protect it.
+                let (snapshot, _metadata_pin) =
+                    crate::metadata::read_snapshot(self.repository.state.as_ref()).await?;
+                let record = snapshot
+                    .object(key)
+                    .await?
+                    .ok_or_else(|| RepositoryError::Absent(key.to_string()))?;
+                if !record.links().is_empty() {
+                    return Err(RepositoryError::InvalidInput(
+                        "Git blobs cannot have forward links".into(),
+                    ));
+                }
+                let verified = BlobFormat::seal_written(
+                    record.payload(),
+                    record.payload_size(),
+                    &self.repository.limits,
+                )?;
+                self.pin
+                    .protect(BTreeSet::from([
+                        crate::metadata::PinResource::Object(key.clone()),
+                        crate::metadata::PinResource::Object(verified.record().key().clone()),
+                        crate::metadata::PinResource::Blob(record.payload()),
+                    ]))
+                    .await?;
+                let (current, _current_pin) =
+                    crate::metadata::read_snapshot(self.repository.state.as_ref()).await?;
+                if current.object(key).await?.as_ref() != Some(&record) {
+                    return Err(RepositoryError::Absent(key.to_string()));
+                }
+                Ok(StagedObject {
+                    verified,
+                    repository: self.repository.staging_identity.clone(),
+                    _hold: std::marker::PhantomData,
+                })
+            })
+            .await
+    }
+
     /// Verify an already durable payload under an exact logical key.
     #[tracing::instrument(name = "repository.stage_existing", level = "debug", skip_all)]
     pub async fn stage_existing<'hold>(
