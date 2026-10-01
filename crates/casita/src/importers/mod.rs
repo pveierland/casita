@@ -79,6 +79,7 @@ mod nar;
 mod oci;
 mod tar;
 
+pub use crate::import_cpu::ImportCpuBudget;
 pub use blob::BlobImport;
 pub use casitar::CasitarImport;
 pub use copy::CopyImport;

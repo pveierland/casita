@@ -468,7 +468,8 @@ impl AsyncRead for SourceReader {
             let gate = this.gate.take();
             this.job = Some(Box::pin(async move {
                 state.permit = Some(slots.acquire_owned().await.map_err(io::Error::other)?);
-                tokio::task::spawn_blocking(move || {
+                let cpu = control.cpu.clone();
+                crate::import_cpu::run(cpu.as_ref(), move || {
                     let active = Active::new(&control);
                     if cancelled.load(Ordering::Relaxed)
                         || control.cancelled.load(Ordering::Relaxed)

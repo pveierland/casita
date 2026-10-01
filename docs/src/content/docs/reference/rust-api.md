@@ -46,6 +46,12 @@ reader alive until application roots have been published. A fully stored
 selection does not access the source directory. Report counters describe work
 performed and reuse boundaries, not the size of the complete reachable graph.
 
+`ImportCpuBudget` in `casita::import` optionally shares admission for source
+blocking decode/inflate and destination chunk hash/compression jobs. Pass clones
+with `GitClosureImport::with_cpu_budget`; `with_cpu_concurrency` creates a budget
+shared by that request's clones. Inline chunking, Bao hashing, async verification
+and storage are outside this job limit. Defaults remain unconfigured.
+
 `Reader` implements Tokio `AsyncRead` and `AsyncSeek`. It keeps the selected
 object's content protected from collection until dropped. `VerifiedReader`
 provides sequential reads that authenticate bytes before returning them.

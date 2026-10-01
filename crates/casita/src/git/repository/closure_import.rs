@@ -80,6 +80,13 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     session: &MutationSession<'_, PS, SS>,
     request: &GitClosureImport,
 ) -> Result<GitClosureImportReport> {
+    crate::import_cpu::scope(request.cpu.clone(), import_scoped(session, request)).await
+}
+
+async fn import_scoped<PS: BlobStore, SS: MetadataStore>(
+    session: &MutationSession<'_, PS, SS>,
+    request: &GitClosureImport,
+) -> Result<GitClosureImportReport> {
     let repository = session.repository();
     let limits = repository.limits();
     if limits.max_batch_objects == 0 {

@@ -733,6 +733,25 @@
       "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports", "requested worker configuration"]
     },
     {
+      "id": "git-shared-cpu",
+      "suite_id": "native-git",
+      "title": "Shared CPU admission across concurrent Git imports",
+      "kind": "module",
+      "target": "benchmarks.suites.git_shared_cpu",
+      "profiles": [
+        "smoke",
+        "standard"
+      ],
+      "correctness": [
+        "every independent destination audited",
+        "combined concurrent import makespan",
+        "observed shared CPU job limit",
+        "independent BLAKE3 and exact streaming readback",
+        "aggregate imported and reused counts",
+        "exhaustive closure verification"
+      ]
+    },
+    {
       "id": "git-closure-import",
       "suite_id": "native-git",
       "title": "Inventory-free Git closure import and persistent cross-root reuse",

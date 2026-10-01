@@ -23,6 +23,7 @@ pub(super) struct ChunkUploader<'a> {
     pub packed_chunks: Option<&'a Arc<PackedChunks>>,
     pub immutable_cache: bool,
     pub pins: &'a WritePins,
+    pub cpu: Option<&'a crate::import_cpu::ImportCpuBudget>,
 }
 
 impl ChunkUploader<'_> {
@@ -41,7 +42,7 @@ impl ChunkUploader<'_> {
     pub async fn upload(&self, data: Vec<u8>, guard: impl Send + 'static) -> io::Result<ChunkMeta> {
         // A cancelled caller cannot stop a running blocking task. Its guard
         // must follow the bytes, including while the task is still queued.
-        let (digest, data, guard) = tokio::task::spawn_blocking(move || {
+        let (digest, data, guard) = crate::import_cpu::run(self.cpu, move || {
             #[cfg(test)]
             super::hash_batch_tests::record_hash_job(std::iter::once(data.as_slice()));
             let digest = ChunkId::new(blake3::hash(&data).into());
@@ -91,7 +92,7 @@ impl ChunkUploader<'_> {
             };
             if !remote_present {
                 let data = data.take().expect("chunk bytes are consumed once");
-                let (compressed, returned_guard) = tokio::task::spawn_blocking(move || {
+                let (compressed, returned_guard) = crate::import_cpu::run(self.cpu, move || {
                     let compressed =
                         crate::compression::compress(&data, zstd::DEFAULT_COMPRESSION_LEVEL);
                     (compressed, guard)

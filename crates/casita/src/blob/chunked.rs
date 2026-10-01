@@ -1314,6 +1314,7 @@ impl BlobStore for ChunkedBlobStore {
             self.chunk_memory_budget.clone(),
             self.chunk_upload_concurrency,
             self.pins.capture(),
+            crate::import_cpu::current(),
         )
     }
 

@@ -24,9 +24,17 @@ struct Pending {
 pub(super) struct HashBatch {
     pending: Vec<Pending>,
     bytes: usize,
+    cpu: Option<crate::import_cpu::ImportCpuBudget>,
 }
 
 impl HashBatch {
+    pub fn new(cpu: Option<crate::import_cpu::ImportCpuBudget>) -> Self {
+        Self {
+            cpu,
+            ..Self::default()
+        }
+    }
+
     pub fn push(
         &mut self,
         data: Vec<u8>,
@@ -56,23 +64,50 @@ impl HashBatch {
         }
         let pending = std::mem::take(&mut self.pending);
         self.bytes = 0;
-        // Each receiver observes job failure as a closed channel. The job owns
-        // admission until its bytes are released, even if the writer is gone.
-        tokio::task::spawn_blocking(move || {
-            #[cfg(test)]
-            super::hash_batch_tests::record_hash_job(pending.iter().map(|p| p.data.as_slice()));
-            for item in pending {
-                if item.result.is_closed() {
-                    continue;
-                }
-                let digest = ChunkId::new(blake3::hash(&item.data).into());
-                // Sending never waits on storage or another blocking job.
-                let _ = item.result.send(Hashed {
-                    data: item.data,
-                    digest,
-                    guard: item.guard,
-                });
+        match self.cpu.as_ref() {
+            None => {
+                tokio::task::spawn_blocking(move || hash(pending));
             }
+            Some(cpu) => {
+                if let Some(permit) = cpu.try_acquire() {
+                    permit.spawn(move || hash(pending));
+                } else {
+                    let cpu = cpu.clone();
+                    tokio::spawn(async move {
+                        let mut pending = pending;
+                        // Dropped writers must return queued byte admission even
+                        // while another import occupies every CPU slot.
+                        let permit = {
+                            let abandoned = futures::future::join_all(
+                                pending.iter_mut().map(|item| item.result.closed()),
+                            );
+                            tokio::select! {
+                                permit = cpu.acquire() => permit,
+                                _ = abandoned => return,
+                            }
+                        };
+                        permit.spawn(move || hash(pending));
+                    });
+                }
+            }
+        }
+    }
+}
+
+fn hash(pending: Vec<Pending>) {
+    #[cfg(test)]
+    super::hash_batch_tests::record_hash_job(pending.iter().map(|p| p.data.as_slice()));
+    for item in pending {
+        if item.result.is_closed() {
+            continue;
+        }
+        let digest = ChunkId::new(blake3::hash(&item.data).into());
+        // Sending never waits on storage or another blocking job. Bytes retain
+        // their own admission; the CPU permit ends with this function.
+        let _ = item.result.send(Hashed {
+            data: item.data,
+            digest,
+            guard: item.guard,
         });
     }
 }

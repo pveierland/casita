@@ -1,0 +1,8 @@
+{
+  "git_closure_import": {
+    "path": "/tmp/casita-shared-cpu-v2-all-smoke/bin/git_closure_import",
+    "sha256": "73c6a48a12ab679b67d01c88406d2488e9faaf30705cef5682783c93ee29c439",
+    "source": "/tmp/casita-shared-cpu-v2-smoke-bin/git_closure_import",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/73c6a48a12ab679b67d01c88406d2488e9faaf30705cef5682783c93ee29c439"
+  }
+}

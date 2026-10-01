@@ -3704,3 +3704,35 @@ fn cancelled_chunk_hash_keeps_chunk_budget_until_cpu_completion() {
     // This reaches normal chunking before EOF and queues chunk hashing.
     check_cancelled_upload_budget(16 * 1024);
 }
+
+#[tokio::test]
+async fn shared_cpu_released_before_paused_chunk_storage() {
+    use crate::import_cpu::ImportCpuBudget;
+    let cpu = ImportCpuBudget::new(std::num::NonZeroUsize::MIN);
+    let objects = Arc::new(ChaosObjectStore::new(ChaosFault::PauseChunkUploads));
+    objects.arm();
+    let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 1024);
+    let writer_cpu = cpu.clone();
+    let writing = tokio::spawn(async move {
+        writer_cpu
+            .scope(store.put_slice(b"shared admission ends before this put"))
+            .await
+    });
+    tokio::time::timeout(
+        std::time::Duration::from_secs(3),
+        objects.wait_until_paused(),
+    )
+    .await
+    .unwrap();
+    let progressed = tokio::time::timeout(std::time::Duration::from_secs(3), cpu.run(|| 43)).await;
+    objects.disarm();
+    objects.resume();
+    writing.await.unwrap().unwrap();
+    assert_eq!(
+        progressed
+            .expect("paused storage held a CPU permit")
+            .unwrap(),
+        43
+    );
+    assert_eq!(cpu.peak_jobs(), 1);
+}
