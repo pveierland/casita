@@ -34,6 +34,7 @@ SMOKE = {
     "git-closure-import": ["--profile", "smoke"],
     "git-object-workers": ["--profile", "smoke"],
     "git-worker-streaming": ["--profile", "smoke"],
+    "git-retained-buffers": ["--profile", "smoke"],
     "git-import-profile": ["--profile", "smoke"],
     "git-blob-file": ["--profile", "smoke"],
     "git-verified-stream": ["--profile", "smoke"],

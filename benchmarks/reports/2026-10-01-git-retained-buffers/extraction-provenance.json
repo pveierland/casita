@@ -1,0 +1,28 @@
+{
+  "original_source_revision": "df8bc19307e78ff3662801e36a5034d79e942d56",
+  "original_checksum_manifest_sha256": "7930e1464492173ed5893b3e0aafa033aaf928ce14112e700f5e77fe233c3cac",
+  "changes": [
+    {
+      "path": "clustered-4m.json.host.json",
+      "original_sha256": "6ccf31ded2b83eee39b4e8159760f50e2af25e2eb13e187654400b61847edde1",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 4
+    },
+    {
+      "path": "stream-threshold.json.host.json",
+      "original_sha256": "567af2bec2be2d7237cec1d0199a825a8d3b202d710873f1094f1edafc1704ee",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 2
+    },
+    {
+      "path": "README.md",
+      "original_sha256": "e48665b66a8341001fa0c16800af5eb80ecf6c72176dafd459641dbe3ad27201",
+      "change": "Add historical provenance for the reordered extraction base."
+    },
+    {
+      "path": "profile.py",
+      "original_sha256": "c8b17f94f4f00e50c022e95e4e38654f340f47e1cf6be7ddd4833db13c477cc6",
+      "change": "Import the later spill comparison only when requested, so retained-buffer help and normal observation remain usable independently."
+    }
+  ]
+}

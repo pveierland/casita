@@ -347,6 +347,12 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         .parse()
         .unwrap();
     let packed = std::env::var("CASITA_GIT_CLOSURE_PACKED").unwrap() == "1";
+    let bounded = std::env::var("CASITA_GIT_CLOSURE_BOUNDED_FIXTURE").as_deref() == Ok("1");
+    let pack_window: usize = std::env::var("CASITA_GIT_CLOSURE_PACK_WINDOW")
+        .unwrap_or("16".into())
+        .parse()
+        .unwrap();
+    let mut expected = Vec::new();
     let source = Source::new("sha1");
     let mut entries = String::new();
     for i in 0..count {
@@ -355,19 +361,26 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         } else {
             file_bytes
         };
-        let mut body = vec![b'x'; size];
-        if content == "random" || content == "mixed" {
-            // Stable incompressible bytes, independent of the importer and its hashes.
-            let mut state = (i as u64 + 1).wrapping_mul(0x9e3779b97f4a7c15);
-            for part in body.chunks_mut(8) {
-                state ^= state << 13;
-                state ^= state >> 7;
-                state ^= state << 17;
-                part.copy_from_slice(&state.to_le_bytes()[..part.len()]);
+        let blob = if bounded {
+            let (oid, hash) = bounded_fixture::blob(&source, size, i, &content);
+            expected.push(bounded_fixture::expected(&oid, hash, size));
+            oid
+        } else {
+            let mut body = vec![b'x'; size];
+            if content == "random" || content == "mixed" || content == "clustered" {
+                // Stable incompressible bytes, independent of the importer and its hashes.
+                let family = if content == "clustered" { i % 8 } else { i };
+                let mut state = (family as u64 + 1).wrapping_mul(0x9e3779b97f4a7c15);
+                for part in body.chunks_mut(8) {
+                    state ^= state << 13;
+                    state ^= state >> 7;
+                    state ^= state << 17;
+                    part.copy_from_slice(&state.to_le_bytes()[..part.len()]);
+                }
             }
-        }
-        body[..8].copy_from_slice(&(i as u64).to_le_bytes());
-        let blob = source.blob(&body);
+            body[..8].copy_from_slice(&(i as u64).to_le_bytes());
+            source.blob(&body)
+        };
         entries.push_str(&format!("100644 blob {blob}\tfile{i:08}\n"));
     }
     let subtree = source.tree(&entries);
@@ -384,7 +397,28 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             ],
             b"",
         );
-        source.git(&["repack", "-adf", "--window=16"], b"");
+        source.git(&["repack", "-adf", &format!("--window={pack_window}")], b"");
+        if content == "clustered" && count > 8 && file_bytes >= 65536 {
+            let deltas: usize = std::fs::read_dir(source.0.path().join("objects/pack"))
+                .unwrap()
+                .map(|entry| entry.unwrap().path())
+                .filter(|path| path.extension().is_some_and(|ext| ext == "idx"))
+                .map(|path| {
+                    source
+                        .git(&["verify-pack", "-v", path.to_str().unwrap()], b"")
+                        .lines()
+                        .filter(|line| {
+                            let fields: Vec<_> = line.split_whitespace().collect();
+                            fields.len() == 7 && fields[1] == "blob"
+                        })
+                        .count()
+                })
+                .sum();
+            assert!(
+                deltas > 0,
+                "clustered packed fixture must contain blob deltas"
+            );
+        }
     }
     let mut holds = Vec::new();
     for operation in ["cold", "warm", "subtree-delta", "wide-delta"] {
@@ -407,9 +441,14 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             .with_max_buffered_bytes(budget.try_into().unwrap())
             .with_concurrency(concurrency.try_into().unwrap())
             .with_decode_workers(decode_workers.try_into().unwrap());
+        let hwm_before = bounded.then(bounded_fixture::parent_hwm).flatten();
         let start = std::time::Instant::now();
         let imported = repository.import(request).await.unwrap();
         let nanos = start.elapsed().as_nanos();
+        let hwm_after = bounded.then(bounded_fixture::parent_hwm).flatten();
+        if bounded {
+            bounded_fixture::audit(&imported.reader, &expected).await;
+        }
         let (new, reused, reachable) = match operation {
             "cold" => (count + 2, 0, count + 2),
             "warm" => (0, 1, count + 2),
@@ -427,6 +466,10 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             "git_closure_sample {}",
             serde_json::json!({
                 "operation": operation, "files": count, "packed": packed,
+                "bounded_fixture": bounded, "pack_window": pack_window,
+                "parent_hwm_before_import_bytes": hwm_before,
+                "parent_hwm_after_import_bytes": hwm_after,
+                "payload_correctness": if bounded { Some("independent BLAKE3 and exact streaming readback") } else { None },
                 "backend": backend, "file_bytes": file_bytes, "content": content,
                 "concurrency": concurrency, "publication_batch_objects": repository.limits().max_batch_objects,
                 "max_buffered_bytes": budget, "wall_nanos": nanos,
@@ -809,3 +852,53 @@ async fn worker_seals_reject_false_backend_digests_before_publication() {
             .is_none()
     );
 }
+
+#[tokio::test]
+async fn parallel_import_verifies_objects_from_primary_and_alternate_packs() {
+    for (name, format) in [
+        ("sha1", GitObjectFormat::Sha1),
+        ("sha256", GitObjectFormat::Sha256),
+    ] {
+        let primary = Source::new(name);
+        let alternate = Source::new(name);
+        let mut entries = String::new();
+        for (group, source) in [("a", &primary), ("b", &alternate)] {
+            let mut pack_entries = String::new();
+            for index in 0..8 {
+                let mut body = vec![group.as_bytes()[0]; 65536];
+                body[..8].copy_from_slice(&(index as u64).to_le_bytes());
+                let oid = source.blob(&body);
+                pack_entries.push_str(&format!("100644 blob {oid}\t{group}{index}\n"));
+            }
+            let root = source.tree(&pack_entries);
+            source.git(&["update-ref", "refs/benchmark/packed", &root], b"");
+            source.git(&["repack", "-adf", "--window=16"], b"");
+            entries.push_str(&pack_entries);
+        }
+        std::fs::write(
+            primary.0.path().join("objects/info/alternates"),
+            format!("{}\n", alternate.0.path().join("objects").display()),
+        )
+        .unwrap();
+        let root = key(format, GitObjectKind::Tree, &primary.tree(&entries));
+        let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+        let imported = repository
+            .import(
+                primary
+                    .request(vec![root.clone()])
+                    .with_concurrency(16.try_into().unwrap())
+                    .with_decode_workers(4.try_into().unwrap())
+                    .with_max_buffered_bytes(1048576.try_into().unwrap()),
+            )
+            .await
+            .unwrap();
+        assert_eq!(imported.report.imported_objects, 17);
+        assert_eq!(
+            repository.verify_closure(&root).await.unwrap(),
+            ClosureStatus::Complete { objects: 17 }
+        );
+    }
+}
+
+#[path = "git_closure_import/bounded_fixture.rs"]
+mod bounded_fixture;

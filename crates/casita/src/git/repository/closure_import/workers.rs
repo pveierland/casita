@@ -36,7 +36,7 @@ struct Pending {
 
 pub(super) struct Decoded {
     pub key: ObjectKey,
-    pub body: Vec<u8>,
+    pub body: Box<[u8]>,
     pub seal: Option<NativeSeal>,
 }
 
@@ -160,7 +160,7 @@ impl SourcePool {
                 .ok_or_else(|| source_error("decoded byte count overflow"))?;
             decoded.push(Decoded {
                 key: pending.pop_front().expect("front exists"),
-                body,
+                body: body.into_boxed_slice(),
                 seal: None,
             });
         }
@@ -243,7 +243,7 @@ fn decode(
             .transpose()?;
         emit(Decoded {
             key: pending.key,
-            body,
+            body: body.into_boxed_slice(),
             seal,
         })?;
     }

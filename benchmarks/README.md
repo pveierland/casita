@@ -2849,3 +2849,16 @@ benchmark run git-worker-streaming --profile smoke --output /tmp/git-worker-stre
 [The historical report](reports/2026-10-01-git-worker-streaming/README.md)
 retains matched-build comparisons, negative cases and correctness evidence;
 its original timings are not measurements of the extracted branch.
+
+## Retained Git body buffers
+
+`git-retained-buffers` checks clustered packed Git bodies using bounded fixture
+construction and independent streamed payload audits. Its smoke cases cover
+1 MiB minus one byte, exactly 1 MiB and plus one byte with one/four source workers.
+Standard cases add tiny/small/large bodies and 16/64-file sources. Completed
+bodies discard excess allocation capacity before waiting for staging; decoder
+workspace, conversion overlap and allocator-held pages remain additional.
+
+See [the focused corpus guide](git-retained-buffers.md) for reproducible commands
+and measurement limits, and [the historical report](reports/2026-10-01-git-retained-buffers/README.md)
+for preserved memory/latency tradeoffs on the original later source base.
