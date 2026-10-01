@@ -1016,7 +1016,34 @@ where
                             });
                         }
                     }
-                    let mut newly_verified: Vec<_> = constructed_closures.iter().cloned().collect();
+                    let mut newly_verified: Vec<_> = if self.repository.formats.is_builtin() {
+                        constructed_closures.iter().cloned().collect()
+                    } else {
+                        Vec::new()
+                    };
+                    if !self.repository.formats.is_builtin() {
+                        // Construction proves the built-in format's rules, not
+                        // a replacement verifier's additional relations. Audit
+                        // those candidates before publishing any proof marks.
+                        for target in &constructed_closures {
+                            let status = verify_closure_with(
+                                self.repository.closure_verifier(),
+                                snapshot.as_ref(),
+                                &overlay,
+                                target,
+                                None,
+                                ClosureAudit::Incremental,
+                                Some(&mut newly_verified),
+                            )
+                            .await?;
+                            if !matches!(status, ClosureStatus::Complete { .. }) {
+                                return Err(RepositoryError::RootNotPublishable {
+                                    root: target.clone(),
+                                    status,
+                                });
+                            }
+                        }
+                    }
                     for change in &root_changes {
                         if let RootChange::Set { target, .. } = change {
                             if constructed_closures.contains(target) {

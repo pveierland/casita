@@ -193,6 +193,11 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   `readahead_deferrals` and `buffer_bypasses`, report how often the budget runs
   out.
 
+### Fixed
+
+- Construction-based publication checks custom format relations before recording
+  closure witnesses or publishing filesystem and Git roots.
+
 ### Security
 
 - Filesystem import and checkout resolve descendants beneath already-open root
