@@ -1,0 +1,18 @@
+{
+  "executable_sha256": "423f2151cb20be1a7bf7662a747d626c339f7c26e1e2df2d8c6a8479d4f0e221",
+  "lockfile_sha256": "bdc3bbc1e97a7bf181c2cd1b52fd38e5d6b58da22fa8400797b7b67bd33265a1",
+  "features": "native,git,experimental",
+  "default_features": false,
+  "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+  "source_head": "98ea56bb61059d7127e9811270c23bf9bfe841e9",
+  "source_patch_sha256": "39afdcb3c2c05d21b872c3372d9eafad7a2f5cd1a6276e4f0056ac504676c70c",
+  "tracked_source_sha256": "6ccd9f6891b758cbc700619a4db1b8c00428724f87e846108cfda33f3dc5c913",
+  "untracked_source_files": [
+    "crates/casita/tests/git_closure_import/bounded_fixture.rs",
+    "crates/casita/tests/git_closure_import/inflation.rs"
+  ],
+  "fixture_sha256": "03b144687bfe9bfd040d9497a934d80c0fc45e69518f644fc39f7b5b30a59cdf",
+  "source_root": "/tmp/casita-inflation-baseline",
+  "cargo_artifact_fresh": false
+}

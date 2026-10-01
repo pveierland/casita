@@ -1,0 +1,20 @@
+    Checking casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+error: this call to `clone` can be replaced with `std::slice::from_ref`
+   --> crates/casita/tests/git_closure_import.rs:202:33
+    |
+202 |             .validated_closures(&[root.clone()])
+    |                                 ^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&root)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.96.0/index.html#cloned_ref_to_slice_refs
+    = note: `-D clippy::cloned-ref-to-slice-refs` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cloned_ref_to_slice_refs)]`
+
+error: this call to `clone` can be replaced with `std::slice::from_ref`
+   --> crates/casita/tests/git_closure_import.rs:596:33
+    |
+596 |             .validated_closures(&[root.clone()])
+    |                                 ^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&root)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.96.0/index.html#cloned_ref_to_slice_refs
+
+error: could not compile `casita` (test "git_closure_import") due to 2 previous errors

@@ -314,16 +314,21 @@ fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
     let (directory, keys) = loose_blobs(&[b"oversized", b""]);
     let mut keys = VecDeque::from(keys);
     let mut source = open(&directory, 16, &[]);
-    let first = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
+    let control = Arc::new(Control::default());
+    let first = source
+        .decode_serial(&mut keys, 2, 1, 16, 16, &control)
+        .unwrap();
     assert_eq!(
         first.len(),
         1,
         "oversized bodies must occupy their own window"
     );
     assert_eq!(keys.len(), 1);
-    let second = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
+    let second = source
+        .decode_serial(&mut keys, 2, 1, 16, 16, &control)
+        .unwrap();
     assert_eq!(second.len(), 1);
-    assert!(second[0].body.is_empty());
+    assert!(matches!(&second[0].body, Body::Buffered(bytes) if bytes.is_empty()));
     assert!(keys.is_empty());
 }
 
@@ -352,7 +357,7 @@ fn a_wrong_type_is_rejected_from_its_header_before_size_limits_or_decoding() {
             let mut pending = VecDeque::from([tree.clone()]);
             let error = if serial {
                 source
-                    .decode_serial(&mut pending, 1, 1024, 1024, 16)
+                    .decode_serial(&mut pending, 1, 1024, 1024, 16, &Arc::default())
                     .err()
                     .unwrap()
             } else {

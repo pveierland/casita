@@ -1,0 +1,16 @@
+Waiting up to five minutes for a quiet interval before the comparison matrix.
+host did not become quiet before the deadline; memory comparisons will still run, with CPU timing marked exploratory.
+Running thresholds
+Completed thresholds
+Running large-64m
+Completed large-64m
+Running parallel-16m
+Completed parallel-16m
+Running small-control
+Completed small-control
+Running delta-fallback
+Completed delta-fallback
+Running compressed-64m
+Completed compressed-64m
+Running byte-budget
+Completed byte-budget

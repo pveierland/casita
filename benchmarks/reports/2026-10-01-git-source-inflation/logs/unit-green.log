@@ -1,0 +1,19 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+warning: function `fuzz_decode` is never used
+   --> crates/casita/src/sync/sliced.rs:952:8
+    |
+952 | pub fn fuzz_decode(bytes: &[u8]) {
+    |        ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `casita` (lib test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 10m 14s
+     Running unittests src/lib.rs (/home/pveierland/dev/casita/target/release/deps/casita-50cd1ef24479fc72)
+
+running 3 tests
+test git::repository::closure_import::workers::streaming::tests::cancellation_retains_submitted_job_permit_but_drops_waiting_job ... ok
+test git::repository::closure_import::workers::streaming::tests::inflater_buffers_remain_fixed_and_declared_lengths_are_enforced ... ok
+test git::repository::closure_import::workers::streaming::tests::error_return_drains_inflater_jobs_for_serial_and_grouped_windows ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 864 filtered out; finished in 0.10s

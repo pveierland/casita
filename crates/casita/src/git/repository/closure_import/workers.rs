@@ -1,4 +1,4 @@
-//! CPU workers stream verified objects into staging within one admitted window.
+//! Bounded source workers deliver objects and streams to verified staging.
 
 use super::{Result, decoded_mismatch, kind_mismatch, native_kind, source_error};
 use crate::ObjectKey;
@@ -16,9 +16,11 @@ use gix::odb::HeaderExt;
 use std::collections::VecDeque;
 use std::path::PathBuf;
 use std::sync::{
-    Arc,
+    Arc, OnceLock,
     atomic::{AtomicBool, AtomicUsize, Ordering},
 };
+
+mod streaming;
 
 const PACK_CACHE_BYTES: usize = 16 * 1024 * 1024;
 
@@ -27,6 +29,8 @@ pub(super) struct SourcePool {
     /// Canonically ordered selected roots, for classifying type mismatches.
     roots: Arc<[ObjectKey]>,
     decoded_bytes: u64,
+    locator: Arc<OnceLock<streaming::Locator>>,
+    slots: Arc<tokio::sync::Semaphore>,
 }
 
 struct Pending {
@@ -36,10 +40,45 @@ struct Pending {
     size: u64,
 }
 
-pub(super) struct Decoded {
-    pub key: ObjectKey,
-    pub body: Box<[u8]>,
-    pub seal: Option<NativeSeal>,
+struct Decoded {
+    key: ObjectKey,
+    body: Body,
+    seal: Option<NativeSeal>,
+}
+
+enum Body {
+    Buffered(Box<[u8]>),
+    Stream {
+        reader: streaming::SourceReader,
+        size: u64,
+    },
+}
+impl Body {
+    fn size(&self) -> u64 {
+        match self {
+            Self::Buffered(bytes) => bytes.len() as u64,
+            Self::Stream { size, .. } => *size,
+        }
+    }
+}
+
+fn stream_blob(
+    source: &gix::odb::Handle,
+    locator: &OnceLock<streaming::Locator>,
+    slots: &Arc<tokio::sync::Semaphore>,
+    control: &Arc<Control>,
+    kind: GitObjectKind,
+    oid: &gix::ObjectId,
+    size: u64,
+) -> Result<Option<Body>> {
+    if kind != GitObjectKind::Blob || size < streaming::MIN_BYTES {
+        return Ok(None);
+    }
+    let locator = locator.get_or_init(|| streaming::Locator::open(source.store_ref()));
+    Ok(locator
+        .reader(oid, size, slots.clone(), control.clone())
+        .map_err(source_error)?
+        .map(|reader| Body::Stream { reader, size }))
 }
 
 struct Window {
@@ -116,6 +155,8 @@ impl SourcePool {
             sources,
             roots,
             decoded_bytes: 0,
+            locator: Arc::new(OnceLock::new()),
+            slots: Arc::new(tokio::sync::Semaphore::new(workers)),
         })
     }
 
@@ -126,6 +167,7 @@ impl SourcePool {
         budget: u64,
         payload_limit: u64,
         metadata_limit: u64,
+        control: &Arc<Control>,
     ) -> Result<Vec<Decoded>> {
         let mut decoded = Vec::new();
         let mut bytes = 0u64;
@@ -155,6 +197,25 @@ impl SourcePool {
             if !decoded.is_empty() && (bytes > budget || size > budget.saturating_sub(bytes)) {
                 break;
             }
+            if let Some(body) = stream_blob(
+                &self.sources[0],
+                &self.locator,
+                &self.slots,
+                control,
+                kind,
+                &oid,
+                size,
+            )? {
+                bytes = bytes
+                    .checked_add(size)
+                    .ok_or_else(|| source_error("decoded byte count overflow"))?;
+                decoded.push(Decoded {
+                    key: pending.pop_front().expect("front exists"),
+                    body,
+                    seal: None,
+                });
+                continue;
+            }
             let mut body = Vec::new();
             let object = self.sources[0]
                 .find(&oid, &mut body)
@@ -167,7 +228,7 @@ impl SourcePool {
                 .ok_or_else(|| source_error("decoded byte count overflow"))?;
             decoded.push(Decoded {
                 key: pending.pop_front().expect("front exists"),
-                body: body.into_boxed_slice(),
+                body: Body::Buffered(body.into_boxed_slice()),
                 seal: None,
             });
         }
@@ -226,7 +287,9 @@ fn decode(
     source: &mut gix::odb::Handle,
     batch: Vec<Pending>,
     verifier: Option<&NativeVerifier>,
-    control: &Control,
+    control: &Arc<Control>,
+    locator: &OnceLock<streaming::Locator>,
+    slots: &Arc<tokio::sync::Semaphore>,
     mut emit: impl FnMut(Decoded) -> Result<()>,
 ) -> Result<()> {
     let _active = Active::new(control);
@@ -236,6 +299,22 @@ fn decode(
         }
         #[cfg(test)]
         tests::pause_before_decode(&pending.key);
+        if let Some(body) = stream_blob(
+            source,
+            locator,
+            slots,
+            control,
+            pending.kind,
+            &pending.oid,
+            pending.size,
+        )? {
+            emit(Decoded {
+                key: pending.key,
+                body,
+                seal: None,
+            })?;
+            continue;
+        }
         let mut body = Vec::new();
         let object = source.find(&pending.oid, &mut body).map_err(source_error)?;
         if let Some(error) =
@@ -248,7 +327,7 @@ fn decode(
             .transpose()?;
         emit(Decoded {
             key: pending.key,
-            body: body.into_boxed_slice(),
+            body: Body::Buffered(body.into_boxed_slice()),
             seal,
         })?;
     }
@@ -259,9 +338,16 @@ async fn stage<'hold, PS: BlobStore, SS: MetadataStore>(
     session: &'hold MutationSession<'_, PS, SS>,
     object: Decoded,
 ) -> Result<StagedObject<'hold>> {
-    Ok(match object.seal {
-        Some(seal) => session.stage_native_seal(seal, &object.body).await?,
-        None => session.stage_object(object.key, &object.body).await?,
+    Ok(match object.body {
+        Body::Stream { mut reader, size } => {
+            session
+                .stage_object_reader_with_size(object.key, size, &mut reader)
+                .await?
+        }
+        Body::Buffered(body) => match object.seal {
+            Some(seal) => session.stage_native_seal(seal, &body).await?,
+            None => session.stage_object(object.key, &body).await?,
+        },
     })
 }
 
@@ -284,9 +370,10 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     let budget = request.max_buffered_bytes.get();
     let serial = request.decode_workers.get() == 1;
     let control = Arc::new(Control::default());
-    // Dropping the import cancels parallel decoding between objects. An
-    // in-flight gix decode or the admitted serial window may finish; source
-    // workers never write destination data.
+    // Dropping the import cancels parallel decoding between objects and
+    // streamed inflation between bounded steps. An in-flight gix decode or
+    // admitted buffered serial window may finish; source workers never write
+    // destination data.
     let _cancellation = Cancellation(control.clone());
     let first_control = control.clone();
     let first_verifier = verifier.clone();
@@ -314,8 +401,9 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 budget,
                 limits.max_payload_bytes,
                 limits.max_metadata_bytes,
+                &first_control,
             )?;
-            let bytes = decoded.iter().map(|object| object.body.len() as u64).sum();
+            let bytes = decoded.iter().map(|object| object.body.size()).sum();
             return Ok(Window {
                 source,
                 pending,
@@ -337,6 +425,8 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 plan,
                 first_verifier.as_ref(),
                 &first_control,
+                &source.locator,
+                &source.slots,
                 |object| {
                     decoded.push(object);
                     Ok(())
@@ -360,12 +450,12 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     })
     .await
     .map_err(source_error)??;
-    let objects = if window.groups.is_empty() {
+    let result = if window.groups.is_empty() {
         futures::stream::iter(std::mem::take(&mut window.decoded))
             .map(|object| stage(session, object))
             .buffer_unordered(count)
-            .try_collect()
-            .await?
+            .try_collect::<Vec<_>>()
+            .await
     } else {
         let (sender, receiver) = tokio::sync::mpsc::channel(workers);
         let sources = std::mem::take(&mut window.source.sources);
@@ -381,13 +471,31 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 let verifier = verifier.clone();
                 let control = control.clone();
                 let sender = sender.clone();
+                let locator = window.source.locator.clone();
+                let slots = window.source.slots.clone();
+                // No staging reader is polled until all jobs are spawned, so
+                // one slot per nonempty group is available here. CPU jobs own
+                // the slot through cancellation and release it before readers
+                // submit bounded inflater steps.
+                let permit = slots
+                    .clone()
+                    .try_acquire_owned()
+                    .expect("previous source window drained");
                 futures::future::Either::Right(tokio::task::spawn_blocking(move || {
-                    let result =
-                        decode(&mut source, batch, verifier.as_ref(), &control, |object| {
+                    let _permit = permit;
+                    let result = decode(
+                        &mut source,
+                        batch,
+                        verifier.as_ref(),
+                        &control,
+                        &locator,
+                        &slots,
+                        |object| {
                             sender
                                 .blocking_send(Ok(object))
                                 .map_err(|_| source_error("Git staging receiver closed"))
-                        });
+                        },
+                    );
                     if let Err(error) = result {
                         // A receiver closed by a staging failure already
                         // holds the error to return; do not replace it.
@@ -423,12 +531,25 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                 }
             }
         }
-        let objects = result?;
-        if let Some(error) = join_error {
-            return Err(error);
+        match (result, join_error) {
+            (Err(error), _) | (_, Some(error)) => Err(error),
+            (Ok(objects), None) => Ok(objects),
         }
-        objects
     };
+    if result.is_err() {
+        control.cancelled.store(true, Ordering::Relaxed);
+        // Staging readers have been dropped and decode groups joined. Waiting
+        // for every slot also drains inflater jobs whose reader was dropped
+        // after submission. Keep the original error, including on job panic.
+        let _drained = window
+            .source
+            .slots
+            .clone()
+            .acquire_many_owned(workers as u32)
+            .await
+            .expect("private source semaphore remains open");
+    }
+    let objects = result?;
     Ok(StagedWindow {
         source: window.source,
         pending: window.pending,

@@ -335,7 +335,7 @@ async fn parallel_source_workers_keep_custom_verifiers_on_the_async_runtime() {
     let source = tempfile::tempdir().unwrap();
     assert!(
         Command::new("git")
-            .args(["init", "--bare", "--quiet"])
+            .args(["init", "--bare", "--quiet", "--object-format=sha1"])
             .arg(source.path())
             .status()
             .unwrap()
@@ -343,7 +343,9 @@ async fn parallel_source_workers_keep_custom_verifiers_on_the_async_runtime() {
     );
     let mut roots = Vec::new();
     for i in 0..8u8 {
-        let body = vec![i; 65536];
+        // Exercise both buffered and streamed source bodies under the custom registry.
+        let size = if i % 2 == 0 { 1024 * 1024 } else { 65536 };
+        let body = vec![i; size];
         let mut child = Command::new("git")
             .arg("-C")
             .arg(source.path())

@@ -2894,3 +2894,16 @@ workspace, conversion overlap and allocator-held pages remain additional.
 See [the focused corpus guide](git-retained-buffers.md) for reproducible commands
 and measurement limits, and [the historical report](reports/2026-10-01-git-retained-buffers/README.md)
 for preserved memory/latency tradeoffs on the original later source base.
+
+## Git source inflation
+
+`git-source-inflation` covers loose blobs below, at and above the 1 MiB streaming
+threshold using bounded fixture generation and independent streamed payload
+audits. One/four-worker controls retain exact closure and import/reuse gates.
+Standard cases add 16/64 MiB blobs and source admission boundaries. Packed objects
+continue through gix as buffered controls.
+
+See [the focused guide](git-source-inflation.md) for commands and memory limits.
+[The historical report](reports/2026-10-01-git-source-inflation/README.md) retains
+the original combined loose/packed experiment; its timings are not measurements
+of this intermediate extracted branch.
