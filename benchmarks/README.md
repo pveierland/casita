@@ -2717,3 +2717,26 @@ for exact source, binary, dependency, and result provenance.
 The [root-prefix](root-prefix.md) suite checks indexed named-root ranges at
 255 and 257 matches, plus sparse and dense prefixes in a 4,096-root store.
 It is registered in `manifest.json` and included in `benchmark all`.
+
+
+### Chunk upload completion
+
+`chunk-upload-completion` compares production writers using separate immutable
+executables. Controlled stragglers delay one in eight chunk puts; `--delays-ms 0`
+provides the zero-delay control. The timer covers the payload write only. Every
+sample verifies independent FastCDC boundaries and hashes, exact blob identity,
+full Bao-verified readback, and that all started uploads finished. Standard cases
+cover the 512-byte chunker minimum, 2048-byte maximum, and byte-budget admission
+on both sides of one-upload and four-upload windows. Reservations round up in
+64 KiB units even for small chunks; 64 KiB therefore permits only one upload. It is included in `benchmark all`.
+
+```sh
+cargo test --release -p casita --no-default-features --features native,experimental --test chunk_upload_completion --no-run
+benchmark run chunk-upload-completion --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/chunk-completion-smoke.json
+benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576 --delays-ms 0,8 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
+```
+
+Build each source checkout in its own Cargo target directory, freeze both
+executables before subsequent builds, and preserve the same Cargo.lock and settings. Optional `.build.json` fingerprints are checked
+before comparing. Reports retain failed gates, every sample, and paired ranges;
+synthetic storage-delay results are not end-to-end Git import speedups.
