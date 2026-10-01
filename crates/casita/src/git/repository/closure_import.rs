@@ -27,7 +27,11 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     session: &MutationSession<'_, PS, SS>,
     request: &GitClosureImport,
 ) -> Result<GitClosureImportReport> {
-    crate::import_cpu::scope(request.cpu.clone(), import_scoped(session, request)).await
+    crate::import_cpu::scope(
+        request.cpu.clone(),
+        crate::import_buffer::scope(request.buffers.clone(), import_scoped(session, request)),
+    )
+    .await
 }
 
 async fn import_scoped<PS: BlobStore, SS: MetadataStore>(

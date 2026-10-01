@@ -7,8 +7,8 @@
 #[cfg(feature = "oci")]
 pub use crate::importers::OciImport;
 pub use crate::importers::{
-    BlobImport, CasitarImport, CopyImport, FilesystemImport, FilesystemNarImport, ImportCpuBudget,
-    Importer, NarImport, TarImport,
+    BlobImport, CasitarImport, CopyImport, FilesystemImport, FilesystemNarImport,
+    ImportBufferBudget, ImportCpuBudget, Importer, NarImport, TarImport,
 };
 #[cfg(feature = "git")]
 pub use crate::importers::{GitClosureImport, GitImport};

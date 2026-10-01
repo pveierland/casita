@@ -7,16 +7,37 @@ use crate::digest::ChunkId;
 const MAX_CHUNKS: usize = 4;
 const MAX_BYTES: usize = 1024 * 1024;
 
+pub(super) struct ChunkGuard {
+    _chunk: OwnedSemaphorePermit,
+    _writer: Option<std::sync::Arc<crate::import_buffer::Reservation>>,
+}
+impl ChunkGuard {
+    pub fn new(
+        chunk: OwnedSemaphorePermit,
+        writer: Option<std::sync::Arc<crate::import_buffer::Reservation>>,
+    ) -> Self {
+        Self {
+            _chunk: chunk,
+            _writer: writer,
+        }
+    }
+}
+impl From<OwnedSemaphorePermit> for ChunkGuard {
+    fn from(chunk: OwnedSemaphorePermit) -> Self {
+        Self::new(chunk, None)
+    }
+}
+
 pub(super) struct Hashed {
     // Drop bytes before returning their admission on every cancellation path.
     pub data: Vec<u8>,
     pub digest: ChunkId,
-    pub guard: OwnedSemaphorePermit,
+    pub guard: ChunkGuard,
 }
 
 struct Pending {
     data: Vec<u8>,
-    guard: OwnedSemaphorePermit,
+    guard: ChunkGuard,
     result: oneshot::Sender<Hashed>,
 }
 
@@ -38,7 +59,7 @@ impl HashBatch {
     pub fn push(
         &mut self,
         data: Vec<u8>,
-        guard: OwnedSemaphorePermit,
+        guard: impl Into<ChunkGuard>,
     ) -> oneshot::Receiver<Hashed> {
         if self.bytes.saturating_add(data.len()) > MAX_BYTES {
             self.flush();
@@ -47,7 +68,7 @@ impl HashBatch {
         self.bytes += data.len();
         self.pending.push(Pending {
             data,
-            guard,
+            guard: guard.into(),
             result,
         });
         // An oversized chunk was already admitted by the shared byte budget;

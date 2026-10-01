@@ -194,6 +194,11 @@ SUITE_BUILD_SPECS["chunk-hash-batch"] = SuiteBuildSpec(
     ("test", "--release", "--no-default-features", "--features", "native,experimental", "--test", "chunk_hash_batch", "--no-run", "--message-format=json"),
     "--probe-binary", "chunk_hash_batch", cargo_json_test="chunk_hash_batch", supports_report=False,
 )
+SUITE_BUILD_SPECS["git-shared-buffers"] = SUITE_BUILD_SPECS["git-object-workers"]
+SUITE_BUILD_SPECS["git-shared-buffer-limits"] = SuiteBuildSpec(
+    ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_import_buffers", "--no-run", "--message-format=json"),
+    "--probe-binary", "git_import_buffers", cargo_json_test="git_import_buffers", supports_report=False,
+)
 SUITE_BUILD_SPECS["git-shared-cpu"] = SUITE_BUILD_SPECS["git-object-workers"]
 SUITE_BUILD_SPECS["git-delta-spill"] = SUITE_BUILD_SPECS["git-object-workers"]
 SUITE_BUILD_SPECS["git-delta-disabled"] = SUITE_BUILD_SPECS["git-object-workers"]

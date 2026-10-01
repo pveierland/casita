@@ -49,6 +49,7 @@ struct Decoded {
     key: ObjectKey,
     body: Body,
     seal: Option<NativeSeal>,
+    _buffers: Option<Arc<crate::import_buffer::Reservation>>,
 }
 
 enum Body {
@@ -107,12 +108,37 @@ pub(super) struct StagedWindow<'hold> {
 #[derive(Default)]
 struct Control {
     cpu: Option<crate::import_cpu::ImportCpuBudget>,
+    buffers: Option<SourceAllowance>,
     cancelled: AtomicBool,
     active: AtomicUsize,
     peak: AtomicUsize,
     spilled_delta_objects: AtomicUsize,
 }
+#[derive(Clone)]
+struct SourceAllowance {
+    body_bytes: u64,
+    reservation: Arc<crate::import_buffer::Reservation>,
+}
+
 impl Control {
+    fn buffer_guard(&self) -> Option<Arc<crate::import_buffer::Reservation>> {
+        self.buffers
+            .as_ref()
+            .map(|buffers| buffers.reservation.clone())
+    }
+    fn check_buffered(&self, size: u64) -> Result<()> {
+        if self
+            .buffers
+            .as_ref()
+            .is_some_and(|buffers| size > buffers.body_bytes)
+        {
+            return Err(RepositoryError::LimitExceeded(format!(
+                "buffered Git object of {size} bytes exceeds admitted source body allowance"
+            ))
+            .into());
+        }
+        Ok(())
+    }
     fn with_cpu_budget(mut self, cpu: Option<crate::import_cpu::ImportCpuBudget>) -> Self {
         self.cpu = cpu;
         self
@@ -250,6 +276,7 @@ impl SourcePool {
                     key: pending.pop_front().expect("front exists"),
                     body,
                     seal: None,
+                    _buffers: control.buffer_guard(),
                 });
                 continue;
             }
@@ -269,9 +296,11 @@ impl SourcePool {
                     key: pending.pop_front().expect("front exists"),
                     body,
                     seal: None,
+                    _buffers: control.buffer_guard(),
                 });
                 continue;
             }
+            control.check_buffered(size)?;
             let mut body = Vec::new();
             let object = self.sources[0]
                 .find(&oid, &mut body)
@@ -294,6 +323,7 @@ impl SourcePool {
                 key: pending.pop_front().expect("front exists"),
                 body: Body::Buffered(body.into_boxed_slice()),
                 seal: None,
+                _buffers: control.buffer_guard(),
             });
         }
         self.decoded_bytes = self.decoded_bytes.saturating_add(bytes);
@@ -420,6 +450,7 @@ fn decode(
                 key: pending.key,
                 body,
                 seal: None,
+                _buffers: control.buffer_guard(),
             })?;
             continue;
         }
@@ -437,9 +468,11 @@ fn decode(
                 key: pending.key,
                 body,
                 seal: None,
+                _buffers: control.buffer_guard(),
             })?;
             continue;
         }
+        control.check_buffered(pending.size)?;
         let mut body = Vec::new();
         let object = source.find(&pending.oid, &mut body).map_err(source_error)?;
         let kind = match object.kind {
@@ -461,6 +494,7 @@ fn decode(
             key: pending.key,
             body: Body::Buffered(body.into_boxed_slice()),
             seal,
+            _buffers: control.buffer_guard(),
         })?;
     }
     Ok(())
@@ -483,6 +517,62 @@ async fn stage<'hold, PS: BlobStore, SS: MetadataStore>(
     })
 }
 
+// Reserve before source work. Fixed reader state is charged for every admitted
+// object, and reconstruction/probing scratch for each worker plus planning.
+// Decoder workspace, locator/cache metadata and verifier buffers are excluded.
+async fn source_allowance(
+    request: &GitClosureImport,
+    mut count: usize,
+) -> Result<(usize, usize, u64, Option<SourceAllowance>)> {
+    let Some(buffers) = request.buffers.as_ref() else {
+        return Ok((
+            count,
+            request.decode_workers.get().min(count),
+            request.max_buffered_bytes.get(),
+            None,
+        ));
+    };
+    let capacity = buffers.source_capacity();
+    loop {
+        let workers = request.decode_workers.get().min(count);
+        let overhead = count
+            .checked_mul(streaming::READER_BUFFER_BYTES)
+            .and_then(|readers| {
+                (workers + 1)
+                    .checked_mul(streaming::SCRATCH_BUFFER_BYTES)
+                    .and_then(|scratch| readers.checked_add(scratch))
+            })
+            .ok_or_else(|| source_error("source buffer envelope overflow"))?;
+        if overhead < capacity {
+            let body_bytes = request
+                .max_buffered_bytes
+                .get()
+                .min((capacity - overhead) as u64);
+            let reservation = buffers
+                .source
+                .reserve(overhead + body_bytes as usize)
+                .await
+                .map_err(source_error)?;
+            return Ok((
+                count,
+                workers,
+                body_bytes,
+                Some(SourceAllowance {
+                    body_bytes,
+                    reservation,
+                }),
+            ));
+        }
+        if count <= 1 {
+            return Err(RepositoryError::LimitExceeded(
+                "source buffer partition cannot hold one reader and reconstruction scratch".into(),
+            )
+            .into());
+        }
+        count -= 1;
+    }
+}
+
 pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     session: &'hold MutationSession<'_, PS, SS>,
     source: Option<SourcePool>,
@@ -498,12 +588,14 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
         .get()
         .min(limits.max_batch_objects)
         .min(super::FRONTIER);
-    let workers = request.decode_workers.get().min(count);
+    let (count, workers, budget, buffers) = source_allowance(request, count).await?;
     let path = request.objects_dir.clone();
-    let budget = request.max_buffered_bytes.get();
     let serial = request.decode_workers.get() == 1;
     let delta_spilling = request.delta_spilling;
-    let control = Arc::new(Control::default().with_cpu_budget(request.cpu.clone()));
+    let control = Arc::new(Control {
+        buffers,
+        ..Control::default().with_cpu_budget(request.cpu.clone())
+    });
     // Dropping the import cancels parallel decoding between objects and
     // streamed inflation between bounded steps. An in-flight gix decode or
     // admitted buffered serial window may finish. Running jobs retain their

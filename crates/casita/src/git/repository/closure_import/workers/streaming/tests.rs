@@ -738,7 +738,7 @@ fn unreceived_compressed_result_does_not_block_another_reader() {
         });
 }
 
-async fn shared_step_admission(spilled: bool, cancel: bool) {
+async fn shared_step_admission(spilled: bool, cancel: bool, with_buffers: bool) {
     use crate::import_cpu::ImportCpuBudget;
     use crate::spill::{SpillArea, SpillLimits};
     struct Release(Option<std::sync::mpsc::Sender<()>>);
@@ -767,7 +767,16 @@ async fn shared_step_admission(spilled: bool, cancel: bool) {
     });
     started.await.unwrap();
     let slots = Arc::new(Semaphore::new(1));
-    let control = Arc::new(Control::default().with_cpu_budget(Some(budget)));
+    let buffer_budget =
+        with_buffers.then(|| crate::import_buffer::ImportBufferBudget::new(262144, 65536).unwrap());
+    let mut control = Control::default().with_cpu_budget(Some(budget));
+    if let Some(buffers) = &buffer_budget {
+        control.buffers = Some(super::super::SourceAllowance {
+            body_bytes: bytes.len() as u64,
+            reservation: buffers.source.reserve(262144).await.unwrap(),
+        });
+    }
+    let control = Arc::new(control);
     let area = SpillArea::new(
         None,
         SpillLimits {
@@ -800,6 +809,9 @@ async fn shared_step_admission(spilled: bool, cancel: bool) {
         let recovered_before_release = recovered.is_ok();
         drop(recovered);
         let spill_recovered = !spilled || area.payload(4).is_ok();
+        let buffers_recovered = buffer_budget
+            .as_ref()
+            .is_none_or(|b| b.reserved_source_bytes() == 0);
         registration.gate.release();
         drop(release);
         running.await.unwrap();
@@ -807,6 +819,10 @@ async fn shared_step_admission(spilled: bool, cancel: bool) {
             .await
             .unwrap()
             .unwrap();
+        assert!(
+            buffers_recovered,
+            "cancelled reader retained source buffers behind foreign CPU work"
+        );
         assert!(!bypassed, "source read step bypassed global CPU admission");
         assert!(
             recovered_before_release,
@@ -826,23 +842,98 @@ async fn shared_step_admission(spilled: bool, cancel: bool) {
             .unwrap()
             .unwrap();
         assert_eq!(actual, if spilled { b"test".to_vec() } else { bytes });
+        drop(reader);
+        assert!(
+            buffer_budget
+                .as_ref()
+                .is_none_or(|b| b.reserved_source_bytes() == 0)
+        );
         assert!(!bypassed, "source read step bypassed global CPU admission");
     }
 }
 
 #[tokio::test]
 async fn shared_cpu_inflation_steps_obey_global_admission() {
-    shared_step_admission(false, false).await;
+    shared_step_admission(false, false, false).await;
 }
 #[tokio::test]
 async fn shared_cpu_spilled_reads_obey_global_admission() {
-    shared_step_admission(true, false).await;
+    shared_step_admission(true, false, false).await;
 }
 #[tokio::test]
 async fn shared_cpu_cancelled_inflation_waiter_returns_private_slot() {
-    shared_step_admission(false, true).await;
+    shared_step_admission(false, true, false).await;
 }
 #[tokio::test]
 async fn shared_cpu_cancelled_spill_waiter_returns_slot_and_quota() {
-    shared_step_admission(true, true).await;
+    shared_step_admission(true, true, false).await;
+}
+
+#[tokio::test]
+async fn shared_buffers_cancelled_inflation_waiter_returns_reservation() {
+    shared_step_admission(false, true, true).await;
+}
+#[tokio::test]
+async fn shared_buffers_cancelled_spill_waiter_returns_reservation() {
+    shared_step_admission(true, true, true).await;
+}
+
+#[test]
+fn shared_buffers_unreceived_reader_outputs_retain_reservations() {
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(1)
+        .build()
+        .unwrap()
+        .block_on(async {
+            for spilled in [false, true] {
+                let (source, oid, bytes) = fixture();
+                let registration = Registration::new(oid);
+                let budget = crate::import_buffer::ImportBufferBudget::new(262144, 65536).unwrap();
+                let slots = Arc::new(Semaphore::new(1));
+                let control = Arc::new(Control {
+                    buffers: Some(super::super::SourceAllowance {
+                        body_bytes: bytes.len() as u64,
+                        reservation: budget.source.reserve(262144).await.unwrap(),
+                    }),
+                    ..Control::default()
+                });
+                let area = crate::spill::SpillArea::new(
+                    None,
+                    crate::spill::SpillLimits {
+                        max_memory_objects: 1,
+                        max_spill_bytes: 4,
+                    },
+                );
+                let mut reader = if spilled {
+                    let mut payload = area.payload(4).unwrap();
+                    payload.append(b"test").unwrap();
+                    payload.rewind().unwrap();
+                    SourceReader::from_spill(payload, 4, slots.clone(), control, &oid)
+                } else {
+                    let handle = gix::odb::at(source.path().join("objects")).unwrap();
+                    Locator::open(handle.store_ref())
+                        .reader(&oid, bytes.len() as u64, slots.clone(), control)
+                        .unwrap()
+                        .unwrap()
+                };
+                assert!(reader.read(&mut [0; 4]).now_or_never().is_none());
+                registration.gate.entered().await;
+                registration.gate.release();
+                tokio::task::spawn_blocking(|| ()).await.unwrap();
+                assert_eq!(budget.reserved_source_bytes(), 262144);
+                assert!(budget.source.try_reserve(1).is_none());
+                drop(reader);
+                let reservation =
+                    tokio::time::timeout(Duration::from_secs(3), budget.source.reserve(262144))
+                        .await
+                        .unwrap()
+                        .unwrap();
+                drop(reservation);
+                assert_eq!(budget.reserved_source_bytes(), 0);
+                if spilled {
+                    assert!(area.payload(4).is_ok());
+                }
+            }
+        });
 }

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/home/pveierland/dev/git-import-perf/casita/benchmarks/work/14883dfaedcd4026939dae29121e94d9",
+  "finished": true,
+  "revision": "15c735b2b57fe31a74a54239d7ee74232b47ee50",
+  "diff": " benchmarks/all.py                                  |   2 +\n benchmarks/manifest.json                           |  18 ++++\n benchmarks/revisions.py                            |   5 +\n benchmarks/suites/git_closure_import.py            |  57 ++++++++++-\n benchmarks/tests/test_revisions.py                 |   1 +\n crates/casita/src/blob/chunked.rs                  |   2 +\n crates/casita/src/blob/chunked/hash_batch.rs       |  29 +++++-\n crates/casita/src/blob/chunked/writer.rs           | 111 ++++++++++++++++++---\n crates/casita/src/experimental.rs                  |   2 +\n crates/casita/src/git/repository/closure_import.rs |   6 +-\n .../src/git/repository/closure_import/workers.rs   |  98 +++++++++++++++++-\n .../repository/closure_import/workers/streaming.rs |   8 +-\n .../closure_import/workers/streaming/tests.rs      | 103 +++++++++++++++++--\n crates/casita/src/import.rs                        |   4 +-\n crates/casita/src/importers/git_closure.rs         |  31 ++++++\n crates/casita/src/importers/mod.rs                 |   1 +\n crates/casita/src/lib.rs                           |   2 +\n crates/casita/tests/git_closure_import.rs          | 106 ++++++++++++++++++++\n 18 files changed, 552 insertions(+), 34 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "git-shared-buffers",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-shared-buffers",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/bin/git_closure_import",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/git-shared-buffers.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.5207312130078208,
+      "log": "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/git-shared-buffers.log"
+    },
+    {
+      "suite": "git-shared-buffer-limits",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-shared-buffer-limits",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/bin/git_import_buffers",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/git-shared-buffer-limits.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.36449957799050026,
+      "log": "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/git-shared-buffer-limits.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}

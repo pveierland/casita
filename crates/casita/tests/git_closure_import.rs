@@ -1,3 +1,4 @@
+#![recursion_limit = "256"]
 #![cfg(all(feature = "git", feature = "experimental"))]
 
 use std::io::Write;
@@ -297,13 +298,19 @@ async fn benchmark_git_closure_import() {
         let destinations: Vec<_> = (0..imports).map(|_| tempfile::tempdir().unwrap()).collect();
         let mut repositories = Vec::new();
         for destination in &destinations {
-            let repository = Repository::local(destination.path())
+            let mut repository = Repository::local(destination.path())
                 .await
                 .unwrap()
                 .with_spill_limits(SpillLimits {
                     max_memory_objects: 64,
                     ..Default::default()
                 });
+            let chunk_concurrency: usize = std::env::var("CASITA_GIT_CLOSURE_CHUNK_CONCURRENCY")
+                .unwrap_or("32".into())
+                .parse()
+                .unwrap();
+            repository =
+                repository.with_chunk_upload_concurrency(chunk_concurrency.try_into().unwrap());
             repositories.push(repository);
         }
         run_git_closure_benchmark(&repositories).await;
@@ -339,6 +346,20 @@ async fn benchmark_git_closure_import() {
 async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: MetadataStore>(
     repositories: &[Repository<PS, SS>],
 ) {
+    let source_buffer_bytes: usize = std::env::var("CASITA_GIT_CLOSURE_SOURCE_BUFFER_BYTES")
+        .unwrap_or("0".into())
+        .parse()
+        .unwrap();
+    let destination_buffer_bytes: usize =
+        std::env::var("CASITA_GIT_CLOSURE_DESTINATION_BUFFER_BYTES")
+            .unwrap_or("0".into())
+            .parse()
+            .unwrap();
+    assert_eq!(source_buffer_bytes == 0, destination_buffer_bytes == 0);
+    let chunk_concurrency: usize = std::env::var("CASITA_GIT_CLOSURE_CHUNK_CONCURRENCY")
+        .unwrap_or("32".into())
+        .parse()
+        .unwrap();
     let imports = repositories.len();
     let shared_cpu_limit: usize = std::env::var("CASITA_GIT_CLOSURE_SHARED_CPU_LIMIT")
         .unwrap_or("0".into())
@@ -474,6 +495,11 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         if let Some(limit) = std::num::NonZeroUsize::new(shared_cpu_limit) {
             request = request.with_cpu_concurrency(limit);
         }
+        if source_buffer_bytes > 0 {
+            request = request
+                .with_buffer_limits(source_buffer_bytes, destination_buffer_bytes)
+                .unwrap();
+        }
         let hwm_before = bounded.then(bounded_fixture::parent_hwm).flatten();
         let io_before = delta_metrics.then(bounded_fixture::process_io).flatten();
         let cpu_before = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
@@ -493,6 +519,43 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         let io_after = delta_metrics.then(bounded_fixture::process_io).flatten();
         let process_io = bounded_fixture::io_delta(io_before, io_after);
         let hwm_after = bounded.then(bounded_fixture::parent_hwm).flatten();
+        // Observe release before readback or audits can hide late cleanup.
+        let (
+            source_buffer_capacity,
+            destination_buffer_capacity,
+            peak_source_buffer_bytes,
+            peak_destination_buffer_bytes,
+            reserved_source_buffer_bytes,
+            reserved_destination_buffer_bytes,
+        ) = request
+            .buffer_budget()
+            .map_or((0, 0, 0, 0, 0, 0), |buffers| {
+                (
+                    buffers.source_capacity(),
+                    buffers.destination_capacity(),
+                    buffers.peak_source_bytes(),
+                    buffers.peak_destination_bytes(),
+                    buffers.reserved_source_bytes(),
+                    buffers.reserved_destination_bytes(),
+                )
+            });
+        assert_eq!(source_buffer_capacity, source_buffer_bytes / 65536 * 65536);
+        assert_eq!(
+            destination_buffer_capacity,
+            destination_buffer_bytes / 65536 * 65536
+        );
+        assert!(peak_source_buffer_bytes <= source_buffer_capacity);
+        assert!(peak_destination_buffer_bytes <= destination_buffer_capacity);
+        assert_eq!(reserved_source_buffer_bytes, 0);
+        assert_eq!(reserved_destination_buffer_bytes, 0);
+        assert_eq!(
+            peak_source_buffer_bytes == 0,
+            source_buffer_bytes == 0 || operation == "warm"
+        );
+        assert_eq!(
+            peak_destination_buffer_bytes == 0,
+            destination_buffer_bytes == 0 || operation == "warm" || backend == "memory"
+        );
         let (new, reused, reachable) = match operation {
             "cold" => (count + 2, 0, count + 2),
             "warm" => (0, 1, count + 2),
@@ -547,6 +610,10 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             serde_json::json!({
                 "imports": imports, "audited_imports": imports,
                 "shared_cpu_limit": shared_cpu_limit, "peak_cpu_jobs": peak_cpu_jobs,
+                "source_buffer_capacity": source_buffer_capacity, "destination_buffer_capacity": destination_buffer_capacity,
+                "peak_source_buffer_bytes": peak_source_buffer_bytes, "peak_destination_buffer_bytes": peak_destination_buffer_bytes,
+                "reserved_source_buffer_bytes": reserved_source_buffer_bytes, "reserved_destination_buffer_bytes": reserved_destination_buffer_bytes,
+                "chunk_upload_concurrency": chunk_concurrency,
                 "timing_scope": "combined concurrent import makespan",
                 "operation": operation, "files": count, "packed": packed,
                 "bounded_fixture": bounded, "pack_window": pack_window,

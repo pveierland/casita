@@ -1,0 +1,216 @@
+{
+  "complete": true,
+  "checks": [
+    {
+      "repetition": 0,
+      "source_bytes": 140509183,
+      "destination_bytes": 119537663,
+      "expected": [
+        70254592,
+        59768832
+      ],
+      "actual": [
+        70254592,
+        59768832
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 1,
+      "source_bytes": 140509183,
+      "destination_bytes": 119537663,
+      "expected": [
+        70254592,
+        59768832
+      ],
+      "actual": [
+        70254592,
+        59768832
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 2,
+      "source_bytes": 140509183,
+      "destination_bytes": 119537663,
+      "expected": [
+        70254592,
+        59768832
+      ],
+      "actual": [
+        70254592,
+        59768832
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 3,
+      "source_bytes": 140509183,
+      "destination_bytes": 119537663,
+      "expected": [
+        70254592,
+        59768832
+      ],
+      "actual": [
+        70254592,
+        59768832
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 4,
+      "source_bytes": 140509183,
+      "destination_bytes": 119537663,
+      "expected": [
+        70254592,
+        59768832
+      ],
+      "actual": [
+        70254592,
+        59768832
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 0,
+      "source_bytes": 140509184,
+      "destination_bytes": 119537664,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 1,
+      "source_bytes": 140509184,
+      "destination_bytes": 119537664,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 2,
+      "source_bytes": 140509184,
+      "destination_bytes": 119537664,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 3,
+      "source_bytes": 140509184,
+      "destination_bytes": 119537664,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 4,
+      "source_bytes": 140509184,
+      "destination_bytes": 119537664,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 0,
+      "source_bytes": 140509185,
+      "destination_bytes": 119537665,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 1,
+      "source_bytes": 140509185,
+      "destination_bytes": 119537665,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 2,
+      "source_bytes": 140509185,
+      "destination_bytes": 119537665,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 3,
+      "source_bytes": 140509185,
+      "destination_bytes": 119537665,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    },
+    {
+      "repetition": 4,
+      "source_bytes": 140509185,
+      "destination_bytes": 119537665,
+      "expected": [
+        140509184,
+        119537664
+      ],
+      "actual": [
+        140509184,
+        119537664
+      ],
+      "passed": true
+    }
+  ],
+  "meaning": "cold peaks exercise one complete source/writer envelope below the rounded boundary, two at and above it"
+}

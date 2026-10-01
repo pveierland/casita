@@ -752,6 +752,46 @@
       ]
     },
     {
+      "id": "git-shared-buffer-limits",
+      "suite_id": "native-git",
+      "title": "Git producer buffer admission boundaries and progress",
+      "kind": "module",
+      "target": "benchmarks.suites.git_shared_buffer_limits",
+      "profiles": [
+        "smoke",
+        "standard"
+      ],
+      "correctness": [
+        "strict reservation rounding",
+        "minimum writer envelope minus/at/plus one",
+        "source envelope boundary",
+        "oversized fallback rejection",
+        "one CPU and one blocking thread progress"
+      ]
+    },
+    {
+      "id": "git-shared-buffers",
+      "suite_id": "native-git",
+      "title": "Partitioned producer buffers across concurrent Git imports",
+      "kind": "module",
+      "target": "benchmarks.suites.git_shared_buffers",
+      "profiles": [
+        "smoke",
+        "standard"
+      ],
+      "correctness": [
+        "every independent destination audited",
+        "combined concurrent import makespan",
+        "observed shared CPU job limit",
+        "rounded source and destination partition limits",
+        "aggregate reserved peaks",
+        "complete producer reservation release",
+        "independent BLAKE3 and exact streaming readback",
+        "aggregate imported and reused counts",
+        "exhaustive closure verification"
+      ]
+    },
+    {
       "id": "git-closure-import",
       "suite_id": "native-git",
       "title": "Inventory-free Git closure import and persistent cross-root reuse",

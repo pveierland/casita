@@ -52,6 +52,15 @@ with `GitClosureImport::with_cpu_budget`; `with_cpu_concurrency` creates a budge
 shared by that request's clones. Inline chunking, Bao hashing, async verification
 and storage are outside this job limit. Defaults remain unconfigured.
 
+`ImportBufferBudget` in `casita::import` adds separate shared source and writer
+allowances. Pass clones through `GitClosureImport::with_buffer_budget`; its
+`with_buffer_limits` convenience method creates a budget for that request and
+its clones. Capacities round down to 64 KiB and reservations round up. Complete
+source-window and writer envelopes are reserved before production begins, so
+impossible reservations fail. These opt-in allowances exclude backend-owned
+payloads, decoder/codec workspace, verification and metadata; they do not bound
+process RSS. Source and destination partitions never borrow from each other.
+
 `Reader` implements Tokio `AsyncRead` and `AsyncSeek`. It keeps the selected
 object's content protected from collection until dropped. `VerifiedReader`
 provides sequential reads that authenticate bytes before returning them.
