@@ -100,6 +100,9 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Changed
 
+- Publishing verified built-in raw blobs records complete-closure witnesses without
+  rereading their payloads. Custom registries keep their normal validation rules.
+
 - On macOS, repositories whose state is a `TursoMetadataStore`, including
   `Repository::local` and custom compositions, flush the drive cache
   (`F_FULLFSYNC`) before each deletion batch. Commits sync only to the drive's

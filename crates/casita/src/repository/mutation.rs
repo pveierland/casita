@@ -907,7 +907,7 @@ where
         expectations: Vec<RootExpectation>,
         root_changes: Vec<RootChange>,
         exact_revision: Option<crate::RepositoryRevision>,
-        constructed_closures: BTreeSet<ObjectKey>,
+        mut constructed_closures: BTreeSet<ObjectKey>,
         metadata: Option<MetadataMutation>,
     ) -> Result<ConditionalPublishResult, RepositoryError> {
         self.write_scope()
@@ -950,6 +950,16 @@ where
                     let record = object.record();
                     if !Arc::ptr_eq(&object.repository, &self.repository.staging_identity) {
                         return Err(RepositoryError::ForeignStagedObject(record.key().clone()));
+                    }
+                    // Built-in raw blobs have no relational rules or links:
+                    // the sealed body already proves their complete closure.
+                    // Custom registries retain normal unrooted semantics.
+                    if self.repository.formats.is_builtin()
+                        && record.key().namespace().as_str() == crate::object::BLOB_NAMESPACE
+                        && record.key() == &ObjectKey::blob(record.payload())
+                        && record.links().is_empty()
+                    {
+                        constructed_closures.insert(record.key().clone());
                     }
                     match overlay.get(record.key()) {
                         Some(existing) if existing == record => {}
