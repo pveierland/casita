@@ -2721,3 +2721,27 @@ Build each source checkout in its own Cargo target directory, freeze both
 executables before subsequent builds, and preserve the same Cargo.lock and settings. Optional `.build.json` fingerprints are checked
 before comparing. Reports retain failed gates, every sample, and paired ranges;
 synthetic storage-delay results are not end-to-end Git import speedups.
+
+
+
+### Streaming chunk manifests
+
+`chunk-manifest-stream` measures writing and closing a payload generated from a
+repeated deterministic 64 KiB block. Both the fixture and verified readback use
+fixed-size buffers. Every sample checks an independently streamed BLAKE3 digest,
+all returned bytes, and the stored manifest identity. Paired runs reject differing
+blob or manifest hashes. The periodic source limits unique payload data in the
+memory backend while retaining one manifest entry per source chunk.
+
+The probe captures Linux process high-water RSS immediately after close, before
+readback; it includes the runtime and backend, not just manifest allocations.
+The runner also preserves whole-process RSS separately. Standard sizes range
+from 64 KiB to 256 MiB, with memory and local backends. Exact flat/page and
+page-tree fanout boundaries (63/64/65 and 4095/4096/4097 entries) are covered by
+the `streaming_chunk_manifests_preserve_flat_and_paged_bytes_with_bounded_buffers`
+unit test. The stalled-first-upload test covers the reorder bound.
+
+```sh
+benchmark run chunk-manifest-stream --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/manifest-smoke.json
+benchmark run chunk-manifest-stream --file-bytes 65536,16777216,67108864 --backend both --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/manifest-paired.json
+```
