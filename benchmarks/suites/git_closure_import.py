@@ -66,8 +66,13 @@ def main(argv=None):
     parser.add_argument("--file-bytes", type=positive_csv, default=[1024])
     parser.add_argument("--concurrency", type=positive_csv, default=[16])
     parser.add_argument("--decode-workers", type=positive_csv, default=[1])
-    parser.add_argument("--baseline-decode-workers", type=int)
-    parser.add_argument("--content", choices=("repeated", "random", "mixed"), default="repeated")
+    worker_baseline = parser.add_mutually_exclusive_group()
+    worker_baseline.add_argument("--baseline-decode-workers", type=int)
+    worker_baseline.add_argument("--match-baseline-decode-workers", action="store_true",
+                                 help="use each requested decoder count for both variants")
+    parser.add_argument("--content", choices=("repeated", "random", "mixed", "clustered"), default="repeated")
+    parser.add_argument("--bounded-fixture", action="store_true", help="stream fixture generation/readback and capture parent RSS before audits")
+    parser.add_argument("--pack-window", type=int, default=16)
     parser.add_argument("--repetitions", type=int, default=1)
     parser.add_argument("--probe-binary", type=pathlib.Path)
     parser.add_argument("--baseline-binary", type=pathlib.Path)
@@ -75,6 +80,10 @@ def main(argv=None):
     parser.add_argument("--no-build", action="store_true")
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args(argv)
+    if args.pack_window < 0:
+        parser.error("pack window must be nonnegative")
+    if args.content == "clustered" and args.pack_window == 0:
+        parser.error("clustered fixture requires delta packing")
     if args.repetitions < 1 or (args.no_build and args.probe_binary is None):
         parser.error("positive repetitions and a probe binary with --no-build are required")
     if min(args.file_bytes) < 8:
@@ -116,6 +125,10 @@ def main(argv=None):
         for field in ("lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
             if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
                 raise common.BenchmarkError(f"paired build manifests differ in {field}")
+    if args.bounded_fixture and len(artifacts) == 2:
+        hashes = [artifact.get("build", {}).get("fixture_sha256") for artifact in artifacts]
+        if any(hashes) and (not all(hashes) or hashes[0] != hashes[1]):
+            raise common.BenchmarkError("paired bounded fixture fingerprints differ")
     if (len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]
             and (args.baseline_decode_workers is None or all(n == args.baseline_decode_workers for n in args.decode_workers))):
         parser.error("baseline and candidate executables must have distinct hashes")
@@ -126,7 +139,9 @@ def main(argv=None):
                   complete=False, artifacts=artifacts, samples=[], processes=[], configuration=dict(
                       counts=counts, byte_budgets=args.max_buffered_bytes, layouts=layouts,
                       backends=backends, file_bytes=args.file_bytes, concurrency=args.concurrency,
-                      decode_workers=args.decode_workers, baseline_decode_workers=args.baseline_decode_workers or 1,
+                      decode_workers=args.decode_workers, baseline_decode_workers=None if args.match_baseline_decode_workers else args.baseline_decode_workers or 1,
+                      match_baseline_decode_workers=args.match_baseline_decode_workers,
+                      bounded_fixture=args.bounded_fixture, pack_window=args.pack_window,
                       content=args.content, paired=bool(args.baseline_binary), cpu_affinity=args.cpu_affinity,
                       memory_measurement="whole-process peak RSS includes fixture creation and audits",
                       spill_memory_objects=64, metadata_frontier=256,
@@ -149,8 +164,11 @@ def main(argv=None):
             for count, budget, packed, backend, file_bytes, concurrency, decode_workers, repetition in matrix:
                 ordered = variants if repetition % 2 == 0 else list(reversed(variants))
                 for variant, executable in ordered:
-                    actual_workers = (args.baseline_decode_workers or 1) if variant == "baseline" else decode_workers
-                    env = {**os.environ, "CASITA_GIT_CLOSURE_FILES": str(count), "CASITA_GIT_CLOSURE_BYTES": str(budget),
+                    actual_workers = ((args.baseline_decode_workers or 1)
+                                      if variant == "baseline" and not args.match_baseline_decode_workers
+                                      else decode_workers)
+                    env = {**os.environ, "CASITA_GIT_CLOSURE_BOUNDED_FIXTURE": str(int(args.bounded_fixture)),
+                           "CASITA_GIT_CLOSURE_PACK_WINDOW": str(args.pack_window), "CASITA_GIT_CLOSURE_FILES": str(count), "CASITA_GIT_CLOSURE_BYTES": str(budget),
                            "CASITA_GIT_CLOSURE_PACKED": str(int(packed)),
                            "CASITA_GIT_CLOSURE_BACKEND": backend, "CASITA_GIT_CLOSURE_FILE_BYTES": str(file_bytes),
                            "CASITA_GIT_CLOSURE_CONCURRENCY": str(concurrency), "CASITA_GIT_CLOSURE_CONTENT": args.content,
@@ -173,6 +191,13 @@ def main(argv=None):
                     for row in rows:
                         if not isinstance(row.get("root"), str) or not row["root"]:
                             raise common.BenchmarkError("missing or invalid benchmark root identity")
+                        if args.bounded_fixture:
+                            if (row.get("payload_correctness") != "independent BLAKE3 and exact streaming readback"
+                                    or row.get("bounded_fixture") is not True
+                                    or row.get("pack_window") != args.pack_window
+                                    or not isinstance(row.get("parent_hwm_after_import_bytes"), int)
+                                    or row["parent_hwm_after_import_bytes"] <= 0):
+                                raise common.BenchmarkError("missing bounded fixture or parent RSS correctness gate")
                         if (row.get("correctness") != CORRECTNESS or row.get("files") != count
                                 or row.get("packed") != packed or row.get("max_buffered_bytes") != budget
                                 or row.get("backend") != backend or row.get("file_bytes") != file_bytes

@@ -610,6 +610,15 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-retained-buffers",
+      "suite_id": "native-git",
+      "title": "Retained source body capacity around one MiB",
+      "kind": "module",
+      "target": "benchmarks.suites.git_retained_buffers",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["buffered delta reconstruction", "actual packed delta counts", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification"]
+    },
+    {
       "id": "git-worker-streaming",
       "suite_id": "native-git",
       "title": "Mixed-size Git decoding and staging within a bounded window",

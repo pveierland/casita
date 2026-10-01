@@ -1,0 +1,9 @@
+case,samples,host_intervals,competing_build_intervals,external_cpu_fraction_max
+tiny,80,3,0,0.08130430053840683
+stream-threshold,240,170,22,0.3448274167571208
+clustered-4m,80,269,264,0.4541487527985428
+dense-1m,80,359,295,0.6298221864059241
+ordinary-controls,160,24,24,0.49154317525544955
+incremental-spilling-4m,80,284,243,0.4030607475479939
+ordinary-packed-repeat,80,5,0,0.07790830469059454
+dense-four-repeat,40,76,0,0.11710116305609854
