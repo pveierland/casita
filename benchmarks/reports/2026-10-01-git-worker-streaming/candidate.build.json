@@ -1,0 +1,17 @@
+{
+  "executable_sha256": "68049f66b355e907a601a57b7964250c7c23d5d625e4ac10095be6148d2a29b6",
+  "lockfile_sha256": "bdc3bbc1e97a7bf181c2cd1b52fd38e5d6b58da22fa8400797b7b67bd33265a1",
+  "features": "native,git,experimental",
+  "default_features": false,
+  "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+  "source_head": "1699a944bc90608200e5655b8f61dc6d247a88ae",
+  "source_patch_sha256": "2e9468732bbb957f52cadf0c3a6a3513bbe886791c42278878800a871f229039",
+  "tracked_source_sha256": "f689bb3d2fe8542631c3218bdb1a140eb211fd226c8dcdd7d3be3cfd2333633c",
+  "untracked_source_files": [
+    "crates/casita/src/git/repository/closure_import/workers/tests.rs"
+  ],
+  "fixture_sha256": "e55381a428fac7934331a7aea15e7473cfed710a4313864fae142736387698b9",
+  "source_root": "/home/pveierland/dev/git-import-perf/casita",
+  "cargo_artifact_fresh": false
+}

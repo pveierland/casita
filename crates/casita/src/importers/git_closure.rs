@@ -57,9 +57,10 @@ impl GitClosureImport {
 
     /// Maximum CPU workers decoding and verifying one bounded object window.
     /// Defaults to one.
-    /// Workers finish before destination writes begin. The aggregate configured
-    /// pack-cache target remains 16 MiB; custom verifiers run on the caller's
-    /// async runtime. Cache allocator overhead and delta workspace are additional.
+    /// Parallel workers hand each decoded object to destination staging as it
+    /// finishes. The next window waits for all workers and writes to complete.
+    /// The aggregate pack-cache target remains 16 MiB; custom verifiers run on
+    /// the caller's async runtime. Cache and delta workspace are additional.
     pub fn with_decode_workers(mut self, workers: NonZeroUsize) -> Self {
         self.decode_workers = workers;
         self

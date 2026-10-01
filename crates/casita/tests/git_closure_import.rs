@@ -686,7 +686,9 @@ async fn parallel_native_verification_rejects_corrupt_source_identity() {
 #[test]
 fn parallel_windows_progress_with_one_blocking_thread() {
     let source = Source::new("sha1");
-    let roots = (0..8u8)
+    // Each worker emits eight objects into a two-slot channel. Storage also
+    // needs the sole blocking thread: receiving must progress under pressure.
+    let roots = (0..16u8)
         .map(|i| {
             key(
                 GitObjectFormat::Sha1,
@@ -708,14 +710,14 @@ fn parallel_windows_progress_with_one_blocking_thread() {
                 repository.import(
                     source
                         .request(roots)
-                        .with_decode_workers(8.try_into().unwrap())
-                        .with_max_buffered_bytes(65536.try_into().unwrap()),
+                        .with_decode_workers(2.try_into().unwrap())
+                        .with_max_buffered_bytes(524288.try_into().unwrap()),
                 ),
             )
             .await
             .expect("source workers must not occupy a blocking thread waiting for storage")
             .unwrap();
-            assert_eq!(result.report.imported_objects, 8);
+            assert_eq!(result.report.imported_objects, 16);
             assert_eq!(result.report.peak_decode_workers, 1);
             drop(result);
             repository.flush().await.unwrap();
