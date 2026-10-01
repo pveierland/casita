@@ -1,0 +1,265 @@
+"""Inventory-free cold, warm, cross-root and wide-delta Git closure imports."""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import itertools
+import json
+import os
+import pathlib
+import subprocess
+import statistics
+import tempfile
+
+from benchmarks import cli
+from benchmarks.affinity import cpu_affinity, cpu_list
+from benchmarks.suites import repository as common
+from benchmarks.suites.metadata_collection import positive_csv
+
+PROBE = "benchmark_git_closure_import"
+CORRECTNESS = "exact imported/reused counts and exhaustive closure verification"
+
+
+def summarize_pairs(samples):
+    """Pair identical workloads by repetition; report effects without hiding spread."""
+    dimensions = ("operation", "backend", "files", "file_bytes", "content", "packed",
+                  "concurrency", "max_buffered_bytes", "requested_decode_workers", "requested_delta_spilling")
+    groups = {}
+    for sample in samples:
+        if not isinstance(sample.get("root"), str) or not sample["root"]:
+            raise common.BenchmarkError("missing or invalid benchmark root identity")
+        key = tuple(sample.get(name, 1) if name == "requested_decode_workers" else sample.get(name, False) if name == "requested_delta_spilling" else sample[name] for name in dimensions)
+        repetitions = groups.setdefault(key, {})
+        pair = repetitions.setdefault(sample["repetition"], {})
+        if sample["variant"] in pair:
+            raise common.BenchmarkError("duplicate variant in paired measurement")
+        pair[sample["variant"]] = sample
+    summaries = []
+    for key, repetitions in groups.items():
+        baseline, candidate, reductions = [], [], []
+        for pair in repetitions.values():
+            if set(pair) != {"baseline", "candidate"}:
+                raise common.BenchmarkError("incomplete paired measurement")
+            before, after = pair["baseline"], pair["candidate"]
+            if before.get("root") != after.get("root"):
+                raise common.BenchmarkError("paired imports produced different root identities")
+            baseline.append(before["wall_seconds"])
+            candidate.append(after["wall_seconds"])
+            reductions.append(100 * (1 - after["wall_seconds"] / before["wall_seconds"]))
+        summaries.append(dict(zip(dimensions, key), pairs=len(baseline),
+            enough_samples=len(baseline) >= 5,
+            baseline_median_seconds=statistics.median(baseline),
+            candidate_median_seconds=statistics.median(candidate),
+            median_paired_reduction_percent=statistics.median(reductions),
+            minimum_paired_reduction_percent=min(reductions),
+            maximum_paired_reduction_percent=max(reductions)))
+    return summaries
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", choices=("smoke", "standard"), default="standard")
+    parser.add_argument("--counts", type=positive_csv)
+    parser.add_argument("--max-buffered-bytes", type=positive_csv, default=[1023, 1024, 1025, 2047, 2048, 2049])
+    parser.add_argument("--layout", choices=("loose", "packed", "both"), default="both")
+    parser.add_argument("--backend", choices=("memory", "local", "both"), default="both")
+    parser.add_argument("--file-bytes", type=positive_csv, default=[1024])
+    parser.add_argument("--concurrency", type=positive_csv, default=[16])
+    parser.add_argument("--decode-workers", type=positive_csv, default=[1])
+    worker_baseline = parser.add_mutually_exclusive_group()
+    worker_baseline.add_argument("--baseline-decode-workers", type=int)
+    worker_baseline.add_argument("--match-baseline-decode-workers", action="store_true",
+                                 help="use each requested decoder count for both variants")
+    parser.add_argument("--content", choices=("repeated", "random", "mixed", "clustered"), default="repeated")
+    parser.add_argument("--delta-spilling", action=argparse.BooleanOptionalAction, default=False, help="enable bounded file-backed reconstruction for located blob deltas")
+    parser.add_argument("--baseline-delta-spilling", action="store_true")
+    parser.add_argument("--cpu-metrics", action="store_true", help="require import-only Linux process CPU ticks (all threads; excludes children)")
+    parser.add_argument("--delta-metrics", action="store_true", help="observe delta counts and import I/O even when spilling is disabled")
+    parser.add_argument("--bounded-fixture", action="store_true", help="stream fixture generation/readback and capture parent RSS before audits")
+    parser.add_argument("--pack-window", type=int, default=16)
+    parser.add_argument("--repetitions", type=int, default=1)
+    parser.add_argument("--probe-binary", type=pathlib.Path)
+    parser.add_argument("--baseline-binary", type=pathlib.Path)
+    parser.add_argument("--cpu-affinity", type=cpu_list)
+    parser.add_argument("--no-build", action="store_true")
+    parser.add_argument("--output", type=pathlib.Path, required=True)
+    args = parser.parse_args(argv)
+    if args.pack_window < 0:
+        parser.error("pack window must be nonnegative")
+    if args.content == "clustered" and args.pack_window == 0:
+        parser.error("clustered fixture requires delta packing")
+    if args.repetitions < 1 or (args.no_build and args.probe_binary is None):
+        parser.error("positive repetitions and a probe binary with --no-build are required")
+    if min(args.file_bytes) < 8:
+        parser.error("file sizes must be at least 8 bytes to encode distinct objects")
+    if args.baseline_decode_workers is not None and args.baseline_decode_workers < 1:
+        parser.error("baseline decode workers must be positive")
+    binary = args.probe_binary
+    if binary is None:
+        built = subprocess.run(["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,git,experimental",
+                                "--test", "git_closure_import", "--no-run", "--message-format=json"],
+                               cwd=cli.ROOT, capture_output=True, text=True)
+        if built.returncode:
+            raise common.BenchmarkError(built.stderr or built.stdout)
+        artifacts = [json.loads(line) for line in built.stdout.splitlines() if line.startswith("{")]
+        paths = [item["executable"] for item in artifacts if item.get("reason") == "compiler-artifact"
+                 and item.get("target", {}).get("name") == "git_closure_import" and item.get("executable")]
+        if len(paths) != 1:
+            raise common.BenchmarkError("expected one Git closure benchmark executable")
+        binary = pathlib.Path(paths[0])
+    binary = binary.resolve()
+    variants = [("candidate", binary)]
+    if args.baseline_binary:
+        variants.insert(0, ("baseline", args.baseline_binary.resolve()))
+    artifacts = []
+    for variant, executable in variants:
+        with executable.open("rb") as source:
+            digest = hashlib.file_digest(source, "sha256").hexdigest()
+        artifact = dict(variant=variant, path=str(executable), sha256=digest)
+        manifest = pathlib.Path(str(executable) + ".build.json")
+        if manifest.exists():
+            build = json.loads(manifest.read_text())
+            if build.get("executable_sha256") != digest:
+                raise common.BenchmarkError("build manifest fingerprint does not match executable")
+            if not build.get("lockfile_sha256"):
+                raise common.BenchmarkError("build manifest is missing its dependency lockfile fingerprint")
+            artifact["build"] = build
+        artifacts.append(artifact)
+    if len(artifacts) == 2 and all("build" in artifact for artifact in artifacts):
+        for field in ("lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
+            if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
+                raise common.BenchmarkError(f"paired build manifests differ in {field}")
+    if args.bounded_fixture and len(artifacts) == 2:
+        hashes = [artifact.get("build", {}).get("fixture_sha256") for artifact in artifacts]
+        if any(hashes) and (not all(hashes) or hashes[0] != hashes[1]):
+            raise common.BenchmarkError("paired bounded fixture fingerprints differ")
+    if (len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]
+            and (args.baseline_decode_workers is None or all(n == args.baseline_decode_workers for n in args.decode_workers))
+            and args.delta_spilling == args.baseline_delta_spilling):
+        parser.error("baseline and candidate executables must have distinct hashes")
+    cpu_ticks = os.sysconf("SC_CLK_TCK") if args.cpu_metrics else None
+    if args.cpu_metrics and (type(cpu_ticks) is not int or cpu_ticks <= 0):
+        raise common.BenchmarkError("CPU counters require a positive system clock tick rate")
+    counts = args.counts or ([63, 64, 65] if args.profile == "smoke" else [63, 64, 65, 255, 256, 257, 10000])
+    layouts = [False, True] if args.layout == "both" else [args.layout == "packed"]
+    backends = ["memory", "local"] if args.backend == "both" else [args.backend]
+    result = dict(schema_version=1, result_schema="casita.git-closure-import.v1", suite_id="native-git",
+                  complete=False, artifacts=artifacts, samples=[], processes=[], configuration=dict(
+                      counts=counts, byte_budgets=args.max_buffered_bytes, layouts=layouts,
+                      backends=backends, file_bytes=args.file_bytes, concurrency=args.concurrency,
+                      decode_workers=args.decode_workers, baseline_decode_workers=None if args.match_baseline_decode_workers else args.baseline_decode_workers or 1,
+                      match_baseline_decode_workers=args.match_baseline_decode_workers,
+                      bounded_fixture=args.bounded_fixture, pack_window=args.pack_window,
+                      delta_spilling=args.delta_spilling, baseline_delta_spilling=args.baseline_delta_spilling, delta_metrics=args.delta_metrics,
+                      cpu_metrics=args.cpu_metrics, process_cpu_ticks_per_second=cpu_ticks,
+                      content=args.content, paired=bool(args.baseline_binary), cpu_affinity=args.cpu_affinity,
+                      memory_measurement="whole-process peak RSS includes fixture creation and audits",
+                      spill_memory_objects=64, metadata_frontier=256,
+                      repetitions=args.repetitions, timing="import only; fixture generation and exhaustive audits excluded"))
+    with cpu_affinity(args.cpu_affinity), tempfile.TemporaryDirectory(prefix="casita-git-closure-benchmark-") as temporary:
+        work = pathlib.Path(temporary)
+        result["environment"] = common.environment_metadata(work)
+        if hasattr(os, "sched_getaffinity"):
+            allowed = sorted(os.sched_getaffinity(0))
+            result["environment"]["cpu_affinity"] = allowed
+            frequencies = {}
+            for cpu in allowed:
+                frequency = pathlib.Path(f"/sys/devices/system/cpu/cpu{cpu}/cpufreq/cpuinfo_max_freq")
+                if frequency.exists():
+                    frequencies[str(cpu)] = int(frequency.read_text().strip())
+            result["environment"]["cpu_max_frequencies_khz"] = frequencies
+        try:
+            matrix = itertools.product(counts, args.max_buffered_bytes, layouts, backends,
+                                       args.file_bytes, args.concurrency, args.decode_workers, range(args.repetitions))
+            for count, budget, packed, backend, file_bytes, concurrency, decode_workers, repetition in matrix:
+                ordered = variants if repetition % 2 == 0 else list(reversed(variants))
+                for variant, executable in ordered:
+                    actual_workers = ((args.baseline_decode_workers or 1)
+                                      if variant == "baseline" and not args.match_baseline_decode_workers
+                                      else decode_workers)
+                    actual_spill = args.baseline_delta_spilling if variant == "baseline" else args.delta_spilling
+                    env = {**os.environ, "CASITA_GIT_CLOSURE_CPU_METRICS": str(int(args.cpu_metrics)), "CASITA_GIT_CLOSURE_DELTA_METRICS": str(int(args.delta_metrics or args.delta_spilling or args.baseline_delta_spilling)), "CASITA_GIT_CLOSURE_DELTA_SPILL": str(int(actual_spill)), "CASITA_GIT_CLOSURE_BOUNDED_FIXTURE": str(int(args.bounded_fixture)),
+                           "CASITA_GIT_CLOSURE_PACK_WINDOW": str(args.pack_window), "CASITA_GIT_CLOSURE_FILES": str(count), "CASITA_GIT_CLOSURE_BYTES": str(budget),
+                           "CASITA_GIT_CLOSURE_PACKED": str(int(packed)),
+                           "CASITA_GIT_CLOSURE_BACKEND": backend, "CASITA_GIT_CLOSURE_FILE_BYTES": str(file_bytes),
+                           "CASITA_GIT_CLOSURE_CONCURRENCY": str(concurrency), "CASITA_GIT_CLOSURE_CONTENT": args.content,
+                           "CASITA_GIT_CLOSURE_DECODE_WORKERS": str(actual_workers)}
+                    timing = common.measured_command(common.CommandSpec(
+                        [[str(executable), PROBE, "--exact", "--ignored", "--nocapture"]], work, env),
+                        work / "stdout", work / "stderr", check=False)
+                    stdout, stderr = (work / "stdout").read_text(), (work / "stderr").read_text()
+                    result["processes"].append(dict(**timing, variant=variant, files=count, budget=budget, packed=packed,
+                                                    backend=backend, file_bytes=file_bytes, concurrency=concurrency, content=args.content,
+                                                    decode_workers=actual_workers, requested_decode_workers=decode_workers,
+                                                    delta_spilling=actual_spill, requested_delta_spilling=args.delta_spilling,
+                                                    repetition=repetition, stdout=stdout, stderr=stderr))
+                    if timing["exit_code"] != 0:
+                        raise common.BenchmarkError(f"Git closure benchmark failed: {stdout}\n{stderr}")
+                    rows = [json.loads(line.removeprefix("git_closure_sample ")) for raw in stdout.splitlines()
+                            if (line := raw.removeprefix(f"test {PROBE} ... ")).startswith("git_closure_sample ")]
+                    if ([row.get("operation") for row in rows] != ["cold", "warm", "subtree-delta", "wide-delta"]
+                            or "test result: ok. 1 passed; 0 failed;" not in stdout):
+                        raise common.BenchmarkError("missing benchmark operations or passing correctness gate")
+                    for row in rows:
+                        if not isinstance(row.get("root"), str) or not row["root"]:
+                            raise common.BenchmarkError("missing or invalid benchmark root identity")
+                        if args.cpu_metrics:
+                            counters = row.get("import_process_cpu")
+                            if (not isinstance(counters, dict) or set(counters) != {"user_ticks", "system_ticks"}
+                                    or any(type(value) is not int or value < 0 for value in counters.values())):
+                                raise common.BenchmarkError("missing or invalid import CPU counters")
+                        if args.delta_metrics or args.delta_spilling or args.baseline_delta_spilling:
+                            deltas = row.get("fixture_blob_deltas")
+                            spilled = row.get("spilled_delta_objects")
+                            peak = row.get("peak_spill_bytes")
+                            expected_spilled = deltas if actual_spill and row["operation"] == "cold" else 0
+                            if (row.get("delta_spilling") is not actual_spill
+                                    or not isinstance(deltas, int) or deltas < 0
+                                    or (packed and args.content == "clustered" and count > 8 and file_bytes >= 65536 and deltas == 0)
+                                    or spilled != expected_spilled
+                                    or not isinstance(peak, int) or peak < 0 or (spilled and peak == 0)):
+                                raise common.BenchmarkError("wrong delta spill selection, counts or reservation gate")
+                            counters = row.get("import_process_io")
+                            io_fields = {"rchar", "wchar", "read_bytes", "write_bytes", "cancelled_write_bytes"}
+                            if ("import_process_io" not in row or (counters is not None and
+                                    (not isinstance(counters, dict) or set(counters) != io_fields
+                                     or any(type(value) is not int or value < 0 for value in counters.values())))):
+                                raise common.BenchmarkError("invalid delta spill import I/O counters")
+                        if args.bounded_fixture:
+                            if (row.get("payload_correctness") != "independent BLAKE3 and exact streaming readback"
+                                    or row.get("bounded_fixture") is not True
+                                    or row.get("pack_window") != args.pack_window
+                                    or not isinstance(row.get("parent_hwm_after_import_bytes"), int)
+                                    or row["parent_hwm_after_import_bytes"] <= 0):
+                                raise common.BenchmarkError("missing bounded fixture or parent RSS correctness gate")
+                        if (row.get("correctness") != CORRECTNESS or row.get("files") != count
+                                or row.get("packed") != packed or row.get("max_buffered_bytes") != budget
+                                or row.get("backend") != backend or row.get("file_bytes") != file_bytes
+                                or row.get("concurrency") != concurrency or row.get("content") != args.content
+                                or row.get("decode_workers", 1) != actual_workers
+                                or not isinstance(row.get("wall_nanos"), int) or row["wall_nanos"] <= 0):
+                            raise common.BenchmarkError("wrong benchmark configuration or correctness gate")
+                        expected = {"cold": (count + 2, 0), "warm": (0, 1),
+                                    "subtree-delta": (2, 1), "wide-delta": (2, count)}[row["operation"]]
+                        if ((row.get("imported_objects"), row.get("reused_objects")) != expected
+                                or (row["operation"] == "warm" and row.get("source_bytes") != 0)):
+                            raise common.BenchmarkError("incorrect import/reuse counters")
+                        result["samples"].append(dict(status="ok", implementation="casita", variant=variant, entries=count,
+                            repetition=repetition, requested_decode_workers=decode_workers,
+                            requested_delta_spilling=args.delta_spilling,
+                            wall_seconds=row["wall_nanos"] / 1e9,
+                            max_rss_bytes=timing["max_rss_bytes"], **row))
+                    common.write_atomic(args.output, json.dumps(result, indent=2) + "\n")
+            if args.baseline_binary:
+                result["paired_summary"] = summarize_pairs(result["samples"])
+            result["complete"] = True
+        except Exception as error:
+            result["error"] = str(error)
+            raise
+        finally:
+            common.write_atomic(args.output, json.dumps(result, indent=2) + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

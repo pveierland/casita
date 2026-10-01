@@ -1066,13 +1066,13 @@ fn hash_body(
     hasher.finish()
 }
 
-enum NativeHasher {
+pub(crate) enum NativeHasher {
     Sha1(Box<Sha1>),
     Sha256(Sha256),
 }
 
 impl NativeHasher {
-    fn new(format: GitObjectFormat, header: &[u8]) -> Self {
+    pub(crate) fn new(format: GitObjectFormat, header: &[u8]) -> Self {
         match format {
             GitObjectFormat::Sha1 => {
                 let mut hasher = Sha1::new();
@@ -1087,14 +1087,14 @@ impl NativeHasher {
         }
     }
 
-    fn update(&mut self, bytes: &[u8]) {
+    pub(crate) fn update(&mut self, bytes: &[u8]) {
         match self {
             Self::Sha1(hasher) => hasher.update(bytes),
             Self::Sha256(hasher) => hasher.update(bytes),
         }
     }
 
-    fn finish(self) -> Result<Vec<u8>, GitError> {
+    pub(crate) fn finish(self) -> Result<Vec<u8>, GitError> {
         match self {
             Self::Sha1(hasher) => {
                 let result = (*hasher).try_finalize();

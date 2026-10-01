@@ -1,0 +1,60 @@
+.......usage: python3 -m unittest [-h] [--profile {smoke,standard}] [--counts COUNTS]
+                           [--max-buffered-bytes MAX_BUFFERED_BYTES]
+                           [--layout {loose,packed,both}]
+                           [--backend {memory,local,both}]
+                           [--file-bytes FILE_BYTES]
+                           [--concurrency CONCURRENCY]
+                           [--decode-workers DECODE_WORKERS]
+                           [--baseline-decode-workers BASELINE_DECODE_WORKERS |
+                           --match-baseline-decode-workers]
+                           [--chunk-cpu-limit CHUNK_CPU_LIMIT]
+                           [--baseline-chunk-cpu-limit BASELINE_CHUNK_CPU_LIMIT]
+                           [--content {repeated,random,mixed,clustered}]
+                           [--bounded-fixture] [--pack-window PACK_WINDOW]
+                           [--repetitions REPETITIONS]
+                           [--probe-binary PROBE_BINARY]
+                           [--baseline-binary BASELINE_BINARY]
+                           [--cpu-affinity CPU_AFFINITY] [--no-build]
+                           --output OUTPUT
+python3 -m unittest: error: baseline and candidate executables must have distinct hashes
+.building benchmark artifacts
+building benchmark artifacts
+building benchmark artifacts
+building benchmark artifacts
+.....results: /tmp/tmpaiwhff4y/results
+running online-holds
+.completion ledger: /tmp/tmpaiwhff4y/results/execution.json
+results: /tmp/tmpl61dsmuz/results
+running online-holds
+...completion ledger: /tmp/tmpl61dsmuz/results/execution.json
+results: /tmp/tmp_coxfbru/results
+running pin-protocol-s3
+.completion ledger: /tmp/tmp_coxfbru/results/execution.json
+results: /tmp/tmpbcfszbf4/results
+running transfer-holds
+completion ledger: /tmp/tmpbcfszbf4/results/execution.json
+results: /tmp/tmp9pt_gr6l/results
+running transfer-holds
+..........completion ledger: /tmp/tmp9pt_gr6l/results/execution.json
++ cargo bench --features git --bench gix_odb --no-run --message-format=json
+.round 1/3: before (aaaaaaaaaaaa)
+error: benchmark interrupted
+..building a (aaaaaaaaaaaa)
+building b (bbbbbbbbbbbb)
+building c (cccccccccccc)
+round 1/3: a (aaaaaaaaaaaa)
+round 1/3: b (bbbbbbbbbbbb)
+round 1/3: c (cccccccccccc)
+round 2/3: b (bbbbbbbbbbbb)
+round 2/3: c (cccccccccccc)
+round 2/3: a (aaaaaaaaaaaa)
+round 3/3: c (cccccccccccc)
+round 3/3: a (aaaaaaaaaaaa)
+round 3/3: b (bbbbbbbbbbbb)
+....
+----------------------------------------------------------------------
+Ran 35 tests in 4.128s
+
+OK
+revision series: /tmp/tmp3zvpgthn/output/series.json
+report: /tmp/tmp3zvpgthn/output/series.md

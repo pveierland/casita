@@ -643,6 +643,114 @@
       ]
     },
     {
+      "id": "git-verified-stream",
+      "suite_id": "native-git",
+      "title": "One-pass native Git verification and payload storage",
+      "kind": "module",
+      "target": "benchmarks.suites.git_verified_stream",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["identical native identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
+    },
+    {
+      "id": "git-blob-file",
+      "suite_id": "native-git",
+      "title": "Register verified Git blob contents as files without payload rereads",
+      "kind": "module",
+      "target": "benchmarks.suites.git_blob_file",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
+    },
+    {
+      "id": "git-delta-disabled",
+      "suite_id": "native-git",
+      "title": "Default-disabled delta import control with observed deltas and I/O",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_disabled",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["actual packed delta counts", "zero spilled objects", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts"]
+    },
+    {
+      "id": "git-delta-limits",
+      "suite_id": "native-git",
+      "title": "Delta chain, work, spill and source-handle boundary diagnostics",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_limits",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["below, at and above resource limits", "reference cycle rejection", "spill quota recovery", "pending object survives a full handle window"]
+    },
+    {
+      "id": "git-delta-spill",
+      "suite_id": "native-git",
+      "title": "File-backed delta reconstruction with bounded fixture and readback memory",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_spill",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["actual packed delta counts", "observed spill selection and reservations", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification"]
+    },
+    {
+      "id": "git-source-locator",
+      "suite_id": "native-git",
+      "title": "Bounded pack locator thresholds with asserted fallback selection",
+      "kind": "module",
+      "target": "benchmarks.suites.git_source_locator",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["asserted stream selection", "exact stream and fallback payload", "all below, at, and above boundary cases"]
+    },
+    {
+      "id": "git-source-inflation",
+      "suite_id": "native-git",
+      "title": "Bounded loose and non-delta pack inflation with streaming fixture and readback",
+      "kind": "module",
+      "target": "benchmarks.suites.git_source_inflation",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused counts", "exhaustive closure verification", "independent BLAKE3 and exact streaming readback", "identical paired root identities", "parent RSS captured before audit"]
+    },
+    {
+      "id": "git-retained-buffers",
+      "suite_id": "native-git",
+      "title": "Retained source body capacity around one MiB",
+      "kind": "module",
+      "target": "benchmarks.suites.git_retained_buffers",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["buffered delta reconstruction", "actual packed delta counts", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification"]
+    },
+    {
+      "id": "git-worker-streaming",
+      "suite_id": "native-git",
+      "title": "Mixed-size Git decoding and staging within a bounded window",
+      "kind": "module",
+      "target": "benchmarks.suites.git_worker_streaming",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports", "requested worker configuration"]
+    },
+    {
+      "id": "git-object-workers",
+      "suite_id": "native-git",
+      "title": "Bounded parallel Git decode and native verification workers",
+      "kind": "module",
+      "target": "benchmarks.suites.git_object_workers",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports", "requested worker configuration"]
+    },
+    {
+      "id": "git-closure-import",
+      "suite_id": "native-git",
+      "title": "Inventory-free Git closure import and persistent cross-root reuse",
+      "kind": "module",
+      "target": "benchmarks.suites.git_closure_import",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports"]
+    },
+    {
+      "id": "git-closure-audit",
+      "suite_id": "native-git",
+      "title": "Git closure import audits of linear histories with built-in and custom registries",
+      "kind": "module",
+      "target": "benchmarks.suites.git_closure_audit",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported object counts", "every object audited by custom registries", "exhaustive closure verification", "zero source bytes for warm imports"]
+    },
+    {
       "id": "git-import-profile",
       "suite_id": "native-git",
       "title": "Stage-level profiling of git-scale initial, unchanged and incremental imports",

@@ -13,6 +13,24 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Added
 
+- `GitClosureImport` imports selected native Git closures without named views or
+  per-revision inventories. It reuses verified subtrees and returns a retained
+  reader protecting the result until application roots are published. A
+  selected root of the wrong type fails as invalid input before decoding.
+
+- `MutationSession::stage_object_reader_with_size` verifies an exact-length
+  source while writing it, avoiding a verification reread of the stored payload.
+  Native identity, complete consumption, and backend digest and length remain
+  independently checked.
+
+- `MutationSession::publish_closures` atomically publishes records and checks
+  bounded closure targets without creating named roots. Existing targets
+  can acquire reusable witnesses while remaining protected by the mutation.
+
+- `MutationSession::stage_git_blob_file` registers a stored verified native Git
+  blob as an ordinary file without reading or writing its payload again. The
+  receiving mutation pins the reused bytes and rechecks metadata after admission.
+
 - `RepositoryGeneration` orders the logical states of one repository.
   `MetadataReader::generation` and `RetainedReader::generation` report a
   reader's position in the commit order, so an application holding several
@@ -99,6 +117,17 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   JSON stderr output, while library builds install no subscriber.
 
 ### Changed
+
+- Checked closure batches reuse completed child checks within each publication
+  attempt when staged children precede their parents; retries verify afresh.
+
+- Publication audits of root changes and custom-registry construction proofs
+  reuse every object a complete walk proved earlier in the same attempt. Custom
+  registries audit each object of a Git closure import once instead of once per
+  enclosing commit, removing quadratic cost on linear histories.
+
+- Publishing verified built-in raw blobs records complete-closure witnesses without
+  rereading their payloads. Custom registries keep their normal validation rules.
 
 - On macOS, repositories whose state is a `TursoMetadataStore`, including
   `Repository::local` and custom compositions, flush the drive cache
@@ -192,6 +221,11 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   releases them only when it is polled again. Two new pack read counters,
   `readahead_deferrals` and `buffer_bypasses`, report how often the budget runs
   out.
+
+### Fixed
+
+- Construction-based publication checks custom format relations before recording
+  closure witnesses or publishing filesystem and Git roots.
 
 ### Security
 

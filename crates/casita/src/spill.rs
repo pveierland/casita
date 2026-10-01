@@ -61,7 +61,7 @@ pub struct SpillLimits {
 /// record it with a benchmark result after temporary files have been removed.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct SpillMetrics {
-    /// Number of temporary spill databases opened by the operation.
+    /// Number of temporary spill files or databases opened by the operation.
     pub files_opened: u64,
     /// Greatest aggregate temporary footprint observed, including WAL files.
     pub peak_bytes: u64,
@@ -1008,6 +1008,78 @@ impl SpillAccounting {
 impl Drop for SpillAccounting {
     fn drop(&mut self) {
         self.budget.release(self.bytes.load(Ordering::Acquire));
+    }
+}
+
+/// An anonymous payload file charged before any bytes are written. File
+/// ownership precedes accounting so cancellation closes it before releasing
+/// its reservation. Callers cannot clone its file handle or bypass append's cap.
+#[cfg(feature = "git")]
+pub(crate) struct SpillPayload {
+    file: std::fs::File,
+    _accounting: SpillAccounting,
+    capacity: u64,
+    written: u64,
+}
+
+#[cfg(feature = "git")]
+impl SpillArea {
+    pub(crate) fn payload(&self, capacity: u64) -> Result<SpillPayload, Error> {
+        let accounting = SpillAccounting::new(self.budget.clone());
+        accounting.replace_usage(capacity)?;
+        let directory = self.directory();
+        std::fs::create_dir_all(&directory)?;
+        let file = tempfile::tempfile_in(directory)?;
+        self.budget.files_opened.fetch_add(1, Ordering::AcqRel);
+        Ok(SpillPayload {
+            file,
+            _accounting: accounting,
+            capacity,
+            written: 0,
+        })
+    }
+}
+
+#[cfg(feature = "git")]
+impl SpillPayload {
+    pub(crate) fn len(&self) -> u64 {
+        self.written
+    }
+
+    pub(crate) fn append(&mut self, bytes: &[u8]) -> std::io::Result<()> {
+        use std::io::Write;
+        if bytes.len() as u64 > self.capacity - self.written {
+            return Err(std::io::Error::other("Git spill exceeds reserved capacity"));
+        }
+        self.file.write_all(bytes)?;
+        self.written += bytes.len() as u64;
+        Ok(())
+    }
+
+    pub(crate) fn rewind(&mut self) -> std::io::Result<()> {
+        use std::io::Seek;
+        if self.written != self.capacity {
+            return Err(std::io::Error::other(
+                "Git spill ended before reserved payload length",
+            ));
+        }
+        self.file.rewind()
+    }
+
+    pub(crate) fn read_exact_at(&mut self, offset: u64, bytes: &mut [u8]) -> std::io::Result<()> {
+        use std::io::{Read, Seek, SeekFrom};
+        if offset > self.written || bytes.len() as u64 > self.written - offset {
+            return Err(std::io::Error::other("Git delta copy exceeds spill base"));
+        }
+        self.file.seek(SeekFrom::Start(offset))?;
+        self.file.read_exact(bytes)
+    }
+}
+
+#[cfg(feature = "git")]
+impl std::io::Read for SpillPayload {
+    fn read(&mut self, bytes: &mut [u8]) -> std::io::Result<usize> {
+        std::io::Read::read(&mut self.file, bytes)
     }
 }
 

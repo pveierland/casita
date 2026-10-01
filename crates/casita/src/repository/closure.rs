@@ -45,6 +45,7 @@ impl<PS, SS> Repository<PS, SS> {
             formats: &self.formats,
             limits: &self.limits,
             area: self.spill_area(),
+            completed: None,
         }
     }
 }
@@ -90,6 +91,10 @@ pub(super) struct ClosureVerifier<'a, PS> {
     pub(super) formats: &'a FormatRegistry,
     pub(super) limits: &'a FormatLimits,
     pub(super) area: SpillArea,
+    /// Closures completely checked against this same overlay/snapshot within
+    /// one publication attempt. Publication holds no more keys than it records
+    /// as newly verified and resets this on retry.
+    pub(super) completed: Option<&'a BTreeSet<ObjectKey>>,
 }
 
 /// Verify one closure, optionally recording every verified key in `union`.
@@ -152,6 +157,7 @@ pub(super) async fn verify_closure_with<PS: BlobStore>(
         formats,
         limits,
         area,
+        completed,
     } = verifier;
     // An incremental walk stops at verified objects, so it cannot also produce
     // the complete union a transfer or archive plan needs.
@@ -207,7 +213,10 @@ pub(super) async fn verify_closure_with<PS: BlobStore>(
             // these marks with the objects they vouch for, and a walk that
             // trusted a mark without looking would be unable to notice if one
             // ever outlived its object.
-            if settled {
+            if settled
+                || (matches!(audit, ClosureAudit::Incremental)
+                    && completed.is_some_and(|completed| completed.contains(&key)))
+            {
                 continue;
             }
             let Some(format) = formats.get(key.namespace()) else {

@@ -1,0 +1,200 @@
+{
+  "samples": [
+    {
+      "external_cpu_fraction": 0.0362445127256986,
+      "kernel_worker_cpu_fraction": 0.006665657512772156,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 32
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 18
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 14
+        },
+        {
+          "pid": 3697887,
+          "name": ".claude-wrapped",
+          "ticks": 6
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 5
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 3
+        },
+        {
+          "pid": 3843961,
+          "name": "Isolated Web Co",
+          "ticks": 3
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 2
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0001513960014563
+    },
+    {
+      "external_cpu_fraction": 0.030770013058641084,
+      "kernel_worker_cpu_fraction": 0.004102668407818811,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 31
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 13
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 4
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 4
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 4
+        },
+        {
+          "pid": 3822212,
+          "name": ".claude-wrapped",
+          "ticks": 4
+        },
+        {
+          "pid": 3843961,
+          "name": "Isolated Web Co",
+          "ticks": 4
+        },
+        {
+          "pid": 951,
+          "name": "systemd-udevd",
+          "ticks": 2
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0155991789943073
+    },
+    {
+      "external_cpu_fraction": 0.029938288296414064,
+      "kernel_worker_cpu_fraction": 0.009432611381061965,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 31
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 12
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 4
+        },
+        {
+          "pid": 208751,
+          "name": ".claude-wrapped",
+          "ticks": 3
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 3
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 3
+        },
+        {
+          "pid": 67274,
+          "name": ".claude-wrapped",
+          "ticks": 2
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 2
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.015978815004928
+    },
+    {
+      "external_cpu_fraction": 0.03446911676300777,
+      "kernel_worker_cpu_fraction": 0.004924159537572539,
+      "top_external_processes": [
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 29
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 19
+        },
+        {
+          "pid": 3834047,
+          "name": "herdr",
+          "ticks": 11
+        },
+        {
+          "pid": 3703,
+          "name": "cosmic-comp",
+          "ticks": 5
+        },
+        {
+          "pid": 3843961,
+          "name": "Isolated Web Co",
+          "ticks": 5
+        },
+        {
+          "pid": 2143556,
+          "name": ".claude-wrapped",
+          "ticks": 3
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 3
+        },
+        {
+          "pid": 1668693,
+          "name": "codex",
+          "ticks": 2
+        }
+      ],
+      "competing_processes": [],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.015401707001729
+    }
+  ]
+}

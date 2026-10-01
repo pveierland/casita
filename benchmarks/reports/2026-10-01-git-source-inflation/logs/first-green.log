@@ -1,0 +1,22 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+warning: type `closure_import::workers::Body` is more private than the item `Decoded::body`
+  --> crates/casita/src/git/repository/closure_import/workers.rs:43:5
+   |
+43 |     pub body: Body,
+   |     ^^^^^^^^^^^^^^ field `Decoded::body` is reachable at visibility `pub(in crate::git::repository::closure_import)`
+   |
+note: but type `closure_import::workers::Body` is only usable at visibility `pub(self)`
+  --> crates/casita/src/git/repository/closure_import/workers.rs:47:1
+   |
+47 | enum Body {
+   | ^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: `casita` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 2m 44s
+     Running tests/git_closure_import.rs (/home/pveierland/dev/casita/target/release/deps/git_closure_import-983c094d32046391)
+
+running 1 test
+test inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.51s

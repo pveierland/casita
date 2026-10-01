@@ -466,26 +466,37 @@ async fn metadata_records_unvalidated_roots_use_full_graph_verification() {
     let repo = Repository::local(directory.path()).await.unwrap();
     let session = repo.inner.mutation_session().await.unwrap();
     let object = session.stage_blob(b"unrooted").await.unwrap();
-    let target = object.record().key().clone();
-    let invalid_directory = crate::Directory::try_from_iter([(
-        crate::PathComponent::try_from("file").unwrap(),
-        crate::Node::File {
-            digest: crate::BlobId::new(target.native_digest().unwrap()),
-            size: 999,
-            executable: false,
-        },
-    )])
-    .unwrap();
-    let tree = session.stage_directory(&invalid_directory).await.unwrap();
+    let directory = |size| {
+        crate::Directory::try_from_iter([(
+            crate::PathComponent::try_from("file").unwrap(),
+            crate::Node::File {
+                digest: object.record().payload(),
+                size,
+                executable: false,
+            },
+        )])
+        .unwrap()
+    };
+    // Raw blobs now carry construction witnesses. Directories published
+    // without requested closure checks still exercise the verification fallback.
+    let valid = session
+        .stage_directory(&directory(object.record().payload_size()))
+        .await
+        .unwrap();
+    let target = valid.record().key().clone();
+    let tree = session.stage_directory(&directory(999)).await.unwrap();
     let bad_target = tree.record().key().clone();
-    session.publish_unrooted(vec![object, tree]).await.unwrap();
+    session
+        .publish_unrooted(vec![object, valid, tree])
+        .await
+        .unwrap();
     let snapshot = repo.inner.metadata().snapshot().await.unwrap();
     assert_eq!(
         snapshot
-            .validated_closures(std::slice::from_ref(&target))
+            .validated_closures(&[target.clone(), bad_target.clone()])
             .await
             .unwrap(),
-        vec![false]
+        vec![false, false]
     );
     drop(snapshot);
     // Metadata graph reachability alone would accept this directory. The
