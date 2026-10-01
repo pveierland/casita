@@ -13,6 +13,10 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Added
 
+- `MutationSession::publish_closures` atomically publishes records and checks
+  bounded closure targets without creating named roots. Existing targets
+  can acquire reusable witnesses while remaining protected by the mutation.
+
 - `MutationSession::stage_git_blob_file` registers a stored verified native Git
   blob as an ordinary file without reading or writing its payload again. The
   receiving mutation pins the reused bytes and rechecks metadata after admission.

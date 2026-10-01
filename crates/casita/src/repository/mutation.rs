@@ -2,6 +2,14 @@
 
 use super::*;
 
+/// Private construction evidence and public requests for normal verification
+/// must remain distinct, even when they share the publication transaction.
+#[derive(Default)]
+pub(super) struct ClosurePublication {
+    constructed: BTreeSet<ObjectKey>,
+    requested: BTreeSet<ObjectKey>,
+}
+
 /// One root value that must still match before a conditional mutation can
 /// commit.
 ///
@@ -842,7 +850,10 @@ where
                 Vec::new(),
                 root_changes,
                 None,
-                constructed,
+                ClosurePublication {
+                    constructed,
+                    ..Default::default()
+                },
                 metadata,
             )
             .await?
@@ -917,7 +928,7 @@ where
                 Vec::new(),
                 roots,
                 None,
-                BTreeSet::new(),
+                ClosurePublication::default(),
                 Some(mutation),
             )
             .await?
@@ -942,7 +953,10 @@ where
             expectations,
             root_changes,
             exact_revision,
-            constructed_closures,
+            ClosurePublication {
+                constructed: constructed_closures,
+                ..Default::default()
+            },
             None,
         )
         .await
@@ -956,7 +970,8 @@ where
             root_expectations = expectations.len(),
             root_changes = root_changes.len(),
             exact_revision = exact_revision.is_some(),
-            constructed_closures = constructed_closures.len()
+            constructed_closures = closures.constructed.len(),
+            checked_closures = closures.requested.len()
         )
     )]
     pub(super) async fn publish_inner_with_metadata(
@@ -965,15 +980,26 @@ where
         expectations: Vec<RootExpectation>,
         root_changes: Vec<RootChange>,
         exact_revision: Option<crate::RepositoryRevision>,
-        mut constructed_closures: BTreeSet<ObjectKey>,
+        closures: ClosurePublication,
         metadata: Option<MetadataMutation>,
     ) -> Result<ConditionalPublishResult, RepositoryError> {
+        let ClosurePublication {
+            constructed: mut constructed_closures,
+            requested: checked_closures,
+        } = closures;
         self.write_scope()
             .run(async {
                 if staged.len() > self.repository.limits.max_batch_objects {
                     return Err(RepositoryError::LimitExceeded(format!(
                         "mutation has {} objects, limit is {}",
                         staged.len(),
+                        self.repository.limits.max_batch_objects
+                    )));
+                }
+                if checked_closures.len() > self.repository.limits.max_batch_objects {
+                    return Err(RepositoryError::LimitExceeded(format!(
+                        "mutation checks {} closures, limit is {}",
+                        checked_closures.len(),
                         self.repository.limits.max_batch_objects
                     )));
                 }
@@ -1049,6 +1075,7 @@ where
                         inputs.insert(crate::metadata::PinResource::Object(target.clone()));
                     }
                 }
+                inputs.extend(checked_closures.iter().cloned().map(crate::metadata::PinResource::Object));
                 self.pin.protect(inputs).await?;
                 #[cfg(test)]
                 let phase = self.repository.time_publication_phase(0);
@@ -1112,6 +1139,26 @@ where
                             }
                         }
                     }
+                    // Public targets always use normal format and link verification.
+                    // Record only these bounded targets, not the entire visited graph.
+                    for target in &checked_closures {
+                        let status = verify_closure_with(
+                            self.repository.closure_verifier(),
+                            snapshot.as_ref(),
+                            &overlay,
+                            target,
+                            None,
+                            ClosureAudit::Incremental,
+                            None,
+                        ).await?;
+                        if !matches!(status, ClosureStatus::Complete { .. }) {
+                            return Err(RepositoryError::RootNotPublishable {
+                                root: target.clone(),
+                                status,
+                            });
+                        }
+                    }
+                    newly_verified.extend(checked_closures.iter().cloned());
                     for change in &root_changes {
                         if let RootChange::Set { target, .. } = change {
                             if constructed_closures.contains(target) {
@@ -1228,6 +1275,45 @@ where
         staged: Vec<StagedObject<'_>>,
     ) -> Result<CommitResult, RepositoryError> {
         self.publish(staged, Vec::new()).await
+    }
+
+    /// Publish records and verify selected complete closures without naming
+    /// them. Targets may refer to staged or previously published objects.
+    /// Every target must pass normal format and link verification before any
+    /// records or closure witnesses become visible.
+    ///
+    /// Only requested targets acquire new directory closure witnesses; this
+    /// does not accumulate the full transitive object inventory. Target count
+    /// and staged-object count are each bounded by `max_batch_objects`.
+    /// Already verified closures may be trusted, so this is a completeness
+    /// check rather than a fresh corruption audit. Witnesses do not retain
+    /// objects: after the mutation and other holds end, they remain collectible.
+    pub async fn publish_closures(
+        &self,
+        staged: Vec<StagedObject<'_>>,
+        targets: BTreeSet<ObjectKey>,
+    ) -> Result<CommitResult, RepositoryError> {
+        match self
+            .publish_inner_with_metadata(
+                staged,
+                Vec::new(),
+                Vec::new(),
+                None,
+                ClosurePublication {
+                    requested: targets,
+                    ..Default::default()
+                },
+                // Existing targets need only the metadata commit path; no payload
+                // flush should be needed when this call has no staged records.
+                Some(MetadataMutation::new()),
+            )
+            .await?
+        {
+            ConditionalPublishResult::Committed(result) => Ok(result),
+            ConditionalPublishResult::RootMismatch { .. } => {
+                unreachable!("unnamed closure publication has no root expectations")
+            }
+        }
     }
 
     /// Atomically publish records and set one exact named root.
