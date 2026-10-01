@@ -383,6 +383,10 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         .unwrap_or("16".into())
         .parse()
         .unwrap();
+    let decode_workers: usize = std::env::var("CASITA_GIT_CLOSURE_DECODE_WORKERS")
+        .unwrap_or("1".into())
+        .parse()
+        .unwrap();
     let content = std::env::var("CASITA_GIT_CLOSURE_CONTENT").unwrap_or("repeated".into());
     let count: usize = std::env::var("CASITA_GIT_CLOSURE_FILES")
         .unwrap()
@@ -451,7 +455,8 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         let request = source
             .request(vec![root.clone()])
             .with_max_buffered_bytes(budget.try_into().unwrap())
-            .with_concurrency(concurrency.try_into().unwrap());
+            .with_concurrency(concurrency.try_into().unwrap())
+            .with_decode_workers(decode_workers.try_into().unwrap());
         let start = std::time::Instant::now();
         let imported = repository.import(request).await.unwrap();
         let nanos = start.elapsed().as_nanos();
@@ -478,6 +483,9 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
                 "imported_objects": imported.report.imported_objects,
                 "reused_objects": imported.report.reused_objects,
                 "source_bytes": imported.report.source_bytes,
+                "decode_workers": decode_workers,
+                "peak_source_bytes": imported.report.peak_source_bytes,
+                "peak_decode_workers": imported.report.peak_decode_workers,
                 "root": root.to_string(),
                 "correctness": "exact imported/reused counts and exhaustive closure verification"
             })
@@ -580,5 +588,272 @@ async fn failed_import_checkpoints_never_claim_an_incomplete_tree_is_validated()
     assert_eq!(
         repository.verify_closure(&root).await.unwrap(),
         ClosureStatus::Complete { objects: 2 }
+    );
+}
+
+#[tokio::test]
+async fn parallel_decode_preserves_closures_and_bounds_each_window() {
+    for format in ["sha1", "sha256"] {
+        let source = Source::new(format);
+        let hash = if format == "sha1" {
+            GitObjectFormat::Sha1
+        } else {
+            GitObjectFormat::Sha256
+        };
+        let mut entries = String::new();
+        for i in 0..12u8 {
+            let oid = source.blob(&vec![i; 128 * 1024]);
+            entries.push_str(&format!("100644 blob {oid}\tfile{i:02}\n"));
+        }
+        let root = key(hash, GitObjectKind::Tree, &source.tree(&entries));
+        for workers in [1, 2, 4, 8] {
+            for budget in [128 * 1024 - 1, 128 * 1024, 256 * 1024] {
+                let repository =
+                    Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+                let imported = repository
+                    .import(
+                        source
+                            .request(vec![root.clone()])
+                            .with_decode_workers(workers.try_into().unwrap())
+                            .with_max_buffered_bytes((budget as u64).try_into().unwrap()),
+                    )
+                    .await
+                    .unwrap();
+                assert_eq!(imported.report.imported_objects, 13);
+                assert!(imported.report.peak_source_bytes <= budget.max(128 * 1024) as u64);
+                assert!(imported.report.peak_decode_workers <= workers);
+                if budget <= 128 * 1024 {
+                    assert_eq!(imported.report.peak_decode_workers, 1);
+                }
+                assert_eq!(
+                    repository.verify_closure(&root).await.unwrap(),
+                    ClosureStatus::Complete { objects: 13 }
+                );
+                let warm = repository
+                    .import(
+                        GitClosureImport::new("/absent", [root.clone()])
+                            .with_decode_workers(workers.try_into().unwrap()),
+                    )
+                    .await
+                    .unwrap();
+                assert_eq!(warm.report.imported_objects, 0);
+                assert_eq!(warm.report.peak_decode_workers, 0);
+                assert_eq!(warm.report.peak_source_bytes, 0);
+            }
+        }
+    }
+}
+
+#[tokio::test]
+async fn parallel_native_verification_rejects_corrupt_source_identity() {
+    let source = Source::new("sha1");
+    let original = source.blob(&vec![b'x'; 65536]);
+    let replacement = source.blob(&vec![b'y'; 65536]);
+    let objects = source.0.path().join("objects");
+    // Git writes loose objects read-only; replace this private fixture entry.
+    std::fs::remove_file(objects.join(&original[..2]).join(&original[2..])).unwrap();
+    std::fs::copy(
+        objects.join(&replacement[..2]).join(&replacement[2..]),
+        objects.join(&original[..2]).join(&original[2..]),
+    )
+    .unwrap();
+    let root = key(GitObjectFormat::Sha1, GitObjectKind::Blob, &original);
+    let sibling = key(GitObjectFormat::Sha1, GitObjectKind::Blob, &replacement);
+    let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+    assert!(
+        repository
+            .import(
+                source
+                    .request(vec![root.clone(), sibling])
+                    .with_decode_workers(4.try_into().unwrap())
+            )
+            .await
+            .is_err()
+    );
+    assert_eq!(
+        repository
+            .metadata()
+            .snapshot()
+            .await
+            .unwrap()
+            .validated_closures(&[root])
+            .await
+            .unwrap(),
+        [false]
+    );
+}
+
+#[test]
+fn parallel_windows_progress_with_one_blocking_thread() {
+    let source = Source::new("sha1");
+    let roots = (0..8u8)
+        .map(|i| {
+            key(
+                GitObjectFormat::Sha1,
+                GitObjectKind::Blob,
+                &source.blob(&vec![i; 32768]),
+            )
+        })
+        .collect::<Vec<_>>();
+    let destination = tempfile::tempdir().unwrap();
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(1)
+        .build()
+        .unwrap()
+        .block_on(async {
+            let repository = Repository::local(destination.path()).await.unwrap();
+            let result = tokio::time::timeout(
+                std::time::Duration::from_secs(10),
+                repository.import(
+                    source
+                        .request(roots)
+                        .with_decode_workers(8.try_into().unwrap())
+                        .with_max_buffered_bytes(65536.try_into().unwrap()),
+                ),
+            )
+            .await
+            .expect("source workers must not occupy a blocking thread waiting for storage")
+            .unwrap();
+            assert_eq!(result.report.imported_objects, 8);
+            assert_eq!(result.report.peak_decode_workers, 1);
+            drop(result);
+            repository.flush().await.unwrap();
+        });
+}
+
+#[tokio::test]
+async fn excessive_worker_requests_are_bounded_by_the_metadata_frontier() {
+    use casita::experimental::{FormatLimits, FormatRegistry};
+    let source = Source::new("sha1");
+    let root = tree(&source.tree(""));
+    let repository = Repository::with_formats(
+        MemoryBlobStore::new(),
+        MemoryMetadataStore::new().unwrap(),
+        FormatRegistry::builtin(),
+        FormatLimits {
+            max_batch_objects: usize::MAX,
+            ..Default::default()
+        },
+    );
+    let imported = repository
+        .import(
+            source
+                .request(vec![root])
+                .with_decode_workers(usize::MAX.try_into().unwrap())
+                .with_concurrency(usize::MAX.try_into().unwrap()),
+        )
+        .await
+        .unwrap();
+    assert_eq!(imported.report.imported_objects, 1);
+    assert_eq!(imported.report.peak_decode_workers, 1);
+}
+
+#[tokio::test]
+async fn an_oversized_source_body_does_not_admit_an_empty_sibling() {
+    let source = Source::new("sha1");
+    let empty = source.blob(b"");
+    let mut large = source.blob(&vec![0; 4 * 1024 * 1024]);
+    for byte in 1..=255u8 {
+        if large < empty {
+            break;
+        }
+        large = source.blob(&vec![byte; 4 * 1024 * 1024]);
+    }
+    assert!(
+        large < empty,
+        "the oversized object must sort before its empty sibling"
+    );
+    let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+    let imported = repository
+        .import(
+            source
+                .request(vec![
+                    key(GitObjectFormat::Sha1, GitObjectKind::Blob, &large),
+                    key(GitObjectFormat::Sha1, GitObjectKind::Blob, &empty),
+                ])
+                .with_decode_workers(2.try_into().unwrap())
+                .with_max_buffered_bytes(1.try_into().unwrap()),
+        )
+        .await
+        .unwrap();
+    assert_eq!(imported.report.imported_objects, 2);
+    assert_eq!(imported.report.peak_source_bytes, 4 * 1024 * 1024);
+    assert_eq!(
+        imported.report.peak_decode_workers, 1,
+        "oversized bodies run alone, including zero-byte siblings"
+    );
+}
+
+struct FalseDigestStore(MemoryBlobStore);
+
+#[async_trait::async_trait]
+impl casita::experimental::BlobStore for FalseDigestStore {
+    fn write_scope(&self) -> casita::experimental::BackendWriteScope {
+        self.0.write_scope()
+    }
+    fn begin_pinned_batch(
+        &self,
+        pin: casita::experimental::DataPinLease,
+    ) -> Result<casita::experimental::BlobBatchGuard, casita::experimental::Error> {
+        self.0.begin_pinned_batch(pin)
+    }
+    fn publication(&self) -> casita::experimental::PayloadPublication<'_> {
+        self.0.publication()
+    }
+    async fn has(&self, id: &casita::BlobId) -> Result<bool, casita::experimental::Error> {
+        self.0.has(id).await
+    }
+    async fn open_read(
+        &self,
+        id: &casita::BlobId,
+    ) -> Result<Option<Box<dyn casita::experimental::BlobReader>>, casita::experimental::Error>
+    {
+        self.0.open_read(id).await
+    }
+    async fn open_write(&self) -> Box<dyn casita::experimental::BlobWriter> {
+        self.0.open_write().await
+    }
+    async fn put_slice(&self, bytes: &[u8]) -> Result<casita::BlobId, casita::experimental::Error> {
+        self.0.put_slice(bytes).await?;
+        Ok(casita::BlobId::new(casita::Digest::hash(
+            b"false backend digest",
+        )))
+    }
+}
+
+#[tokio::test]
+async fn worker_seals_reject_false_backend_digests_before_publication() {
+    use casita::experimental::{GitClosureImportError, RepositoryError};
+    let source = Source::new("sha1");
+    let oid = source.blob(b"verified source bytes");
+    let root = key(GitObjectFormat::Sha1, GitObjectKind::Blob, &oid);
+    let repository = Repository::new(
+        FalseDigestStore(MemoryBlobStore::new()),
+        MemoryMetadataStore::new().unwrap(),
+    );
+    let result = repository
+        .import(
+            source
+                .request(vec![root.clone()])
+                .with_decode_workers(std::num::NonZeroUsize::new(2).unwrap()),
+        )
+        .await;
+    assert!(matches!(
+        result,
+        Err(GitClosureImportError::Repository(
+            RepositoryError::PayloadIdentityMismatch { .. }
+        ))
+    ));
+    assert!(
+        repository
+            .metadata()
+            .snapshot()
+            .await
+            .unwrap()
+            .object(&root)
+            .await
+            .unwrap()
+            .is_none()
     );
 }

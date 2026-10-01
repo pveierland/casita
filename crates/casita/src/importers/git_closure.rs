@@ -24,6 +24,7 @@ pub struct GitClosureImport {
     pub(crate) objects_dir: PathBuf,
     pub(crate) roots: Vec<ObjectKey>,
     pub(crate) concurrency: NonZeroUsize,
+    pub(crate) decode_workers: NonZeroUsize,
     pub(crate) max_buffered_bytes: NonZeroU64,
 }
 
@@ -42,6 +43,7 @@ impl GitClosureImport {
                 .into_iter()
                 .collect(),
             concurrency: DEFAULT_GIT_IMPORT_CONCURRENCY,
+            decode_workers: NonZeroUsize::MIN,
             max_buffered_bytes: DEFAULT_GIT_IMPORT_BUFFERED_BYTES,
         }
     }
@@ -50,6 +52,16 @@ impl GitClosureImport {
     /// blocking worker; payload writes run concurrently on the async runtime.
     pub fn with_concurrency(mut self, concurrency: NonZeroUsize) -> Self {
         self.concurrency = concurrency;
+        self
+    }
+
+    /// Maximum CPU workers decoding and verifying one bounded object window.
+    /// Defaults to one.
+    /// Workers finish before destination writes begin. The aggregate configured
+    /// pack-cache target remains 16 MiB; custom verifiers run on the caller's
+    /// async runtime. Cache allocator overhead and delta workspace are additional.
+    pub fn with_decode_workers(mut self, workers: NonZeroUsize) -> Self {
+        self.decode_workers = workers;
         self
     }
 
@@ -74,6 +86,11 @@ pub struct GitClosureImportReport {
     pub reused_objects: usize,
     /// Uncompressed source body bytes decoded for newly imported objects.
     pub source_bytes: u64,
+    /// Peak source body bytes admitted in a decode/staging window. Pack caches,
+    /// delta workspace and destination buffers are additional.
+    pub peak_source_bytes: u64,
+    /// Peak concurrently executing decode/verification jobs, excluding storage.
+    pub peak_decode_workers: usize,
 }
 
 /// A completed import and the reader protecting its selected closures.

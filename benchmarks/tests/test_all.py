@@ -32,6 +32,18 @@ class AllSuiteTests(unittest.TestCase):
         self.assertIn("/binaries/git_closure_custom_formats", args)
         self.assertIn("--no-build", args)
 
+    def test_git_object_workers_build_and_receive_their_integration_probe(self):
+        commands = runner.build_commands(["git-object-workers"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertIn("--test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_closure_import")
+        self.assertNotIn("--example", command)
+        args = runner.suite_arguments("git-object-workers", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_closure_import", args)
+        self.assertIn("--no-build", args)
+
     def test_verified_stream_builds_and_receives_its_registered_probe(self):
         commands = runner.build_commands(["git-verified-stream"], pathlib.Path("/build"))
         self.assertEqual(len(commands), 1)
