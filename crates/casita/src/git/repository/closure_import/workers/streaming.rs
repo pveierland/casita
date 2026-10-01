@@ -20,6 +20,8 @@ use tokio::sync::Semaphore;
 pub(super) const MIN_BYTES: u64 = 1024 * 1024;
 const BUFFER_BYTES: usize = 64 * 1024;
 const HEADER_BYTES: usize = 64;
+pub(super) const READER_BUFFER_BYTES: usize = 2 * BUFFER_BYTES + HEADER_BYTES;
+pub(super) const SCRATCH_BUFFER_BYTES: usize = READER_BUFFER_BYTES + BUFFER_BYTES;
 // Optional hints cannot add repository-sized work to a single blob import.
 // Larger indexes and packs beyond this snapshot use the normal gix path.
 const MAX_INDEX_ENTRIES: usize = 256;
@@ -271,6 +273,7 @@ struct State {
     seen: u64,
     // Last: errors, unwind and unreceived outputs close spill files and release
     // their quota before making the source slot available to a draining window.
+    _buffers: Option<Arc<crate::import_buffer::Reservation>>,
     permit: Option<tokio::sync::OwnedSemaphorePermit>,
 }
 impl State {
@@ -292,6 +295,7 @@ impl State {
             header_done: !loose,
             size,
             seen: 0,
+            _buffers: None,
             permit: None,
         }
     }
@@ -394,8 +398,10 @@ impl SourceReader {
         control: Arc<Control>,
         _oid: &gix::ObjectId,
     ) -> Self {
+        let mut state = State::new(source, size, loose);
+        state._buffers = control.buffer_guard();
         Self {
-            state: Some(Box::new(State::new(source, size, loose))),
+            state: Some(Box::new(state)),
             job: None,
             slots,
             control,
@@ -486,8 +492,9 @@ impl AsyncRead for SourceReader {
                     state.step()?;
                     drop(active);
                     if matches!(&state.inflater.source, Input::Compressed(_)) {
-                        // These fixed buffers own no spill or shared byte quota.
-                        // Do not serialize another reader behind result receipt.
+                        // Release the private source slot after this step.
+                        // State still owns the independent shared buffer reservation
+                        // through result receipt or disposal.
                         drop(state.permit.take());
                     }
                     Ok(state)

@@ -78,6 +78,8 @@ pub use crate::git::{
     git_object_key_for_body, parse_git_tree,
 };
 #[cfg(feature = "native")]
+pub use crate::import_buffer::ImportBufferBudget;
+#[cfg(feature = "native")]
 pub use crate::import_cpu::ImportCpuBudget;
 #[cfg(feature = "git")]
 pub use crate::importers::GitClosureImportError;

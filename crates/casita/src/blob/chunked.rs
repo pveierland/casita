@@ -1315,7 +1315,9 @@ impl BlobStore for ChunkedBlobStore {
             self.chunk_upload_concurrency,
             self.pins.capture(),
             crate::import_cpu::current(),
+            crate::import_buffer::current(),
         )
+        .await
     }
 
     fn begin_batch(&self) -> BlobBatchGuard {

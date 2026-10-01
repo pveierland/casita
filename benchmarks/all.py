@@ -17,6 +17,8 @@ CORE_BENCHES = ("write_path", "hash_inputs", "tar_import", "filesystem_import", 
 
 # Bounded defaults. Frontier sizes remain explicit opt-in suite arguments.
 SMOKE = {
+    "git-shared-buffers": ["--profile", "smoke"],
+    "git-shared-buffer-limits": ["--profile", "smoke"],
     "git-shared-cpu": ["--profile", "smoke"],
     "chunk-hash-batch": ["--profile", "smoke"],
     "chunk-manifest-stream": ["--profile", "smoke"],

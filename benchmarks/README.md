@@ -2983,3 +2983,17 @@ audits; samples report the entire group's completion time.
 See [the focused guide](git-shared-cpu.md) for scope and reproducible commands.
 [Historical results](reports/2026-10-01-git-shared-cpu/README.md) retain memory
 benefits and small-workload costs on their original source and dependency set.
+
+## Shared Git producer-buffer admission
+
+`git-shared-buffers` compares independent source and destination buffer budgets
+across concurrent imports, with CPU admission selected separately. It covers
+one/two/four imports, disabled controls and both sides of complete-window
+capacity thresholds. `git-shared-buffer-limits` runs six exact rounding,
+minimum-envelope, cancellation and one-thread progress tests.
+
+The budgets reserve enumerated producer-buffer envelopes; they are not process
+RSS limits. See [the focused guide](git-shared-buffers.md) for ownership and
+exclusions. [Historical results](reports/2026-10-01-git-shared-buffers/README.md)
+retain concurrent memory reductions and their throughput costs on the original
+source and dependency set.

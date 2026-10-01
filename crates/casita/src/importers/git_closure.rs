@@ -28,6 +28,7 @@ pub struct GitClosureImport {
     pub(crate) max_buffered_bytes: NonZeroU64,
     pub(crate) delta_spilling: bool,
     pub(crate) cpu: Option<crate::import_cpu::ImportCpuBudget>,
+    pub(crate) buffers: Option<crate::import_buffer::ImportBufferBudget>,
 }
 
 impl GitClosureImport {
@@ -49,7 +50,37 @@ impl GitClosureImport {
             max_buffered_bytes: DEFAULT_GIT_IMPORT_BUFFERED_BYTES,
             delta_spilling: false,
             cpu: None,
+            buffers: None,
         }
+    }
+
+    /// Share separate source and supported chunked-writer buffer allowances.
+    /// Reservations cover conservative producer envelopes. Oversized buffered
+    /// source fallbacks and impossible writer envelopes fail before allocation;
+    /// eligible streams may exceed the source body allowance. Source/cache and
+    /// backend exclusions are documented on [`crate::import::ImportBufferBudget`].
+    pub fn with_buffer_budget(mut self, budget: crate::import_buffer::ImportBufferBudget) -> Self {
+        self.buffers = Some(budget);
+        self
+    }
+
+    /// Create source and destination partitions shared by this request's clones.
+    pub fn with_buffer_limits(
+        self,
+        source_bytes: usize,
+        destination_bytes: usize,
+    ) -> std::io::Result<Self> {
+        Ok(
+            self.with_buffer_budget(crate::import_buffer::ImportBufferBudget::new(
+                source_bytes,
+                destination_bytes,
+            )?),
+        )
+    }
+
+    /// The shared producer-buffer coordinator selected for this request.
+    pub fn buffer_budget(&self) -> Option<&crate::import_buffer::ImportBufferBudget> {
+        self.buffers.as_ref()
     }
 
     /// Share admission for source decode/inflate and supported destination chunk

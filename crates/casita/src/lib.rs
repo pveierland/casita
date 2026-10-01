@@ -164,6 +164,8 @@ mod git;
 #[cfg(feature = "native")]
 pub mod import;
 #[cfg(feature = "native")]
+mod import_buffer;
+#[cfg(feature = "native")]
 mod import_cpu;
 #[cfg(feature = "native")]
 mod importers;

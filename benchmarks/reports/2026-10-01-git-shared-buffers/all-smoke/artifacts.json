@@ -1,0 +1,14 @@
+{
+  "git_closure_import": {
+    "path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/bin/git_closure_import",
+    "sha256": "8ef9e6ec1d8f90614109e5c33357ec25ac08e9d54dcd56492575b32e978e5ec2",
+    "source": "/tmp/casita-shared-buffers-all-bin/git_closure_import",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/8ef9e6ec1d8f90614109e5c33357ec25ac08e9d54dcd56492575b32e978e5ec2"
+  },
+  "git_import_buffers": {
+    "path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/bin/git_import_buffers",
+    "sha256": "058c750d9d0fd634460bf66aa1190cf76182cf935a0c16c8d488f807db49ae4a",
+    "source": "/tmp/casita-shared-buffers-all-bin/git_import_buffers",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/058c750d9d0fd634460bf66aa1190cf76182cf935a0c16c8d488f807db49ae4a"
+  }
+}
