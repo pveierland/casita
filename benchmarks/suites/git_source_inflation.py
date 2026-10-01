@@ -14,7 +14,7 @@ def main(argv=None):
     return run([
         "--counts", "1" if smoke else "1,4",
         "--file-bytes", "1048575,1048576,1048577" if smoke else "1048575,1048576,1048577,16777216,67108864",
-        "--backend", "local", "--layout", "loose", "--bounded-fixture", "--pack-window", "0",
+        "--backend", "local", "--layout", "both", "--bounded-fixture", "--pack-window", "0",
         "--max-buffered-bytes", "16777216" if smoke else "1048575,1048576,1048577,67108864",
         "--decode-workers", "1,4", "--match-baseline-decode-workers", "--concurrency", "16",
         "--content", "random", *arguments,

@@ -11,6 +11,25 @@ from benchmarks import all as runner
 from benchmarks import cli
 
 class AllSuiteTests(unittest.TestCase):
+    def test_registered_unit_probes_preserve_their_build_configuration(self):
+        from benchmarks.revisions import SUITE_BUILD_SPECS
+        directory = pathlib.Path("/build")
+        expected = list(SUITE_BUILD_SPECS["git-source-locator"].cargo_arguments)
+        command, = runner.build_commands(["git-source-locator"], directory)
+        self.assertEqual(command[3:], expected)
+        self.assertNotIn("--all-features", command)
+        with mock.patch.dict(SUITE_BUILD_SPECS, {"locator-alias": SUITE_BUILD_SPECS["git-source-locator"]}):
+            self.assertEqual(runner.build_commands(["git-source-locator", "locator-alias"], directory), [command])
+        mixed = runner.build_commands(["git-source-locator", "git-source-inflation"], directory)
+        self.assertEqual([row for row in mixed if "--lib" in row], [command])
+        self.assertEqual(len(mixed), 2)
+        for selected in (["state-publication"], ["git-source-locator", "state-publication"],
+                         ["git-source-locator", "fsck"], ["git-source-locator", "metadata-collection"]):
+            with self.subTest(selected=selected):
+                units = [row for row in runner.build_commands(selected, directory) if "--lib" in row]
+                self.assertEqual(len(units), 1)
+                self.assertIn("--all-features", units[0])
+
     def test_git_closure_import_builds_and_receives_its_integration_probe(self):
         commands = runner.build_commands(["git-closure-import"], pathlib.Path("/build"))
         self.assertEqual(len(commands), 1)

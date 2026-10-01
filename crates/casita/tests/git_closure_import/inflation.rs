@@ -141,6 +141,76 @@ async fn loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error() {
     }
 }
 
+fn pack(source: &Source, oids: &[String], delta: bool) -> std::path::PathBuf {
+    let prefix = source.0.path().join("objects/pack/pack");
+    let id = source.git(
+        &[
+            "pack-objects",
+            if delta { "--window=10" } else { "--window=0" },
+            prefix.to_str().unwrap(),
+        ],
+        (oids.join("\n") + "\n").as_bytes(),
+    );
+    for oid in oids {
+        source.remove(oid);
+    }
+    prefix.with_file_name(format!("pack-{id}.pack"))
+}
+
+#[tokio::test]
+async fn packed_blob_stages_a_prefix_before_rejecting_a_late_inflate_error() {
+    for (name, format) in [
+        ("sha1", GitObjectFormat::Sha1),
+        ("sha256", GitObjectFormat::Sha256),
+    ] {
+        let source = Source::new(name);
+        let body = vec![b'x'; 8 * 1024 * 1024];
+        let oid = source.blob(&body);
+        let root = key(format, GitObjectKind::Blob, &oid);
+        let path = pack(&source, &[oid], false);
+        let mut bytes = std::fs::read(&path).unwrap();
+        let trailer = bytes.len() - if name == "sha1" { 20 } else { 32 } - 1;
+        bytes[trailer] ^= 1;
+        std::fs::remove_file(&path).unwrap();
+        std::fs::write(path, bytes).unwrap();
+        for workers in [1, 4] {
+            let written = Arc::new(AtomicU64::new(0));
+            let repository = Repository::new(
+                ObservedStore {
+                    inner: MemoryBlobStore::new(),
+                    written: written.clone(),
+                },
+                MemoryMetadataStore::new().unwrap(),
+            );
+            assert!(
+                repository
+                    .import(
+                        source
+                            .request(vec![root.clone()])
+                            .with_decode_workers(workers.try_into().unwrap())
+                    )
+                    .await
+                    .is_err()
+            );
+            assert!(
+                written.load(Ordering::Relaxed) > 0,
+                "packed payload must also be incremental"
+            );
+            assert!(
+                repository
+                    .metadata()
+                    .snapshot()
+                    .await
+                    .unwrap()
+                    .object(&root)
+                    .await
+                    .unwrap()
+                    .is_none()
+            );
+        }
+    }
+}
+
 #[tokio::test]
 async fn streaming_and_buffered_blobs_roundtrip_across_threshold_and_alternates() {
     use tokio::io::AsyncReadExt;
@@ -148,7 +218,7 @@ async fn streaming_and_buffered_blobs_roundtrip_across_threshold_and_alternates(
         ("sha1", GitObjectFormat::Sha1),
         ("sha256", GitObjectFormat::Sha256),
     ] {
-        {
+        for packed in [false, true] {
             let source = Source::new(name);
             let alternate = Source::new(name);
             std::fs::write(
@@ -167,6 +237,13 @@ async fn streaming_and_buffered_blobs_roundtrip_across_threshold_and_alternates(
                 let body: Vec<_> = (0..size).map(|i| ((i * 31 + i / 7) % 251) as u8).collect();
                 let oid = source.blob(&body);
                 blobs.push((oid, body));
+            }
+            if packed {
+                pack(
+                    &source,
+                    &blobs.iter().map(|(oid, _)| oid.clone()).collect::<Vec<_>>(),
+                    false,
+                );
             }
             let roots: Vec<_> = blobs
                 .iter()
@@ -339,6 +416,75 @@ async fn valid_zlib_with_wrong_declared_length_and_truncated_zlib_never_publish(
                     .is_none(),
                 "{error}"
             );
+        }
+    }
+}
+
+#[tokio::test]
+async fn actual_packed_deltas_fall_back_and_preserve_payloads() {
+    use tokio::io::AsyncReadExt;
+    for (name, format) in [
+        ("sha1", GitObjectFormat::Sha1),
+        ("sha256", GitObjectFormat::Sha256),
+    ] {
+        let source = Source::new(name);
+        let mut body = vec![0; 2 * 1024 * 1024];
+        let mut state = 0x123456789abcdefu64;
+        for part in body.chunks_mut(8) {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            part.copy_from_slice(&state.to_le_bytes()[..part.len()]);
+        }
+        let mut objects = Vec::new();
+        for i in 0..4u8 {
+            body[0] = i;
+            objects.push((source.blob(&body), body.clone()));
+        }
+        let path = pack(
+            &source,
+            &objects
+                .iter()
+                .map(|(oid, _)| oid.clone())
+                .collect::<Vec<_>>(),
+            true,
+        );
+        let listing = source.git(
+            &[
+                "verify-pack",
+                "-v",
+                path.with_extension("idx").to_str().unwrap(),
+            ],
+            b"",
+        );
+        assert!(
+            listing.lines().any(|line| {
+                let fields: Vec<_> = line.split_whitespace().collect();
+                fields.len() == 7 && fields[1] == "blob"
+            }),
+            "fixture must contain real Git deltas"
+        );
+        let roots = objects
+            .iter()
+            .map(|(oid, _)| key(format, GitObjectKind::Blob, oid))
+            .collect::<Vec<_>>();
+        for workers in [1, 4] {
+            let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+            let imported = repository
+                .import(
+                    source
+                        .request(roots.clone())
+                        .with_decode_workers(workers.try_into().unwrap()),
+                )
+                .await
+                .unwrap();
+            assert_eq!(imported.report.imported_objects, objects.len());
+            for (root, (_, expected)) in roots.iter().zip(&objects) {
+                let (_, mut payload) = imported.reader.open_payload(root).await.unwrap().unwrap();
+                let mut actual = Vec::new();
+                payload.read_to_end(&mut actual).await.unwrap();
+                assert_eq!(&actual, expected);
+            }
         }
     }
 }

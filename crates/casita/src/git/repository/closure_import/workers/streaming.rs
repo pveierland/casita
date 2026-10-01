@@ -3,11 +3,11 @@
 use super::{Active, Control};
 use gix::features::zlib::{Decompress, FlushDecompress, Status};
 use std::future::Future;
-use std::io::{self, Read};
+use std::io::{self, Read, Seek, SeekFrom};
 use std::path::PathBuf;
 use std::pin::Pin;
 use std::sync::{
-    Arc,
+    Arc, OnceLock,
     atomic::{AtomicBool, Ordering},
 };
 use std::task::{Context, Poll};
@@ -17,15 +17,75 @@ use tokio::sync::Semaphore;
 pub(super) const MIN_BYTES: u64 = 1024 * 1024;
 const BUFFER_BYTES: usize = 64 * 1024;
 const HEADER_BYTES: usize = 64;
+// Optional hints cannot add repository-sized work to a single blob import.
+// Larger indexes and packs beyond this snapshot use the normal gix path.
+const MAX_INDEX_ENTRIES: usize = 256;
+const MAX_INDEX_FILES: usize = 32;
+const MAX_INDEX_BYTES: u64 = 16 * 1024 * 1024;
+
 pub(super) struct Locator {
     roots: Vec<PathBuf>,
+    indexes: OnceLock<Vec<gix::odb::pack::index::File<Box<[u8]>>>>,
+    hash: gix::hash::Kind,
 }
 impl Locator {
     pub(super) fn open(store: &gix::odb::Store) -> Self {
         let roots: Vec<_> = std::iter::once(store.path().to_owned())
             .chain(store.alternate_db_paths().unwrap_or_default())
             .collect();
-        Self { roots }
+        Self {
+            roots,
+            indexes: OnceLock::new(),
+            hash: store.object_hash(),
+        }
+    }
+
+    fn indexes(&self) -> &[gix::odb::pack::index::File<Box<[u8]>>] {
+        self.indexes.get_or_init(|| {
+            let mut indexes = Vec::new();
+            let mut examined = 0;
+            let mut bytes = 0;
+            for root in &self.roots {
+                let Ok(entries) = std::fs::read_dir(root.join("pack")) else {
+                    continue;
+                };
+                for entry in entries {
+                    if examined == MAX_INDEX_ENTRIES || indexes.len() == MAX_INDEX_FILES {
+                        return indexes;
+                    }
+                    examined += 1;
+                    let Ok(entry) = entry else { continue };
+                    let path = entry.path();
+                    if path.extension().is_none_or(|ext| ext != "idx") {
+                        continue;
+                    }
+                    let Ok(metadata) = path.metadata() else {
+                        continue;
+                    };
+                    if !metadata.is_file() || metadata.len() > MAX_INDEX_BYTES - bytes {
+                        continue;
+                    }
+                    // Bounded owned snapshots avoid mmap growth/truncation
+                    // races and charge invalid indexes against the same limit.
+                    bytes += metadata.len();
+                    let Ok(mut file) = std::fs::File::open(&path) else {
+                        continue;
+                    };
+                    if !file.metadata().is_ok_and(|m| m.is_file()) {
+                        continue;
+                    }
+                    let mut data = vec![0; metadata.len() as usize].into_boxed_slice();
+                    if file.read_exact(&mut data).is_err() {
+                        continue;
+                    }
+                    if let Ok(index) = gix::odb::pack::index::File::from_data(data, path, self.hash)
+                    {
+                        indexes.push(index);
+                    }
+                }
+            }
+            indexes
+        })
     }
 
     pub(super) fn reader(
@@ -59,7 +119,68 @@ impl Locator {
                 oid,
             )));
         }
+        for index in self.indexes() {
+            let Some(position) = index.lookup(oid) else {
+                continue;
+            };
+            let offset = index.pack_offset_at_index(position);
+            // Indexes are optional snapshots. Every error before selecting a
+            // validated stream is a hint miss: gix can refresh or use a copy.
+            if let Ok(Some(reader)) =
+                Self::packed_reader(index, offset, oid, size, slots.clone(), control.clone())
+            {
+                return Ok(Some(reader));
+            }
+        }
         Ok(None)
+    }
+    fn packed_reader(
+        index: &gix::odb::pack::index::File<Box<[u8]>>,
+        offset: u64,
+        oid: &gix::ObjectId,
+        size: u64,
+        slots: Arc<Semaphore>,
+        control: Arc<Control>,
+    ) -> io::Result<Option<SourceReader>> {
+        let path = index.path().with_extension("pack");
+        if !path.metadata()?.is_file() {
+            return Ok(None);
+        }
+        let mut file = std::fs::File::open(path)?;
+        let metadata = file.metadata()?;
+        if !metadata.is_file() {
+            return Ok(None);
+        }
+        let hash_len = oid.as_bytes().len();
+        let Some(pack_end) = metadata.len().checked_sub(hash_len as u64) else {
+            return Ok(None);
+        };
+        if offset < 12 || offset >= pack_end {
+            return Ok(None);
+        }
+        let mut header = [0; 12];
+        file.read_exact(&mut header)?;
+        gix::odb::pack::data::header::decode(&header).map_err(io::Error::other)?;
+        file.seek(SeekFrom::Start(offset))?;
+        let entry = gix::odb::pack::data::Entry::from_read(
+            &mut (&mut file).take((pack_end - offset).min(HEADER_BYTES as u64)),
+            offset,
+            hash_len,
+        )?;
+        if entry.header != gix::odb::pack::data::entry::Header::Blob
+            || entry.decompressed_size != size
+            || entry.data_offset >= pack_end
+        {
+            return Ok(None);
+        }
+        Ok(Some(SourceReader::new(
+            file.take(pack_end - entry.data_offset),
+            size,
+            false,
+            slots,
+            control,
+            oid,
+        )))
     }
 }
 
