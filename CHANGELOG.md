@@ -13,6 +13,11 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Added
 
+- `MutationSession::stage_object_reader_with_size` verifies an exact-length
+  source while writing it, avoiding a verification reread of the stored payload.
+  Native identity, complete consumption, and backend digest and length remain
+  independently checked.
+
 - `MutationSession::publish_closures` atomically publishes records and checks
   bounded closure targets without creating named roots. Existing targets
   can acquire reusable witnesses while remaining protected by the mutation.

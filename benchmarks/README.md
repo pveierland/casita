@@ -2715,3 +2715,27 @@ Use `--repetitions 7 --cpu-affinity 0,1,2,3` for paired investigation runs, choo
 CPUs allowed on the host. Frozen integration executables can be supplied through
 `--probe-binary` with `--no-build`. The [retained historical report](reports/2026-09-30-git-blob-file/README.md)
 records gains, negative cases, executable fingerprint and measurement limits.
+
+## One-pass verified Git ingestion
+
+`git-verified-stream` compares the existing `stage_object_reader` write-then-read
+path with `stage_object_reader_with_size`, which verifies the native identity
+while writing the same source bytes. Both strategies run in the same executable
+in alternating order, with fresh repositories and deterministic random input.
+Timing covers staging; fixture creation, mutation setup, publication, exhaustive
+closure verification and byte-for-byte readback are excluded. The writer's digest
+and length remain independently checked.
+
+The default matrix covers empty, one-byte, 65535/65536/65537-byte and 4 MiB
+payloads on memory and local backends. The suite is included in `benchmark all`.
+Process RSS includes the fixture and audits, so it cannot establish the importer's
+streaming memory footprint. Source decoding is outside this measurement.
+
+```sh
+benchmark run git-verified-stream --profile smoke --output /tmp/git-verified-stream-smoke.json
+benchmark run git-verified-stream --backend both --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-verified-stream-paired.json
+```
+
+Historical measurements are preserved in
+[the original verified-stream report](reports/2026-09-30-git-verified-stream/README.md).
+They describe the recorded binary and are not measurements of this extracted branch.
