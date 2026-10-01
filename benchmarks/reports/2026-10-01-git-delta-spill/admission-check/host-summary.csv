@@ -1,0 +1,4 @@
+case,samples,host_intervals,competing_build_intervals,external_cpu_fraction_max
+isolated-disabled,160,149,137,0.6950608076717034
+final-disabled,160,114,80,0.3804750651505125
+final-clustered-4m,80,310,310,0.41687167141185544

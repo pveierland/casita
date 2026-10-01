@@ -17,7 +17,7 @@ def main(argv=None):
         "--backend", "local", "--layout", "packed", "--bounded-fixture",
         "--pack-window", "16", "--content", "clustered",
         "--max-buffered-bytes", "67108864", "--decode-workers", "1,4",
-        "--match-baseline-decode-workers", "--concurrency", "16", *arguments,
+        "--match-baseline-decode-workers", "--concurrency", "16", *arguments, "--no-delta-spilling",
     ])
 
 

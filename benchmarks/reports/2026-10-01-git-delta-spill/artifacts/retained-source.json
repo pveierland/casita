@@ -1,0 +1,6 @@
+{
+  "source_head": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+  "source_patch_sha256": "a426887fe15c42af71607cd2402fadefbab7a798f940b1ab9a6854a962a52a53",
+  "measured_artifact": "cpu-state.build.json",
+  "difference_from_measured_candidate": "None in Rust sources; final documentation and benchmark tooling are tracked separately."
+}

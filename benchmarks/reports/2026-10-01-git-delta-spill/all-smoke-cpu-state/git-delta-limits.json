@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "result_schema": "casita.git-delta-limits.v1",
+  "suite_id": "native-git",
+  "complete": true,
+  "artifacts": [
+    {
+      "path": "/tmp/casita-delta-cpu-state-all-smoke/bin/casita-lib-test",
+      "sha256": "27179ab6044cc7445dc96aeea2d9d8fdd696f11b18ac6d8e22cad5a798a342f3",
+      "build": {
+        "executable_sha256": "27179ab6044cc7445dc96aeea2d9d8fdd696f11b18ac6d8e22cad5a798a342f3",
+        "lockfile_sha256": "bdc3bbc1e97a7bf181c2cd1b52fd38e5d6b58da22fa8400797b7b67bd33265a1",
+        "features": "git,experimental",
+        "default_features": true,
+        "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+        "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+        "source_head": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+        "source_patch_sha256": "a426887fe15c42af71607cd2402fadefbab7a798f940b1ab9a6854a962a52a53",
+        "tracked_source_sha256": "3b7bd15621718d4f771986d2c32c03ace54323092897ee39391cf4553c05f88f",
+        "untracked_source_files": [
+          "crates/casita/src/git/repository/closure_import/workers/streaming/delta.rs",
+          "crates/casita/src/git/repository/closure_import/workers/streaming/delta/tests.rs",
+          "crates/casita/tests/git_closure_import/delta_spill.rs"
+        ],
+        "fixture_sha256": "adfff7e5d0f125fa5ba0bb95a94d8d03ca6d32445059cd1d0d72414d8593c4ff",
+        "source_root": "/home/pveierland/dev/git-import-perf/casita",
+        "cargo_artifact_fresh": false
+      }
+    }
+  ],
+  "samples": [
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "depth",
+      "values": [
+        63,
+        64,
+        65
+      ],
+      "wall_seconds": 0.01202077,
+      "max_rss_bytes": 6316032,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "declared-work",
+      "values": [
+        68719476735,
+        68719476736,
+        68719476737
+      ],
+      "wall_seconds": 0.005956769,
+      "max_rss_bytes": 6529024,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "spill-capacity",
+      "values": [
+        131071,
+        131072,
+        131073
+      ],
+      "wall_seconds": 0.0063606,
+      "max_rss_bytes": 6475776,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "tiny-result-spill-capacity",
+      "values": [
+        1048576,
+        1048577,
+        1048578
+      ],
+      "wall_seconds": 0.007484637,
+      "max_rss_bytes": 7487488,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "source-handles",
+      "values": [
+        127,
+        128,
+        129
+      ],
+      "wall_seconds": 0.02751411,
+      "max_rss_bytes": 6238208,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "window-resume",
+      "values": [
+        128,
+        129
+      ],
+      "wall_seconds": 0.034213558,
+      "max_rss_bytes": 6754304,
+      "correctness": "exact boundary test passed"
+    }
+  ],
+  "processes": [
+    {
+      "wall_seconds": 0.01202077,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 6316032,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::delta_chain_depth_and_reference_cycles_are_bounded ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "depth"
+    },
+    {
+      "wall_seconds": 0.005956769,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 6529024,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::declared_work_boundary_is_checked_before_ref_hint_fallback ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "declared-work"
+    },
+    {
+      "wall_seconds": 0.0063606,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 6475776,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::delta_zero_copy_length_means_65536_and_spill_boundaries_hold ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "spill-capacity"
+    },
+    {
+      "wall_seconds": 0.007484637,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 7487488,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::tiny_delta_result_still_reserves_its_full_base ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "tiny-result-spill-capacity"
+    },
+    {
+      "wall_seconds": 0.02751411,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 6238208,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::source_handle_admission_is_bounded_and_recovers_after_a_window ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.02s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "source-handles"
+    },
+    {
+      "wall_seconds": 0.034213558,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 6754304,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest git::repository::closure_import::workers::streaming::delta::tests::full_plan_window_preserves_and_retries_the_pending_key ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 889 filtered out; finished in 0.03s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "window-resume"
+    }
+  ],
+  "configuration": {
+    "repetitions": 1,
+    "cases": {
+      "depth": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::delta_chain_depth_and_reference_cycles_are_bounded",
+        "values": [
+          63,
+          64,
+          65
+        ]
+      },
+      "declared-work": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::declared_work_boundary_is_checked_before_ref_hint_fallback",
+        "values": [
+          68719476735,
+          68719476736,
+          68719476737
+        ]
+      },
+      "spill-capacity": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::delta_zero_copy_length_means_65536_and_spill_boundaries_hold",
+        "values": [
+          131071,
+          131072,
+          131073
+        ]
+      },
+      "tiny-result-spill-capacity": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::tiny_delta_result_still_reserves_its_full_base",
+        "values": [
+          1048576,
+          1048577,
+          1048578
+        ]
+      },
+      "source-handles": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::source_handle_admission_is_bounded_and_recovers_after_a_window",
+        "values": [
+          127,
+          128,
+          129
+        ]
+      },
+      "window-resume": {
+        "test": "git::repository::closure_import::workers::streaming::delta::tests::full_plan_window_preserves_and_retries_the_pending_key",
+        "values": [
+          128,
+          129
+        ]
+      }
+    },
+    "timing": "whole test process including fixture construction, all boundary values, and assertions; diagnostic only",
+    "memory_measurement": "whole-process RSS includes fixture and payload audits"
+  },
+  "environment": {
+    "captured_at_utc": "2026-10-01T05:31:48.195044+00:00",
+    "hostname": "skylab-x3",
+    "platform": "Linux-7.2.6-x86_64-with-glibc2.42",
+    "kernel": "7.2.6",
+    "architecture": "x86_64",
+    "cpu": "AMD Ryzen AI 9 HX 370 w/ Radeon 890M",
+    "logical_cpus": 24,
+    "memory_bytes": 100488892416,
+    "cpu_governor": "performance",
+    "filesystem": "zfs zroot/home rw,noatime,xattr,posixacl,casesensitive",
+    "python": "3.13.14",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "casita_revision": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+    "casita_worktree_dirty": true
+  }
+}

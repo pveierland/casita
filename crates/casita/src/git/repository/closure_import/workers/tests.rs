@@ -304,6 +304,8 @@ fn open(directory: &tempfile::TempDir, limit: u64, roots: &[ObjectKey]) -> Sourc
         GitObjectFormat::Sha1,
         limit,
         1,
+        crate::spill::SpillArea::new(None, crate::spill::SpillLimits::default()),
+        false,
         roots.into(),
     )
     .unwrap()
@@ -361,7 +363,10 @@ fn a_wrong_type_is_rejected_from_its_header_before_size_limits_or_decoding() {
                     .err()
                     .unwrap()
             } else {
-                source.plan(&mut pending, 1, 1024, &limits).err().unwrap()
+                source
+                    .plan(&mut pending, 1, 1024, &limits, &Arc::default())
+                    .err()
+                    .unwrap()
             };
             assert_eq!(error.category(), category, "{error}");
             match error {

@@ -1,0 +1,17 @@
+{
+  "executable_sha256": "744baf2441d3e8f0a4648716c0c351da1820675ac08ea20840c99e2645c9e2f2",
+  "lockfile_sha256": "bdc3bbc1e97a7bf181c2cd1b52fd38e5d6b58da22fa8400797b7b67bd33265a1",
+  "features": "native,git,experimental",
+  "default_features": false,
+  "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+  "source_head": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+  "source_patch_sha256": "0db991f4b7f9f4234085d8c53c9fb63b82a8f483ecd9126dd30efe4af0e00a50",
+  "tracked_source_sha256": "50e00b284e3ff1ce10c10eceda6ae1e70bca59885236d66eb9e7c2ec472c54a4",
+  "untracked_source_files": [
+    "crates/casita/tests/git_closure_import/delta_spill.rs"
+  ],
+  "fixture_sha256": "a934bf2f7443537e73a4e9d1b2e653b230622513612dd5bcc2c71460cd4471d4",
+  "source_root": "/tmp/casita-delta-baseline",
+  "cargo_artifact_fresh": false
+}

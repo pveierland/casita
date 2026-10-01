@@ -36,9 +36,10 @@ class RetainedBufferTests(unittest.TestCase):
             binary.write_text("#!" + sys.executable + "\n" + PROBE)
             binary.chmod(0o755)
             self.assertEqual(main(["--profile", "smoke", "--probe-binary", str(binary),
-                "--no-build", "--output", str(root / "result.json")]), 0)
+                "--no-build", "--delta-spilling", "--output", str(root / "result.json")]), 0)
             report = json.loads((root / "result.json").read_text())
             self.assertTrue(report["complete"])
+            self.assertFalse(report["configuration"]["delta_spilling"])
             self.assertEqual({r["file_bytes"] for r in report["samples"]}, {1048575, 1048576, 1048577})
             self.assertEqual({r["decode_workers"] for r in report["samples"]}, {1, 4})
             self.assertTrue(all(r["bounded_fixture"] and r["packed"] and r["pack_window"] == 16 for r in report["samples"]))

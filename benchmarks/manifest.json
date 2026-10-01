@@ -610,6 +610,33 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-delta-disabled",
+      "suite_id": "native-git",
+      "title": "Default-disabled delta import control with observed deltas and I/O",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_disabled",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["actual packed delta counts", "zero spilled objects", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts"]
+    },
+    {
+      "id": "git-delta-limits",
+      "suite_id": "native-git",
+      "title": "Delta chain, work, spill and source-handle boundary diagnostics",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_limits",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["below, at and above resource limits", "reference cycle rejection", "spill quota recovery", "pending object survives a full handle window"]
+    },
+    {
+      "id": "git-delta-spill",
+      "suite_id": "native-git",
+      "title": "File-backed delta reconstruction with bounded fixture and readback memory",
+      "kind": "module",
+      "target": "benchmarks.suites.git_delta_spill",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["actual packed delta counts", "observed spill selection and reservations", "independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification"]
+    },
+    {
       "id": "git-source-locator",
       "suite_id": "native-git",
       "title": "Bounded pack locator thresholds with asserted fallback selection",

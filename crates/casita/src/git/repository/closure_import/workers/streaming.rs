@@ -1,6 +1,9 @@
 //! Bounded source jobs finish before downstream storage is awaited.
 
 use super::{Active, Control};
+use crate::spill::SpillPayload;
+
+pub(super) mod delta;
 use gix::features::zlib::{Decompress, FlushDecompress, Status};
 use std::future::Future;
 use std::io::{self, Read, Seek, SeekFrom};
@@ -184,8 +187,21 @@ impl Locator {
     }
 }
 
+enum Input {
+    Compressed(io::Take<std::fs::File>),
+    Spilled(SpillPayload),
+}
+impl Read for Input {
+    fn read(&mut self, bytes: &mut [u8]) -> io::Result<usize> {
+        match self {
+            Self::Compressed(file) => file.read(bytes),
+            Self::Spilled(file) => file.read(bytes),
+        }
+    }
+}
+
 struct Inflater {
-    source: io::Take<std::fs::File>,
+    source: Input,
     inflate: Decompress,
     input: Box<[u8]>,
     start: usize,
@@ -198,6 +214,11 @@ impl Inflater {
     fn step(&mut self, output: &mut [u8]) -> io::Result<usize> {
         if self.finished {
             return Ok(0);
+        }
+        if let Input::Spilled(file) = &mut self.source {
+            let read = file.read(output)?;
+            self.finished = read == 0;
+            return Ok(read);
         }
         let initial = self.inflate.total_in();
         loop {
@@ -248,8 +269,32 @@ struct State {
     header_done: bool,
     size: u64,
     seen: u64,
+    // Last: errors, unwind and unreceived outputs close spill files and release
+    // their quota before making the source slot available to a draining window.
+    permit: Option<tokio::sync::OwnedSemaphorePermit>,
 }
 impl State {
+    fn new(source: Input, size: u64, loose: bool) -> Self {
+        let compressed = matches!(&source, Input::Compressed(_));
+        Self {
+            inflater: Inflater {
+                source,
+                inflate: Decompress::new(),
+                input: vec![0; if compressed { BUFFER_BYTES } else { 0 }].into_boxed_slice(),
+                start: 0,
+                end: 0,
+                finished: false,
+            },
+            output: vec![0; BUFFER_BYTES].into_boxed_slice(),
+            cursor: 0,
+            filled: 0,
+            header: Vec::with_capacity(HEADER_BYTES),
+            header_done: !loose,
+            size,
+            seen: 0,
+            permit: None,
+        }
+    }
     fn step(&mut self) -> io::Result<()> {
         self.cursor = 0;
         self.filled = self.inflater.step(&mut self.output)?;
@@ -328,24 +373,29 @@ impl SourceReader {
         control: Arc<Control>,
         _oid: &gix::ObjectId,
     ) -> Self {
+        Self::from_input(Input::Compressed(source), size, loose, slots, control, _oid)
+    }
+
+    pub(super) fn from_spill(
+        source: SpillPayload,
+        size: u64,
+        slots: Arc<Semaphore>,
+        control: Arc<Control>,
+        oid: &gix::ObjectId,
+    ) -> Self {
+        Self::from_input(Input::Spilled(source), size, false, slots, control, oid)
+    }
+
+    fn from_input(
+        source: Input,
+        size: u64,
+        loose: bool,
+        slots: Arc<Semaphore>,
+        control: Arc<Control>,
+        _oid: &gix::ObjectId,
+    ) -> Self {
         Self {
-            state: Some(Box::new(State {
-                inflater: Inflater {
-                    source,
-                    inflate: Decompress::new(),
-                    input: vec![0; BUFFER_BYTES].into_boxed_slice(),
-                    start: 0,
-                    end: 0,
-                    finished: false,
-                },
-                output: vec![0; BUFFER_BYTES].into_boxed_slice(),
-                cursor: 0,
-                filled: 0,
-                header: Vec::with_capacity(HEADER_BYTES),
-                header_done: !loose,
-                size,
-                seen: 0,
-            })),
+            state: Some(Box::new(State::new(source, size, loose))),
             job: None,
             slots,
             control,
@@ -417,10 +467,9 @@ impl AsyncRead for SourceReader {
             #[cfg(test)]
             let gate = this.gate.take();
             this.job = Some(Box::pin(async move {
-                let permit = slots.acquire_owned().await.map_err(io::Error::other)?;
+                state.permit = Some(slots.acquire_owned().await.map_err(io::Error::other)?);
                 tokio::task::spawn_blocking(move || {
-                    let _permit = permit;
-                    let _active = Active::new(&control);
+                    let active = Active::new(&control);
                     if cancelled.load(Ordering::Relaxed)
                         || control.cancelled.load(Ordering::Relaxed)
                     {
@@ -434,10 +483,22 @@ impl AsyncRead for SourceReader {
                         gate.park();
                     }
                     state.step()?;
+                    drop(active);
+                    if matches!(&state.inflater.source, Input::Compressed(_)) {
+                        // These fixed buffers own no spill or shared byte quota.
+                        // Do not serialize another reader behind result receipt.
+                        drop(state.permit.take());
+                    }
                     Ok(state)
                 })
                 .await
                 .map_err(io::Error::other)?
+                .map(|mut state| {
+                    // A spilled result holds its slot through receipt or disposal.
+                    // Release before returning to the reader's next acquisition.
+                    drop(state.permit.take());
+                    state
+                })
             }));
         }
     }
