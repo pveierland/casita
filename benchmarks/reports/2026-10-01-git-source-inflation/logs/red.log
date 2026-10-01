@@ -1,0 +1,22 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+    Finished `release` profile [optimized] target(s) in 36.82s
+     Running tests/git_closure_import.rs (/home/pveierland/dev/casita/target/release/deps/git_closure_import-983c094d32046391)
+
+running 1 test
+test inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error ... FAILED
+
+failures:
+
+---- inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error stdout ----
+
+thread 'inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error' (3872149) panicked at crates/casita/tests/git_closure_import/inflation.rs:99:46:
+called `Result::unwrap()` on an `Err` value: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `-p casita --test git_closure_import`

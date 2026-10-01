@@ -610,6 +610,15 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-source-inflation",
+      "suite_id": "native-git",
+      "title": "Bounded loose inflation with streaming fixture and readback",
+      "kind": "module",
+      "target": "benchmarks.suites.git_source_inflation",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused counts", "exhaustive closure verification", "independent BLAKE3 and exact streaming readback", "identical paired root identities", "parent RSS captured before audit"]
+    },
+    {
       "id": "git-retained-buffers",
       "suite_id": "native-git",
       "title": "Retained source body capacity around one MiB",

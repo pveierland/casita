@@ -302,15 +302,20 @@ fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
         1,
     )
     .unwrap();
-    let first = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
+    let control = Arc::new(Control::default());
+    let first = source
+        .decode_serial(&mut keys, 2, 1, 16, 16, &control)
+        .unwrap();
     assert_eq!(
         first.len(),
         1,
         "oversized bodies must occupy their own window"
     );
     assert_eq!(keys.len(), 1);
-    let second = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
+    let second = source
+        .decode_serial(&mut keys, 2, 1, 16, 16, &control)
+        .unwrap();
     assert_eq!(second.len(), 1);
-    assert!(second[0].body.is_empty());
+    assert!(matches!(&second[0].body, Body::Buffered(bytes) if bytes.is_empty()));
     assert!(keys.is_empty());
 }

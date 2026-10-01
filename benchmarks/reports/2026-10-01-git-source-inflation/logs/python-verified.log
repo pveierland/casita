@@ -1,0 +1,43 @@
+.......usage: python3 -m unittest [-h] [--profile {smoke,standard}] [--counts COUNTS]
+                           [--max-buffered-bytes MAX_BUFFERED_BYTES]
+                           [--layout {loose,packed,both}]
+                           [--backend {memory,local,both}]
+                           [--file-bytes FILE_BYTES]
+                           [--concurrency CONCURRENCY]
+                           [--decode-workers DECODE_WORKERS]
+                           [--baseline-decode-workers BASELINE_DECODE_WORKERS |
+                           --match-baseline-decode-workers]
+                           [--chunk-cpu-limit CHUNK_CPU_LIMIT]
+                           [--baseline-chunk-cpu-limit BASELINE_CHUNK_CPU_LIMIT]
+                           [--content {repeated,random,mixed,clustered}]
+                           [--bounded-fixture] [--pack-window PACK_WINDOW]
+                           [--repetitions REPETITIONS]
+                           [--probe-binary PROBE_BINARY]
+                           [--baseline-binary BASELINE_BINARY]
+                           [--cpu-affinity CPU_AFFINITY] [--no-build]
+                           --output OUTPUT
+python3 -m unittest: error: baseline and candidate executables must have distinct hashes
+.building benchmark artifacts
+building benchmark artifacts
+building benchmark artifacts
+building benchmark artifacts
+.....results: /tmp/tmp_ydktf_8/results
+running online-holds
+.completion ledger: /tmp/tmp_ydktf_8/results/execution.json
+results: /tmp/tmpbulpmkpo/results
+running online-holds
+...completion ledger: /tmp/tmpbulpmkpo/results/execution.json
+results: /tmp/tmpd22qbwla/results
+running pin-protocol-s3
+.completion ledger: /tmp/tmpd22qbwla/results/execution.json
+results: /tmp/tmp8voks5ha/results
+running transfer-holds
+completion ledger: /tmp/tmp8voks5ha/results/execution.json
+results: /tmp/tmp_bdfrfo5/results
+running transfer-holds
+.
+----------------------------------------------------------------------
+Ran 19 tests in 4.206s
+
+OK
+completion ledger: /tmp/tmp_bdfrfo5/results/execution.json

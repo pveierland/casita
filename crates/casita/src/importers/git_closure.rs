@@ -55,20 +55,24 @@ impl GitClosureImport {
         self
     }
 
-    /// Maximum CPU workers decoding and verifying one bounded object window.
-    /// Defaults to one.
-    /// Parallel workers hand each decoded object to destination staging as it
-    /// finishes. The next window waits for all workers and writes to complete.
-    /// The aggregate pack-cache target remains 16 MiB; custom verifiers run on
-    /// the caller's async runtime. Cache and delta workspace are additional.
+    /// Maximum concurrently executing source jobs for one admitted window.
+    /// Defaults to one. Large loose blobs inflate in bounded steps and verify
+    /// while staging; other objects use buffered decoding.
+    /// Parallel workers hand each object or stream to staging as it is ready.
+    /// The next window waits for its source jobs and successful writes to finish.
+    /// Async verification and destination work are outside this source limit.
+    /// The aggregate pack-cache target is 16 MiB; caches and delta workspace
+    /// are additional to the admitted source-body byte count.
     pub fn with_decode_workers(mut self, workers: NonZeroUsize) -> Self {
         self.decode_workers = workers;
         self
     }
 
-    /// Bound decoded source bodies awaiting staging. An oversized object runs
-    /// alone. Pack delta workspace, caches, and payload backend buffers are
-    /// additional; repository payload limits still apply to every object.
+    /// Bound declared source-body bytes admitted in one staging window. An
+    /// oversized object runs alone. Streamed bodies retain this conservative
+    /// accounting while using fixed inflation buffers. Pack delta
+    /// workspace, caches, and payload backend buffers are additional; repository
+    /// payload limits still apply to every object.
     pub fn with_max_buffered_bytes(mut self, bytes: NonZeroU64) -> Self {
         self.max_buffered_bytes = bytes;
         self
@@ -90,7 +94,8 @@ pub struct GitClosureImportReport {
     /// Peak source body bytes admitted in a decode/staging window. Pack caches,
     /// delta workspace and destination buffers are additional.
     pub peak_source_bytes: u64,
-    /// Peak concurrently executing decode/verification jobs, excluding storage.
+    /// Peak concurrently executing source jobs, excluding async verification
+    /// and destination storage work.
     pub peak_decode_workers: usize,
 }
 

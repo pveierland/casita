@@ -900,5 +900,8 @@ async fn parallel_import_verifies_objects_from_primary_and_alternate_packs() {
     }
 }
 
+#[path = "git_closure_import/inflation.rs"]
+mod inflation;
+
 #[path = "git_closure_import/bounded_fixture.rs"]
 mod bounded_fixture;
