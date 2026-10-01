@@ -905,6 +905,39 @@ where
         }
     }
 
+    /// The native closure importer has verified and durably published every
+    /// object reachable from these keys, under overlapping snapshot/staging
+    /// protection. This private construction proof cannot apply to formats
+    /// with extra relational verification requirements.
+    #[cfg(feature = "git")]
+    pub(crate) async fn publish_git_closure_witnesses(
+        &self,
+        keys: BTreeSet<ObjectKey>,
+    ) -> Result<(), RepositoryError> {
+        if keys.len() > self.repository.limits.max_batch_objects {
+            return Err(RepositoryError::LimitExceeded(
+                "Git witness batch exceeds publication limit".into(),
+            ));
+        }
+        for key in &keys {
+            crate::git::git_key_parts(key)
+                .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        }
+        self.publish_inner_with_metadata(
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            None,
+            ClosurePublication {
+                constructed: keys,
+                ..Default::default()
+            },
+            Some(MetadataMutation::new()),
+        )
+        .await?;
+        Ok(())
+    }
+
     /// Publish a native Git view whose complete closure the importer just
     /// traversed, verified, and durably checkpointed in bounded batches.
     ///

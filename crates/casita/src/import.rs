@@ -5,7 +5,7 @@
 //! `experimental` and retain their experimental status.
 
 #[cfg(feature = "git")]
-pub use crate::importers::GitImport;
+pub use crate::importers::{GitClosureImport, GitImport};
 #[cfg(feature = "oci")]
 pub use crate::importers::OciImport;
 pub use crate::importers::{

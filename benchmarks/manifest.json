@@ -610,6 +610,15 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-closure-import",
+      "suite_id": "native-git",
+      "title": "Inventory-free Git closure import and persistent cross-root reuse",
+      "kind": "module",
+      "target": "benchmarks.suites.git_closure_import",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports"]
+    },
+    {
       "id": "git-import-profile",
       "suite_id": "native-git",
       "title": "Stage-level profiling of git-scale initial, unchanged and incremental imports",

@@ -41,6 +41,10 @@ class SuiteBuildSpec:
 
 
 SUITE_BUILD_SPECS = {
+    "git-closure-import": SuiteBuildSpec(
+        ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_closure_import", "--no-run", "--message-format=json"),
+        "--probe-binary", "git_closure_import", cargo_json_test="git_closure_import", supports_report=False,
+    ),
     "git-verified-stream": SuiteBuildSpec(
         ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "verified_stream", "--no-run", "--message-format=json"),
         "--probe-binary", "verified_stream", cargo_json_test="verified_stream", supports_report=False,
