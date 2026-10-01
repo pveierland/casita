@@ -218,6 +218,36 @@ async fn benchmark_chunk_upload_completion() {
     );
 }
 
+#[tokio::test]
+async fn stalled_first_upload_bounds_completed_manifest_metadata() {
+    let (store, backend) = store(Some(usize::MAX), 0, 1024 * 1024);
+    let body = data(1024 * 1024);
+    let write = store.put_slice(&body);
+    tokio::pin!(write);
+    tokio::select! {
+        _ = &mut write => panic!("the first source chunk must remain parked"),
+        _ = async {
+            tokio::time::timeout(Duration::from_secs(5), async {
+                while backend.started.load(Ordering::SeqCst) <= 4 {
+                    tokio::time::sleep(Duration::from_millis(1)).await;
+                }
+            }).await.expect("completion-order admission made no progress");
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        } => {}
+    }
+    let started = backend.started.load(Ordering::SeqCst);
+    backend.released.notify_one();
+    assert!(
+        started <= 64 + 4,
+        "a straggler admitted {started} uploads, exceeding the bounded completed-metadata window"
+    );
+    let digest = tokio::time::timeout(Duration::from_secs(5), &mut write)
+        .await
+        .unwrap()
+        .unwrap();
+    audit(&store, digest, &body).await;
+}
+
 #[test]
 fn paused_source_still_drives_admitted_chunk_uploads() {
     use futures::TryStreamExt;
