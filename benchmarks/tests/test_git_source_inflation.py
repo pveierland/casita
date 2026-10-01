@@ -35,7 +35,7 @@ class SourceInflationTests(unittest.TestCase):
             self.assertEqual(suite.main(args), 0)
             report = json.loads((root/"report.json").read_text())
             self.assertTrue(report["complete"])
-            self.assertEqual(len(report["samples"]), 24)
+            self.assertEqual(len(report["samples"]), 48)
             self.assertEqual({r["file_bytes"] for r in report["samples"]}, {1048575,1048576,1048577})
             self.assertTrue(all(r["bounded_fixture"] and r["pack_window"] == 0 for r in report["samples"]))
             for before, after in [('parent_hwm_after_import_bytes=4096', 'parent_hwm_after_import_bytes=None'),

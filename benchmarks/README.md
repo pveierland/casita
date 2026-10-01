@@ -2865,13 +2865,15 @@ for preserved memory/latency tradeoffs on the original later source base.
 
 ## Git source inflation
 
-`git-source-inflation` covers loose blobs below, at and above the 1 MiB streaming
+`git-source-inflation` covers loose and non-delta packed blobs below, at and above the 1 MiB streaming
 threshold using bounded fixture generation and independent streamed payload
 audits. One/four-worker controls retain exact closure and import/reuse gates.
-Standard cases add 16/64 MiB blobs and source admission boundaries. Packed objects
-continue through gix as buffered controls.
+Standard cases add 16/64 MiB blobs and source admission boundaries. Delta objects
+and missing, stale or out-of-budget pack hints fall back to gix. The registered
+`git-source-locator` companion covers all three sides of the index-file, index-byte
+and directory-entry caps, asserting exact stream/fallback selection and payload.
 
 See [the focused guide](git-source-inflation.md) for commands and memory limits.
 [The historical report](reports/2026-10-01-git-source-inflation/README.md) retains
 the original combined loose/packed experiment; its timings are not measurements
-of this intermediate extracted branch.
+of this extracted branch.

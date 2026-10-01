@@ -2,10 +2,9 @@
 
 These original measurements from 2026-10-01 tested loose and packed source
 inflation together, with the recorded source, dependencies and fixture. This
-extraction introduces loose inflation first; packed inflation and optional index
-hints arrive separately. Archived commands and patches describe that original
-combined experiment, not the capabilities or performance of this intermediate
-branch. Numeric observations remain unchanged. extraction-provenance.json
+extraction introduces loose and packed inflation in separate commits. Archived
+commands and patches describe that original combined experiment; its timings
+are not measurements of the updated extracted branch. Numeric observations remain unchanged. extraction-provenance.json
 records limited unrelated process-name redactions and original file hashes.
 
 # Incremental Git source inflation: retained for memory reduction

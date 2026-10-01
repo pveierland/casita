@@ -56,13 +56,14 @@ impl GitClosureImport {
     }
 
     /// Maximum concurrently executing source jobs for one admitted window.
-    /// Defaults to one. Large loose blobs inflate in bounded steps and verify
-    /// while staging; other objects use buffered decoding.
+    /// Defaults to one. Large loose blobs and eligible non-delta pack entries
+    /// inflate in bounded steps and verify while staging; other objects use
+    /// buffered decoding.
     /// Parallel workers hand each object or stream to staging as it is ready.
     /// The next window waits for its source jobs and successful writes to finish.
     /// Async verification and destination work are outside this source limit.
-    /// The aggregate pack-cache target is 16 MiB; caches and delta workspace
-    /// are additional to the admitted source-body byte count.
+    /// The aggregate pack-cache target is 16 MiB; index hints, caches and delta
+    /// workspace are additional to the admitted source-body byte count.
     pub fn with_decode_workers(mut self, workers: NonZeroUsize) -> Self {
         self.decode_workers = workers;
         self
@@ -70,7 +71,7 @@ impl GitClosureImport {
 
     /// Bound declared source-body bytes admitted in one staging window. An
     /// oversized object runs alone. Streamed bodies retain this conservative
-    /// accounting while using fixed inflation buffers. Pack delta
+    /// accounting while using fixed inflation buffers. Index hints, pack delta
     /// workspace, caches, and payload backend buffers are additional; repository
     /// payload limits still apply to every object.
     pub fn with_max_buffered_bytes(mut self, bytes: NonZeroU64) -> Self {

@@ -610,9 +610,18 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-source-locator",
+      "suite_id": "native-git",
+      "title": "Bounded pack locator thresholds with asserted fallback selection",
+      "kind": "module",
+      "target": "benchmarks.suites.git_source_locator",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["asserted stream selection", "exact stream and fallback payload", "all below, at, and above boundary cases"]
+    },
+    {
       "id": "git-source-inflation",
       "suite_id": "native-git",
-      "title": "Bounded loose inflation with streaming fixture and readback",
+      "title": "Bounded loose and non-delta pack inflation with streaming fixture and readback",
       "kind": "module",
       "target": "benchmarks.suites.git_source_inflation",
       "profiles": ["smoke", "standard"],

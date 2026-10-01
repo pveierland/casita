@@ -41,6 +41,10 @@ class SuiteBuildSpec:
 
 
 SUITE_BUILD_SPECS = {
+    "git-source-locator": SuiteBuildSpec(
+        ("test", "--release", "--features", "git,experimental", "--lib", "--no-run", "--message-format=json"),
+        "--probe-binary", "casita-lib-test", cargo_json_test="casita", supports_report=False,
+    ),
     "git-source-inflation": SuiteBuildSpec(
         ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_closure_import", "--no-run", "--message-format=json"),
         "--probe-binary", "git_closure_import", cargo_json_test="git_closure_import", supports_report=False,
