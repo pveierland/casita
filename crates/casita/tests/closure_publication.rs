@@ -382,3 +382,63 @@ async fn checking_existing_targets_retains_their_entire_graph_in_a_new_session()
     assert!(snapshot.object(&file_key).await.unwrap().is_none());
     assert_eq!(snapshot.validated_closures(&[key]).await.unwrap(), [false]);
 }
+
+#[tokio::test]
+async fn postorder_targets_reuse_only_completed_closure_checks() {
+    use std::sync::{
+        Arc,
+        atomic::{AtomicUsize, Ordering},
+    };
+    let reads = Arc::new(AtomicUsize::new(0));
+    let repository = Repository::new(
+        counting_blob_store::CountingBlobStore {
+            inner: MemoryBlobStore::new(),
+            reads: reads.clone(),
+            writes: Arc::new(AtomicUsize::new(0)),
+        },
+        MemoryMetadataStore::new().unwrap(),
+    );
+    let session = repository.mutation_session().await.unwrap();
+    let mut directory = Directory::new();
+    let mut staged = Vec::new();
+    let mut targets = BTreeSet::new();
+    const DEPTH: usize = 16;
+    for _ in 0..DEPTH {
+        let object = session.stage_directory(&directory).await.unwrap();
+        targets.insert(object.record().key().clone());
+        staged.push(object);
+        directory = Directory::try_from_iter([(
+            PathComponent::try_from("child").unwrap(),
+            Node::Directory {
+                digest: directory.digest(),
+                size: directory.size(),
+            },
+        )])
+        .unwrap();
+    }
+    reads.store(0, Ordering::SeqCst);
+    session
+        .publish_closures(staged, targets.clone())
+        .await
+        .unwrap();
+    // Each directory needs its own relation check, including reading the
+    // immediate child's declared size. Descendants already checked as targets
+    // need no additional closure walk in this publication attempt.
+    assert!(
+        reads.load(Ordering::SeqCst) < 2 * DEPTH,
+        "postorder closure checks reopened {} payloads for {DEPTH} directories",
+        reads.load(Ordering::SeqCst),
+    );
+    assert!(
+        repository
+            .metadata()
+            .snapshot()
+            .await
+            .unwrap()
+            .validated_closures(&targets.into_iter().collect::<Vec<_>>())
+            .await
+            .unwrap()
+            .into_iter()
+            .all(|valid| valid)
+    );
+}

@@ -1139,11 +1139,24 @@ where
                             }
                         }
                     }
-                    // Public targets always use normal format and link verification.
-                    // Record only these bounded targets, not the entire visited graph.
-                    for target in &checked_closures {
+                    // Requested targets use normal format verification, never
+                    // the importers' private construction shortcut. Record only
+                    // these bounded targets instead of an entire visited graph.
+                    // Staging order lets bottom-up producers reuse each completed
+                    // child check. Remaining committed targets use canonical order.
+                    // A successful prefix is private to this immutable attempt:
+                    // neither partial walks nor retries may reuse its proofs.
+                    let mut completed_checks = BTreeSet::new();
+                    for target in staged.iter().map(|object| object.record().key())
+                        .chain(checked_closures.iter())
+                    {
+                        if !checked_closures.contains(target) || completed_checks.contains(target) {
+                            continue;
+                        }
+                        let mut verifier = self.repository.closure_verifier();
+                        verifier.completed = Some(&completed_checks);
                         let status = verify_closure_with(
-                            self.repository.closure_verifier(),
+                            verifier,
                             snapshot.as_ref(),
                             &overlay,
                             target,
@@ -1157,6 +1170,7 @@ where
                                 status,
                             });
                         }
+                        completed_checks.insert(target.clone());
                     }
                     newly_verified.extend(checked_closures.iter().cloned());
                     for change in &root_changes {
@@ -1285,6 +1299,8 @@ where
     /// Only requested targets acquire new directory closure witnesses; this
     /// does not accumulate the full transitive object inventory. Target count
     /// and staged-object count are each bounded by `max_batch_objects`.
+    /// Staged targets are checked in staging order, so placing children before
+    /// parents avoids repeating their completed closure checks within a batch.
     /// Already verified closures may be trusted, so this is a completeness
     /// check rather than a fresh corruption audit. Witnesses do not retain
     /// objects: after the mutation and other holds end, they remain collectible.

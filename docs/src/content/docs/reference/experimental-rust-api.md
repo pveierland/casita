@@ -145,7 +145,9 @@ link checks before atomically publishing records and requested witnesses.
 Staged-object and target counts are each limited by `max_batch_objects`.
 Existing witnesses may be reused; this is a completeness check, not a fresh
 corruption audit. The mutation retains the checked graphs for its lifetime,
-but their witnesses do not become permanent roots.
+but their witnesses do not become permanent roots. Place staged children
+before their parents to reuse completed checks within one publication
+attempt; a retried commit validates against its new snapshot again.
 
 ## Stable reads and retention
 

@@ -108,6 +108,9 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Changed
 
+- Checked closure batches reuse completed child checks within each publication
+  attempt when staged children precede their parents; retries verify afresh.
+
 - Publishing verified built-in raw blobs records complete-closure witnesses without
   rereading their payloads. Custom registries keep their normal validation rules.
 

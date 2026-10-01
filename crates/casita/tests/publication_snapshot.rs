@@ -172,7 +172,7 @@ async fn checked_closures_revalidate_after_a_refused_commit() {
     assert_eq!(state.commits.load(Ordering::SeqCst), 2);
     assert_eq!(
         reads.load(Ordering::SeqCst),
-        8,
+        6,
         "each attempt must recheck both directories and the parent-child relation",
     );
 }
