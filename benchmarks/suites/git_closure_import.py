@@ -20,15 +20,26 @@ PROBE = "benchmark_git_closure_import"
 CORRECTNESS = "exact imported/reused counts and exhaustive closure verification"
 
 
+def nonnegative_csv(value):
+    try:
+        values = [int(part) for part in value.split(",")]
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("expected comma-separated nonnegative integers") from error
+    if not values or any(value < 0 for value in values):
+        raise argparse.ArgumentTypeError("expected comma-separated nonnegative integers")
+    return values
+
+
 def summarize_pairs(samples):
     """Pair identical workloads by repetition; report effects without hiding spread."""
     dimensions = ("operation", "backend", "files", "file_bytes", "content", "packed",
-                  "concurrency", "max_buffered_bytes", "requested_decode_workers", "requested_delta_spilling")
+                  "concurrency", "max_buffered_bytes", "requested_decode_workers", "requested_delta_spilling", "imports", "requested_shared_cpu_limit")
+    defaults = {"requested_decode_workers": 1, "requested_delta_spilling": False, "imports": 1, "requested_shared_cpu_limit": 0}
     groups = {}
     for sample in samples:
         if not isinstance(sample.get("root"), str) or not sample["root"]:
             raise common.BenchmarkError("missing or invalid benchmark root identity")
-        key = tuple(sample.get(name, 1) if name == "requested_decode_workers" else sample.get(name, False) if name == "requested_delta_spilling" else sample[name] for name in dimensions)
+        key = tuple(sample.get(name, defaults[name]) if name in defaults else sample[name] for name in dimensions)
         repetitions = groups.setdefault(key, {})
         pair = repetitions.setdefault(sample["repetition"], {})
         if sample["variant"] in pair:
@@ -70,6 +81,9 @@ def main(argv=None):
     worker_baseline.add_argument("--baseline-decode-workers", type=int)
     worker_baseline.add_argument("--match-baseline-decode-workers", action="store_true",
                                  help="use each requested decoder count for both variants")
+    parser.add_argument("--imports", type=positive_csv, default=[1], help="concurrent imports into independent destination repositories")
+    parser.add_argument("--shared-cpu-limit", type=nonnegative_csv, default=[0], help="shared source/destination CPU limits; zero disables admission")
+    parser.add_argument("--baseline-shared-cpu-limit", type=int, default=0)
     parser.add_argument("--content", choices=("repeated", "random", "mixed", "clustered"), default="repeated")
     parser.add_argument("--delta-spilling", action=argparse.BooleanOptionalAction, default=False, help="enable bounded file-backed reconstruction for located blob deltas")
     parser.add_argument("--baseline-delta-spilling", action="store_true")
@@ -84,6 +98,8 @@ def main(argv=None):
     parser.add_argument("--no-build", action="store_true")
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args(argv)
+    if args.baseline_shared_cpu_limit < 0:
+        parser.error("baseline shared CPU limit must be nonnegative")
     if args.pack_window < 0:
         parser.error("pack window must be nonnegative")
     if args.content == "clustered" and args.pack_window == 0:
@@ -135,6 +151,7 @@ def main(argv=None):
             raise common.BenchmarkError("paired bounded fixture fingerprints differ")
     if (len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]
             and (args.baseline_decode_workers is None or all(n == args.baseline_decode_workers for n in args.decode_workers))
+            and all(limit == args.baseline_shared_cpu_limit for limit in args.shared_cpu_limit)
             and args.delta_spilling == args.baseline_delta_spilling):
         parser.error("baseline and candidate executables must have distinct hashes")
     cpu_ticks = os.sysconf("SC_CLK_TCK") if args.cpu_metrics else None
@@ -149,13 +166,14 @@ def main(argv=None):
                       backends=backends, file_bytes=args.file_bytes, concurrency=args.concurrency,
                       decode_workers=args.decode_workers, baseline_decode_workers=None if args.match_baseline_decode_workers else args.baseline_decode_workers or 1,
                       match_baseline_decode_workers=args.match_baseline_decode_workers,
+                      imports=args.imports, shared_cpu_limits=args.shared_cpu_limit, baseline_shared_cpu_limit=args.baseline_shared_cpu_limit,
                       bounded_fixture=args.bounded_fixture, pack_window=args.pack_window,
                       delta_spilling=args.delta_spilling, baseline_delta_spilling=args.baseline_delta_spilling, delta_metrics=args.delta_metrics,
                       cpu_metrics=args.cpu_metrics, process_cpu_ticks_per_second=cpu_ticks,
                       content=args.content, paired=bool(args.baseline_binary), cpu_affinity=args.cpu_affinity,
                       memory_measurement="whole-process peak RSS includes fixture creation and audits",
                       spill_memory_objects=64, metadata_frontier=256,
-                      repetitions=args.repetitions, timing="import only; fixture generation and exhaustive audits excluded"))
+                      repetitions=args.repetitions, timing="combined concurrent import makespan; fixture generation and per-repository audits excluded"))
     with cpu_affinity(args.cpu_affinity), tempfile.TemporaryDirectory(prefix="casita-git-closure-benchmark-") as temporary:
         work = pathlib.Path(temporary)
         result["environment"] = common.environment_metadata(work)
@@ -170,15 +188,16 @@ def main(argv=None):
             result["environment"]["cpu_max_frequencies_khz"] = frequencies
         try:
             matrix = itertools.product(counts, args.max_buffered_bytes, layouts, backends,
-                                       args.file_bytes, args.concurrency, args.decode_workers, range(args.repetitions))
-            for count, budget, packed, backend, file_bytes, concurrency, decode_workers, repetition in matrix:
+                                       args.file_bytes, args.concurrency, args.decode_workers, args.imports, args.shared_cpu_limit, range(args.repetitions))
+            for count, budget, packed, backend, file_bytes, concurrency, decode_workers, imports, shared_cpu_limit, repetition in matrix:
                 ordered = variants if repetition % 2 == 0 else list(reversed(variants))
                 for variant, executable in ordered:
                     actual_workers = ((args.baseline_decode_workers or 1)
                                       if variant == "baseline" and not args.match_baseline_decode_workers
                                       else decode_workers)
+                    actual_shared_cpu = args.baseline_shared_cpu_limit if variant == "baseline" else shared_cpu_limit
                     actual_spill = args.baseline_delta_spilling if variant == "baseline" else args.delta_spilling
-                    env = {**os.environ, "CASITA_GIT_CLOSURE_CPU_METRICS": str(int(args.cpu_metrics)), "CASITA_GIT_CLOSURE_DELTA_METRICS": str(int(args.delta_metrics or args.delta_spilling or args.baseline_delta_spilling)), "CASITA_GIT_CLOSURE_DELTA_SPILL": str(int(actual_spill)), "CASITA_GIT_CLOSURE_BOUNDED_FIXTURE": str(int(args.bounded_fixture)),
+                    env = {**os.environ, "CASITA_GIT_CLOSURE_IMPORTS": str(imports), "CASITA_GIT_CLOSURE_SHARED_CPU_LIMIT": str(actual_shared_cpu), "CASITA_GIT_CLOSURE_CPU_METRICS": str(int(args.cpu_metrics)), "CASITA_GIT_CLOSURE_DELTA_METRICS": str(int(args.delta_metrics or args.delta_spilling or args.baseline_delta_spilling)), "CASITA_GIT_CLOSURE_DELTA_SPILL": str(int(actual_spill)), "CASITA_GIT_CLOSURE_BOUNDED_FIXTURE": str(int(args.bounded_fixture)),
                            "CASITA_GIT_CLOSURE_PACK_WINDOW": str(args.pack_window), "CASITA_GIT_CLOSURE_FILES": str(count), "CASITA_GIT_CLOSURE_BYTES": str(budget),
                            "CASITA_GIT_CLOSURE_PACKED": str(int(packed)),
                            "CASITA_GIT_CLOSURE_BACKEND": backend, "CASITA_GIT_CLOSURE_FILE_BYTES": str(file_bytes),
@@ -191,6 +210,7 @@ def main(argv=None):
                     result["processes"].append(dict(**timing, variant=variant, files=count, budget=budget, packed=packed,
                                                     backend=backend, file_bytes=file_bytes, concurrency=concurrency, content=args.content,
                                                     decode_workers=actual_workers, requested_decode_workers=decode_workers,
+                                                    imports=imports, shared_cpu_limit=actual_shared_cpu, requested_shared_cpu_limit=shared_cpu_limit,
                                                     delta_spilling=actual_spill, requested_delta_spilling=args.delta_spilling,
                                                     repetition=repetition, stdout=stdout, stderr=stderr))
                     if timing["exit_code"] != 0:
@@ -203,6 +223,16 @@ def main(argv=None):
                     for row in rows:
                         if not isinstance(row.get("root"), str) or not row["root"]:
                             raise common.BenchmarkError("missing or invalid benchmark root identity")
+                        if imports != 1 or actual_shared_cpu != 0 or "imports" in row:
+                            peak_cpu = row.get("peak_cpu_jobs")
+                            if (row.get("imports") != imports or row.get("audited_imports") != imports
+                                    or row.get("shared_cpu_limit") != actual_shared_cpu
+                                    or row.get("timing_scope") != "combined concurrent import makespan"
+                                    or type(peak_cpu) is not int or peak_cpu < 0
+                                    or peak_cpu > actual_shared_cpu
+                                    or (actual_shared_cpu and row["operation"] != "warm" and peak_cpu == 0)
+                                    or (row["operation"] == "warm" and peak_cpu != 0)):
+                                raise common.BenchmarkError("incorrect shared CPU admission or concurrent import audit")
                         if args.cpu_metrics:
                             counters = row.get("import_process_cpu")
                             if (not isinstance(counters, dict) or set(counters) != {"user_ticks", "system_ticks"}
@@ -212,7 +242,7 @@ def main(argv=None):
                             deltas = row.get("fixture_blob_deltas")
                             spilled = row.get("spilled_delta_objects")
                             peak = row.get("peak_spill_bytes")
-                            expected_spilled = deltas if actual_spill and row["operation"] == "cold" else 0
+                            expected_spilled = deltas * imports if actual_spill and row["operation"] == "cold" else 0
                             if (row.get("delta_spilling") is not actual_spill
                                     or not isinstance(deltas, int) or deltas < 0
                                     or (packed and args.content == "clustered" and count > 8 and file_bytes >= 65536 and deltas == 0)
@@ -241,11 +271,12 @@ def main(argv=None):
                             raise common.BenchmarkError("wrong benchmark configuration or correctness gate")
                         expected = {"cold": (count + 2, 0), "warm": (0, 1),
                                     "subtree-delta": (2, 1), "wide-delta": (2, count)}[row["operation"]]
+                        expected = tuple(value * imports for value in expected)
                         if ((row.get("imported_objects"), row.get("reused_objects")) != expected
                                 or (row["operation"] == "warm" and row.get("source_bytes") != 0)):
                             raise common.BenchmarkError("incorrect import/reuse counters")
                         result["samples"].append(dict(status="ok", implementation="casita", variant=variant, entries=count,
-                            repetition=repetition, requested_decode_workers=decode_workers,
+                            repetition=repetition, requested_shared_cpu_limit=shared_cpu_limit, requested_decode_workers=decode_workers,
                             requested_delta_spilling=args.delta_spilling,
                             wall_seconds=row["wall_nanos"] / 1e9,
                             max_rss_bytes=timing["max_rss_bytes"], **row))

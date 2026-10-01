@@ -1,0 +1,23 @@
+{
+  "original_commit": "5e73034e2ecb528c7bb22d81f163018ca5d5499f",
+  "original_parent": "df8bc19307e78ff3662801e36a5034d79e942d56",
+  "original_checksum_list_sha256": "392f983e371ea35891d411a6fa71c314a5681ce2ab5d4e56227814c11252737f",
+  "edited_host_records": [
+    {
+      "path": "benchmarks/reports/2026-10-01-git-shared-cpu/cpu-boundary.json.host.json",
+      "original_sha256": "e3568d8a03348df3fe2b332ee5e531d0a56ac094916cc484c94549b195c848b6",
+      "extracted_sha256": "881c423a079944644a6a3ec533a0febbd135e64a1bb3b174b23dca6516572982",
+      "reason": "Neutralize unrelated host process label; retain all numerical observations.",
+      "replacements": 6
+    },
+    {
+      "path": "benchmarks/reports/2026-10-01-git-shared-cpu/source-boundary.json.host.json",
+      "original_sha256": "194fe95a7b02fc50ac5cc711b2bde4221bebe5452ab212a9810a518e0c18f5e3",
+      "extracted_sha256": "6a3e93f579bf866f2e577be4810112621c28e3f61affa24931443272c8413a4a",
+      "reason": "Neutralize unrelated host process label; retain all numerical observations.",
+      "replacements": 10
+    }
+  ],
+  "omitted_unrelated_artifact_count": 0,
+  "omitted_unrelated_artifact_sha256": []
+}

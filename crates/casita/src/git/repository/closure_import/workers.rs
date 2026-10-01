@@ -106,10 +106,17 @@ pub(super) struct StagedWindow<'hold> {
 
 #[derive(Default)]
 struct Control {
+    cpu: Option<crate::import_cpu::ImportCpuBudget>,
     cancelled: AtomicBool,
     active: AtomicUsize,
     peak: AtomicUsize,
     spilled_delta_objects: AtomicUsize,
+}
+impl Control {
+    fn with_cpu_budget(mut self, cpu: Option<crate::import_cpu::ImportCpuBudget>) -> Self {
+        self.cpu = cpu;
+        self
+    }
 }
 struct Cancellation(Arc<Control>);
 impl Drop for Cancellation {
@@ -215,6 +222,8 @@ impl SourcePool {
         let mut bytes = 0u64;
         while decoded.len() < count {
             let Some(key) = pending.front() else { break };
+            #[cfg(test)]
+            tests::pause_before_decode(key);
             let (_, kind, oid) = git_key_parts(key)?;
             let oid = gix::ObjectId::from_bytes_or_panic(oid);
             let (size, delta) = self.probe(kind, &oid, control).map_err(delta_error)?;
@@ -494,15 +503,15 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
     let budget = request.max_buffered_bytes.get();
     let serial = request.decode_workers.get() == 1;
     let delta_spilling = request.delta_spilling;
-    let control = Arc::new(Control::default());
+    let control = Arc::new(Control::default().with_cpu_budget(request.cpu.clone()));
     // Dropping the import cancels parallel decoding between objects and
     // streamed inflation between bounded steps. An in-flight gix decode or
-    // admitted buffered serial window may finish; source workers never write
-    // destination data.
+    // admitted buffered serial window may finish. Running jobs retain their
+    // buffers and permits; source workers never wait for destination operations.
     let _cancellation = Cancellation(control.clone());
     let first_control = control.clone();
     let first_verifier = verifier.clone();
-    let mut window = tokio::task::spawn_blocking(move || {
+    let mut window = crate::import_cpu::run(request.cpu.as_ref(), move || {
         let mut source = match source {
             Some(source)
                 if source.decoded_bytes < super::super::MAX_GIT_SOURCE_MAPPING_WINDOW_BYTES =>
@@ -587,7 +596,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
             .try_collect::<Vec<_>>()
             .await
     } else {
-        let (sender, receiver) = tokio::sync::mpsc::channel(workers);
+        let (sender, receiver) = decoded_channel(workers, request.cpu.is_some());
         let sources = std::mem::take(&mut window.source.sources);
         // Spawn eagerly: waiting for the receiver before spawning these jobs
         // would leave it waiting for senders that have never started.
@@ -596,7 +605,7 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
             .zip(std::mem::take(&mut window.groups))
             .map(|(mut source, batch)| {
                 if batch.is_empty() {
-                    return futures::future::Either::Left(futures::future::ready(Ok(source)));
+                    return (Some(source), None);
                 }
                 let verifier = verifier.clone();
                 let control = control.clone();
@@ -612,31 +621,34 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
                     .clone()
                     .try_acquire_owned()
                     .expect("previous source window drained");
-                futures::future::Either::Right(tokio::task::spawn_blocking(move || {
-                    let _permit = permit;
-                    let result = decode(
-                        &mut source,
-                        batch,
-                        verifier.as_ref(),
-                        DecodeResources {
-                            control: &control,
-                            locator: &locator,
-                            slots: &slots,
-                            area: &area,
-                        },
-                        |object| {
-                            sender
-                                .blocking_send(Ok(object))
-                                .map_err(|_| source_error("Git staging receiver closed"))
-                        },
-                    );
-                    if let Err(error) = result {
-                        // A receiver closed by a staging failure already
-                        // holds the error to return; do not replace it.
-                        let _ = sender.blocking_send(Err(error));
-                    }
-                    source
-                }))
+                (
+                    None,
+                    Some(crate::import_cpu::spawn(request.cpu.clone(), move || {
+                        let _permit = permit;
+                        let result = decode(
+                            &mut source,
+                            batch,
+                            verifier.as_ref(),
+                            DecodeResources {
+                                control: &control,
+                                locator: &locator,
+                                slots: &slots,
+                                area: &area,
+                            },
+                            |object| {
+                                sender
+                                    .blocking_send(Ok(object))
+                                    .map_err(|_| source_error("Git staging receiver closed"))
+                            },
+                        );
+                        if let Err(error) = result {
+                            // A receiver closed by a staging failure already
+                            // holds the error to return; do not replace it.
+                            let _ = sender.blocking_send(Err(error));
+                        }
+                        source
+                    })),
+                )
             })
             .collect();
         drop(sender);
@@ -655,9 +667,23 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
         // until every source job and successful destination writer has drained.
         if result.is_err() {
             control.cancelled.store(true, Ordering::Relaxed);
+            // Do not await admission held by an unrelated import after failure.
+            // Submitted blocking jobs still drain through their private slots.
+            for (_, job) in &jobs {
+                if let Some(job) = job {
+                    job.cancel_waiter();
+                }
+            }
         }
         let mut join_error = None;
-        for result in futures::future::join_all(jobs).await {
+        for result in futures::future::join_all(jobs.into_iter().map(|(ready, job)| async move {
+            match job {
+                Some(job) => job.join().await,
+                None => Ok(ready.expect("idle source")),
+            }
+        }))
+        .await
+        {
             match result {
                 Ok(source) => window.source.sources.push(source),
                 Err(error) => {
@@ -694,6 +720,50 @@ pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
             .peak_workers
             .max(control.peak.load(Ordering::Relaxed)),
     })
+}
+
+// With global CPU admission, sending must never wait while holding a CPU
+// permit. The unbounded channel is confined to one already-admitted window
+// (at most FRONTIER objects); no new window starts before it drains.
+#[derive(Clone)]
+enum DecodedSender {
+    Bounded(tokio::sync::mpsc::Sender<Result<Decoded>>),
+    Window(tokio::sync::mpsc::UnboundedSender<Result<Decoded>>),
+}
+enum DecodedReceiver {
+    Bounded(tokio::sync::mpsc::Receiver<Result<Decoded>>),
+    Window(tokio::sync::mpsc::UnboundedReceiver<Result<Decoded>>),
+}
+impl DecodedSender {
+    fn blocking_send(&self, value: Result<Decoded>) -> std::result::Result<(), ()> {
+        match self {
+            Self::Bounded(sender) => sender.blocking_send(value).map_err(|_| ()),
+            Self::Window(sender) => sender.send(value).map_err(|_| ()),
+        }
+    }
+}
+impl DecodedReceiver {
+    async fn recv(&mut self) -> Option<Result<Decoded>> {
+        match self {
+            Self::Bounded(receiver) => receiver.recv().await,
+            Self::Window(receiver) => receiver.recv().await,
+        }
+    }
+}
+fn decoded_channel(workers: usize, shared: bool) -> (DecodedSender, DecodedReceiver) {
+    if shared {
+        let (sender, receiver) = tokio::sync::mpsc::unbounded_channel();
+        (
+            DecodedSender::Window(sender),
+            DecodedReceiver::Window(receiver),
+        )
+    } else {
+        let (sender, receiver) = tokio::sync::mpsc::channel(workers);
+        (
+            DecodedSender::Bounded(sender),
+            DecodedReceiver::Bounded(receiver),
+        )
+    }
 }
 
 #[cfg(test)]

@@ -79,6 +79,7 @@ mod nar;
 mod oci;
 mod tar;
 
+pub use crate::import_cpu::ImportCpuBudget;
 pub use blob::BlobImport;
 pub use casitar::CasitarImport;
 pub use copy::CopyImport;
@@ -88,7 +89,9 @@ pub use filesystem::{MultiRootFilesystemImport, UnrootedFilesystemImport};
 #[cfg(feature = "git")]
 pub use git::GitImport;
 #[cfg(feature = "git")]
-pub use git_closure::{GitClosureImport, GitClosureImportError, GitClosureImportOutcome, GitClosureImportReport};
+pub use git_closure::{
+    GitClosureImport, GitClosureImportError, GitClosureImportOutcome, GitClosureImportReport,
+};
 pub use nar::{FilesystemNarImport, NarImport};
 #[cfg(feature = "oci")]
 pub use oci::OciImport;

@@ -288,33 +288,48 @@ async fn closure_witnesses_survive_reopening_a_local_repository() {
 async fn benchmark_git_closure_import() {
     use casita::experimental::{FormatLimits, SpillLimits};
     let backend = std::env::var("CASITA_GIT_CLOSURE_BACKEND").unwrap_or("memory".into());
+    let imports: usize = std::env::var("CASITA_GIT_CLOSURE_IMPORTS")
+        .unwrap_or("1".into())
+        .parse()
+        .unwrap();
+    assert!(imports > 0);
     if backend == "local" {
-        let destination = tempfile::tempdir().unwrap();
-        let repository = Repository::local(destination.path())
-            .await
-            .unwrap()
-            .with_spill_limits(SpillLimits {
-                max_memory_objects: 64,
-                ..Default::default()
-            });
-        run_git_closure_benchmark(&repository).await;
-        repository.flush().await.unwrap();
+        let destinations: Vec<_> = (0..imports).map(|_| tempfile::tempdir().unwrap()).collect();
+        let mut repositories = Vec::new();
+        for destination in &destinations {
+            let repository = Repository::local(destination.path())
+                .await
+                .unwrap()
+                .with_spill_limits(SpillLimits {
+                    max_memory_objects: 64,
+                    ..Default::default()
+                });
+            repositories.push(repository);
+        }
+        run_git_closure_benchmark(&repositories).await;
+        for repository in &repositories {
+            repository.flush().await.unwrap();
+        }
     } else {
         assert_eq!(backend, "memory");
-        let repository = Repository::with_formats(
-            MemoryBlobStore::new(),
-            MemoryMetadataStore::new().unwrap(),
-            casita::experimental::FormatRegistry::builtin(),
-            FormatLimits {
-                max_batch_objects: 64,
-                ..Default::default()
-            },
-        )
-        .with_spill_limits(SpillLimits {
-            max_memory_objects: 64,
-            ..Default::default()
-        });
-        run_git_closure_benchmark(&repository).await;
+        let repositories: Vec<_> = (0..imports)
+            .map(|_| {
+                Repository::with_formats(
+                    MemoryBlobStore::new(),
+                    MemoryMetadataStore::new().unwrap(),
+                    casita::experimental::FormatRegistry::builtin(),
+                    FormatLimits {
+                        max_batch_objects: 64,
+                        ..Default::default()
+                    },
+                )
+                .with_spill_limits(SpillLimits {
+                    max_memory_objects: 64,
+                    ..Default::default()
+                })
+            })
+            .collect();
+        run_git_closure_benchmark(&repositories).await;
     }
     casita::experimental::flush_repository_leases()
         .await
@@ -322,8 +337,13 @@ async fn benchmark_git_closure_import() {
 }
 
 async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: MetadataStore>(
-    repository: &Repository<PS, SS>,
+    repositories: &[Repository<PS, SS>],
 ) {
+    let imports = repositories.len();
+    let shared_cpu_limit: usize = std::env::var("CASITA_GIT_CLOSURE_SHARED_CPU_LIMIT")
+        .unwrap_or("0".into())
+        .parse()
+        .unwrap();
     let backend = std::env::var("CASITA_GIT_CLOSURE_BACKEND").unwrap_or("memory".into());
     let file_bytes: usize = std::env::var("CASITA_GIT_CLOSURE_FILE_BYTES")
         .unwrap_or("1024".into())
@@ -445,26 +465,34 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             }
             _ => unreachable!(),
         };
-        let request = source
+        let mut request = source
             .request(vec![root.clone()])
             .with_max_buffered_bytes(budget.try_into().unwrap())
             .with_concurrency(concurrency.try_into().unwrap())
             .with_decode_workers(decode_workers.try_into().unwrap())
             .with_delta_spilling(delta_spilling);
+        if let Some(limit) = std::num::NonZeroUsize::new(shared_cpu_limit) {
+            request = request.with_cpu_concurrency(limit);
+        }
         let hwm_before = bounded.then(bounded_fixture::parent_hwm).flatten();
         let io_before = delta_metrics.then(bounded_fixture::process_io).flatten();
         let cpu_before = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
         let start = std::time::Instant::now();
-        let imported = repository.import(request).await.unwrap();
+        let outcomes = futures::future::join_all(
+            repositories
+                .iter()
+                .map(|repository| repository.import(request.clone())),
+        )
+        .await
+        .into_iter()
+        .map(Result::unwrap)
+        .collect::<Vec<_>>();
         let nanos = start.elapsed().as_nanos();
         let cpu_after = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
         let process_cpu = bounded_fixture::io_delta(cpu_before, cpu_after);
         let io_after = delta_metrics.then(bounded_fixture::process_io).flatten();
         let process_io = bounded_fixture::io_delta(io_before, io_after);
         let hwm_after = bounded.then(bounded_fixture::parent_hwm).flatten();
-        if bounded {
-            bounded_fixture::audit(&imported.reader, &expected).await;
-        }
         let (new, reused, reachable) = match operation {
             "cold" => (count + 2, 0, count + 2),
             "warm" => (0, 1, count + 2),
@@ -472,49 +500,78 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             "wide-delta" => (2, count, count + 2),
             _ => unreachable!(),
         };
-        assert_eq!(imported.report.imported_objects, new);
-        assert_eq!(imported.report.reused_objects, reused);
-        assert_eq!(
-            repository.verify_closure(&root).await.unwrap(),
-            ClosureStatus::Complete { objects: reachable }
-        );
         let expected_spilled = if delta_spilling && operation == "cold" {
             fixture_blob_deltas
         } else {
             0
         };
-        assert_eq!(imported.report.spilled_delta_objects, expected_spilled);
-        if expected_spilled > 0 {
-            assert!(imported.report.peak_spill_bytes > 0);
+        let mut report = casita::GitClosureImportReport::default();
+        for (repository, imported) in repositories.iter().zip(outcomes) {
+            if bounded {
+                bounded_fixture::audit(&imported.reader, &expected).await;
+            }
+            assert_eq!(imported.report.imported_objects, new);
+            assert_eq!(imported.report.reused_objects, reused);
+            assert_eq!(
+                repository.verify_closure(&root).await.unwrap(),
+                ClosureStatus::Complete { objects: reachable }
+            );
+            assert_eq!(imported.report.spilled_delta_objects, expected_spilled);
+            if expected_spilled > 0 {
+                assert!(imported.report.peak_spill_bytes > 0);
+            }
+            report.imported_objects += imported.report.imported_objects;
+            report.reused_objects += imported.report.reused_objects;
+            report.source_bytes += imported.report.source_bytes;
+            report.spilled_delta_objects += imported.report.spilled_delta_objects;
+            // Per-import maxima are not simultaneous aggregate observations.
+            report.peak_source_bytes = report
+                .peak_source_bytes
+                .max(imported.report.peak_source_bytes);
+            report.peak_spill_bytes = report
+                .peak_spill_bytes
+                .max(imported.report.peak_spill_bytes);
+            report.peak_decode_workers = report
+                .peak_decode_workers
+                .max(imported.report.peak_decode_workers);
+            holds.push(imported);
         }
+        let peak_cpu_jobs = request.cpu_budget().map_or(0, |budget| budget.peak_jobs());
+        assert!(peak_cpu_jobs <= shared_cpu_limit);
+        assert_eq!(
+            peak_cpu_jobs == 0,
+            shared_cpu_limit == 0 || operation == "warm"
+        );
         println!(
             "git_closure_sample {}",
             serde_json::json!({
+                "imports": imports, "audited_imports": imports,
+                "shared_cpu_limit": shared_cpu_limit, "peak_cpu_jobs": peak_cpu_jobs,
+                "timing_scope": "combined concurrent import makespan",
                 "operation": operation, "files": count, "packed": packed,
                 "bounded_fixture": bounded, "pack_window": pack_window,
                 "parent_hwm_before_import_bytes": hwm_before,
                 "parent_hwm_after_import_bytes": hwm_after,
                 "payload_correctness": if bounded { Some("independent BLAKE3 and exact streaming readback") } else { None },
                 "backend": backend, "file_bytes": file_bytes, "content": content,
-                "concurrency": concurrency, "publication_batch_objects": repository.limits().max_batch_objects,
+                "concurrency": concurrency, "publication_batch_objects": repositories[0].limits().max_batch_objects,
                 "max_buffered_bytes": budget, "wall_nanos": nanos,
-                "imported_objects": imported.report.imported_objects,
-                "reused_objects": imported.report.reused_objects,
-                "source_bytes": imported.report.source_bytes,
+                "imported_objects": report.imported_objects,
+                "reused_objects": report.reused_objects,
+                "source_bytes": report.source_bytes,
                 "decode_workers": decode_workers,
                 "delta_spilling": delta_spilling,
                 "fixture_blob_deltas": fixture_blob_deltas,
                 "import_process_io": process_io,
                 "import_process_cpu": process_cpu,
-                "spilled_delta_objects": imported.report.spilled_delta_objects,
-                "peak_spill_bytes": imported.report.peak_spill_bytes,
-                "peak_source_bytes": imported.report.peak_source_bytes,
-                "peak_decode_workers": imported.report.peak_decode_workers,
+                "spilled_delta_objects": report.spilled_delta_objects,
+                "peak_spill_bytes": report.peak_spill_bytes,
+                "peak_source_bytes": report.peak_source_bytes,
+                "peak_decode_workers": report.peak_decode_workers,
                 "root": root.to_string(),
                 "correctness": "exact imported/reused counts and exhaustive closure verification"
             })
         );
-        holds.push(imported);
     }
 }
 

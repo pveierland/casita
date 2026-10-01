@@ -114,6 +114,7 @@ impl ChunkedBlobStore {
                 packed_chunks: self.packed_chunks.as_ref(),
                 immutable_cache: self.immutable_cache,
                 pins: &pins,
+                cpu: None,
             }
             .upload(data, ())
             .await?;

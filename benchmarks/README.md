@@ -2939,3 +2939,15 @@ See [the focused guide](git-delta-spill.md) for commands and resource semantics.
 [The historical report](reports/2026-10-01-git-delta-spill/README.md) retains the
 original experiment and rejected candidates as evidence; its timings do not
 measure this extracted branch with updated dependencies and reordered commits.
+
+## Shared Git import CPU admission
+
+`git-shared-cpu` coordinates explicitly selected source and destination blocking
+jobs across concurrent imports. Its corpus covers disabled, serialized and
+below/at/above four-job limits, source-streaming boundaries and one/four source
+workers. Every destination receives independent identity and streamed payload
+audits; samples report the entire group's completion time.
+
+See [the focused guide](git-shared-cpu.md) for scope and reproducible commands.
+[Historical results](reports/2026-10-01-git-shared-cpu/README.md) retain memory
+benefits and small-workload costs on their original source and dependency set.

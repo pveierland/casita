@@ -38,6 +38,7 @@ pub(super) fn open(
     memory_budget: ByteBudget,
     concurrency: std::num::NonZeroUsize,
     pins: WritePins,
+    cpu: Option<crate::import_cpu::ImportCpuBudget>,
 ) -> Box<dyn BlobWriter> {
     let buf_size = (avg as usize).saturating_mul(8).max(64 * 1024);
     let (writer, reader) = tokio::io::duplex(buf_size);
@@ -52,6 +53,7 @@ pub(super) fn open(
         memory_budget,
         concurrency,
         pins.clone(),
+        cpu,
     ));
 
     Box::new(ChunkedBlobWriter {
@@ -81,6 +83,7 @@ async fn chunk_and_upload(
     memory_budget: ByteBudget,
     concurrency: std::num::NonZeroUsize,
     pins: WritePins,
+    cpu: Option<crate::import_cpu::ImportCpuBudget>,
 ) -> io::Result<(BlobId, u64)> {
     // Clamp to FastCDC's supported ranges and round down to even sizes,
     // as required by v5's two-byte scan. Keep the public configuration u32.
@@ -99,6 +102,7 @@ async fn chunk_and_upload(
         packed_chunks: packed_chunks.as_ref(),
         immutable_cache,
         pins: &pins,
+        cpu: cpu.as_ref(),
     };
 
     // FastCDC never cuts below its minimum, so a stream that ends inside the
@@ -175,7 +179,7 @@ async fn chunk_and_upload(
         let stream = chunker.as_stream();
         futures::pin_mut!(stream);
         let mut uploads = FuturesUnordered::new();
-        let mut hashes = HashBatch::default();
+        let mut hashes = HashBatch::new(cpu.clone());
         let mut reordered = BTreeMap::new();
         let mut next_offset = 0;
 

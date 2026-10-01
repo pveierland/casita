@@ -265,3 +265,135 @@ fn cancelled_hash_group_keeps_all_queued_chunk_permits() {
         assert_eq!(budget.free_bytes(), 4 * 65536);
     });
 }
+
+#[tokio::test]
+async fn shared_cpu_writer_hashes_wait_for_other_import_work() {
+    use crate::import_cpu::ImportCpuBudget;
+    use std::num::NonZeroUsize;
+    use std::time::Duration;
+    struct Release(Option<std::sync::mpsc::Sender<()>>);
+    impl Drop for Release {
+        fn drop(&mut self) {
+            if let Some(sender) = self.0.take() {
+                let _ = sender.send(());
+            }
+        }
+    }
+    let bytes = data(32768, 0xace193);
+    let observed = Registration(Arc::new(Observation {
+        digests: fastcdc::v2020::FastCDC::new(&bytes, 512, 1024, 2048)
+            .map(|chunk| {
+                ChunkId::new(blake3::hash(&bytes[chunk.offset..chunk.offset + chunk.length]).into())
+            })
+            .collect(),
+        jobs: Mutex::new(Vec::new()),
+    }));
+    OBSERVATIONS.lock().unwrap().push(observed.0.clone());
+    let budget = ImportCpuBudget::new(NonZeroUsize::MIN);
+    let occupied = budget.clone();
+    let (entered, started) = tokio::sync::oneshot::channel();
+    let (release, wait) = std::sync::mpsc::channel();
+    let release = Release(Some(release));
+    let running = tokio::spawn(async move {
+        occupied
+            .run(move || {
+                entered.send(()).unwrap();
+                wait.recv().unwrap();
+            })
+            .await
+            .unwrap();
+    });
+    started.await.unwrap();
+    let store = ChunkedBlobStore::new(
+        Arc::new(object_store::memory::InMemory::new()),
+        Path::default(),
+        1024,
+    );
+    let mut writing = Box::pin(budget.scope(store.put_slice(&bytes)));
+    let early = tokio::time::timeout(Duration::from_millis(100), writing.as_mut()).await;
+    let jobs_before_release = observed.0.jobs.lock().unwrap().len();
+    drop(release);
+    running.await.unwrap();
+    let digest = match early {
+        Ok(result) => result.unwrap(),
+        Err(_) => tokio::time::timeout(Duration::from_secs(10), writing)
+            .await
+            .unwrap()
+            .unwrap(),
+    };
+    assert_eq!(digest, BlobId::new(blake3::hash(&bytes).into()));
+    assert!(
+        !observed.0.jobs.lock().unwrap().is_empty(),
+        "the real chunk hash path was not exercised"
+    );
+    assert_eq!(
+        jobs_before_release, 0,
+        "chunk hashing bypassed shared CPU admission"
+    );
+}
+
+#[tokio::test]
+async fn shared_cpu_cancelled_hash_dispatch_releases_bytes_before_foreign_job() {
+    use crate::byte_budget::ByteBudget;
+    use crate::import_cpu::ImportCpuBudget;
+    use std::time::Duration;
+    struct Release(Option<std::sync::mpsc::Sender<()>>);
+    impl Drop for Release {
+        fn drop(&mut self) {
+            if let Some(sender) = self.0.take() {
+                let _ = sender.send(());
+            }
+        }
+    }
+    let chunks: Vec<_> = (0..4).map(|i| data(65536, 0xa900 + i)).collect();
+    let observed = Registration(Arc::new(Observation {
+        digests: chunks
+            .iter()
+            .map(|bytes| ChunkId::new(blake3::hash(bytes).into()))
+            .collect(),
+        jobs: Mutex::new(Vec::new()),
+    }));
+    OBSERVATIONS.lock().unwrap().push(observed.0.clone());
+    let cpu = ImportCpuBudget::new(std::num::NonZeroUsize::MIN);
+    let occupied = cpu.clone();
+    let (release, wait) = std::sync::mpsc::channel();
+    let release = Release(Some(release));
+    let (entered, started) = tokio::sync::oneshot::channel();
+    let running = tokio::spawn(async move {
+        occupied
+            .run(move || {
+                entered.send(()).unwrap();
+                let _ = wait.recv();
+            })
+            .await
+            .unwrap();
+    });
+    started.await.unwrap();
+    let memory = ByteBudget::new(4 * 65536);
+    let mut batch = super::hash_batch::HashBatch::new(Some(cpu));
+    let mut receivers = Vec::new();
+    for chunk in chunks {
+        receivers.push(batch.push(chunk, memory.reserve(65536).await));
+    }
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    let premature_hashes = observed.0.jobs.lock().unwrap().len();
+    drop(receivers);
+    drop(batch);
+    let recovered =
+        tokio::time::timeout(Duration::from_millis(100), memory.reserve(4 * 65536)).await;
+    let recovered_before_release = recovered.is_ok();
+    drop(recovered);
+    drop(release);
+    running.await.unwrap();
+    let _drained = tokio::time::timeout(Duration::from_secs(10), memory.reserve(4 * 65536))
+        .await
+        .unwrap();
+    assert_eq!(
+        premature_hashes, 0,
+        "hash dispatch bypassed global CPU admission"
+    );
+    assert!(
+        recovered_before_release,
+        "cancelled dispatcher waited for unrelated CPU work before releasing bytes"
+    );
+}

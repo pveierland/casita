@@ -321,3 +321,203 @@ fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
     assert!(matches!(&second[0].body, Body::Buffered(bytes) if bytes.is_empty()));
     assert!(keys.is_empty());
 }
+
+async fn shared_source_and_compression(workers: usize) {
+    use crate::blob::ChunkedBlobStore;
+    use crate::import_cpu::ImportCpuBudget;
+    let source = tempfile::tempdir().unwrap();
+    git(source.path(), &["init", "--bare", "-q"], b"");
+    let mut keys = Vec::new();
+    for index in 0..4 {
+        let bytes = format!("shared cpu source {} #{index}", source.path().display());
+        let oid = git(
+            source.path(),
+            &["hash-object", "-w", "--stdin"],
+            bytes.as_bytes(),
+        );
+        keys.push(
+            git_object_key(
+                GitObjectFormat::Sha1,
+                GitObjectKind::Blob,
+                data_encoding::HEXLOWER.decode(oid.as_bytes()).unwrap(),
+            )
+            .unwrap(),
+        );
+    }
+    let (registration, mut arrived) = Registration::new(keys[0].clone());
+    let budget = ImportCpuBudget::new(NonZeroUsize::MIN);
+    let repository = Repository::new(MemoryBlobStore::new(), MemoryMetadataStore::new().unwrap());
+    let request = GitClosureImport::new(source.path().join("objects"), keys)
+        .with_decode_workers(NonZeroUsize::new(workers).unwrap())
+        .with_cpu_budget(budget.clone());
+    let mut importing = Box::pin(request.import_into(&repository));
+    tokio::time::timeout(Duration::from_secs(10), async {
+        tokio::select! {
+            result = &mut importing => panic!("import finished before the source gate: {result:?}"),
+            result = &mut arrived => result.unwrap(),
+        }
+    })
+    .await
+    .unwrap();
+    let store = ChunkedBlobStore::new(
+        Arc::new(object_store::memory::InMemory::new()),
+        object_store::path::Path::default(),
+        1024,
+    );
+    // This small fresh blob reuses its whole-blob digest. It exercises the
+    // prehashed compression path, independently of the multi-chunk hash test.
+    let bytes = b"fresh destination compression shares source execution admission";
+    let mut writing = Box::pin(budget.scope(store.put_slice(bytes)));
+    let early = tokio::time::timeout(Duration::from_millis(100), writing.as_mut()).await;
+    let bypassed = early.is_ok();
+    registration.gate.release();
+    let digest = match early {
+        Ok(result) => result.unwrap(),
+        Err(_) => tokio::time::timeout(Duration::from_secs(10), writing)
+            .await
+            .unwrap()
+            .unwrap(),
+    };
+    let outcome = tokio::time::timeout(Duration::from_secs(10), importing)
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(outcome.report.imported_objects, 4);
+    assert_eq!(digest, BlobId::new(blake3::hash(bytes).into()));
+    assert!(
+        !bypassed,
+        "compression ran while a source job occupied the shared CPU slot"
+    );
+}
+
+#[tokio::test]
+async fn shared_cpu_serial_source_and_compression_do_not_overlap() {
+    shared_source_and_compression(1).await;
+}
+
+#[tokio::test]
+async fn shared_cpu_parallel_source_and_compression_do_not_overlap() {
+    shared_source_and_compression(4).await;
+}
+
+struct CpuCaptureStore {
+    inner: crate::blob::ChunkedBlobStore,
+    budget: crate::import_cpu::ImportCpuBudget,
+    entered: Mutex<Option<oneshot::Sender<()>>>,
+    wait: Mutex<Option<std::sync::mpsc::Receiver<()>>>,
+}
+#[async_trait::async_trait]
+impl BlobStore for CpuCaptureStore {
+    fn write_scope(&self) -> BackendWriteScope {
+        self.inner.write_scope()
+    }
+    fn begin_pinned_batch(&self, pin: DataPinLease) -> Result<BlobBatchGuard, Error> {
+        self.inner.begin_pinned_batch(pin)
+    }
+    fn publication(&self) -> PayloadPublication<'_> {
+        self.inner.publication()
+    }
+    async fn has(&self, id: &BlobId) -> Result<bool, Error> {
+        self.inner.has(id).await
+    }
+    async fn open_read(&self, id: &BlobId) -> Result<Option<Box<dyn BlobReader>>, Error> {
+        self.inner.open_read(id).await
+    }
+    async fn open_write(&self) -> Box<dyn BlobWriter> {
+        // Capture the real import's context before parking unrelated work on
+        // its coordinator. The test never explicitly scopes this writer.
+        let writer = self.inner.open_write().await;
+        let budget = self.budget.clone();
+        let wait = self
+            .wait
+            .lock()
+            .unwrap()
+            .take()
+            .expect("one fresh blob writer");
+        let entered = self.entered.lock().unwrap().take().unwrap();
+        let (ready, started) = oneshot::channel();
+        tokio::spawn(async move {
+            budget
+                .run(move || {
+                    let _ = ready.send(());
+                    let _ = wait.recv();
+                })
+                .await
+                .unwrap();
+        });
+        started.await.unwrap();
+        let _ = entered.send(());
+        writer
+    }
+}
+
+#[tokio::test]
+async fn shared_cpu_import_propagates_to_its_actual_chunked_destination() {
+    use crate::import_cpu::ImportCpuBudget;
+    struct Release(Option<std::sync::mpsc::Sender<()>>);
+    impl Drop for Release {
+        fn drop(&mut self) {
+            if let Some(sender) = self.0.take() {
+                let _ = sender.send(());
+            }
+        }
+    }
+    let source = tempfile::tempdir().unwrap();
+    git(source.path(), &["init", "--bare", "-q"], b"");
+    let bytes = b"automatic source-to-destination CPU scope";
+    let oid = git(source.path(), &["hash-object", "-w", "--stdin"], bytes);
+    let key = git_object_key(
+        GitObjectFormat::Sha1,
+        GitObjectKind::Blob,
+        data_encoding::HEXLOWER.decode(oid.as_bytes()).unwrap(),
+    )
+    .unwrap();
+    let budget = ImportCpuBudget::new(NonZeroUsize::MIN);
+    let (release, wait) = std::sync::mpsc::channel();
+    let release = Release(Some(release));
+    let (entered, mut started) = oneshot::channel();
+    let repository = Repository::new(
+        CpuCaptureStore {
+            inner: crate::blob::ChunkedBlobStore::new(
+                Arc::new(object_store::memory::InMemory::new()),
+                object_store::path::Path::default(),
+                1024,
+            ),
+            budget: budget.clone(),
+            entered: Mutex::new(Some(entered)),
+            wait: Mutex::new(Some(wait)),
+        },
+        MemoryMetadataStore::new().unwrap(),
+    );
+    let request = GitClosureImport::new(source.path().join("objects"), [key.clone()])
+        .with_cpu_budget(budget.clone());
+    let mut importing = Box::pin(request.import_into(&repository));
+    tokio::time::timeout(Duration::from_secs(10), async {
+        tokio::select! {
+            result = &mut importing => panic!("import finished before destination admission: {result:?}"),
+            result = &mut started => result.unwrap(),
+        }
+    }).await.unwrap();
+    let early = tokio::time::timeout(Duration::from_millis(100), importing.as_mut()).await;
+    let bypassed = early.is_ok();
+    drop(release);
+    let outcome = match early {
+        Ok(result) => result.unwrap(),
+        Err(_) => tokio::time::timeout(Duration::from_secs(10), importing)
+            .await
+            .unwrap()
+            .unwrap(),
+    };
+    budget.run(|| ()).await.unwrap();
+    assert_eq!(outcome.report.imported_objects, 1);
+    let (_, mut payload) = outcome.reader.open_payload(&key).await.unwrap().unwrap();
+    let mut actual = Vec::new();
+    tokio::io::AsyncReadExt::read_to_end(&mut payload, &mut actual)
+        .await
+        .unwrap();
+    assert_eq!(actual, bytes);
+    assert!(
+        !bypassed,
+        "the import's own chunked writer did not inherit CPU admission"
+    );
+}

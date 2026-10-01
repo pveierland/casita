@@ -77,6 +77,8 @@ pub use crate::git::{
     GitViewBody, GitViewFormat, MAX_SYMBOLIC_REF_DEPTH, git_key_parts, git_object_key,
     git_object_key_for_body, parse_git_tree,
 };
+#[cfg(feature = "native")]
+pub use crate::import_cpu::ImportCpuBudget;
 #[cfg(feature = "git")]
 pub use crate::importers::GitClosureImportError;
 pub use crate::ipld::{

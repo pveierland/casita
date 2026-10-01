@@ -27,6 +27,7 @@ pub struct GitClosureImport {
     pub(crate) decode_workers: NonZeroUsize,
     pub(crate) max_buffered_bytes: NonZeroU64,
     pub(crate) delta_spilling: bool,
+    pub(crate) cpu: Option<crate::import_cpu::ImportCpuBudget>,
 }
 
 impl GitClosureImport {
@@ -47,7 +48,27 @@ impl GitClosureImport {
             decode_workers: NonZeroUsize::MIN,
             max_buffered_bytes: DEFAULT_GIT_IMPORT_BUFFERED_BYTES,
             delta_spilling: false,
+            cpu: None,
         }
+    }
+
+    /// Share admission for source decode/inflate and supported destination chunk
+    /// hash/compression jobs. Chunked writers capture the operation context when
+    /// opened; custom backends spawning independent tasks must propagate it.
+    /// Inline chunking, Bao hashing, async verification and I/O are outside it.
+    pub fn with_cpu_budget(mut self, budget: crate::import_cpu::ImportCpuBudget) -> Self {
+        self.cpu = Some(budget);
+        self
+    }
+
+    /// Create shared admission for this request and any clones of it.
+    pub fn with_cpu_concurrency(self, jobs: NonZeroUsize) -> Self {
+        self.with_cpu_budget(crate::import_cpu::ImportCpuBudget::new(jobs))
+    }
+
+    /// The selected coordinator, including execution observations across clones.
+    pub fn cpu_budget(&self) -> Option<&crate::import_cpu::ImportCpuBudget> {
+        self.cpu.as_ref()
     }
 
     /// Maximum simultaneously staged objects. Source decoding runs on a
