@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::task::{Context, Poll};
 
 use async_trait::async_trait;
-use futures::stream::{FuturesOrdered, StreamExt, TryStreamExt};
+use futures::stream::{FuturesUnordered, StreamExt, TryStreamExt};
 use object_store::{ObjectStore, path::Path};
 
 use super::manifest::encode_manifest;
@@ -168,7 +168,7 @@ async fn chunk_and_upload(
         let mut chunker = fastcdc::v2020::AsyncStreamCDC::new(&mut source, min, avg, max);
         let stream = chunker.as_stream();
         futures::pin_mut!(stream);
-        let mut uploads = FuturesOrdered::new();
+        let mut uploads = FuturesUnordered::new();
         let mut chunks = Vec::new();
 
         loop {
@@ -201,8 +201,9 @@ async fn chunk_and_upload(
             let uploader = &uploader;
             let pins = &pins;
             let base_path = &base_path;
-            uploads.push_back(async move {
-                match completed {
+            uploads.push(async move {
+                let offset = chunk.offset;
+                let meta = match completed {
                     Some((blob, outboard_len)) => {
                         let chunk_id = single_chunk_id(blob);
                         let mut resources = blob_resources(base_path, blob, outboard_len);
@@ -213,7 +214,8 @@ async fn chunk_and_upload(
                             .await
                     }
                     None => uploader.upload(chunk.data, permit).await,
-                }
+                }?;
+                Ok::<_, io::Error>((offset, meta))
             });
 
             if uploads.len() == concurrency.get() {
@@ -227,7 +229,9 @@ async fn chunk_and_upload(
         }
 
         chunks.extend(uploads.try_collect::<Vec<_>>().await?);
-        chunks
+        // Completion order controls admission; durable metadata follows source order.
+        chunks.sort_unstable_by_key(|(offset, _)| *offset);
+        chunks.into_iter().map(|(_, chunk)| chunk).collect()
     };
 
     let (blob_digest, outboard) = hashing.finish()?;

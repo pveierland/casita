@@ -17,6 +17,7 @@ CORE_BENCHES = ("write_path", "hash_inputs", "tar_import", "filesystem_import", 
 
 # Bounded defaults. Frontier sizes remain explicit opt-in suite arguments.
 SMOKE = {
+    "chunk-upload-completion": ["--profile", "smoke"],
     "filesystem-reuse": ["--profile", "standard"],
     "scoped-catalog": ["--profile", "smoke"],
     "catalog-wal": ["--profile", "smoke"],
@@ -132,6 +133,13 @@ def fingerprint(path):
         return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
+def integration_probe_names():
+    """Integration tests registered as immutable suite probes."""
+    from benchmarks.revisions import SUITE_BUILD_SPECS
+    return {spec.artifact_name for spec in SUITE_BUILD_SPECS.values()
+            if spec.cargo_json_test not in {None, "casita"}}
+
+
 def build_commands(selected, build_dir):
     """Request only needed targets; Cargo owns source/configuration freshness."""
     from benchmarks.revisions import SUITE_BUILD_SPECS
@@ -152,7 +160,12 @@ def build_commands(selected, build_dir):
     prefix = ["cargo", "--config", f'build.build-dir="{build_dir}"']
     commands = []
     benches = sorted(names & {*CORE_BENCHES, "gix_odb", "online_holds", "retained_readers", "transfer_holds", "root_prefix"})
-    examples = sorted(names - {*benches, "casita", "casita-lib-test"})
+    integration_tests = sorted(names & integration_probe_names())
+    examples = sorted(names - {*benches, *integration_tests, "casita", "casita-lib-test"})
+    integration_builds = {SUITE_BUILD_SPECS[suite].cargo_arguments for suite in selected
+                          if suite in SUITE_BUILD_SPECS
+                          and SUITE_BUILD_SPECS[suite].artifact_name in integration_tests}
+    commands.extend(prefix + list(arguments) for arguments in sorted(integration_builds))
     if benches:
         commands.append(prefix + ["bench", "--all-features", "--no-run", "--message-format=json"] +
                         [arg for name in benches for arg in ("--bench", name)])
@@ -186,7 +199,7 @@ def build_binaries(output, build_dir, selected=None):
                     continue
                 target = artifact["target"]
                 name = "casita-lib-test" if target["kind"] == ["lib"] else target["name"]
-                if name not in {"casita", "casita-lib-test", *CORE_BENCHES, "online_holds", "retained_readers", "transfer_holds", "root_prefix", "gix_odb", "pack_index_rustfs", "pack_gc_rustfs", "s3_path_transfer", "git_fetch_s3", "git_pack_cached", "pack_cache_network"}:
+                if name not in {"casita", "casita-lib-test", *CORE_BENCHES, *integration_probe_names(), "online_holds", "retained_readers", "transfer_holds", "root_prefix", "gix_odb", "pack_index_rustfs", "pack_gc_rustfs", "s3_path_transfer", "git_fetch_s3", "git_pack_cached", "pack_cache_network"}:
                     continue
                 path = destination / name
                 if name in artifacts:
