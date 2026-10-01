@@ -2811,7 +2811,9 @@ suite is registered in `benchmark all`.
 
 With multiple workers requested, the source importer admits a whole window by
 declared body sizes before workers allocate those bodies. The default remains
-one worker, preserving serial header/decode order and staging verification. Workers finish before destination writes begin. Reported
+one worker, preserving serial header/decode order and staging verification. Parallel
+workers stream completed objects into staging; each window finishes all source
+jobs and writes before publication. Reported
 `peak_source_bytes` excludes pack caches, delta workspace, verifier metadata and
 storage buffers; `peak_decode_workers` counts executing source jobs. Gix cache
 allocation overhead is additional to its configured byte target.
@@ -2825,3 +2827,25 @@ benchmark run git-closure-import --counts 16 --file-bytes 4194304 --max-buffered
 The last command compares worker counts in the same executable; reports retain
 both the actual worker count and the candidate count identifying each paired
 case. An older baseline without worker support is treated as one worker.
+
+## Git worker result streaming
+
+`git-worker-streaming` checks mixed-size Git closures while completed decode
+results are staged within their admitted window. Smoke cases use 17 files,
+1/4 workers, loose/packed sources and memory/local stores. Byte windows
+65535/65536/65537 straddle the 64 KiB large-body threshold; a 1 MiB window
+provides a concurrent control. Standard cases add 4 MiB bodies and the
+4194303/4194304/4194305-byte boundaries.
+
+Every case checks exact import/reuse counts and exhaustively verifies each
+closure. Started payload writers finish before metadata publication; source
+body windows still exclude pack-cache, delta-workspace and destination buffers.
+The default remains one decode worker.
+
+```sh
+benchmark run git-worker-streaming --profile smoke --output /tmp/git-worker-streaming.json
+```
+
+[The historical report](reports/2026-10-01-git-worker-streaming/README.md)
+retains matched-build comparisons, negative cases and correctness evidence;
+its original timings are not measurements of the extracted branch.

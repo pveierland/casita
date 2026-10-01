@@ -1,11 +1,16 @@
-//! CPU workers share an admission window, then finish before storage starts.
+//! CPU workers stream verified objects into staging within one admitted window.
 
 use super::{Result, source_error};
 use crate::ObjectKey;
+use crate::blob::BlobStore;
 use crate::format::FormatLimits;
 use crate::git::{GitObjectFormat, GitObjectKind, git_key_parts};
 use crate::importers::GitClosureImport;
-use crate::repository::{NativeSeal, NativeVerifier, RepositoryError};
+use crate::metadata::MetadataStore;
+use crate::repository::{
+    MutationSession, NativeSeal, NativeVerifier, RepositoryError, StagedObject,
+};
+use futures::{StreamExt, TryStreamExt};
 use gix::objs::FindExt;
 use gix::odb::HeaderExt;
 use std::collections::VecDeque;
@@ -35,13 +40,21 @@ pub(super) struct Decoded {
     pub seal: Option<NativeSeal>,
 }
 
-pub(super) struct Window {
+struct Window {
     pub source: SourcePool,
     pub pending: VecDeque<ObjectKey>,
     pub decoded: Vec<Decoded>,
     pub bytes: u64,
     pub peak_workers: usize,
     groups: Vec<Vec<Pending>>,
+}
+
+pub(super) struct StagedWindow<'hold> {
+    pub source: SourcePool,
+    pub pending: VecDeque<ObjectKey>,
+    pub objects: Vec<StagedObject<'hold>>,
+    pub bytes: u64,
+    pub peak_workers: usize,
 }
 
 #[derive(Default)]
@@ -202,13 +215,15 @@ fn decode(
     batch: Vec<Pending>,
     verifier: Option<&NativeVerifier>,
     control: &Control,
-) -> Result<Vec<Decoded>> {
+    mut emit: impl FnMut(Decoded) -> Result<()>,
+) -> Result<()> {
     let _active = Active::new(control);
-    let mut output = Vec::with_capacity(batch.len());
     for pending in batch {
         if control.cancelled.load(Ordering::Relaxed) {
             return Err(source_error("Git decoding cancelled"));
         }
+        #[cfg(test)]
+        tests::pause_before_decode(&pending.key);
         let mut body = Vec::new();
         let object = source.find(&pending.oid, &mut body).map_err(source_error)?;
         let kind = match object.kind {
@@ -226,23 +241,34 @@ fn decode(
         let seal = verifier
             .map(|verifier| verifier.verify(&pending.key, &body))
             .transpose()?;
-        output.push(Decoded {
+        emit(Decoded {
             key: pending.key,
             body,
             seal,
-        });
+        })?;
     }
-    Ok(output)
+    Ok(())
 }
 
-pub(super) async fn decode_window(
+async fn stage<'hold, PS: BlobStore, SS: MetadataStore>(
+    session: &'hold MutationSession<'_, PS, SS>,
+    object: Decoded,
+) -> Result<StagedObject<'hold>> {
+    Ok(match object.seal {
+        Some(seal) => session.stage_native_seal(seal, &object.body).await?,
+        None => session.stage_object(object.key, &object.body).await?,
+    })
+}
+
+pub(super) async fn stage_window<'hold, PS: BlobStore, SS: MetadataStore>(
+    session: &'hold MutationSession<'_, PS, SS>,
     source: Option<SourcePool>,
     mut pending: VecDeque<ObjectKey>,
     request: &GitClosureImport,
     format: GitObjectFormat,
     limits: FormatLimits,
-    verifier: Option<NativeVerifier>,
-) -> Result<Window> {
+) -> Result<StagedWindow<'hold>> {
+    let verifier = session.native_verifier();
     let count = request
         .concurrency
         .get()
@@ -296,11 +322,15 @@ pub(super) async fn decode_window(
         let mut groups = Vec::new();
         if workers == 1 || plan.len() == 1 {
             // Preserve one blocking-pool handoff for single-object frontiers.
-            decoded = decode(
+            decode(
                 &mut source.sources[0],
                 plan,
                 first_verifier.as_ref(),
                 &first_control,
+                |object| {
+                    decoded.push(object);
+                    Ok(())
+                },
             )?;
         } else {
             groups = (0..workers).map(|_| Vec::new()).collect();
@@ -320,94 +350,85 @@ pub(super) async fn decode_window(
     })
     .await
     .map_err(source_error)??;
-    if !window.groups.is_empty() {
+    let objects = if window.groups.is_empty() {
+        futures::stream::iter(std::mem::take(&mut window.decoded))
+            .map(|object| stage(session, object))
+            .buffer_unordered(count)
+            .try_collect()
+            .await?
+    } else {
+        let (sender, receiver) = tokio::sync::mpsc::channel(workers);
         let sources = std::mem::take(&mut window.source.sources);
-        let jobs = sources
+        // Spawn eagerly: waiting for the receiver before spawning these jobs
+        // would leave it waiting for senders that have never started.
+        let jobs: Vec<_> = sources
             .into_iter()
             .zip(std::mem::take(&mut window.groups))
             .map(|(mut source, batch)| {
+                if batch.is_empty() {
+                    return futures::future::Either::Left(futures::future::ready(Ok(source)));
+                }
                 let verifier = verifier.clone();
                 let control = control.clone();
-                async move {
-                    if batch.is_empty() {
-                        return Ok((source, Vec::new()));
+                let sender = sender.clone();
+                futures::future::Either::Right(tokio::task::spawn_blocking(move || {
+                    let result =
+                        decode(&mut source, batch, verifier.as_ref(), &control, |object| {
+                            sender
+                                .blocking_send(Ok(object))
+                                .map_err(|_| source_error("Git staging receiver closed"))
+                        });
+                    if let Err(error) = result {
+                        // A receiver closed by a staging failure already
+                        // holds the error to return; do not replace it.
+                        let _ = sender.blocking_send(Err(error));
                     }
-                    tokio::task::spawn_blocking(move || {
-                        let decoded = decode(&mut source, batch, verifier.as_ref(), &control)?;
-                        Ok::<_, super::GitClosureImportError>((source, decoded))
-                    })
-                    .await
-                    .map_err(source_error)?
-                }
-            });
-        // Join every source job even when one fails. No destination writer is
-        // active yet, and successful results cannot escape a failed window.
-        for result in futures::future::join_all(jobs).await {
-            let (source, decoded) = result?;
-            window.source.sources.push(source);
-            window.decoded.extend(decoded);
+                    source
+                }))
+            })
+            .collect();
+        drop(sender);
+        // Staging capacity covers the whole admitted count. It can receive all
+        // bodies without waiting for storage, including when storage and source
+        // decoding share a runtime with only one blocking thread.
+        let result = futures::stream::unfold(receiver, |mut receiver| async move {
+            receiver.recv().await.map(|item| (item, receiver))
+        })
+        .map_ok(|object| stage(session, object))
+        .try_buffer_unordered(count)
+        .try_collect::<Vec<_>>()
+        .await;
+        // The consumed stream (and receiver) is dropped before joining jobs.
+        // This releases blocked senders on failure. No next window is admitted
+        // until every source job and successful destination writer has drained.
+        if result.is_err() {
+            control.cancelled.store(true, Ordering::Relaxed);
         }
-    }
-    window.peak_workers = window
-        .peak_workers
-        .max(control.peak.load(Ordering::Relaxed));
-    Ok(window)
+        let mut join_error = None;
+        for result in futures::future::join_all(jobs).await {
+            match result {
+                Ok(source) => window.source.sources.push(source),
+                Err(error) => {
+                    join_error.get_or_insert_with(|| source_error(error));
+                }
+            }
+        }
+        let objects = result?;
+        if let Some(error) = join_error {
+            return Err(error);
+        }
+        objects
+    };
+    Ok(StagedWindow {
+        source: window.source,
+        pending: window.pending,
+        objects,
+        bytes: window.bytes,
+        peak_workers: window
+            .peak_workers
+            .max(control.peak.load(Ordering::Relaxed)),
+    })
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    use std::io::Write;
-    use std::process::{Command, Stdio};
-
-    #[test]
-    fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
-        let directory = tempfile::tempdir().unwrap();
-        let initialized = Command::new("git")
-            .args(["init", "--bare", "-q", "--object-format=sha1"])
-            .arg(directory.path())
-            .output()
-            .unwrap();
-        assert!(initialized.status.success());
-        let mut keys = VecDeque::new();
-        for body in [b"oversized".as_slice(), b""] {
-            let mut child = Command::new("git")
-                .arg("-C")
-                .arg(directory.path())
-                .args(["hash-object", "-w", "--stdin"])
-                .stdin(Stdio::piped())
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn()
-                .unwrap();
-            child.stdin.take().unwrap().write_all(body).unwrap();
-            assert!(child.wait_with_output().unwrap().status.success());
-            keys.push_back(
-                crate::git::git_object_key_for_body(
-                    GitObjectFormat::Sha1,
-                    GitObjectKind::Blob,
-                    body,
-                )
-                .unwrap(),
-            );
-        }
-        let mut source = SourcePool::open(
-            directory.path().join("objects"),
-            GitObjectFormat::Sha1,
-            16,
-            1,
-        )
-        .unwrap();
-        let first = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
-        assert_eq!(
-            first.len(),
-            1,
-            "oversized bodies must occupy their own window"
-        );
-        assert_eq!(keys.len(), 1);
-        let second = source.decode_serial(&mut keys, 2, 1, 16, 16).unwrap();
-        assert_eq!(second.len(), 1);
-        assert!(second[0].body.is_empty());
-        assert!(keys.is_empty());
-    }
-}
+mod tests;

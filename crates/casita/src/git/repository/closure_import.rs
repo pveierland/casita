@@ -3,7 +3,7 @@
 
 use std::collections::{BTreeSet, VecDeque};
 
-use futures::{StreamExt, TryStreamExt};
+use futures::TryStreamExt;
 
 use crate::blob::BlobStore;
 use crate::git::git_key_parts;
@@ -138,41 +138,27 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             unsettled.insert(key).await.map_err(RepositoryError::from)?;
         }
         while !missing.is_empty() {
-            let concurrency = request.concurrency.get().min(limits.max_batch_objects);
-            let window = workers::decode_window(
+            let window = workers::stage_window(
+                session,
                 source.take(),
                 missing,
                 request,
                 format,
                 limits.clone(),
-                session.native_verifier(),
             )
             .await?;
             source = Some(window.source);
             missing = window.pending;
             report.peak_source_bytes = report.peak_source_bytes.max(window.bytes);
             report.peak_decode_workers = report.peak_decode_workers.max(window.peak_workers);
-            let decoded = window.decoded;
-            report.imported_objects += decoded.len();
-            for object in &decoded {
-                report.source_bytes = report
-                    .source_bytes
-                    .checked_add(object.body.len() as u64)
-                    .ok_or_else(|| source_error("imported byte count overflow"))?;
-            }
-            // Drain every active writer before publication: a payload flush can
-            // wait on a writer, and must not prevent that writer being polled.
-            let objects: Vec<_> = futures::stream::iter(decoded)
-                .map(|object| async move {
-                    match object.seal {
-                        Some(seal) => session.stage_native_seal(seal, &object.body).await,
-                        None => session.stage_object(object.key, &object.body).await,
-                    }
-                })
-                .buffer_unordered(concurrency)
-                .try_collect()
-                .await?;
-            for object in objects {
+            report.imported_objects += window.objects.len();
+            report.source_bytes = report
+                .source_bytes
+                .checked_add(window.bytes)
+                .ok_or_else(|| source_error("imported byte count overflow"))?;
+            // All window writers have drained before publication, which can
+            // flush payloads and must not prevent an active writer being polled.
+            for object in window.objects {
                 for child in object.record().links() {
                     queue
                         .push((None, child.clone()))

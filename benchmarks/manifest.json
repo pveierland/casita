@@ -610,6 +610,15 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-worker-streaming",
+      "suite_id": "native-git",
+      "title": "Mixed-size Git decoding and staging within a bounded window",
+      "kind": "module",
+      "target": "benchmarks.suites.git_worker_streaming",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports", "requested worker configuration"]
+    },
+    {
       "id": "git-object-workers",
       "suite_id": "native-git",
       "title": "Bounded parallel Git decode and native verification workers",

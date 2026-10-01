@@ -1,0 +1,9 @@
+{
+  "original_source_revision": "ef7b2d7686e2e2666e9555545afc211f7f691c3f",
+  "original_readme_sha256": "8b1055585e40e8ffa11c5f1e532eb5bf198fea0f6fef20bf89ac6467305ef2cb",
+  "original_checksum_manifest_sha256": "86d5edf6fc968a1bf6a1e3135a881e377612cf65e1e1d047c0bf02276b9875b8",
+  "changes": [
+    "Add explicit historical provenance to README.md.",
+    "Regenerate checksums for the extracted archive."
+  ]
+}
