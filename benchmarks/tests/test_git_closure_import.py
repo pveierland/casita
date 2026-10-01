@@ -9,6 +9,36 @@ from benchmarks.suites import git_closure_import as suite
 
 
 class GitClosureBenchmarkTests(unittest.TestCase):
+    def test_automatic_build_allows_a_fresh_checkout_to_resolve_dependencies(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            with mock.patch.object(suite.subprocess, "run", side_effect=RuntimeError("build reached")) as build:
+                with self.assertRaisesRegex(RuntimeError, "build reached"):
+                    suite.main(["--output", str(pathlib.Path(directory) / "result.json")])
+            command = build.call_args.args[0]
+            self.assertEqual(command[:2], ["cargo", "test"])
+            self.assertNotIn("--offline", command)
+            self.assertNotIn("--locked", command)
+            self.assertIn("--no-default-features", command)
+            self.assertEqual(command[command.index("--features") + 1], "native,git,experimental")
+
+    def test_paired_summary_requires_nonempty_root_identities(self):
+        rows = [dict(operation="cold", backend="local", files=3,
+                     file_bytes=1024, content="random", packed=True, concurrency=4,
+                     max_buffered_bytes=4096, repetition=0, variant=variant,
+                     wall_seconds=seconds)
+                for variant, seconds in [("baseline", 10), ("candidate", 5)]]
+        for invalid in [None, "", 0]:
+            with self.subTest(root=invalid):
+                for row in rows:
+                    row["root"] = invalid
+                with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
+                    suite.summarize_pairs(rows)
+        for row in rows:
+            del row["root"]
+        with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
+            suite.summarize_pairs(rows)
+
     def test_rejects_stale_build_manifests_and_mismatched_dependency_locks(self):
         import hashlib
         from unittest import mock
@@ -28,19 +58,6 @@ class GitClosureBenchmarkTests(unittest.TestCase):
                 binaries[0].write_bytes(b"replaced executable")
                 with self.assertRaisesRegex(suite.common.BenchmarkError, "fingerprint"):
                     suite.main(args)
-
-    def test_automatic_build_allows_a_fresh_checkout_to_resolve_dependencies(self):
-        from unittest import mock
-        with tempfile.TemporaryDirectory() as directory:
-            with mock.patch.object(suite.subprocess, "run", side_effect=RuntimeError("build reached")) as build:
-                with self.assertRaisesRegex(RuntimeError, "build reached"):
-                    suite.main(["--output", str(pathlib.Path(directory) / "result.json")])
-            command = build.call_args.args[0]
-            self.assertEqual(command[:2], ["cargo", "test"])
-            self.assertNotIn("--offline", command)
-            self.assertNotIn("--locked", command)
-            self.assertIn("--no-default-features", command)
-            self.assertEqual(command[command.index("--features") + 1], "native,git,experimental")
 
     def test_revision_build_matches_the_evaluator_library_features(self):
         from benchmarks import revisions
@@ -67,24 +84,7 @@ class GitClosureBenchmarkTests(unittest.TestCase):
         with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
             suite.summarize_pairs(rows)
 
-    def test_paired_summary_requires_nonempty_root_identities(self):
-        rows = [dict(operation="cold", backend="local", files=3,
-                     file_bytes=1024, content="random", packed=True, concurrency=4,
-                     max_buffered_bytes=4096, repetition=0, variant=variant,
-                     wall_seconds=seconds)
-                for variant, seconds in [("baseline", 10), ("candidate", 5)]]
-        for invalid in [None, "", 0]:
-            with self.subTest(root=invalid):
-                for row in rows:
-                    row["root"] = invalid
-                with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
-                    suite.summarize_pairs(rows)
-        for row in rows:
-            del row["root"]
-        with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
-            suite.summarize_pairs(rows)
-
-    def test_runs_requested_matrix_with_serial_libtest_sample_prefix(self):
+    def test_runs_requested_storage_size_and_concurrency_matrix(self):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
             probe = root / "probe"
@@ -99,6 +99,7 @@ for operation in ["cold", "warm", "subtree-delta", "wide-delta"]:
         file_bytes=int(os.environ["CASITA_GIT_CLOSURE_FILE_BYTES"]),
         content=os.environ["CASITA_GIT_CLOSURE_CONTENT"],
         concurrency=int(os.environ["CASITA_GIT_CLOSURE_CONCURRENCY"]),
+        decode_workers=int(os.environ.get("CASITA_GIT_CLOSURE_DECODE_WORKERS", "1")),
         root="fixture-root", wall_nanos=1000, imported_objects=new, reused_objects=reused,
         source_bytes=0 if operation == "warm" else 1,
         correctness="exact imported/reused counts and exhaustive closure verification")))
@@ -110,11 +111,12 @@ print("test result: ok. 1 passed; 0 failed;")
                 "--probe-binary", str(probe), "--no-build", "--output", str(output),
                 "--counts", "3", "--max-buffered-bytes", "1024", "--layout", "packed",
                 "--backend", "both", "--file-bytes", "1024,262144",
-                "--concurrency", "1,4", "--content", "random",
+                "--concurrency", "1,4", "--content", "random", "--decode-workers", "1,2,4,8",
             ]), 0)
             report = json.loads(output.read_text())
             self.assertTrue(report["complete"])
-            self.assertEqual(len(report["samples"]), 32)
+            self.assertEqual(len(report["samples"]), 128)
+            self.assertEqual({r["decode_workers"] for r in report["samples"]}, {1, 2, 4, 8})
             self.assertEqual({(r["backend"], r["file_bytes"], r["concurrency"])
                               for r in report["samples"]},
                              {(backend, size, workers) for backend in ["memory", "local"]
@@ -141,6 +143,21 @@ print("test result: ok. 1 passed; 0 failed;")
             if original_affinity:
                 self.assertEqual(report["environment"]["cpu_affinity"], [min(original_affinity)])
                 self.assertEqual(os.sched_getaffinity(0), original_affinity)
+
+            same_binary = root / "same-binary.json"
+            worker_args = ["--probe-binary", str(probe), "--baseline-binary", str(probe),
+                           "--baseline-decode-workers", "1", "--decode-workers", "2,4",
+                           "--no-build", "--output", str(same_binary), "--counts", "3",
+                           "--max-buffered-bytes", "1024", "--layout", "loose", "--backend", "memory"]
+            self.assertEqual(suite.main(worker_args), 0)
+            report = json.loads(same_binary.read_text())
+            self.assertEqual(len(report["samples"]), 16)
+            self.assertEqual({r["decode_workers"] for r in report["samples"] if r["variant"] == "baseline"}, {1})
+            self.assertEqual({r["requested_decode_workers"] for r in report["paired_summary"]}, {2, 4})
+            probe.write_text(probe.read_text().replace('int(os.environ.get("CASITA_GIT_CLOSURE_DECODE_WORKERS", "1"))', '1'))
+            with self.assertRaisesRegex(suite.common.BenchmarkError, "configuration"):
+                suite.main(worker_args)
+
             valid_probe = probe.read_text()
             for root_field in ["", "root=None, ", 'root="", ']:
                 with self.subTest(root_field=root_field):

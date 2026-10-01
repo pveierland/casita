@@ -23,12 +23,12 @@ CORRECTNESS = "exact imported/reused counts and exhaustive closure verification"
 def summarize_pairs(samples):
     """Pair identical workloads by repetition; report effects without hiding spread."""
     dimensions = ("operation", "backend", "files", "file_bytes", "content", "packed",
-                  "concurrency", "max_buffered_bytes")
+                  "concurrency", "max_buffered_bytes", "requested_decode_workers")
     groups = {}
     for sample in samples:
         if not isinstance(sample.get("root"), str) or not sample["root"]:
             raise common.BenchmarkError("missing or invalid benchmark root identity")
-        key = tuple(sample[name] for name in dimensions)
+        key = tuple(sample.get(name, 1) if name == "requested_decode_workers" else sample[name] for name in dimensions)
         repetitions = groups.setdefault(key, {})
         pair = repetitions.setdefault(sample["repetition"], {})
         if sample["variant"] in pair:
@@ -65,6 +65,8 @@ def main(argv=None):
     parser.add_argument("--backend", choices=("memory", "local", "both"), default="both")
     parser.add_argument("--file-bytes", type=positive_csv, default=[1024])
     parser.add_argument("--concurrency", type=positive_csv, default=[16])
+    parser.add_argument("--decode-workers", type=positive_csv, default=[1])
+    parser.add_argument("--baseline-decode-workers", type=int)
     parser.add_argument("--content", choices=("repeated", "random", "mixed"), default="repeated")
     parser.add_argument("--repetitions", type=int, default=1)
     parser.add_argument("--probe-binary", type=pathlib.Path)
@@ -77,6 +79,8 @@ def main(argv=None):
         parser.error("positive repetitions and a probe binary with --no-build are required")
     if min(args.file_bytes) < 8:
         parser.error("file sizes must be at least 8 bytes to encode distinct objects")
+    if args.baseline_decode_workers is not None and args.baseline_decode_workers < 1:
+        parser.error("baseline decode workers must be positive")
     binary = args.probe_binary
     if binary is None:
         built = subprocess.run(["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,git,experimental",
@@ -112,7 +116,8 @@ def main(argv=None):
         for field in ("lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
             if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
                 raise common.BenchmarkError(f"paired build manifests differ in {field}")
-    if len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]:
+    if (len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]
+            and (args.baseline_decode_workers is None or all(n == args.baseline_decode_workers for n in args.decode_workers))):
         parser.error("baseline and candidate executables must have distinct hashes")
     counts = args.counts or ([63, 64, 65] if args.profile == "smoke" else [63, 64, 65, 255, 256, 257, 10000])
     layouts = [False, True] if args.layout == "both" else [args.layout == "packed"]
@@ -121,6 +126,7 @@ def main(argv=None):
                   complete=False, artifacts=artifacts, samples=[], processes=[], configuration=dict(
                       counts=counts, byte_budgets=args.max_buffered_bytes, layouts=layouts,
                       backends=backends, file_bytes=args.file_bytes, concurrency=args.concurrency,
+                      decode_workers=args.decode_workers, baseline_decode_workers=args.baseline_decode_workers or 1,
                       content=args.content, paired=bool(args.baseline_binary), cpu_affinity=args.cpu_affinity,
                       memory_measurement="whole-process peak RSS includes fixture creation and audits",
                       spill_memory_objects=64, metadata_frontier=256,
@@ -139,20 +145,23 @@ def main(argv=None):
             result["environment"]["cpu_max_frequencies_khz"] = frequencies
         try:
             matrix = itertools.product(counts, args.max_buffered_bytes, layouts, backends,
-                                       args.file_bytes, args.concurrency, range(args.repetitions))
-            for count, budget, packed, backend, file_bytes, concurrency, repetition in matrix:
+                                       args.file_bytes, args.concurrency, args.decode_workers, range(args.repetitions))
+            for count, budget, packed, backend, file_bytes, concurrency, decode_workers, repetition in matrix:
                 ordered = variants if repetition % 2 == 0 else list(reversed(variants))
                 for variant, executable in ordered:
+                    actual_workers = (args.baseline_decode_workers or 1) if variant == "baseline" else decode_workers
                     env = {**os.environ, "CASITA_GIT_CLOSURE_FILES": str(count), "CASITA_GIT_CLOSURE_BYTES": str(budget),
                            "CASITA_GIT_CLOSURE_PACKED": str(int(packed)),
                            "CASITA_GIT_CLOSURE_BACKEND": backend, "CASITA_GIT_CLOSURE_FILE_BYTES": str(file_bytes),
-                           "CASITA_GIT_CLOSURE_CONCURRENCY": str(concurrency), "CASITA_GIT_CLOSURE_CONTENT": args.content}
+                           "CASITA_GIT_CLOSURE_CONCURRENCY": str(concurrency), "CASITA_GIT_CLOSURE_CONTENT": args.content,
+                           "CASITA_GIT_CLOSURE_DECODE_WORKERS": str(actual_workers)}
                     timing = common.measured_command(common.CommandSpec(
                         [[str(executable), PROBE, "--exact", "--ignored", "--nocapture"]], work, env),
                         work / "stdout", work / "stderr", check=False)
                     stdout, stderr = (work / "stdout").read_text(), (work / "stderr").read_text()
                     result["processes"].append(dict(**timing, variant=variant, files=count, budget=budget, packed=packed,
                                                     backend=backend, file_bytes=file_bytes, concurrency=concurrency, content=args.content,
+                                                    decode_workers=actual_workers, requested_decode_workers=decode_workers,
                                                     repetition=repetition, stdout=stdout, stderr=stderr))
                     if timing["exit_code"] != 0:
                         raise common.BenchmarkError(f"Git closure benchmark failed: {stdout}\n{stderr}")
@@ -168,6 +177,7 @@ def main(argv=None):
                                 or row.get("packed") != packed or row.get("max_buffered_bytes") != budget
                                 or row.get("backend") != backend or row.get("file_bytes") != file_bytes
                                 or row.get("concurrency") != concurrency or row.get("content") != args.content
+                                or row.get("decode_workers", 1) != actual_workers
                                 or not isinstance(row.get("wall_nanos"), int) or row["wall_nanos"] <= 0):
                             raise common.BenchmarkError("wrong benchmark configuration or correctness gate")
                         expected = {"cold": (count + 2, 0), "warm": (0, 1),
@@ -176,7 +186,8 @@ def main(argv=None):
                                 or (row["operation"] == "warm" and row.get("source_bytes") != 0)):
                             raise common.BenchmarkError("incorrect import/reuse counters")
                         result["samples"].append(dict(status="ok", implementation="casita", variant=variant, entries=count,
-                            repetition=repetition, wall_seconds=row["wall_nanos"] / 1e9,
+                            repetition=repetition, requested_decode_workers=decode_workers,
+                            wall_seconds=row["wall_nanos"] / 1e9,
                             max_rss_bytes=timing["max_rss_bytes"], **row))
                     common.write_atomic(args.output, json.dumps(result, indent=2) + "\n")
             if args.baseline_binary:

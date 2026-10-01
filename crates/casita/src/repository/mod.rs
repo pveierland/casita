@@ -42,6 +42,8 @@ mod error;
 mod filesystem;
 mod integrity;
 mod mutation;
+#[cfg(feature = "git")]
+pub(crate) use mutation::{NativeSeal, NativeVerifier};
 mod open;
 mod profile;
 mod read;

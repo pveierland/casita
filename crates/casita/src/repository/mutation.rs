@@ -4,6 +4,43 @@ use super::*;
 
 mod verified_stream;
 
+/// Private proof of native verification, still awaiting independent storage
+/// identity validation. It is bound to the repository selecting the verifier.
+#[cfg(feature = "git")]
+pub(crate) struct NativeSeal {
+    verified: VerifiedObject,
+    repository: Arc<()>,
+}
+
+#[cfg(feature = "git")]
+#[derive(Clone)]
+pub(crate) struct NativeVerifier {
+    formats: FormatRegistry,
+    limits: FormatLimits,
+    repository: Arc<()>,
+}
+
+#[cfg(feature = "git")]
+impl NativeVerifier {
+    pub(crate) fn verify(
+        &self,
+        key: &ObjectKey,
+        body: &[u8],
+    ) -> Result<NativeSeal, RepositoryError> {
+        crate::git::git_key_parts(key)
+            .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        let mut reader = BlobPayloadReader::new(std::io::Cursor::new(body), body.len() as u64);
+        // Only the factory's Git formats reach this adapter. They read memory
+        // and hash/parse synchronously; custom async formats stay on the caller.
+        let verified =
+            futures::executor::block_on(self.formats.verify(key, &mut reader, &self.limits))?;
+        Ok(NativeSeal {
+            verified,
+            repository: self.repository.clone(),
+        })
+    }
+}
+
 /// Private construction evidence and public requests for normal verification
 /// must remain distinct, even when they share the publication transaction.
 #[derive(Default)]
@@ -411,6 +448,47 @@ where
                 Ok(StagedObject {
                     verified,
                     repository: self.repository.staging_identity.clone(),
+                    _hold: std::marker::PhantomData,
+                })
+            })
+            .await
+    }
+
+    #[cfg(feature = "git")]
+    pub(crate) fn native_verifier(&self) -> Option<NativeVerifier> {
+        self.repository
+            .formats
+            .is_builtin()
+            .then(|| NativeVerifier {
+                formats: self.repository.formats.clone(),
+                limits: self.repository.limits.clone(),
+                repository: self.repository.staging_identity.clone(),
+            })
+    }
+
+    #[cfg(feature = "git")]
+    pub(crate) async fn stage_native_seal<'hold>(
+        &'hold self,
+        seal: NativeSeal,
+        bytes: &[u8],
+    ) -> Result<StagedObject<'hold>, RepositoryError> {
+        if !Arc::ptr_eq(&seal.repository, &self.repository.staging_identity) {
+            return Err(RepositoryError::ForeignStagedObject(
+                seal.verified.record().key().clone(),
+            ));
+        }
+        self.write_scope()
+            .run(async {
+                let payload = self.repository.payloads.put_slice(bytes).await?;
+                if payload != seal.verified.record().payload() {
+                    return Err(RepositoryError::PayloadIdentityMismatch {
+                        expected: seal.verified.record().payload(),
+                        actual: payload,
+                    });
+                }
+                Ok(StagedObject {
+                    verified: seal.verified,
+                    repository: seal.repository,
                     _hold: std::marker::PhantomData,
                 })
             })
@@ -1444,5 +1522,50 @@ where
                 Err(error) => return Err(error.into()),
             }
         }
+    }
+}
+
+#[cfg(all(test, feature = "git"))]
+mod native_seal_tests {
+    use super::*;
+    use crate::blob::MemoryBlobStore;
+    use crate::git::{GitObjectFormat, GitObjectKind, git_object_key_for_body};
+    use crate::metadata::MemoryMetadataStore;
+
+    #[tokio::test]
+    async fn native_seals_cannot_cross_repository_boundaries() {
+        let first = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+        let second = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+        let bytes = b"repository-bound proof";
+        let key =
+            git_object_key_for_body(GitObjectFormat::Sha1, GitObjectKind::Blob, bytes).unwrap();
+        let source = first.mutation_session().await.unwrap();
+        let seal = source
+            .native_verifier()
+            .unwrap()
+            .verify(&key, bytes)
+            .unwrap();
+        let destination = second.mutation_session().await.unwrap();
+        assert!(
+            matches!(destination.stage_native_seal(seal, bytes).await, Err(RepositoryError::ForeignStagedObject(rejected)) if rejected == key)
+        );
+        assert!(
+            !second
+                .payloads
+                .has(&BlobId::new(Digest::hash(bytes)))
+                .await
+                .unwrap()
+        );
+        assert!(
+            second
+                .metadata()
+                .snapshot()
+                .await
+                .unwrap()
+                .object(&key)
+                .await
+                .unwrap()
+                .is_none()
+        );
     }
 }

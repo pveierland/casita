@@ -2799,3 +2799,29 @@ including noisy or negative results.
 Historical initial correctness results are preserved in
 [the Git closure report](reports/2026-09-30-git-closure/README.md);
 its recorded timings are not measurements of this extracted branch.
+
+## Git decode and verification workers
+
+`git-object-workers` uses the Git closure-import correctness gates with CPU worker
+counts 1/2/4/8. Its default cases straddle the 16-object staging window (15/16/17
+files) and admission of two 64 KiB bodies (131071/131072/131073-byte source
+windows). Standard runs also include 1 KiB and 4 MiB files and a 64 MiB source
+window. Both loose/packed sources and memory/local stores are included, and the
+suite is registered in `benchmark all`.
+
+With multiple workers requested, the source importer admits a whole window by
+declared body sizes before workers allocate those bodies. The default remains
+one worker, preserving serial header/decode order and staging verification. Workers finish before destination writes begin. Reported
+`peak_source_bytes` excludes pack caches, delta workspace, verifier metadata and
+storage buffers; `peak_decode_workers` counts executing source jobs. Gix cache
+allocation overhead is additional to its configured byte target.
+
+```sh
+benchmark run git-object-workers --profile smoke --output /tmp/git-workers-smoke.json
+benchmark run git-object-workers --counts 16 --file-bytes 4194304 --max-buffered-bytes 67108864 --backend local --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-workers-large.json
+benchmark run git-closure-import --counts 16 --file-bytes 4194304 --max-buffered-bytes 67108864 --content random --decode-workers 2,4,8 --baseline-decode-workers 1 --probe-binary /path/to/probe --baseline-binary /path/to/probe --no-build --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-workers-paired.json
+```
+
+The last command compares worker counts in the same executable; reports retain
+both the actual worker count and the candidate count identifying each paired
+case. An older baseline without worker support is treated as one worker.

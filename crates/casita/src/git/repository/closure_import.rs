@@ -2,22 +2,17 @@
 //! identities; only a validated closure proves it is safe to stop descending.
 
 use std::collections::{BTreeSet, VecDeque};
-use std::path::PathBuf;
 
 use futures::{StreamExt, TryStreamExt};
-use gix::objs::FindExt;
-use gix::odb::HeaderExt;
 
-use crate::ObjectKey;
 use crate::blob::BlobStore;
-use crate::git::{GitObjectFormat, GitObjectKind, git_key_parts};
+use crate::git::git_key_parts;
 use crate::importers::{GitClosureImport, GitClosureImportError, GitClosureImportReport};
 use crate::metadata::MetadataStore;
 use crate::repository::{MutationSession, RepositoryError};
 use crate::spill::{SpillSet, TraversalQueue};
 
 const FRONTIER: usize = 256;
-const PACK_CACHE_BYTES: usize = 16 * 1024 * 1024;
 
 type Result<T> = std::result::Result<T, GitClosureImportError>;
 
@@ -25,86 +20,8 @@ fn source_error(error: impl std::fmt::Display) -> GitClosureImportError {
     GitClosureImportError::Source(error.to_string())
 }
 
-struct Source {
-    objects: gix::odb::Handle,
-    decoded_bytes: u64,
-}
-
-impl Source {
-    fn open(path: PathBuf, format: GitObjectFormat, limit: u64) -> Result<Self> {
-        let options = gix::odb::store::init::Options {
-            object_hash: match format {
-                GitObjectFormat::Sha1 => gix::hash::Kind::Sha1,
-                GitObjectFormat::Sha256 => gix::hash::Kind::Sha256,
-            },
-            alloc_limit_bytes: usize::try_from(limit).ok(),
-            ..Default::default()
-        };
-        let objects = gix::odb::at_opts(path, [], options)
-            .map_err(source_error)?
-            .with_pack_cache(|| {
-                Box::new(gix::odb::pack::cache::lru::MemoryCappedHashmap::new(
-                    PACK_CACHE_BYTES,
-                ))
-            });
-        Ok(Self {
-            objects,
-            decoded_bytes: 0,
-        })
-    }
-
-    fn decode(
-        &mut self,
-        pending: &mut VecDeque<ObjectKey>,
-        count: usize,
-        budget: u64,
-        payload_limit: u64,
-        metadata_limit: u64,
-    ) -> Result<Vec<(ObjectKey, Vec<u8>)>> {
-        let mut decoded = Vec::new();
-        let mut bytes = 0u64;
-        while decoded.len() < count {
-            let Some(key) = pending.front() else { break };
-            let (_, kind, oid) = git_key_parts(key)?;
-            let oid = gix::ObjectId::from_bytes_or_panic(oid);
-            let header = self.objects.header(oid).map_err(source_error)?;
-            let size = header.size();
-            let limit = if kind == GitObjectKind::Blob {
-                payload_limit
-            } else {
-                payload_limit.min(metadata_limit)
-            };
-            if size > limit {
-                return Err(RepositoryError::LimitExceeded(format!(
-                    "Git object {key} has {size} bytes, limit is {limit}"
-                ))
-                .into());
-            }
-            if !decoded.is_empty() && (bytes > budget || size > budget.saturating_sub(bytes)) {
-                break;
-            }
-            let mut body = Vec::new();
-            let object = self.objects.find(&oid, &mut body).map_err(source_error)?;
-            let actual_kind = match object.kind {
-                gix::objs::Kind::Blob => GitObjectKind::Blob,
-                gix::objs::Kind::Tree => GitObjectKind::Tree,
-                gix::objs::Kind::Commit => GitObjectKind::Commit,
-                gix::objs::Kind::Tag => GitObjectKind::Tag,
-            };
-            if actual_kind != kind || body.len() as u64 != size {
-                return Err(source_error(format!(
-                    "Git object {key} disagrees with its expected kind or size"
-                )));
-            }
-            bytes = bytes
-                .checked_add(size)
-                .ok_or_else(|| source_error("decoded byte count overflow"))?;
-            decoded.push((pending.pop_front().expect("front exists"), body));
-        }
-        self.decoded_bytes = self.decoded_bytes.saturating_add(bytes);
-        Ok(decoded)
-    }
-}
+mod workers;
+use workers::SourcePool;
 
 pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     session: &MutationSession<'_, PS, SS>,
@@ -156,7 +73,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             .await
             .map_err(RepositoryError::from)?;
     }
-    let mut source: Option<Source> = None;
+    let mut source: Option<SourcePool> = None;
     let mut staged = Vec::new();
     let mut staged_links = 0usize;
     loop {
@@ -221,44 +138,37 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             unsettled.insert(key).await.map_err(RepositoryError::from)?;
         }
         while !missing.is_empty() {
-            let path = request.objects_dir.clone();
             let concurrency = request.concurrency.get().min(limits.max_batch_objects);
-            let budget = request.max_buffered_bytes.get();
-            let payload_limit = limits.max_payload_bytes;
-            let metadata_limit = limits.max_metadata_bytes;
-            let (next_source, next_missing, decoded) = tokio::task::spawn_blocking(move || {
-                let mut source = match source {
-                    Some(source)
-                        if source.decoded_bytes < super::MAX_GIT_SOURCE_MAPPING_WINDOW_BYTES =>
-                    {
-                        source
-                    }
-                    _ => Source::open(path, format, payload_limit)?,
-                };
-                let decoded = source.decode(
-                    &mut missing,
-                    concurrency,
-                    budget,
-                    payload_limit,
-                    metadata_limit,
-                )?;
-                Ok::<_, GitClosureImportError>((source, missing, decoded))
-            })
-            .await
-            .map_err(source_error)??;
-            source = Some(next_source);
-            missing = next_missing;
+            let window = workers::decode_window(
+                source.take(),
+                missing,
+                request,
+                format,
+                limits.clone(),
+                session.native_verifier(),
+            )
+            .await?;
+            source = Some(window.source);
+            missing = window.pending;
+            report.peak_source_bytes = report.peak_source_bytes.max(window.bytes);
+            report.peak_decode_workers = report.peak_decode_workers.max(window.peak_workers);
+            let decoded = window.decoded;
             report.imported_objects += decoded.len();
-            for (_, body) in &decoded {
+            for object in &decoded {
                 report.source_bytes = report
                     .source_bytes
-                    .checked_add(body.len() as u64)
+                    .checked_add(object.body.len() as u64)
                     .ok_or_else(|| source_error("imported byte count overflow"))?;
             }
             // Drain every active writer before publication: a payload flush can
             // wait on a writer, and must not prevent that writer being polled.
             let objects: Vec<_> = futures::stream::iter(decoded)
-                .map(|(key, body)| async move { session.stage_object(key, &body).await })
+                .map(|object| async move {
+                    match object.seal {
+                        Some(seal) => session.stage_native_seal(seal, &object.body).await,
+                        None => session.stage_object(object.key, &object.body).await,
+                    }
+                })
                 .buffer_unordered(concurrency)
                 .try_collect()
                 .await?;
@@ -307,57 +217,4 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
         session.publish_git_closure_witnesses(batch).await?;
     }
     Ok(report)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::io::Write;
-    use std::process::{Command, Stdio};
-
-    #[test]
-    fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
-        let directory = tempfile::tempdir().unwrap();
-        let initialized = Command::new("git")
-            .args(["init", "--bare", "-q", "--object-format=sha1"])
-            .arg(directory.path())
-            .output()
-            .unwrap();
-        assert!(initialized.status.success());
-        let mut keys = VecDeque::new();
-        for body in [b"oversized".as_slice(), b""] {
-            let mut child = Command::new("git")
-                .arg("-C")
-                .arg(directory.path())
-                .args(["hash-object", "-w", "--stdin"])
-                .stdin(Stdio::piped())
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn()
-                .unwrap();
-            child.stdin.take().unwrap().write_all(body).unwrap();
-            assert!(child.wait_with_output().unwrap().status.success());
-            keys.push_back(
-                crate::git::git_object_key_for_body(
-                    GitObjectFormat::Sha1,
-                    GitObjectKind::Blob,
-                    body,
-                )
-                .unwrap(),
-            );
-        }
-        let mut source =
-            Source::open(directory.path().join("objects"), GitObjectFormat::Sha1, 16).unwrap();
-        let first = source.decode(&mut keys, 2, 1, 16, 16).unwrap();
-        assert_eq!(
-            first.len(),
-            1,
-            "oversized bodies must occupy their own window"
-        );
-        assert_eq!(keys.len(), 1);
-        let second = source.decode(&mut keys, 2, 1, 16, 16).unwrap();
-        assert_eq!(second.len(), 1);
-        assert!(second[0].1.is_empty());
-        assert!(keys.is_empty());
-    }
 }
