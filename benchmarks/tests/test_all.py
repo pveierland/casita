@@ -11,7 +11,7 @@ from benchmarks import all as runner
 from benchmarks import cli
 
 class AllSuiteTests(unittest.TestCase):
-    def test_build_retains_registered_integration_probe(self):
+    def test_build_retains_registered_chunk_integration_probe(self):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
             probe = root / "chunk_upload_completion"
@@ -46,6 +46,122 @@ class AllSuiteTests(unittest.TestCase):
             self.assertEqual(runner.build_commands(["chunk-upload-completion", "alias-probe"], pathlib.Path("/build")), commands)
         args = runner.suite_arguments("chunk-upload-completion", pathlib.Path("/binaries"), "smoke", 1)
         self.assertIn("/binaries/chunk_upload_completion", args)
+        self.assertIn("--no-build", args)
+
+    def test_registered_unit_probes_preserve_their_build_configuration(self):
+        from benchmarks.revisions import SUITE_BUILD_SPECS
+        directory = pathlib.Path("/build")
+        expected = list(SUITE_BUILD_SPECS["git-source-locator"].cargo_arguments)
+        command, = runner.build_commands(["git-source-locator"], directory)
+        self.assertEqual(command[3:], expected)
+        self.assertNotIn("--all-features", command)
+        with mock.patch.dict(SUITE_BUILD_SPECS, {"locator-alias": SUITE_BUILD_SPECS["git-source-locator"]}):
+            self.assertEqual(runner.build_commands(["git-source-locator", "locator-alias"], directory), [command])
+        mixed = runner.build_commands(["git-source-locator", "git-source-inflation"], directory)
+        self.assertEqual([row for row in mixed if "--lib" in row], [command])
+        self.assertEqual(len(mixed), 2)
+        for selected in (["state-publication"], ["git-source-locator", "state-publication"],
+                         ["git-source-locator", "fsck"], ["git-source-locator", "metadata-collection"]):
+            with self.subTest(selected=selected):
+                units = [row for row in runner.build_commands(selected, directory) if "--lib" in row]
+                self.assertEqual(len(units), 1)
+                self.assertIn("--all-features", units[0])
+
+    def test_git_closure_import_builds_and_receives_its_integration_probe(self):
+        commands = runner.build_commands(["git-closure-import"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertIn("--test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_closure_import")
+        self.assertNotIn("--example", command)
+        args = runner.suite_arguments("git-closure-import", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_closure_import", args)
+        self.assertIn("--no-build", args)
+
+    def test_git_object_workers_build_and_receive_their_integration_probe(self):
+        commands = runner.build_commands(["git-object-workers"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertIn("--test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_closure_import")
+        self.assertNotIn("--example", command)
+        args = runner.suite_arguments("git-object-workers", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_closure_import", args)
+        self.assertIn("--no-build", args)
+
+    def test_git_worker_streaming_builds_and_receives_its_integration_probe(self):
+        commands = runner.build_commands(["git-worker-streaming"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertIn("--test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_closure_import")
+        self.assertNotIn("--example", command)
+        args = runner.suite_arguments("git-worker-streaming", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_closure_import", args)
+        self.assertIn("--no-build", args)
+
+    def test_git_source_inflation_builds_and_receives_its_integration_probe(self):
+        commands = runner.build_commands(["git-source-inflation"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertIn("--test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_closure_import")
+        self.assertNotIn("--example", command)
+        args = runner.suite_arguments("git-source-inflation", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_closure_import", args)
+        self.assertIn("--no-build", args)
+
+    def test_verified_stream_builds_and_receives_its_registered_probe(self):
+        commands = runner.build_commands(["git-verified-stream"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertEqual(command[command.index("--test") + 1], "verified_stream")
+        self.assertIn("--no-default-features", command)
+        self.assertEqual(command[command.index("--features") + 1], "native,git,experimental")
+        self.assertIn("verified_stream", runner.integration_probe_names())
+        arguments = runner.suite_arguments("git-verified-stream", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/verified_stream", arguments)
+        self.assertIn("--no-build", arguments)
+
+    def test_build_retains_registered_integration_probe(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            probe = root / "git_blob_file"
+            probe.write_bytes(b"integration probe")
+
+            def build(command, **kwargs):
+                self.assertIn("test", command)
+                self.assertEqual(command[command.index("--test") + 1], "git_blob_file")
+                kwargs["stdout"].write(json.dumps({
+                    "reason": "compiler-artifact",
+                    "target": {"kind": ["test"], "name": "git_blob_file"},
+                    "executable": str(probe),
+                }) + "\n")
+
+            with mock.patch.object(runner.subprocess, "run", side_effect=build):
+                binaries = runner.build_binaries(root, root / "build", ["git-blob-file"])
+            self.assertEqual((binaries / "git_blob_file").read_bytes(), b"integration probe")
+            artifacts = json.loads((root / "artifacts.json").read_text())
+            self.assertEqual(artifacts["git_blob_file"]["sha256"], runner.fingerprint(probe))
+
+    def test_git_blob_file_builds_and_receives_its_integration_probe(self):
+        commands = runner.build_commands(["git-blob-file"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("test", command)
+        self.assertEqual(command[command.index("--test") + 1], "git_blob_file")
+        self.assertIn("--no-default-features", command)
+        self.assertEqual(command[command.index("--features") + 1], "native,git,experimental")
+        self.assertNotIn("--all-features", command)
+        from benchmarks.revisions import SUITE_BUILD_SPECS
+        with mock.patch.dict(SUITE_BUILD_SPECS, {"alias-probe": SUITE_BUILD_SPECS["git-blob-file"]}):
+            self.assertEqual(runner.build_commands(["git-blob-file", "alias-probe"], pathlib.Path("/build")), commands)
+        args = runner.suite_arguments("git-blob-file", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/git_blob_file", args)
         self.assertIn("--no-build", args)
 
     def test_rustfs_protocol_matrix_retains_failed_cases_in_all_ledger(self):

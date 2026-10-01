@@ -1,0 +1,29 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+    Finished `release` profile [optimized] target(s) in 7m 39s
+     Running tests/git_closure_import.rs (/home/pveierland/dev/casita/target/release/deps/git_closure_import-983c094d32046391)
+
+running 22 tests
+test benchmark_git_closure_import ... ignored, run through benchmark run git-closure-import
+test failed_import_checkpoints_never_claim_an_incomplete_tree_is_validated ... ok
+test supports_sha256_and_rejects_wrong_types ... ok
+test an_existing_parent_is_not_a_complete_closure_and_can_be_repaired ... ok
+test imports_only_selected_closures_and_repeats_without_source_access ... ok
+test parallel_native_verification_rejects_corrupt_source_identity ... ok
+test worker_seals_reject_false_backend_digests_before_publication ... ok
+test excessive_worker_requests_are_bounded_by_the_metadata_frontier ... ok
+test reuses_subtrees_across_unrelated_roots_without_reading_old_source_objects ... ok
+test packed_alternates_import_tag_and_commit_closures_without_following_gitlinks ... ok
+test closure_witnesses_survive_reopening_a_local_repository ... ok
+test an_oversized_source_body_does_not_admit_an_empty_sibling ... ok
+test parallel_windows_progress_with_one_blocking_thread ... ok
+test parallel_import_verifies_objects_from_primary_and_alternate_packs ... ok
+test inflation::valid_zlib_with_wrong_declared_length_and_truncated_zlib_never_publish ... ok
+test inflation::packed_blob_stages_a_prefix_before_rejecting_a_late_inflate_error ... ok
+test inflation::streamed_native_mismatch_short_and_excess_payloads_never_publish ... ok
+test parallel_decode_preserves_closures_and_bounds_each_window ... ok
+test inflation::streamed_windows_progress_with_one_blocking_thread_and_local_storage ... ok
+test inflation::loose_blob_stages_a_prefix_before_rejecting_a_late_inflate_error ... ok
+test inflation::actual_packed_deltas_fall_back_and_preserve_payloads ... ok
+test inflation::streaming_and_buffered_blobs_roundtrip_across_threshold_and_alternates ... ok
+
+test result: ok. 21 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 5.24s

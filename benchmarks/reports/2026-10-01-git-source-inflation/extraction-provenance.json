@@ -1,0 +1,29 @@
+{
+  "original_source_revision": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+  "original_checksum_manifest_sha256": "7714a8e761f6da662be0ac8d37436cd0216e1dd28af31f13f9fc23390d42c1ed",
+  "changes": [
+    {
+      "path": "parallel-16m.json.host.json",
+      "original_sha256": "bc4116fad19e3b525718e729a3b3ccb02557f7d9682ce966590b14b7a64cc092",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 50
+    },
+    {
+      "path": "thresholds.json.host.json",
+      "original_sha256": "6af4e0ad1d6a8e283677dc696f3dec00398832034d6427a317f299906689f78d",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 68
+    },
+    {
+      "path": "large-64m.json.host.json",
+      "original_sha256": "c554a9577889cf1b3a1c68a0d5f275392f761a224054ab5b832fe596a85b6607",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 5
+    },
+    {
+      "path": "README.md",
+      "original_sha256": "32e9a95f789dafd739586514693079fd369718bd30129e236311318879c40b28",
+      "change": "Add explicit historical provenance for the split source-inflation extraction."
+    }
+  ]
+}

@@ -34,7 +34,18 @@ SMOKE = {
     "mutation-catalog": ["--profile", "smoke"],
     "filesystem-outputs": ["--profile", "smoke"],
     "output-import": ["--profile", "smoke"],
+    "git-closure-import": ["--profile", "smoke"],
+    "git-object-workers": ["--profile", "smoke"],
+    "git-worker-streaming": ["--profile", "smoke"],
+    "git-retained-buffers": ["--profile", "smoke"],
+    "git-source-inflation": ["--profile", "smoke"],
+    "git-source-locator": ["--profile", "smoke"],
+    "git-delta-spill": ["--profile", "smoke"],
+    "git-delta-disabled": ["--profile", "smoke"],
+    "git-delta-limits": ["--profile", "smoke"],
     "git-import-profile": ["--profile", "smoke"],
+    "git-blob-file": ["--profile", "smoke"],
+    "git-verified-stream": ["--profile", "smoke"],
     "git-ingest-scheduling": ["--profile", "smoke"],
     "git-ingest-concurrency": ["--profile", "smoke"],
     "git-fetch-s3": ["--profile", "smoke", "--diagnostics"],
@@ -146,6 +157,7 @@ def build_commands(selected, build_dir):
     """Request only needed targets; Cargo owns source/configuration freshness."""
     from benchmarks.revisions import SUITE_BUILD_SPECS
     names = set()
+    legacy_unit = "fsck" in selected
     for suite in selected:
         if suite == "core-primitives":
             names.update(CORE_BENCHES)
@@ -155,6 +167,7 @@ def build_commands(selected, build_dir):
             names.add(SUITE_BUILD_SPECS[suite].artifact_name)
         elif suite in {"state-publication", "metadata-durability", "deletion-ordering", "catalog-maintenance", "catalog-durability", "logical-state", "s3-catalog-index"}:
             names.add("casita-lib-test")
+            legacy_unit = True
         elif suite in {"casitar", "casitar-scaling", "casitar-import-profile", "casitar-pin-profile", "casitar-quiet-import", "fault-and-recovery", "generations", "process-contention"}:
             names.add("casita")
     if "fsck" in selected:
@@ -172,7 +185,16 @@ def build_commands(selected, build_dir):
         commands.append(prefix + ["bench", "--all-features", "--no-run", "--message-format=json"] +
                         [arg for name in benches for arg in ("--bench", name)])
     if "casita-lib-test" in names:
-        commands.append(prefix + ["test", "-p", "casita", "--release", "--all-features", "--lib", "--no-run", "--message-format=json"])
+        unit_builds = {SUITE_BUILD_SPECS[suite].cargo_arguments for suite in selected
+                       if suite in SUITE_BUILD_SPECS
+                       and SUITE_BUILD_SPECS[suite].artifact_name == "casita-lib-test"}
+        # All unit consumers share one retained artifact. Preserve a common
+        # registered configuration; legacy or mixed configurations keep the
+        # existing all-features build so every selected probe is included.
+        if not legacy_unit and len(unit_builds) == 1:
+            commands.append(prefix + list(next(iter(unit_builds))))
+        else:
+            commands.append(prefix + ["test", "-p", "casita", "--release", "--all-features", "--lib", "--no-run", "--message-format=json"])
     if examples or "casita" in names:
         commands.append(prefix + ["build", "--release", "--all-features", "--message-format=json"] +
                         (["--bin", "casita"] if "casita" in names else []) +

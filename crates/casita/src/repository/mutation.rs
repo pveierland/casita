@@ -2,6 +2,53 @@
 
 use super::*;
 
+mod verified_stream;
+
+/// Private proof of native verification, still awaiting independent storage
+/// identity validation. It is bound to the repository selecting the verifier.
+#[cfg(feature = "git")]
+pub(crate) struct NativeSeal {
+    verified: VerifiedObject,
+    repository: Arc<()>,
+}
+
+#[cfg(feature = "git")]
+#[derive(Clone)]
+pub(crate) struct NativeVerifier {
+    formats: FormatRegistry,
+    limits: FormatLimits,
+    repository: Arc<()>,
+}
+
+#[cfg(feature = "git")]
+impl NativeVerifier {
+    pub(crate) fn verify(
+        &self,
+        key: &ObjectKey,
+        body: &[u8],
+    ) -> Result<NativeSeal, RepositoryError> {
+        crate::git::git_key_parts(key)
+            .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        let mut reader = BlobPayloadReader::new(std::io::Cursor::new(body), body.len() as u64);
+        // Only the factory's Git formats reach this adapter. They read memory
+        // and hash/parse synchronously; custom async formats stay on the caller.
+        let verified =
+            futures::executor::block_on(self.formats.verify(key, &mut reader, &self.limits))?;
+        Ok(NativeSeal {
+            verified,
+            repository: self.repository.clone(),
+        })
+    }
+}
+
+/// Private construction evidence and public requests for normal verification
+/// must remain distinct, even when they share the publication transaction.
+#[derive(Default)]
+pub(super) struct ClosurePublication {
+    constructed: BTreeSet<ObjectKey>,
+    requested: BTreeSet<ObjectKey>,
+}
+
 /// One root value that must still match before a conditional mutation can
 /// commit.
 ///
@@ -407,6 +454,47 @@ where
             .await
     }
 
+    #[cfg(feature = "git")]
+    pub(crate) fn native_verifier(&self) -> Option<NativeVerifier> {
+        self.repository
+            .formats
+            .is_builtin()
+            .then(|| NativeVerifier {
+                formats: self.repository.formats.clone(),
+                limits: self.repository.limits.clone(),
+                repository: self.repository.staging_identity.clone(),
+            })
+    }
+
+    #[cfg(feature = "git")]
+    pub(crate) async fn stage_native_seal<'hold>(
+        &'hold self,
+        seal: NativeSeal,
+        bytes: &[u8],
+    ) -> Result<StagedObject<'hold>, RepositoryError> {
+        if !Arc::ptr_eq(&seal.repository, &self.repository.staging_identity) {
+            return Err(RepositoryError::ForeignStagedObject(
+                seal.verified.record().key().clone(),
+            ));
+        }
+        self.write_scope()
+            .run(async {
+                let payload = self.repository.payloads.put_slice(bytes).await?;
+                if payload != seal.verified.record().payload() {
+                    return Err(RepositoryError::PayloadIdentityMismatch {
+                        expected: seal.verified.record().payload(),
+                        actual: payload,
+                    });
+                }
+                Ok(StagedObject {
+                    verified: seal.verified,
+                    repository: seal.repository,
+                    _hold: std::marker::PhantomData,
+                })
+            })
+            .await
+    }
+
     /// Store bytes and verify them under an exact caller-supplied logical key.
     /// The selected namespace still reproduces and checks the native identity,
     /// canonical payload, and forward links before returning a staged seal.
@@ -466,6 +554,44 @@ where
                 tokio::io::copy(reader, &mut writer).await?;
                 let (payload, _) = writer.close().await?;
                 self.stage_existing(key, payload).await
+            })
+            .await
+    }
+
+    /// Verify an exact-length stream while writing it, without reopening the
+    /// stored payload. The selected format checks native identity and links;
+    /// its physical digest is independently compared with the backend writer.
+    /// Short, oversized, or incompletely consumed streams cannot be staged.
+    pub async fn stage_object_reader_with_size<'hold>(
+        &'hold self,
+        key: ObjectKey,
+        payload_size: u64,
+        reader: &mut (impl AsyncRead + Unpin + Send),
+    ) -> Result<StagedObject<'hold>, RepositoryError> {
+        self.write_scope()
+            .run(async {
+                if payload_size > self.repository.limits.max_payload_bytes {
+                    return Err(FormatError::PayloadLimit {
+                        limit: self.repository.limits.max_payload_bytes,
+                    }
+                    .into());
+                }
+                let mut tee = verified_stream::WritingReader::new(
+                    reader,
+                    self.repository.payloads.open_write().await,
+                    payload_size,
+                );
+                let verified = self
+                    .repository
+                    .formats
+                    .verify(&key, &mut tee, &self.repository.limits)
+                    .await?;
+                tee.finish(verified.record()).await?;
+                Ok(StagedObject {
+                    verified,
+                    repository: self.repository.staging_identity.clone(),
+                    _hold: std::marker::PhantomData,
+                })
             })
             .await
     }
@@ -581,6 +707,64 @@ where
             )
             .await?;
         Ok(())
+    }
+
+    /// Register a stored, repository-verified native Git blob as an ordinary
+    /// file without reading or writing its payload again. Git blob bodies are
+    /// exactly file contents; their verified records already authenticate the
+    /// raw payload digest and length. Other Git kinds are rejected.
+    #[cfg(feature = "git")]
+    pub async fn stage_git_blob_file<'hold>(
+        &'hold self,
+        key: &ObjectKey,
+    ) -> Result<StagedObject<'hold>, RepositoryError> {
+        let (_, kind, _) = crate::git::git_key_parts(key)
+            .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        if kind != crate::git::GitObjectKind::Blob {
+            return Err(RepositoryError::InvalidInput(
+                "plain files require a native Git blob".into(),
+            ));
+        }
+        self.write_scope()
+            .run(async {
+                // Read metadata first to discover all required protections.
+                // Recheck after admission: collection may have removed this
+                // candidate before the receiving mutation could protect it.
+                let (snapshot, _metadata_pin) =
+                    crate::metadata::read_snapshot(self.repository.state.as_ref()).await?;
+                let record = snapshot
+                    .object(key)
+                    .await?
+                    .ok_or_else(|| RepositoryError::Absent(key.to_string()))?;
+                if !record.links().is_empty() {
+                    return Err(RepositoryError::InvalidInput(
+                        "Git blobs cannot have forward links".into(),
+                    ));
+                }
+                let verified = BlobFormat::seal_written(
+                    record.payload(),
+                    record.payload_size(),
+                    &self.repository.limits,
+                )?;
+                self.pin
+                    .protect(BTreeSet::from([
+                        crate::metadata::PinResource::Object(key.clone()),
+                        crate::metadata::PinResource::Object(verified.record().key().clone()),
+                        crate::metadata::PinResource::Blob(record.payload()),
+                    ]))
+                    .await?;
+                let (current, _current_pin) =
+                    crate::metadata::read_snapshot(self.repository.state.as_ref()).await?;
+                if current.object(key).await?.as_ref() != Some(&record) {
+                    return Err(RepositoryError::Absent(key.to_string()));
+                }
+                Ok(StagedObject {
+                    verified,
+                    repository: self.repository.staging_identity.clone(),
+                    _hold: std::marker::PhantomData,
+                })
+            })
+            .await
     }
 
     /// Verify an already durable payload under an exact logical key.
@@ -784,7 +968,10 @@ where
                 Vec::new(),
                 root_changes,
                 None,
-                constructed,
+                ClosurePublication {
+                    constructed,
+                    ..Default::default()
+                },
                 metadata,
             )
             .await?
@@ -794,6 +981,39 @@ where
                 unreachable!("a filesystem import has no root expectations")
             }
         }
+    }
+
+    /// The native closure importer has verified and durably published every
+    /// object reachable from these keys, under overlapping snapshot/staging
+    /// protection. This private construction proof cannot apply to formats
+    /// with extra relational verification requirements.
+    #[cfg(feature = "git")]
+    pub(crate) async fn publish_git_closure_witnesses(
+        &self,
+        keys: BTreeSet<ObjectKey>,
+    ) -> Result<(), RepositoryError> {
+        if keys.len() > self.repository.limits.max_batch_objects {
+            return Err(RepositoryError::LimitExceeded(
+                "Git witness batch exceeds publication limit".into(),
+            ));
+        }
+        for key in &keys {
+            crate::git::git_key_parts(key)
+                .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        }
+        self.publish_inner_with_metadata(
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            None,
+            ClosurePublication {
+                constructed: keys,
+                ..Default::default()
+            },
+            Some(MetadataMutation::new()),
+        )
+        .await?;
+        Ok(())
     }
 
     /// Publish a native Git view whose complete closure the importer just
@@ -859,7 +1079,7 @@ where
                 Vec::new(),
                 roots,
                 None,
-                BTreeSet::new(),
+                ClosurePublication::default(),
                 Some(mutation),
             )
             .await?
@@ -884,7 +1104,10 @@ where
             expectations,
             root_changes,
             exact_revision,
-            constructed_closures,
+            ClosurePublication {
+                constructed: constructed_closures,
+                ..Default::default()
+            },
             None,
         )
         .await
@@ -898,7 +1121,8 @@ where
             root_expectations = expectations.len(),
             root_changes = root_changes.len(),
             exact_revision = exact_revision.is_some(),
-            constructed_closures = constructed_closures.len()
+            constructed_closures = closures.constructed.len(),
+            checked_closures = closures.requested.len()
         )
     )]
     pub(super) async fn publish_inner_with_metadata(
@@ -907,15 +1131,26 @@ where
         expectations: Vec<RootExpectation>,
         root_changes: Vec<RootChange>,
         exact_revision: Option<crate::RepositoryRevision>,
-        constructed_closures: BTreeSet<ObjectKey>,
+        closures: ClosurePublication,
         metadata: Option<MetadataMutation>,
     ) -> Result<ConditionalPublishResult, RepositoryError> {
+        let ClosurePublication {
+            constructed: mut constructed_closures,
+            requested: checked_closures,
+        } = closures;
         self.write_scope()
             .run(async {
                 if staged.len() > self.repository.limits.max_batch_objects {
                     return Err(RepositoryError::LimitExceeded(format!(
                         "mutation has {} objects, limit is {}",
                         staged.len(),
+                        self.repository.limits.max_batch_objects
+                    )));
+                }
+                if checked_closures.len() > self.repository.limits.max_batch_objects {
+                    return Err(RepositoryError::LimitExceeded(format!(
+                        "mutation checks {} closures, limit is {}",
+                        checked_closures.len(),
                         self.repository.limits.max_batch_objects
                     )));
                 }
@@ -951,6 +1186,16 @@ where
                     if !Arc::ptr_eq(&object.repository, &self.repository.staging_identity) {
                         return Err(RepositoryError::ForeignStagedObject(record.key().clone()));
                     }
+                    // Built-in raw blobs have no relational rules or links:
+                    // the sealed body already proves their complete closure.
+                    // Custom registries retain normal unrooted semantics.
+                    if self.repository.formats.is_builtin()
+                        && record.key().namespace().as_str() == crate::object::BLOB_NAMESPACE
+                        && record.key() == &ObjectKey::blob(record.payload())
+                        && record.links().is_empty()
+                    {
+                        constructed_closures.insert(record.key().clone());
+                    }
                     match overlay.get(record.key()) {
                         Some(existing) if existing == record => {}
                         Some(_) => {
@@ -981,6 +1226,7 @@ where
                         inputs.insert(crate::metadata::PinResource::Object(target.clone()));
                     }
                 }
+                inputs.extend(checked_closures.iter().cloned().map(crate::metadata::PinResource::Object));
                 self.pin.protect(inputs).await?;
                 #[cfg(test)]
                 let phase = self.repository.time_publication_phase(0);
@@ -1016,7 +1262,68 @@ where
                             });
                         }
                     }
-                    let mut newly_verified: Vec<_> = constructed_closures.iter().cloned().collect();
+                    let mut newly_verified: Vec<_> = if self.repository.formats.is_builtin() {
+                        constructed_closures.iter().cloned().collect()
+                    } else {
+                        Vec::new()
+                    };
+                    if !self.repository.formats.is_builtin() {
+                        // Construction proves the built-in format's rules, not
+                        // a replacement verifier's additional relations. Audit
+                        // those candidates before publishing any proof marks.
+                        for target in &constructed_closures {
+                            let status = verify_closure_with(
+                                self.repository.closure_verifier(),
+                                snapshot.as_ref(),
+                                &overlay,
+                                target,
+                                None,
+                                ClosureAudit::Incremental,
+                                Some(&mut newly_verified),
+                            )
+                            .await?;
+                            if !matches!(status, ClosureStatus::Complete { .. }) {
+                                return Err(RepositoryError::RootNotPublishable {
+                                    root: target.clone(),
+                                    status,
+                                });
+                            }
+                        }
+                    }
+                    // Requested targets use normal format verification, never
+                    // the importers' private construction shortcut. Record only
+                    // these bounded targets instead of an entire visited graph.
+                    // Staging order lets bottom-up producers reuse each completed
+                    // child check. Remaining committed targets use canonical order.
+                    // A successful prefix is private to this immutable attempt:
+                    // neither partial walks nor retries may reuse its proofs.
+                    let mut completed_checks = BTreeSet::new();
+                    for target in staged.iter().map(|object| object.record().key())
+                        .chain(checked_closures.iter())
+                    {
+                        if !checked_closures.contains(target) || completed_checks.contains(target) {
+                            continue;
+                        }
+                        let mut verifier = self.repository.closure_verifier();
+                        verifier.completed = Some(&completed_checks);
+                        let status = verify_closure_with(
+                            verifier,
+                            snapshot.as_ref(),
+                            &overlay,
+                            target,
+                            None,
+                            ClosureAudit::Incremental,
+                            None,
+                        ).await?;
+                        if !matches!(status, ClosureStatus::Complete { .. }) {
+                            return Err(RepositoryError::RootNotPublishable {
+                                root: target.clone(),
+                                status,
+                            });
+                        }
+                        completed_checks.insert(target.clone());
+                    }
+                    newly_verified.extend(checked_closures.iter().cloned());
                     for change in &root_changes {
                         if let RootChange::Set { target, .. } = change {
                             if constructed_closures.contains(target) {
@@ -1135,6 +1442,47 @@ where
         self.publish(staged, Vec::new()).await
     }
 
+    /// Publish records and verify selected complete closures without naming
+    /// them. Targets may refer to staged or previously published objects.
+    /// Every target must pass normal format and link verification before any
+    /// records or closure witnesses become visible.
+    ///
+    /// Only requested targets acquire new directory closure witnesses; this
+    /// does not accumulate the full transitive object inventory. Target count
+    /// and staged-object count are each bounded by `max_batch_objects`.
+    /// Staged targets are checked in staging order, so placing children before
+    /// parents avoids repeating their completed closure checks within a batch.
+    /// Already verified closures may be trusted, so this is a completeness
+    /// check rather than a fresh corruption audit. Witnesses do not retain
+    /// objects: after the mutation and other holds end, they remain collectible.
+    pub async fn publish_closures(
+        &self,
+        staged: Vec<StagedObject<'_>>,
+        targets: BTreeSet<ObjectKey>,
+    ) -> Result<CommitResult, RepositoryError> {
+        match self
+            .publish_inner_with_metadata(
+                staged,
+                Vec::new(),
+                Vec::new(),
+                None,
+                ClosurePublication {
+                    requested: targets,
+                    ..Default::default()
+                },
+                // Existing targets need only the metadata commit path; no payload
+                // flush should be needed when this call has no staged records.
+                Some(MetadataMutation::new()),
+            )
+            .await?
+        {
+            ConditionalPublishResult::Committed(result) => Ok(result),
+            ConditionalPublishResult::RootMismatch { .. } => {
+                unreachable!("unnamed closure publication has no root expectations")
+            }
+        }
+    }
+
     /// Atomically publish records and set one exact named root.
     pub async fn publish_rooted(
         &self,
@@ -1174,5 +1522,50 @@ where
                 Err(error) => return Err(error.into()),
             }
         }
+    }
+}
+
+#[cfg(all(test, feature = "git"))]
+mod native_seal_tests {
+    use super::*;
+    use crate::blob::MemoryBlobStore;
+    use crate::git::{GitObjectFormat, GitObjectKind, git_object_key_for_body};
+    use crate::metadata::MemoryMetadataStore;
+
+    #[tokio::test]
+    async fn native_seals_cannot_cross_repository_boundaries() {
+        let first = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+        let second = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+        let bytes = b"repository-bound proof";
+        let key =
+            git_object_key_for_body(GitObjectFormat::Sha1, GitObjectKind::Blob, bytes).unwrap();
+        let source = first.mutation_session().await.unwrap();
+        let seal = source
+            .native_verifier()
+            .unwrap()
+            .verify(&key, bytes)
+            .unwrap();
+        let destination = second.mutation_session().await.unwrap();
+        assert!(
+            matches!(destination.stage_native_seal(seal, bytes).await, Err(RepositoryError::ForeignStagedObject(rejected)) if rejected == key)
+        );
+        assert!(
+            !second
+                .payloads
+                .has(&BlobId::new(Digest::hash(bytes)))
+                .await
+                .unwrap()
+        );
+        assert!(
+            second
+                .metadata()
+                .snapshot()
+                .await
+                .unwrap()
+                .object(&key)
+                .await
+                .unwrap()
+                .is_none()
+        );
     }
 }
