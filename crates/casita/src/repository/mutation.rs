@@ -976,6 +976,36 @@ where
         }
     }
 
+    /// The native closure importer has verified and durably published every
+    /// object reachable from these keys, under overlapping snapshot/staging
+    /// protection. This private construction proof cannot apply to formats
+    /// with extra relational verification requirements.
+    #[cfg(feature = "git")]
+    pub(crate) async fn publish_git_closure_witnesses(
+        &self,
+        keys: BTreeSet<ObjectKey>,
+    ) -> Result<(), RepositoryError> {
+        if keys.len() > self.repository.limits.max_batch_objects {
+            return Err(RepositoryError::LimitExceeded(
+                "Git witness batch exceeds publication limit".into(),
+            ));
+        }
+        for key in &keys {
+            crate::git::git_key_parts(key)
+                .map_err(|error| RepositoryError::InvalidInput(error.to_string()))?;
+        }
+        self.publish_inner_with_metadata(
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            None,
+            ClosurePublication::constructed(keys),
+            Some(MetadataMutation::new()),
+        )
+        .await?;
+        Ok(())
+    }
+
     /// Publish a native Git view whose complete closure the importer just
     /// traversed, verified, and durably checkpointed in bounded batches.
     ///
@@ -1338,11 +1368,17 @@ where
             // Construction proves the built-in rules, not those a replacement
             // verifier adds under the same namespace. Staging order is
             // bottom-up, so parents stop at their already proven children.
+            // Constructed objects published by earlier batches follow.
             walks.extend(
                 staged
                     .iter()
                     .map(|object| object.record().key())
                     .filter(|key| constructed_closures.contains(*key))
+                    .chain(
+                        constructed_closures
+                            .iter()
+                            .filter(|key| !overlay.contains_key(*key)),
+                    )
                     .map(|key| (key.clone(), true)),
             );
         }
