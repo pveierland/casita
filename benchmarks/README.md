@@ -2828,3 +2828,6 @@ Paired runs accept `--baseline-binary /path/to/baseline --probe-binary
 variant's deterministic `link_audits` beside paired wall-time reductions. Build
 both executables with `cargo test --release -p casita --no-default-features
 --features native,git,experimental --test git_closure_custom_formats --no-run`.
+
+The paired measurements of audit reuse are preserved in
+[the Git closure audit report](reports/2026-10-02-git-closure-audit/README.md).
