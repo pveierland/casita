@@ -1,0 +1,75 @@
+[
+  {
+    "reason": "compiler-artifact",
+    "package_id": "path+file:///tmp/casita-e-matrix/candidate/crates/casita#0.1.0",
+    "manifest_path": "/tmp/casita-e-matrix/candidate/crates/casita/Cargo.toml",
+    "target": {
+      "kind": [
+        "lib"
+      ],
+      "crate_types": [
+        "lib"
+      ],
+      "name": "casita",
+      "src_path": "/tmp/casita-e-matrix/candidate/crates/casita/src/lib.rs",
+      "edition": "2024",
+      "doc": true,
+      "doctest": true,
+      "test": true
+    },
+    "profile": {
+      "opt_level": "3",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": false
+    },
+    "features": [
+      "experimental",
+      "git",
+      "native"
+    ],
+    "filenames": [
+      "/home/pveierland/dev/casita/target/release/deps/libcasita-8d5b1f7880165a67.rlib",
+      "/home/pveierland/dev/casita/target/release/deps/libcasita-8d5b1f7880165a67.rmeta"
+    ],
+    "executable": null,
+    "fresh": true
+  },
+  {
+    "reason": "compiler-artifact",
+    "package_id": "path+file:///tmp/casita-e-matrix/candidate/crates/casita#0.1.0",
+    "manifest_path": "/tmp/casita-e-matrix/candidate/crates/casita/Cargo.toml",
+    "target": {
+      "kind": [
+        "test"
+      ],
+      "crate_types": [
+        "bin"
+      ],
+      "name": "git_worker_matrix",
+      "src_path": "/tmp/casita-e-matrix/candidate/crates/casita/tests/git_worker_matrix.rs",
+      "edition": "2024",
+      "doc": false,
+      "doctest": false,
+      "test": true
+    },
+    "profile": {
+      "opt_level": "3",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": true
+    },
+    "features": [
+      "experimental",
+      "git",
+      "native"
+    ],
+    "filenames": [
+      "/home/pveierland/dev/casita/target/release/deps/git_worker_matrix-675b16f85cfb6afe"
+    ],
+    "executable": "/home/pveierland/dev/casita/target/release/deps/git_worker_matrix-675b16f85cfb6afe",
+    "fresh": true
+  }
+]
