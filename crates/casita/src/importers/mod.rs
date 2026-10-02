@@ -88,7 +88,9 @@ pub use filesystem::{MultiRootFilesystemImport, UnrootedFilesystemImport};
 #[cfg(feature = "git")]
 pub use git::GitImport;
 #[cfg(feature = "git")]
-pub use git_closure::{GitClosureImport, GitClosureImportError, GitClosureImportOutcome, GitClosureImportReport};
+pub use git_closure::{
+    GitClosureImport, GitClosureImportError, GitClosureImportOutcome, GitClosureImportReport,
+};
 pub use nar::{FilesystemNarImport, NarImport};
 #[cfg(feature = "oci")]
 pub use oci::OciImport;

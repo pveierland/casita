@@ -5,8 +5,8 @@ use std::process::{Command, Stdio};
 
 use casita::ObjectKey;
 use casita::experimental::{
-    ClosureStatus, GitObjectFormat, GitObjectKind, MemoryBlobStore, MemoryMetadataStore,
-    MetadataStore, Repository, git_object_key,
+    ClosureStatus, GitClosureImportError, GitObjectFormat, GitObjectKind, MemoryBlobStore,
+    MemoryMetadataStore, MetadataStore, Repository, git_object_key,
 };
 use casita::import::GitClosureImport;
 
@@ -236,12 +236,62 @@ async fn supports_sha256_and_rejects_wrong_types() {
         ClosureStatus::Complete { objects: 2 }
     ));
     let wrong = key(GitObjectFormat::Sha256, GitObjectKind::Tree, &blob);
-    assert!(
-        repository
-            .import(source.request(vec![wrong]))
+    match repository.import(source.request(vec![wrong.clone()])).await {
+        Err(GitClosureImportError::RootKind { root, actual }) => {
+            assert_eq!(root, wrong);
+            assert_eq!(actual, GitObjectKind::Blob);
+        }
+        other => panic!("expected a selected-root type error, got {other:?}"),
+    }
+    // A caller's wrong selection is permanent input, not a retryable backend fault.
+    let application = casita::Repository::memory().unwrap();
+    let error = application
+        .import(source.request(vec![wrong]))
+        .await
+        .unwrap_err();
+    assert_eq!(error.kind(), casita::ErrorKind::InvalidInput);
+    assert_eq!(error.retry_disposition(), casita::RetryDisposition::Never);
+}
+
+#[tokio::test]
+async fn a_linked_object_with_a_different_source_type_is_invalid_data() {
+    let source = Source::new("sha1");
+    let blob = source.blob(b"linked contents");
+    let subtree = source.tree(&format!("100644 blob {blob}\tfile\n"));
+    // `git mktree` rejects this, so write the inconsistent tree literally: its
+    // entry links the subtree's OID as a blob.
+    let mut body = b"100644 wrong\0".to_vec();
+    body.extend(data_encoding::HEXLOWER.decode(subtree.as_bytes()).unwrap());
+    let root = tree(&source.git(
+        &["hash-object", "-t", "tree", "-w", "--stdin", "--literally"],
+        &body,
+    ));
+    let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+    match repository.import(source.request(vec![root.clone()])).await {
+        Err(GitClosureImportError::Git(error)) => {
+            assert!(
+                error
+                    .to_string()
+                    .contains("linked as a blob but stored as a tree"),
+                "{error}"
+            );
+        }
+        other => panic!("expected invalid source data, got {other:?}"),
+    }
+    let snapshot = repository.metadata().snapshot().await.unwrap();
+    assert_eq!(
+        snapshot
+            .validated_closures(std::slice::from_ref(&root))
             .await
-            .is_err()
+            .unwrap(),
+        [false]
     );
+    let application = casita::Repository::memory().unwrap();
+    let error = application
+        .import(source.request(vec![root]))
+        .await
+        .unwrap_err();
+    assert_eq!(error.kind(), casita::ErrorKind::InvalidData);
 }
 
 #[tokio::test]

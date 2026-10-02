@@ -3,6 +3,7 @@
 
 use std::collections::{BTreeSet, VecDeque};
 use std::path::PathBuf;
+use std::sync::Arc;
 
 use futures::{StreamExt, TryStreamExt};
 use gix::objs::FindExt;
@@ -10,7 +11,7 @@ use gix::odb::HeaderExt;
 
 use crate::ObjectKey;
 use crate::blob::BlobStore;
-use crate::git::{GitObjectFormat, GitObjectKind, git_key_parts};
+use crate::git::{GitError, GitObjectFormat, GitObjectKind, git_key_parts};
 use crate::importers::{GitClosureImport, GitClosureImportError, GitClosureImportReport};
 use crate::metadata::MetadataStore;
 use crate::repository::{MutationSession, RepositoryError};
@@ -25,13 +26,52 @@ fn source_error(error: impl std::fmt::Display) -> GitClosureImportError {
     GitClosureImportError::Source(error.to_string())
 }
 
+fn native_kind(kind: gix::objs::Kind) -> GitObjectKind {
+    match kind {
+        gix::objs::Kind::Blob => GitObjectKind::Blob,
+        gix::objs::Kind::Tree => GitObjectKind::Tree,
+        gix::objs::Kind::Commit => GitObjectKind::Commit,
+        gix::objs::Kind::Tag => GitObjectKind::Tag,
+    }
+}
+
+/// A source object whose stored type differs from its type-qualified key. A
+/// selected root is the caller's mistake; a linked object is invalid source data.
+fn kind_mismatch(
+    roots: &[ObjectKey],
+    key: &ObjectKey,
+    expected: GitObjectKind,
+    actual: GitObjectKind,
+) -> GitClosureImportError {
+    if roots.binary_search(key).is_ok() {
+        GitClosureImportError::RootKind {
+            root: key.clone(),
+            actual,
+        }
+    } else {
+        GitError::InvalidObject(format!(
+            "Git object {key} is linked as a {} but stored as a {}",
+            expected.as_str(),
+            actual.as_str()
+        ))
+        .into()
+    }
+}
+
 struct Source {
     objects: gix::odb::Handle,
+    /// Canonically ordered selected roots, for classifying type mismatches.
+    roots: Arc<[ObjectKey]>,
     decoded_bytes: u64,
 }
 
 impl Source {
-    fn open(path: PathBuf, format: GitObjectFormat, limit: u64) -> Result<Self> {
+    fn open(
+        path: PathBuf,
+        format: GitObjectFormat,
+        limit: u64,
+        roots: Arc<[ObjectKey]>,
+    ) -> Result<Self> {
         let options = gix::odb::store::init::Options {
             object_hash: match format {
                 GitObjectFormat::Sha1 => gix::hash::Kind::Sha1,
@@ -49,6 +89,7 @@ impl Source {
             });
         Ok(Self {
             objects,
+            roots,
             decoded_bytes: 0,
         })
     }
@@ -68,6 +109,12 @@ impl Source {
             let (_, kind, oid) = git_key_parts(key)?;
             let oid = gix::ObjectId::from_bytes_or_panic(oid);
             let header = self.objects.header(oid).map_err(source_error)?;
+            // Reject a wrong type from the header alone: its size limit and
+            // decoding cost belong to a different kind than the one selected.
+            let actual = native_kind(header.kind());
+            if actual != kind {
+                return Err(kind_mismatch(&self.roots, key, kind, actual));
+            }
             let size = header.size();
             let limit = if kind == GitObjectKind::Blob {
                 payload_limit
@@ -85,16 +132,15 @@ impl Source {
             }
             let mut body = Vec::new();
             let object = self.objects.find(&oid, &mut body).map_err(source_error)?;
-            let actual_kind = match object.kind {
-                gix::objs::Kind::Blob => GitObjectKind::Blob,
-                gix::objs::Kind::Tree => GitObjectKind::Tree,
-                gix::objs::Kind::Commit => GitObjectKind::Commit,
-                gix::objs::Kind::Tag => GitObjectKind::Tag,
-            };
-            if actual_kind != kind || body.len() as u64 != size {
-                return Err(source_error(format!(
-                    "Git object {key} disagrees with its expected kind or size"
-                )));
+            let body_kind = native_kind(object.kind);
+            if body_kind != kind || body.len() as u64 != size {
+                return Err(GitError::InvalidObject(format!(
+                    "Git object {key} decoded as a {} of {} bytes, but its header declares a {} of {size} bytes",
+                    body_kind.as_str(),
+                    body.len(),
+                    kind.as_str()
+                ))
+                .into());
             }
             bytes = bytes
                 .checked_add(size)
@@ -141,6 +187,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     let Some(format) = format else {
         return Ok(report);
     };
+    let roots: Arc<[ObjectKey]> = request.roots.as_slice().into();
     // Protect the existing graph before inspecting records. New objects are
     // protected by the mutation's staging pin; both protections overlap until
     // selected roots and all their now-complete links have been retained.
@@ -206,7 +253,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             .await
             .map_err(RepositoryError::from)?;
         let mut missing = VecDeque::new();
-        for (key, record) in unresolved.into_iter().zip(records) {
+        for (key, record) in unresolved.iter().zip(records) {
             if let Some(record) = record {
                 report.reused_objects += 1;
                 for child in record.links() {
@@ -218,14 +265,20 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             } else {
                 missing.push_back(key.clone());
             }
-            unsettled.insert(key).await.map_err(RepositoryError::from)?;
         }
+        // Visited keys are already distinct, so one batched spill write
+        // replaces a per-key membership probe once the set has spilled.
+        unsettled
+            .insert_batch(&unresolved)
+            .await
+            .map_err(RepositoryError::from)?;
         while !missing.is_empty() {
             let path = request.objects_dir.clone();
             let concurrency = request.concurrency.get().min(limits.max_batch_objects);
             let budget = request.max_buffered_bytes.get();
             let payload_limit = limits.max_payload_bytes;
             let metadata_limit = limits.max_metadata_bytes;
+            let roots = roots.clone();
             let (next_source, next_missing, decoded) = tokio::task::spawn_blocking(move || {
                 let mut source = match source {
                     Some(source)
@@ -233,7 +286,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
                     {
                         source
                     }
-                    _ => Source::open(path, format, payload_limit)?,
+                    _ => Source::open(path, format, payload_limit, roots)?,
                 };
                 let decoded = source.decode(
                     &mut missing,
@@ -315,8 +368,8 @@ mod tests {
     use std::io::Write;
     use std::process::{Command, Stdio};
 
-    #[test]
-    fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
+    /// A bare SHA-1 object directory holding these loose blobs, and their keys.
+    fn loose_blobs(bodies: &[&[u8]]) -> (tempfile::TempDir, Vec<ObjectKey>) {
         let directory = tempfile::tempdir().unwrap();
         let initialized = Command::new("git")
             .args(["init", "--bare", "-q", "--object-format=sha1"])
@@ -324,8 +377,8 @@ mod tests {
             .output()
             .unwrap();
         assert!(initialized.status.success());
-        let mut keys = VecDeque::new();
-        for body in [b"oversized".as_slice(), b""] {
+        let mut keys = Vec::new();
+        for body in bodies {
             let mut child = Command::new("git")
                 .arg("-C")
                 .arg(directory.path())
@@ -337,7 +390,7 @@ mod tests {
                 .unwrap();
             child.stdin.take().unwrap().write_all(body).unwrap();
             assert!(child.wait_with_output().unwrap().status.success());
-            keys.push_back(
+            keys.push(
                 crate::git::git_object_key_for_body(
                     GitObjectFormat::Sha1,
                     GitObjectKind::Blob,
@@ -346,8 +399,24 @@ mod tests {
                 .unwrap(),
             );
         }
-        let mut source =
-            Source::open(directory.path().join("objects"), GitObjectFormat::Sha1, 16).unwrap();
+        (directory, keys)
+    }
+
+    fn open(directory: &tempfile::TempDir, limit: u64, roots: &[ObjectKey]) -> Source {
+        Source::open(
+            directory.path().join("objects"),
+            GitObjectFormat::Sha1,
+            limit,
+            roots.into(),
+        )
+        .unwrap()
+    }
+
+    #[test]
+    fn an_oversized_serial_body_does_not_admit_an_empty_sibling() {
+        let (directory, keys) = loose_blobs(&[b"oversized", b""]);
+        let mut keys = VecDeque::from(keys);
+        let mut source = open(&directory, 16, &[]);
         let first = source.decode(&mut keys, 2, 1, 16, 16).unwrap();
         assert_eq!(
             first.len(),
@@ -359,5 +428,39 @@ mod tests {
         assert_eq!(second.len(), 1);
         assert!(second[0].1.is_empty());
         assert!(keys.is_empty());
+    }
+
+    #[test]
+    fn a_wrong_type_is_rejected_from_its_header_before_size_limits_or_decoding() {
+        let body = [b'x'; 64];
+        let (directory, blobs) = loose_blobs(&[&body]);
+        let (format, _, oid) = git_key_parts(&blobs[0]).unwrap();
+        let tree = crate::git::git_object_key(format, GitObjectKind::Tree, oid.to_vec()).unwrap();
+        // The blob exceeds the metadata limit a tree would be held to. Only the
+        // type error describes the request; neither path decodes the body.
+        for (roots, category) in [
+            (
+                vec![tree.clone()],
+                crate::RepositoryErrorCategory::InvalidInput,
+            ),
+            (Vec::new(), crate::RepositoryErrorCategory::InvalidData),
+        ] {
+            let mut source = open(&directory, 1024, &roots);
+            let mut pending = VecDeque::from([tree.clone()]);
+            let error = source.decode(&mut pending, 1, 1024, 1024, 16).unwrap_err();
+            assert_eq!(error.category(), category, "{error}");
+            match error {
+                GitClosureImportError::RootKind { root, actual } => {
+                    assert_eq!(root, tree);
+                    assert_eq!(actual, GitObjectKind::Blob);
+                }
+                GitClosureImportError::Git(GitError::InvalidObject(message)) => {
+                    assert!(message.contains("linked as a tree but stored as a blob"));
+                }
+                other => panic!("unexpected error: {other}"),
+            }
+            assert_eq!(source.decoded_bytes, 0);
+            assert_eq!(pending.len(), 1);
+        }
     }
 }

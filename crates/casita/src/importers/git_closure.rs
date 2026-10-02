@@ -102,7 +102,16 @@ pub enum GitClosureImportError {
     /// The selection is not a set of native keys in one Git hash format.
     #[error("invalid Git closure selection: {0}")]
     InvalidSelection(&'static str),
-    /// Native object syntax or identity is invalid.
+    /// A selected root names a different type than the source object has.
+    #[error("selected Git root {root} is a {} in the source", actual.as_str())]
+    RootKind {
+        /// The selected type-qualified key.
+        root: ObjectKey,
+        /// The type the source object database stores for this OID.
+        actual: crate::git::GitObjectKind,
+    },
+    /// Native object syntax, type or identity is invalid, including a linked
+    /// object whose source type differs from its referrer's link.
     #[error(transparent)]
     Git(#[from] crate::git::GitError),
     /// A source object database could not be opened or decoded.
@@ -117,7 +126,7 @@ impl GitClosureImportError {
     pub(crate) fn category(&self) -> crate::RepositoryErrorCategory {
         use crate::RepositoryErrorCategory as Category;
         match self {
-            Self::InvalidSelection(_) => Category::InvalidInput,
+            Self::InvalidSelection(_) | Self::RootKind { .. } => Category::InvalidInput,
             Self::Git(_) => Category::InvalidData,
             Self::Source(_) => Category::Backend,
             Self::Repository(error) => error.category(),
