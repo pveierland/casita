@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/home/pveierland/dev/git-import-perf/casita/benchmarks/work/37895914f5b940449962d4848a0dafac",
+  "finished": true,
+  "revision": "05f224bcdbe6a8dfb700c6b94f66f6f0a5a19653",
+  "diff": " benchmarks/all.py                        |  1 +\n benchmarks/manifest.json                 |  9 ++++\n benchmarks/revisions.py                  |  4 ++\n benchmarks/tests/test_revisions.py       |  2 +-\n crates/casita/src/blob/chunked.rs        |  3 ++\n crates/casita/src/blob/chunked/upload.rs |  2 +\n crates/casita/src/blob/chunked/writer.rs | 82 +++++++++++++++++++++++---------\n 7 files changed, 80 insertions(+), 23 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "chunk-hash-batch",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "chunk-hash-batch",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-hash-all-smoke/bin/chunk_hash_batch",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-hash-all-smoke/chunk-hash-batch.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.1701518500049133,
+      "log": "/tmp/casita-hash-all-smoke/chunk-hash-batch.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}

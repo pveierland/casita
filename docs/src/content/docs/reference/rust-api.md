@@ -21,7 +21,7 @@ and `IntegrityDisposition`.
 | Area | `Repository` methods |
 |---|---|
 | Open | `local`, `memory`; `s3` with the experimental S3 storage profile |
-| Import | `import` with `BlobImport`, `CopyImport`, `FilesystemImport`, `TarImport`, `CasitarImport`, or `GitImport` (`git`) |
+| Import | `import` with `BlobImport`, `CopyImport`, `FilesystemImport`, `TarImport`, `CasitarImport`, or `GitImport` / `GitClosureImport` (`git`) |
 | Filesystem | `checkout` |
 | Objects | `object`, `open`, `open_verified` |
 | Consistent reads | `metadata_reader`, `retained_reader` |
@@ -36,6 +36,30 @@ It consumes an input request and returns that importer's associated `Report` and
 are no public format-specific import methods. Built-in requests use application
 `Error` with the standard handle and typed engine errors with experimental
 compositions. Custom importers can implement the same trait.
+
+`GitClosureImport::new(objects_dir, roots)` imports type-qualified native Git
+roots directly from an object directory. It follows packs and alternates and
+reuses complete stored subtrees across unrelated revisions and repositories.
+It creates no named roots or serving-view inventory. The returned
+`GitClosureImportOutcome` contains a `report` and a retained `reader`; keep the
+reader alive until application roots have been published. A fully stored
+selection does not access the source directory. Report counters describe work
+performed and reuse boundaries, not the size of the complete reachable graph.
+
+`ImportCpuBudget` in `casita::import` optionally shares admission for source
+blocking decode/inflate and destination chunk hash/compression jobs. Pass clones
+with `GitClosureImport::with_cpu_budget`; `with_cpu_concurrency` creates a budget
+shared by that request's clones. Inline chunking, Bao hashing, async verification
+and storage are outside this job limit. Defaults remain unconfigured.
+
+`ImportBufferBudget` in `casita::import` adds separate shared source and writer
+allowances. Pass clones through `GitClosureImport::with_buffer_budget`; its
+`with_buffer_limits` convenience method creates a budget for that request and
+its clones. Capacities round down to 64 KiB and reservations round up. Complete
+source-window and writer envelopes are reserved before production begins, so
+impossible reservations fail. These opt-in allowances exclude backend-owned
+payloads, decoder/codec workspace, verification and metadata; they do not bound
+process RSS. Source and destination partitions never borrow from each other.
 
 `Reader` implements Tokio `AsyncRead` and `AsyncSeek`. It keeps the selected
 object's content protected from collection until dropped. `VerifiedReader`

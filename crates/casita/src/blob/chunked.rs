@@ -134,6 +134,7 @@ pub(crate) async fn put_object(
     Ok(())
 }
 
+mod hash_batch;
 mod manifest;
 mod overwrite;
 mod page_gc;
@@ -1313,7 +1314,10 @@ impl BlobStore for ChunkedBlobStore {
             self.chunk_memory_budget.clone(),
             self.chunk_upload_concurrency,
             self.pins.capture(),
+            crate::import_cpu::current(),
+            crate::import_buffer::current(),
         )
+        .await
     }
 
     fn begin_batch(&self) -> BlobBatchGuard {
@@ -2069,3 +2073,6 @@ pub(crate) fn digest_from_location(location: &Path) -> io::Result<Digest> {
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod hash_batch_tests;

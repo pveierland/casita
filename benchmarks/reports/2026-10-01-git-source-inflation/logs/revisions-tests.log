@@ -1,0 +1,40 @@
+..F......+ cargo bench --features git --bench gix_odb --no-run --message-format=json
+.round 1/3: before (aaaaaaaaaaaa)
+error: benchmark interrupted
+..building a (aaaaaaaaaaaa)
+building b (bbbbbbbbbbbb)
+building c (cccccccccccc)
+round 1/3: a (aaaaaaaaaaaa)
+round 1/3: b (bbbbbbbbbbbb)
+round 1/3: c (cccccccccccc)
+round 2/3: b (bbbbbbbbbbbb)
+round 2/3: c (cccccccccccc)
+round 2/3: a (aaaaaaaaaaaa)
+round 3/3: c (cccccccccccc)
+round 3/3: a (aaaaaaaaaaaa)
+round 3/3: b (bbbbbbbbbbbb)
+....
+======================================================================
+FAIL: test_every_supported_suite_has_an_explicit_build_contract (benchmarks.tests.test_revisions.RevisionArgumentTests.test_every_supported_suite_has_an_explicit_build_contract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pveierland/dev/git-import-perf/casita/benchmarks/tests/test_revisions.py", line 59, in test_every_supported_suite_has_an_explicit_build_contract
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        set(revisions.SUPPORTED_SUITES),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<44 lines>...
+        },
+        ^^
+    )
+    ^
+AssertionError: Items in the first set but not the second:
+'git-source-locator'
+'git-source-inflation'
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.051s
+
+FAILED (failures=1)
+revision series: /tmp/tmpyy_lbffh/output/series.json
+report: /tmp/tmpyy_lbffh/output/series.md

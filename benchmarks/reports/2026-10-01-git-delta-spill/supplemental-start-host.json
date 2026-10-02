@@ -1,0 +1,5178 @@
+{
+  "note": "Exploratory timing: primary quiet-host gate timed out; supplemental run retains per-second host samples without another quiet-host wait.",
+  "processes": {
+    "1": {
+      "name": "systemd",
+      "state": "S",
+      "parent": 0,
+      "ticks": 40683,
+      "started": 20
+    },
+    "2": {
+      "name": "kthreadd",
+      "state": "S",
+      "parent": 0,
+      "ticks": 1620,
+      "started": 20
+    },
+    "3": {
+      "name": "pool_workqueue_release",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "4": {
+      "name": "kworker/R-rcu_gp",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "5": {
+      "name": "kworker/R-sync_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "6": {
+      "name": "kworker/R-kvfree_rcu_reclaim",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "7": {
+      "name": "kworker/R-slub_flushwq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "8": {
+      "name": "kworker/R-netns",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "10": {
+      "name": "kworker/0:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 220,
+      "started": 30
+    },
+    "13": {
+      "name": "kworker/R-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "15": {
+      "name": "ksoftirqd/0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 332,
+      "started": 30
+    },
+    "16": {
+      "name": "rcu_preempt",
+      "state": "I",
+      "parent": 2,
+      "ticks": 72547,
+      "started": 30
+    },
+    "17": {
+      "name": "rcu_exp_par_gp_kthread_worker/1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 303,
+      "started": 30
+    },
+    "18": {
+      "name": "rcu_exp_gp_kthread_worker",
+      "state": "S",
+      "parent": 2,
+      "ticks": 533,
+      "started": 30
+    },
+    "19": {
+      "name": "migration/0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 31,
+      "started": 30
+    },
+    "20": {
+      "name": "kprobe-optimizer",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "21": {
+      "name": "idle_inject/0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "22": {
+      "name": "cpuhp/0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "23": {
+      "name": "cpuhp/1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "24": {
+      "name": "idle_inject/1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "25": {
+      "name": "migration/1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 33,
+      "started": 30
+    },
+    "26": {
+      "name": "ksoftirqd/1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 345,
+      "started": 30
+    },
+    "28": {
+      "name": "kworker/1:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "29": {
+      "name": "cpuhp/2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "30": {
+      "name": "idle_inject/2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "31": {
+      "name": "migration/2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 35,
+      "started": 30
+    },
+    "32": {
+      "name": "ksoftirqd/2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 525,
+      "started": 30
+    },
+    "34": {
+      "name": "kworker/2:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "35": {
+      "name": "cpuhp/3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "36": {
+      "name": "idle_inject/3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "37": {
+      "name": "migration/3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 39,
+      "started": 30
+    },
+    "38": {
+      "name": "ksoftirqd/3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 586,
+      "started": 30
+    },
+    "40": {
+      "name": "kworker/3:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "41": {
+      "name": "cpuhp/4",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "42": {
+      "name": "idle_inject/4",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 30
+    },
+    "43": {
+      "name": "migration/4",
+      "state": "S",
+      "parent": 2,
+      "ticks": 50,
+      "started": 30
+    },
+    "44": {
+      "name": "ksoftirqd/4",
+      "state": "S",
+      "parent": 2,
+      "ticks": 277,
+      "started": 31
+    },
+    "46": {
+      "name": "kworker/4:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "47": {
+      "name": "cpuhp/5",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "48": {
+      "name": "idle_inject/5",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "49": {
+      "name": "migration/5",
+      "state": "S",
+      "parent": 2,
+      "ticks": 56,
+      "started": 31
+    },
+    "50": {
+      "name": "ksoftirqd/5",
+      "state": "S",
+      "parent": 2,
+      "ticks": 235,
+      "started": 31
+    },
+    "52": {
+      "name": "kworker/5:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "53": {
+      "name": "cpuhp/6",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "54": {
+      "name": "idle_inject/6",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "55": {
+      "name": "migration/6",
+      "state": "S",
+      "parent": 2,
+      "ticks": 56,
+      "started": 31
+    },
+    "56": {
+      "name": "ksoftirqd/6",
+      "state": "S",
+      "parent": 2,
+      "ticks": 209,
+      "started": 31
+    },
+    "58": {
+      "name": "kworker/6:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "59": {
+      "name": "cpuhp/7",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "60": {
+      "name": "idle_inject/7",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "61": {
+      "name": "migration/7",
+      "state": "S",
+      "parent": 2,
+      "ticks": 57,
+      "started": 31
+    },
+    "62": {
+      "name": "ksoftirqd/7",
+      "state": "S",
+      "parent": 2,
+      "ticks": 180,
+      "started": 31
+    },
+    "64": {
+      "name": "kworker/7:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "65": {
+      "name": "cpuhp/8",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "66": {
+      "name": "idle_inject/8",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "67": {
+      "name": "migration/8",
+      "state": "S",
+      "parent": 2,
+      "ticks": 56,
+      "started": 31
+    },
+    "68": {
+      "name": "ksoftirqd/8",
+      "state": "S",
+      "parent": 2,
+      "ticks": 190,
+      "started": 31
+    },
+    "70": {
+      "name": "kworker/8:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "71": {
+      "name": "cpuhp/9",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "72": {
+      "name": "idle_inject/9",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "73": {
+      "name": "migration/9",
+      "state": "S",
+      "parent": 2,
+      "ticks": 51,
+      "started": 31
+    },
+    "74": {
+      "name": "ksoftirqd/9",
+      "state": "S",
+      "parent": 2,
+      "ticks": 180,
+      "started": 31
+    },
+    "76": {
+      "name": "kworker/9:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "77": {
+      "name": "cpuhp/10",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "78": {
+      "name": "idle_inject/10",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "79": {
+      "name": "migration/10",
+      "state": "S",
+      "parent": 2,
+      "ticks": 32,
+      "started": 31
+    },
+    "80": {
+      "name": "ksoftirqd/10",
+      "state": "S",
+      "parent": 2,
+      "ticks": 807,
+      "started": 31
+    },
+    "82": {
+      "name": "kworker/10:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "83": {
+      "name": "cpuhp/11",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "84": {
+      "name": "idle_inject/11",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "85": {
+      "name": "migration/11",
+      "state": "S",
+      "parent": 2,
+      "ticks": 30,
+      "started": 31
+    },
+    "86": {
+      "name": "ksoftirqd/11",
+      "state": "S",
+      "parent": 2,
+      "ticks": 717,
+      "started": 31
+    },
+    "88": {
+      "name": "kworker/11:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "89": {
+      "name": "cpuhp/12",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "90": {
+      "name": "idle_inject/12",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "91": {
+      "name": "migration/12",
+      "state": "S",
+      "parent": 2,
+      "ticks": 36,
+      "started": 31
+    },
+    "92": {
+      "name": "ksoftirqd/12",
+      "state": "S",
+      "parent": 2,
+      "ticks": 334,
+      "started": 31
+    },
+    "94": {
+      "name": "kworker/12:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "95": {
+      "name": "rcu_exp_par_gp_kthread_worker/2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "96": {
+      "name": "cpuhp/13",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "97": {
+      "name": "idle_inject/13",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "98": {
+      "name": "migration/13",
+      "state": "S",
+      "parent": 2,
+      "ticks": 37,
+      "started": 31
+    },
+    "99": {
+      "name": "ksoftirqd/13",
+      "state": "S",
+      "parent": 2,
+      "ticks": 112,
+      "started": 31
+    },
+    "101": {
+      "name": "kworker/13:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "102": {
+      "name": "cpuhp/14",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "103": {
+      "name": "idle_inject/14",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "104": {
+      "name": "migration/14",
+      "state": "S",
+      "parent": 2,
+      "ticks": 38,
+      "started": 31
+    },
+    "105": {
+      "name": "ksoftirqd/14",
+      "state": "S",
+      "parent": 2,
+      "ticks": 458,
+      "started": 31
+    },
+    "107": {
+      "name": "kworker/14:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "108": {
+      "name": "cpuhp/15",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "109": {
+      "name": "idle_inject/15",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "110": {
+      "name": "migration/15",
+      "state": "S",
+      "parent": 2,
+      "ticks": 36,
+      "started": 31
+    },
+    "111": {
+      "name": "ksoftirqd/15",
+      "state": "S",
+      "parent": 2,
+      "ticks": 377,
+      "started": 31
+    },
+    "113": {
+      "name": "kworker/15:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "114": {
+      "name": "cpuhp/16",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "115": {
+      "name": "idle_inject/16",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "116": {
+      "name": "migration/16",
+      "state": "S",
+      "parent": 2,
+      "ticks": 49,
+      "started": 31
+    },
+    "117": {
+      "name": "ksoftirqd/16",
+      "state": "S",
+      "parent": 2,
+      "ticks": 134,
+      "started": 31
+    },
+    "119": {
+      "name": "kworker/16:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "120": {
+      "name": "cpuhp/17",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "121": {
+      "name": "idle_inject/17",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "122": {
+      "name": "migration/17",
+      "state": "S",
+      "parent": 2,
+      "ticks": 53,
+      "started": 31
+    },
+    "123": {
+      "name": "ksoftirqd/17",
+      "state": "S",
+      "parent": 2,
+      "ticks": 164,
+      "started": 31
+    },
+    "125": {
+      "name": "kworker/17:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "126": {
+      "name": "cpuhp/18",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "127": {
+      "name": "idle_inject/18",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "128": {
+      "name": "migration/18",
+      "state": "S",
+      "parent": 2,
+      "ticks": 51,
+      "started": 31
+    },
+    "129": {
+      "name": "ksoftirqd/18",
+      "state": "S",
+      "parent": 2,
+      "ticks": 176,
+      "started": 31
+    },
+    "131": {
+      "name": "kworker/18:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "132": {
+      "name": "cpuhp/19",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "133": {
+      "name": "idle_inject/19",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "134": {
+      "name": "migration/19",
+      "state": "S",
+      "parent": 2,
+      "ticks": 52,
+      "started": 31
+    },
+    "135": {
+      "name": "ksoftirqd/19",
+      "state": "S",
+      "parent": 2,
+      "ticks": 307,
+      "started": 31
+    },
+    "137": {
+      "name": "kworker/19:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "138": {
+      "name": "cpuhp/20",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "139": {
+      "name": "idle_inject/20",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "140": {
+      "name": "migration/20",
+      "state": "S",
+      "parent": 2,
+      "ticks": 52,
+      "started": 31
+    },
+    "141": {
+      "name": "ksoftirqd/20",
+      "state": "S",
+      "parent": 2,
+      "ticks": 126,
+      "started": 31
+    },
+    "143": {
+      "name": "kworker/20:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "144": {
+      "name": "cpuhp/21",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "145": {
+      "name": "idle_inject/21",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "146": {
+      "name": "migration/21",
+      "state": "S",
+      "parent": 2,
+      "ticks": 50,
+      "started": 31
+    },
+    "147": {
+      "name": "ksoftirqd/21",
+      "state": "S",
+      "parent": 2,
+      "ticks": 171,
+      "started": 31
+    },
+    "149": {
+      "name": "kworker/21:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "150": {
+      "name": "cpuhp/22",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "151": {
+      "name": "idle_inject/22",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "152": {
+      "name": "migration/22",
+      "state": "S",
+      "parent": 2,
+      "ticks": 29,
+      "started": 31
+    },
+    "153": {
+      "name": "ksoftirqd/22",
+      "state": "S",
+      "parent": 2,
+      "ticks": 653,
+      "started": 31
+    },
+    "155": {
+      "name": "kworker/22:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "156": {
+      "name": "cpuhp/23",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "157": {
+      "name": "idle_inject/23",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "158": {
+      "name": "migration/23",
+      "state": "S",
+      "parent": 2,
+      "ticks": 29,
+      "started": 31
+    },
+    "159": {
+      "name": "ksoftirqd/23",
+      "state": "S",
+      "parent": 2,
+      "ticks": 764,
+      "started": 31
+    },
+    "161": {
+      "name": "kworker/23:0H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 31
+    },
+    "164": {
+      "name": "kdevtmpfs",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1,
+      "started": 31
+    },
+    "165": {
+      "name": "kworker/R-inet_frag_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 32
+    },
+    "166": {
+      "name": "rcu_tasks_kthread",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 32
+    },
+    "167": {
+      "name": "rcu_tasks_rude_kthread",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 32
+    },
+    "168": {
+      "name": "kauditd",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 32
+    },
+    "169": {
+      "name": "khungtaskd",
+      "state": "S",
+      "parent": 2,
+      "ticks": 110,
+      "started": 33
+    },
+    "170": {
+      "name": "oom_reaper",
+      "state": "S",
+      "parent": 2,
+      "ticks": 337,
+      "started": 33
+    },
+    "173": {
+      "name": "kworker/R-writeback",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 33
+    },
+    "174": {
+      "name": "kcompactd0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 285750,
+      "started": 33
+    },
+    "175": {
+      "name": "ksmd",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 33
+    },
+    "176": {
+      "name": "khugepaged",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1973,
+      "started": 33
+    },
+    "177": {
+      "name": "kworker/R-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 33
+    },
+    "178": {
+      "name": "kworker/R-blkcg_punt_bio",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 33
+    },
+    "179": {
+      "name": "kworker/R-kintegrityd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 33
+    },
+    "180": {
+      "name": "irq/9-acpi",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2528,
+      "started": 34
+    },
+    "183": {
+      "name": "kworker/R-tpm_dev_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 38
+    },
+    "184": {
+      "name": "kworker/R-devfreq_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 39
+    },
+    "186": {
+      "name": "kworker/R-quota_events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 40
+    },
+    "188": {
+      "name": "irq/27-AMD-Vi",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 41
+    },
+    "189": {
+      "name": "kswapd0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 130208,
+      "started": 42
+    },
+    "190": {
+      "name": "kdamond.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1305,
+      "started": 42
+    },
+    "191": {
+      "name": "kworker/R-kthrotld",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 42
+    },
+    "193": {
+      "name": "irq/34-pciehp",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 42
+    },
+    "195": {
+      "name": "irq/35-pciehp",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 42
+    },
+    "216": {
+      "name": "kworker/R-mld",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 195
+    },
+    "217": {
+      "name": "kworker/R-ipv6_addrconf",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 195
+    },
+    "218": {
+      "name": "kworker/R-kstrp",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 195
+    },
+    "223": {
+      "name": "irq/28-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "224": {
+      "name": "irq/29-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "225": {
+      "name": "irq/30-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "226": {
+      "name": "irq/31-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "227": {
+      "name": "irq/32-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "228": {
+      "name": "irq/33-ACPI:Event",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 197
+    },
+    "253": {
+      "name": "spl_system_task",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 242
+    },
+    "254": {
+      "name": "spl_delay_taskq",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 242
+    },
+    "255": {
+      "name": "spl_dynamic_tas",
+      "state": "S",
+      "parent": 2,
+      "ticks": 710,
+      "started": 242
+    },
+    "256": {
+      "name": "spl_kmem_cache",
+      "state": "S",
+      "parent": 2,
+      "ticks": 3465,
+      "started": 242
+    },
+    "336": {
+      "name": "kworker/R-nvme-wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 274
+    },
+    "337": {
+      "name": "kworker/R-nvme-reset-wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 274
+    },
+    "338": {
+      "name": "kworker/R-nvme-delete-wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 274
+    },
+    "339": {
+      "name": "kworker/R-nvme-auth-wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 274
+    },
+    "343": {
+      "name": "zvol_tq-0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "344": {
+      "name": "zvol_tq-1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "345": {
+      "name": "zvol_tq-2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "346": {
+      "name": "zvol_tq-3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "347": {
+      "name": "zvol_tq-4",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "349": {
+      "name": "arc_prune",
+      "state": "S",
+      "parent": 2,
+      "ticks": 3444,
+      "started": 275
+    },
+    "350": {
+      "name": "arc_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 283,
+      "started": 275
+    },
+    "351": {
+      "name": "arc_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 280,
+      "started": 275
+    },
+    "352": {
+      "name": "arc_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 287,
+      "started": 275
+    },
+    "353": {
+      "name": "arc_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 284,
+      "started": 275
+    },
+    "354": {
+      "name": "arc_flush",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 275
+    },
+    "355": {
+      "name": "arc_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 8228,
+      "started": 275
+    },
+    "356": {
+      "name": "arc_reap",
+      "state": "S",
+      "parent": 2,
+      "ticks": 199,
+      "started": 275
+    },
+    "357": {
+      "name": "dbu_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 7430,
+      "started": 275
+    },
+    "358": {
+      "name": "dbuf_evict",
+      "state": "S",
+      "parent": 2,
+      "ticks": 21751,
+      "started": 275
+    },
+    "361": {
+      "name": "kworker/4:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 288,
+      "started": 280
+    },
+    "367": {
+      "name": "z_vdev_file",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 283
+    },
+    "374": {
+      "name": "l2arc_feed",
+      "state": "S",
+      "parent": 2,
+      "ticks": 541,
+      "started": 287
+    },
+    "377": {
+      "name": "kworker/R-amdgpu-reset-dev",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 418
+    },
+    "379": {
+      "name": "kworker/R-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 422
+    },
+    "381": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "382": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "383": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "384": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "385": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "386": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "387": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "388": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "389": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "390": {
+      "name": "kworker/R-amdgpu_dm_hpd_rx_offload_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "391": {
+      "name": "kworker/R-dm_vblank_control_workqueue",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "392": {
+      "name": "kworker/R-hdmi_frl_status_polling_workque",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "393": {
+      "name": "kworker/R-amdgpu_dm_hpd_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 450
+    },
+    "394": {
+      "name": "card1-crtc0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 460
+    },
+    "395": {
+      "name": "card1-crtc1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 460
+    },
+    "396": {
+      "name": "card1-crtc2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 460
+    },
+    "397": {
+      "name": "card1-crtc3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 460
+    },
+    "398": {
+      "name": "kworker/R-gfx_0.0.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "399": {
+      "name": "kworker/R-comp_1.0.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "400": {
+      "name": "kworker/R-comp_1.1.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "401": {
+      "name": "kworker/R-comp_1.2.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "402": {
+      "name": "kworker/R-comp_1.3.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "403": {
+      "name": "kworker/R-comp_1.0.1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "404": {
+      "name": "kworker/R-comp_1.1.1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "405": {
+      "name": "kworker/R-comp_1.2.1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "406": {
+      "name": "kworker/R-comp_1.3.1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "407": {
+      "name": "kworker/R-sdma0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "408": {
+      "name": "kworker/R-vcn_unified_0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "409": {
+      "name": "kworker/R-jpeg_dec_0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "410": {
+      "name": "kworker/R-vpe",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 461
+    },
+    "413": {
+      "name": "kworker/0:1H",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 465
+    },
+    "616": {
+      "name": "z_null_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1192,
+      "started": 542
+    },
+    "617": {
+      "name": "z_null_int",
+      "state": "S",
+      "parent": 2,
+      "ticks": 11473,
+      "started": 542
+    },
+    "618": {
+      "name": "z_rd_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 6,
+      "started": 542
+    },
+    "619": {
+      "name": "z_rd_int_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16914,
+      "started": 542
+    },
+    "620": {
+      "name": "z_rd_int_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16905,
+      "started": 542
+    },
+    "621": {
+      "name": "z_rd_int_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16877,
+      "started": 542
+    },
+    "622": {
+      "name": "z_rd_int_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16916,
+      "started": 542
+    },
+    "623": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 122488,
+      "started": 542
+    },
+    "624": {
+      "name": "z_wr_int_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16012,
+      "started": 542
+    },
+    "625": {
+      "name": "z_wr_int_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16033,
+      "started": 542
+    },
+    "626": {
+      "name": "z_wr_int_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16035,
+      "started": 542
+    },
+    "627": {
+      "name": "z_wr_int_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16057,
+      "started": 542
+    },
+    "628": {
+      "name": "z_fr_iss_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 553,
+      "started": 542
+    },
+    "629": {
+      "name": "z_fr_iss_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 559,
+      "started": 542
+    },
+    "630": {
+      "name": "z_fr_iss_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 555,
+      "started": 542
+    },
+    "631": {
+      "name": "z_fr_iss_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 557,
+      "started": 542
+    },
+    "632": {
+      "name": "z_fr_int",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "633": {
+      "name": "z_cl_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "634": {
+      "name": "z_cl_int",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "635": {
+      "name": "z_flush_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "636": {
+      "name": "z_flush_int",
+      "state": "S",
+      "parent": 2,
+      "ticks": 4305,
+      "started": 542
+    },
+    "637": {
+      "name": "z_trim_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 306,
+      "started": 542
+    },
+    "638": {
+      "name": "z_trim_int",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1930,
+      "started": 542
+    },
+    "639": {
+      "name": "z_zvol",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "640": {
+      "name": "z_metaslab",
+      "state": "S",
+      "parent": 2,
+      "ticks": 184,
+      "started": 542
+    },
+    "641": {
+      "name": "z_prefetch",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "642": {
+      "name": "z_upgrade",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "645": {
+      "name": "dp_sync_taskq",
+      "state": "S",
+      "parent": 2,
+      "ticks": 17357,
+      "started": 542
+    },
+    "646": {
+      "name": "dp_sync_taskq",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16771,
+      "started": 542
+    },
+    "647": {
+      "name": "dp_sync_taskq",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16095,
+      "started": 542
+    },
+    "648": {
+      "name": "dp_sync_taskq",
+      "state": "S",
+      "parent": 2,
+      "ticks": 16168,
+      "started": 542
+    },
+    "649": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 328,
+      "started": 542
+    },
+    "650": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 370,
+      "started": 542
+    },
+    "651": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 330,
+      "started": 542
+    },
+    "652": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 343,
+      "started": 542
+    },
+    "653": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 359,
+      "started": 542
+    },
+    "654": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 334,
+      "started": 542
+    },
+    "655": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 370,
+      "started": 542
+    },
+    "656": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 329,
+      "started": 542
+    },
+    "657": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 340,
+      "started": 542
+    },
+    "658": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 368,
+      "started": 542
+    },
+    "659": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 363,
+      "started": 542
+    },
+    "660": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 324,
+      "started": 542
+    },
+    "661": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 355,
+      "started": 542
+    },
+    "662": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 345,
+      "started": 542
+    },
+    "663": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 337,
+      "started": 542
+    },
+    "664": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 362,
+      "started": 542
+    },
+    "665": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 341,
+      "started": 542
+    },
+    "666": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 354,
+      "started": 542
+    },
+    "667": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 289,
+      "started": 542
+    },
+    "668": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 383,
+      "started": 542
+    },
+    "669": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 367,
+      "started": 542
+    },
+    "670": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 365,
+      "started": 542
+    },
+    "671": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 357,
+      "started": 542
+    },
+    "672": {
+      "name": "dp_zil_clean_ta",
+      "state": "S",
+      "parent": 2,
+      "ticks": 404,
+      "started": 542
+    },
+    "673": {
+      "name": "z_zrele",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "674": {
+      "name": "z_unlinked_drai",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 542
+    },
+    "702": {
+      "name": "txg_quiesce",
+      "state": "S",
+      "parent": 2,
+      "ticks": 206,
+      "started": 546
+    },
+    "703": {
+      "name": "txg_sync",
+      "state": "S",
+      "parent": 2,
+      "ticks": 47275,
+      "started": 546
+    },
+    "704": {
+      "name": "mmp",
+      "state": "S",
+      "parent": 2,
+      "ticks": 261,
+      "started": 546
+    },
+    "724": {
+      "name": "kworker/20:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 86,
+      "started": 553
+    },
+    "725": {
+      "name": "raidz_expand",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 553
+    },
+    "726": {
+      "name": "z_indirect_cond",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 553
+    },
+    "727": {
+      "name": "z_livelist_dest",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 553
+    },
+    "728": {
+      "name": "z_livelist_cond",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 553
+    },
+    "729": {
+      "name": "z_checkpoint_di",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 553
+    },
+    "730": {
+      "name": "vdev_autotrim",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2010,
+      "started": 553
+    },
+    "758": {
+      "name": "kworker/8:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 156,
+      "started": 558
+    },
+    "759": {
+      "name": "kworker/16:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 108,
+      "started": 558
+    },
+    "760": {
+      "name": "spl_system_task",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 558
+    },
+    "878": {
+      "name": "kworker/21:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 104,
+      "started": 683
+    },
+    "879": {
+      "name": "kworker/2:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 235,
+      "started": 683
+    },
+    "880": {
+      "name": "kworker/3:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 280,
+      "started": 683
+    },
+    "881": {
+      "name": "kworker/6:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 171,
+      "started": 683
+    },
+    "882": {
+      "name": "kworker/17:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 107,
+      "started": 684
+    },
+    "918": {
+      "name": "systemd-journal",
+      "state": "S",
+      "parent": 1,
+      "ticks": 930,
+      "started": 756
+    },
+    "951": {
+      "name": "systemd-udevd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 197818,
+      "started": 759
+    },
+    "955": {
+      "name": "kworker/13:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 134,
+      "started": 761
+    },
+    "957": {
+      "name": "kworker/19:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 77,
+      "started": 762
+    },
+    "959": {
+      "name": "kworker/12:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 228,
+      "started": 763
+    },
+    "960": {
+      "name": "psimon",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1,
+      "started": 764
+    },
+    "1061": {
+      "name": "kworker/R-acpi_thermal_pm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 771
+    },
+    "1067": {
+      "name": "irq/112-FRMW0005:00",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 772
+    },
+    "1073": {
+      "name": "irq/113-FRMW0004:00",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 772
+    },
+    "1075": {
+      "name": "irq/114-PIXA3854:00",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1417,
+      "started": 772
+    },
+    "1115": {
+      "name": "systemd-oomd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 56228,
+      "started": 786
+    },
+    "1159": {
+      "name": "watchdogd",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 792
+    },
+    "1169": {
+      "name": "kworker/R-edac-poller",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 794
+    },
+    "1194": {
+      "name": "kworker/R-notifier_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 800
+    },
+    "1200": {
+      "name": "kworker/R-cfg80211",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 801
+    },
+    "1217": {
+      "name": "kworker/R-USBC000:00-con1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 802
+    },
+    "1281": {
+      "name": "napi/phy0-0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 111186,
+      "started": 818
+    },
+    "1282": {
+      "name": "napi/phy0-0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 235444,
+      "started": 818
+    },
+    "1283": {
+      "name": "kworker/R-USBC000:00-con2",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 833
+    },
+    "1316": {
+      "name": "kworker/11:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 378,
+      "started": 862
+    },
+    "1387": {
+      "name": "dbus-broker-lau",
+      "state": "S",
+      "parent": 1,
+      "ticks": 16,
+      "started": 870
+    },
+    "1388": {
+      "name": "dbus-broker",
+      "state": "S",
+      "parent": 1387,
+      "ticks": 8560,
+      "started": 875
+    },
+    "1390": {
+      "name": "acpid",
+      "state": "S",
+      "parent": 1,
+      "ticks": 4381,
+      "started": 875
+    },
+    "1391": {
+      "name": "avahi-daemon",
+      "state": "S",
+      "parent": 1,
+      "ticks": 200904,
+      "started": 875
+    },
+    "1392": {
+      "name": "bluetoothd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 18462,
+      "started": 875
+    },
+    "1393": {
+      "name": "cosmic-greeter-",
+      "state": "S",
+      "parent": 1,
+      "ticks": 33,
+      "started": 876
+    },
+    "1396": {
+      "name": "iio-sensor-prox",
+      "state": "S",
+      "parent": 1,
+      "ticks": 18,
+      "started": 876
+    },
+    "1397": {
+      "name": "irqbalance",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1478,
+      "started": 876
+    },
+    "1415": {
+      "name": "scx_lavd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1156,
+      "started": 877
+    },
+    "1416": {
+      "name": "systemd-machine",
+      "state": "S",
+      "parent": 1,
+      "ticks": 34154,
+      "started": 877
+    },
+    "1449": {
+      "name": "systemd-logind",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1875,
+      "started": 879
+    },
+    "1496": {
+      "name": "kworker/18:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 83,
+      "started": 879
+    },
+    "1608": {
+      "name": "kworker/R-USBC000:00-con3",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 882
+    },
+    "1675": {
+      "name": "NetworkManager",
+      "state": "S",
+      "parent": 1,
+      "ticks": 2481,
+      "started": 883
+    },
+    "1696": {
+      "name": "systemd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1231,
+      "started": 884
+    },
+    "1703": {
+      "name": "kworker/10:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 399,
+      "started": 885
+    },
+    "1780": {
+      "name": "(sd-pam)",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 0,
+      "started": 887
+    },
+    "1789": {
+      "name": "dhcpcd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 32,
+      "started": 888
+    },
+    "1846": {
+      "name": "chronyd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 146,
+      "started": 891
+    },
+    "1848": {
+      "name": "dnsmasq",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1695,
+      "started": 892
+    },
+    "1900": {
+      "name": "determinate-nix",
+      "state": "S",
+      "parent": 1,
+      "ticks": 12331,
+      "started": 895
+    },
+    "1923": {
+      "name": "nix-daemon",
+      "state": "S",
+      "parent": 1900,
+      "ticks": 1287,
+      "started": 900
+    },
+    "1929": {
+      "name": "crashpad_handle",
+      "state": "S",
+      "parent": 1,
+      "ticks": 3,
+      "started": 903
+    },
+    "1959": {
+      "name": ".capacity-tmuxe",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 5551,
+      "started": 905
+    },
+    "1964": {
+      "name": ".maestral-wrapp",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 66330,
+      "started": 905
+    },
+    "1988": {
+      "name": "ssh-agent",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 7,
+      "started": 907
+    },
+    "1998": {
+      "name": "mt76-tx phy0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 28602,
+      "started": 915
+    },
+    "2016": {
+      "name": "wpa_supplicant",
+      "state": "S",
+      "parent": 1,
+      "ticks": 364,
+      "started": 922
+    },
+    "2162": {
+      "name": "kworker/R-USBC000:00-con4",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 941
+    },
+    "2540": {
+      "name": "kworker/1:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 194,
+      "started": 983
+    },
+    "2541": {
+      "name": "kworker/9:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 143,
+      "started": 983
+    },
+    "2543": {
+      "name": "dbus-broker-lau",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 3,
+      "started": 984
+    },
+    "2544": {
+      "name": "kworker/14:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 348,
+      "started": 984
+    },
+    "2548": {
+      "name": "dbus-broker",
+      "state": "S",
+      "parent": 2543,
+      "ticks": 405,
+      "started": 987
+    },
+    "2553": {
+      "name": ".gnome-keyring-",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 198,
+      "started": 997
+    },
+    "2578": {
+      "name": "kworker/23:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 360,
+      "started": 1011
+    },
+    "2650": {
+      "name": "scx_enable_helper",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 1026
+    },
+    "2651": {
+      "name": "sched_ext_helper",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 1026
+    },
+    "2693": {
+      "name": "greetd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 0,
+      "started": 1045
+    },
+    "2777": {
+      "name": ".tailscaled-wra",
+      "state": "S",
+      "parent": 1,
+      "ticks": 10397,
+      "started": 1255
+    },
+    "2922": {
+      "name": "dockerd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 3255,
+      "started": 1390
+    },
+    "2923": {
+      "name": "mullvad-daemon",
+      "state": "S",
+      "parent": 1,
+      "ticks": 242,
+      "started": 1390
+    },
+    "2966": {
+      "name": "containerd",
+      "state": "S",
+      "parent": 2922,
+      "ticks": 13938,
+      "started": 1405
+    },
+    "2998": {
+      "name": "kworker/5:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 199,
+      "started": 1417
+    },
+    "3002": {
+      "name": "kworker/7:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 157,
+      "started": 1426
+    },
+    "3552": {
+      "name": "greetd",
+      "state": "S",
+      "parent": 2693,
+      "ticks": 0,
+      "started": 1716
+    },
+    "3554": {
+      "name": "upowerd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 55105,
+      "started": 1717
+    },
+    "3578": {
+      "name": "kworker/15:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 157,
+      "started": 1730
+    },
+    "3616": {
+      "name": "cosmic-session",
+      "state": "S",
+      "parent": 3552,
+      "ticks": 45,
+      "started": 2063
+    },
+    "3703": {
+      "name": "cosmic-comp",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 1916477,
+      "started": 2068
+    },
+    "3739": {
+      "name": "Xwayland",
+      "state": "S",
+      "parent": 3703,
+      "ticks": 8421,
+      "started": 2083
+    },
+    "3764": {
+      "name": "cosmic-settings",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 10094,
+      "started": 2090
+    },
+    "3774": {
+      "name": ".udiskie-wrappe",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 1132,
+      "started": 2092
+    },
+    "3777": {
+      "name": "cosmic-notifica",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 22502,
+      "started": 2093
+    },
+    "3782": {
+      "name": "cosmic-panel",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 117126,
+      "started": 2093
+    },
+    "3783": {
+      "name": "rtkit-daemon",
+      "state": "S",
+      "parent": 1,
+      "ticks": 265,
+      "started": 2093
+    },
+    "3784": {
+      "name": "cosmic-app-libr",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 15792,
+      "started": 2093
+    },
+    "3788": {
+      "name": "pipewire",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 2952,
+      "started": 2093
+    },
+    "3789": {
+      "name": "cosmic-launcher",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 29189,
+      "started": 2093
+    },
+    "3790": {
+      "name": "wireplumber",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 1532,
+      "started": 2093
+    },
+    "3791": {
+      "name": "cosmic-workspac",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 139999,
+      "started": 2093
+    },
+    "3792": {
+      "name": "cosmic-osd",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 15918,
+      "started": 2094
+    },
+    "3795": {
+      "name": "cosmic-bg",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 43194,
+      "started": 2094
+    },
+    "3799": {
+      "name": "cosmic-greeter",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 78243,
+      "started": 2094
+    },
+    "3801": {
+      "name": "cosmic-idle",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 103,
+      "started": 2094
+    },
+    "3935": {
+      "name": ".at-spi-bus-lau",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 4,
+      "started": 2096
+    },
+    "4100": {
+      "name": "pop-launcher",
+      "state": "S",
+      "parent": 3789,
+      "ticks": 43,
+      "started": 2101
+    },
+    "4108": {
+      "name": ".xdg-desktop-po",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 889,
+      "started": 2101
+    },
+    "4143": {
+      "name": ".cbar-wrapped",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 22958,
+      "started": 2103
+    },
+    "4144": {
+      "name": "cosmic-toplevel",
+      "state": "S",
+      "parent": 4100,
+      "ticks": 6511,
+      "started": 2103
+    },
+    "4145": {
+      "name": "cosmic-applet-a",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 46,
+      "started": 2103
+    },
+    "4150": {
+      "name": "cosmic-applet-a",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 222,
+      "started": 2103
+    },
+    "4153": {
+      "name": "cosmic-applet-b",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 8177,
+      "started": 2103
+    },
+    "4155": {
+      "name": "cosmic-applet-i",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 403,
+      "started": 2104
+    },
+    "4156": {
+      "name": "cosmic-applet-n",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 180,
+      "started": 2104
+    },
+    "4158": {
+      "name": "cosmic-applet-n",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 97,
+      "started": 2104
+    },
+    "4159": {
+      "name": "cosmic-applet-p",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 43,
+      "started": 2104
+    },
+    "4160": {
+      "name": "cosmic-applet-s",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 49,
+      "started": 2105
+    },
+    "4161": {
+      "name": "cosmic-applet-t",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 15770,
+      "started": 2105
+    },
+    "4162": {
+      "name": "cosmic-applet-t",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 563,
+      "started": 2105
+    },
+    "4168": {
+      "name": ".xdg-permission",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 1,
+      "started": 2106
+    },
+    "4169": {
+      "name": "cosmic-applet-w",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 10877,
+      "started": 2106
+    },
+    "4200": {
+      "name": ".gvfsd-wrapped",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 28,
+      "started": 2110
+    },
+    "4203": {
+      "name": ".xdg-document-p",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 120,
+      "started": 2110
+    },
+    "4240": {
+      "name": "fusermount3",
+      "state": "S",
+      "parent": 4203,
+      "ticks": 0,
+      "started": 2113
+    },
+    "4249": {
+      "name": ".gvfsd-fuse-wra",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 3,
+      "started": 2114
+    },
+    "4250": {
+      "name": ".xdg-desktop-po",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 618,
+      "started": 2114
+    },
+    "4261": {
+      "name": ".gvfs-udisks2-v",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 51,
+      "started": 2114
+    },
+    "4529": {
+      "name": "udisksd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 302,
+      "started": 2115
+    },
+    "4565": {
+      "name": "cosmic-applet-s",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 104,
+      "started": 2116
+    },
+    "4572": {
+      "name": "power-profiles-",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1346,
+      "started": 2118
+    },
+    "4619": {
+      "name": "dbus-broker-lau",
+      "state": "S",
+      "parent": 3935,
+      "ticks": 0,
+      "started": 2121
+    },
+    "4621": {
+      "name": "dbus-broker",
+      "state": "S",
+      "parent": 4619,
+      "ticks": 223,
+      "started": 2121
+    },
+    "4629": {
+      "name": "at-spi2-registr",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 246,
+      "started": 2124
+    },
+    "4630": {
+      "name": ".gvfs-goa-volum",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 4,
+      "started": 2125
+    },
+    "4635": {
+      "name": "krfcommd",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 2126
+    },
+    "4645": {
+      "name": ".gvfs-mtp-volum",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 14,
+      "started": 2127
+    },
+    "4648": {
+      "name": "xdg-desktop-por",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 85480,
+      "started": 2128
+    },
+    "4676": {
+      "name": ".gvfs-gphoto2-v",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 13,
+      "started": 2129
+    },
+    "4703": {
+      "name": ".gvfs-afc-volum",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 419,
+      "started": 2132
+    },
+    "4992": {
+      "name": ".ghostty-wrappe",
+      "state": "S",
+      "parent": 3703,
+      "ticks": 7858872,
+      "started": 3481
+    },
+    "5045": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 12,
+      "started": 3512
+    },
+    "7271": {
+      "name": ".fwupd-wrapped",
+      "state": "S",
+      "parent": 1,
+      "ticks": 4519,
+      "started": 109496
+    },
+    "9584": {
+      "name": ".firefox-wrappe",
+      "state": "S",
+      "parent": 1,
+      "ticks": 829604,
+      "started": 209793
+    },
+    "9595": {
+      "name": "crashhelper",
+      "state": "S",
+      "parent": 1,
+      "ticks": 30,
+      "started": 209801
+    },
+    "9707": {
+      "name": "forkserver",
+      "state": "S",
+      "parent": 9584,
+      "ticks": 290,
+      "started": 209831
+    },
+    "9710": {
+      "name": "Socket Process",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 17,
+      "started": 209836
+    },
+    "9736": {
+      "name": "Privileged Cont",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 33651,
+      "started": 209859
+    },
+    "9744": {
+      "name": "RDD Process",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 287424,
+      "started": 209859
+    },
+    "9806": {
+      "name": "WebExtensions",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 5214,
+      "started": 209891
+    },
+    "9848": {
+      "name": "Utility Process",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 364,
+      "started": 209916
+    },
+    "9865": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 81733,
+      "started": 209959
+    },
+    "9869": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 23709,
+      "started": 209959
+    },
+    "10218": {
+      "name": "pipewire-pulse",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 3920,
+      "started": 212400
+    },
+    "11146": {
+      "name": "kworker/22:1H-kblockd",
+      "state": "I",
+      "parent": 2,
+      "ticks": 337,
+      "started": 228383
+    },
+    "11848": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 5,
+      "started": 264349
+    },
+    "12360": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 11848,
+      "ticks": 485209,
+      "started": 265747
+    },
+    "14637": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 21,
+      "started": 299374
+    },
+    "17003": {
+      "name": "python3",
+      "state": "S",
+      "parent": 14637,
+      "ticks": 15001,
+      "started": 302436
+    },
+    "26373": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 63,
+      "started": 465770
+    },
+    "38684": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 4,
+      "started": 583844
+    },
+    "39203": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 38684,
+      "ticks": 253583,
+      "started": 587732
+    },
+    "39332": {
+      "name": "MainThread",
+      "state": "S",
+      "parent": 39203,
+      "ticks": 43,
+      "started": 587854
+    },
+    "46057": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 133,
+      "started": 675992
+    },
+    "46781": {
+      "name": "code",
+      "state": "S",
+      "parent": 1,
+      "ticks": 14108,
+      "started": 676576
+    },
+    "46827": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 2,
+      "started": 676578
+    },
+    "46835": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 2,
+      "started": 676578
+    },
+    "46838": {
+      "name": "code",
+      "state": "S",
+      "parent": 46835,
+      "ticks": 0,
+      "started": 676581
+    },
+    "46881": {
+      "name": "code",
+      "state": "S",
+      "parent": 46827,
+      "ticks": 10199,
+      "started": 676611
+    },
+    "46891": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 1877,
+      "started": 676612
+    },
+    "46940": {
+      "name": "code",
+      "state": "S",
+      "parent": 46838,
+      "ticks": 43568,
+      "started": 676627
+    },
+    "46986": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 4641,
+      "started": 676684
+    },
+    "47001": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 13310,
+      "started": 676687
+    },
+    "47002": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 7367,
+      "started": 676687
+    },
+    "47061": {
+      "name": "code",
+      "state": "S",
+      "parent": 46986,
+      "ticks": 293,
+      "started": 676749
+    },
+    "47210": {
+      "name": "code",
+      "state": "S",
+      "parent": 46986,
+      "ticks": 876,
+      "started": 677202
+    },
+    "47219": {
+      "name": "code",
+      "state": "S",
+      "parent": 46986,
+      "ticks": 837,
+      "started": 677208
+    },
+    "63011": {
+      "name": "code",
+      "state": "S",
+      "parent": 46781,
+      "ticks": 36217,
+      "started": 1133679
+    },
+    "63033": {
+      "name": "bash",
+      "state": "S",
+      "parent": 63011,
+      "ticks": 1,
+      "started": 1133696
+    },
+    "66882": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 5,
+      "started": 1170502
+    },
+    "67274": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 66882,
+      "ticks": 264621,
+      "started": 1170861
+    },
+    "115677": {
+      "name": "kworker/u99:0-hci0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1105,
+      "started": 1582683
+    },
+    "144594": {
+      "name": "bash",
+      "state": "S",
+      "parent": 1,
+      "ticks": 0,
+      "started": 5222463
+    },
+    "144596": {
+      "name": "tail",
+      "state": "S",
+      "parent": 144594,
+      "ticks": 159,
+      "started": 5222463
+    },
+    "144597": {
+      "name": "grep",
+      "state": "S",
+      "parent": 144594,
+      "ticks": 45,
+      "started": 5222463
+    },
+    "208751": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 26373,
+      "ticks": 142070,
+      "started": 5358060
+    },
+    "275861": {
+      "name": "dconf-service",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 2,
+      "started": 1820188
+    },
+    "347953": {
+      "name": ".gedit-wrapped",
+      "state": "S",
+      "parent": 1,
+      "ticks": 26629,
+      "started": 1859907
+    },
+    "690420": {
+      "name": "psimon",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 8794793
+    },
+    "690439": {
+      "name": "polkitd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 376,
+      "started": 8794827
+    },
+    "690457": {
+      "name": "accounts-daemon",
+      "state": "S",
+      "parent": 1,
+      "ticks": 5,
+      "started": 8794830
+    },
+    "691007": {
+      "name": "codex",
+      "state": "S",
+      "parent": 1,
+      "ticks": 1848,
+      "started": 8796296
+    },
+    "1146145": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 32,
+      "started": 9990023
+    },
+    "1147841": {
+      "name": "codex",
+      "state": "S",
+      "parent": 1146145,
+      "ticks": 6302,
+      "started": 9992190
+    },
+    "1148205": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 34,
+      "started": 9993407
+    },
+    "1157057": {
+      "name": "codex",
+      "state": "S",
+      "parent": 1148205,
+      "ticks": 147700,
+      "started": 10013961
+    },
+    "1547683": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 88,
+      "started": 11273122
+    },
+    "1549978": {
+      "name": "codex",
+      "state": "S",
+      "parent": 1547683,
+      "ticks": 260956,
+      "started": 11278078
+    },
+    "1665994": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 21,
+      "started": 11593885
+    },
+    "1668693": {
+      "name": "codex",
+      "state": "S",
+      "parent": 1665994,
+      "ticks": 398041,
+      "started": 11602525
+    },
+    "1911879": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 31,
+      "started": 12470445
+    },
+    "1917815": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 1911879,
+      "ticks": 62212,
+      "started": 12473757
+    },
+    "1918195": {
+      "name": "MainThread",
+      "state": "S",
+      "parent": 1917815,
+      "ticks": 130,
+      "started": 12474005
+    },
+    "2143282": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 49,
+      "started": 13011447
+    },
+    "2143556": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 2143282,
+      "ticks": 189709,
+      "started": 13012405
+    },
+    "2705823": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 21,
+      "started": 14110285
+    },
+    "2707550": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 2705823,
+      "ticks": 377269,
+      "started": 14113941
+    },
+    "2779747": {
+      "name": ".gvfsd-trash-wr",
+      "state": "S",
+      "parent": 4200,
+      "ticks": 10,
+      "started": 14267211
+    },
+    "2779772": {
+      "name": ".gvfsd-network-",
+      "state": "S",
+      "parent": 4200,
+      "ticks": 17,
+      "started": 14267245
+    },
+    "2779780": {
+      "name": ".gvfsd-dnssd-wr",
+      "state": "S",
+      "parent": 4200,
+      "ticks": 17,
+      "started": 14267248
+    },
+    "2796647": {
+      "name": "kworker/u99:1-hci0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1013,
+      "started": 2862957
+    },
+    "2796884": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 8,
+      "started": 2866006
+    },
+    "2797706": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 2796884,
+      "ticks": 562539,
+      "started": 2867611
+    },
+    "2820057": {
+      "name": "speech-dispatch",
+      "state": "S",
+      "parent": 1696,
+      "ticks": 19,
+      "started": 2951899
+    },
+    "2820069": {
+      "name": "sd_voxin",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951902
+    },
+    "2820070": {
+      "name": "sd_baratinoo",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951902
+    },
+    "2820071": {
+      "name": "sd_pico",
+      "state": "S",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951902
+    },
+    "2820073": {
+      "name": "sd_cicero",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951904
+    },
+    "2820074": {
+      "name": "sd_kali",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951904
+    },
+    "2820075": {
+      "name": "sd_festival",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951904
+    },
+    "2820076": {
+      "name": "sd_flite",
+      "state": "S",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951904
+    },
+    "2820077": {
+      "name": "sd_espeak-ng-mb",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 3,
+      "started": 2951905
+    },
+    "2820173": {
+      "name": "sd_espeak-ng",
+      "state": "S",
+      "parent": 2820057,
+      "ticks": 1,
+      "started": 2951913
+    },
+    "2820174": {
+      "name": "sd_dummy",
+      "state": "S",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951922
+    },
+    "2820177": {
+      "name": "sd_openjtalk",
+      "state": "Z",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951924
+    },
+    "2820178": {
+      "name": "sd_espeak-ng",
+      "state": "S",
+      "parent": 2820057,
+      "ticks": 0,
+      "started": 2951924
+    },
+    "3179933": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 4,
+      "started": 3634247
+    },
+    "3180246": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 3179933,
+      "ticks": 215339,
+      "started": 3636118
+    },
+    "3209974": {
+      "name": "kworker/10:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 2406,
+      "started": 15371322
+    },
+    "3602952": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 85,
+      "started": 4015356
+    },
+    "3646439": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 3602952,
+      "ticks": 1059991,
+      "started": 4057828
+    },
+    "3664200": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 70,
+      "started": 4061246
+    },
+    "3697887": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 3664200,
+      "ticks": 564778,
+      "started": 4084643
+    },
+    "3805096": {
+      "name": "codex",
+      "state": "S",
+      "parent": 691007,
+      "ticks": 37516,
+      "started": 17154154
+    },
+    "3805725": {
+      "name": "codex-code-mode",
+      "state": "S",
+      "parent": 3805096,
+      "ticks": 695,
+      "started": 17155994
+    },
+    "3822104": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 4,
+      "started": 4293689
+    },
+    "3822212": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 3822104,
+      "ticks": 186003,
+      "started": 4293856
+    },
+    "3826818": {
+      "name": "zed",
+      "state": "S",
+      "parent": 1,
+      "ticks": 4,
+      "started": 17273057
+    },
+    "3827016": {
+      "name": "nsncd",
+      "state": "S",
+      "parent": 1,
+      "ticks": 6107,
+      "started": 17273487
+    },
+    "3832491": {
+      "name": ".cbar-wrapped",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 1633,
+      "started": 17287497
+    },
+    "3832495": {
+      "name": "cosmic-applet-a",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 31,
+      "started": 17287499
+    },
+    "3832500": {
+      "name": "cosmic-applet-a",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 45,
+      "started": 17287501
+    },
+    "3832505": {
+      "name": "cosmic-applet-b",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 101,
+      "started": 17287503
+    },
+    "3832507": {
+      "name": "cosmic-applet-b",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 835,
+      "started": 17287504
+    },
+    "3832508": {
+      "name": "cosmic-applet-i",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 125,
+      "started": 17287506
+    },
+    "3832509": {
+      "name": "cosmic-applet-n",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 38,
+      "started": 17287508
+    },
+    "3832514": {
+      "name": "cosmic-applet-n",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 30,
+      "started": 17287512
+    },
+    "3832516": {
+      "name": "cosmic-applet-p",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 23,
+      "started": 17287513
+    },
+    "3832517": {
+      "name": "cosmic-applet-s",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 24,
+      "started": 17287515
+    },
+    "3832518": {
+      "name": "cosmic-applet-t",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 1498,
+      "started": 17287516
+    },
+    "3832520": {
+      "name": "cosmic-applet-t",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 71,
+      "started": 17287517
+    },
+    "3832521": {
+      "name": "cosmic-applet-w",
+      "state": "S",
+      "parent": 3782,
+      "ticks": 991,
+      "started": 17287519
+    },
+    "3834003": {
+      "name": "herdr",
+      "state": "S",
+      "parent": 5045,
+      "ticks": 3391,
+      "started": 17298233
+    },
+    "3834026": {
+      "name": "ssh",
+      "state": "S",
+      "parent": 1,
+      "ticks": 6861,
+      "started": 17298452
+    },
+    "3834047": {
+      "name": "herdr",
+      "state": "R",
+      "parent": 3834003,
+      "ticks": 514654,
+      "started": 17298795
+    },
+    "3834048": {
+      "name": "ssh",
+      "state": "S",
+      "parent": 3834003,
+      "ticks": 0,
+      "started": 17298800
+    },
+    "3838819": {
+      "name": "cosmic-files-ap",
+      "state": "S",
+      "parent": 3616,
+      "ticks": 3916,
+      "started": 17326825
+    },
+    "3934266": {
+      "name": "kworker/9:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 308,
+      "started": 17850277
+    },
+    "3978367": {
+      "name": "kworker/11:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 563,
+      "started": 18011996
+    },
+    "3980427": {
+      "name": "kworker/5:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 263,
+      "started": 18033856
+    },
+    "3996211": {
+      "name": "z_rd_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18165457
+    },
+    "3996625": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 33,
+      "started": 18169778
+    },
+    "3996935": {
+      "name": ".claude-wrapped",
+      "state": "S",
+      "parent": 3996625,
+      "ticks": 63654,
+      "started": 18171167
+    },
+    "4003215": {
+      "name": "kworker/6:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 190,
+      "started": 18217749
+    },
+    "4007482": {
+      "name": "kworker/u98:1-flush-zfs-1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1211,
+      "started": 18239627
+    },
+    "4068781": {
+      "name": "kworker/20:0-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 71,
+      "started": 18298967
+    },
+    "4068899": {
+      "name": "kworker/22:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 238,
+      "started": 18299384
+    },
+    "4076274": {
+      "name": "kworker/21:1-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 63,
+      "started": 18332165
+    },
+    "4078126": {
+      "name": "kworker/u100:0-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 2,
+      "started": 18341776
+    },
+    "4080796": {
+      "name": "kworker/12:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 121,
+      "started": 18357654
+    },
+    "4087635": {
+      "name": "kworker/18:0-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 47,
+      "started": 18412072
+    },
+    "4090771": {
+      "name": "kworker/13:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 51,
+      "started": 18435435
+    },
+    "4091149": {
+      "name": "kworker/19:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 38,
+      "started": 18438693
+    },
+    "4091224": {
+      "name": "kworker/7:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 105,
+      "started": 18439555
+    },
+    "4096835": {
+      "name": "kworker/23:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 221,
+      "started": 18461221
+    },
+    "4106005": {
+      "name": "kworker/4:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 104,
+      "started": 18509468
+    },
+    "4106332": {
+      "name": "kworker/3:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 40,
+      "started": 18512887
+    },
+    "4106842": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 5969,
+      "started": 18519485
+    },
+    "4106852": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 4718,
+      "started": 18519486
+    },
+    "4110141": {
+      "name": "kworker/2:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 59,
+      "started": 18534673
+    },
+    "4112275": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 581,
+      "started": 18539101
+    },
+    "4116020": {
+      "name": "kworker/u96:0-mt76",
+      "state": "I",
+      "parent": 2,
+      "ticks": 519,
+      "started": 18573525
+    },
+    "4116721": {
+      "name": "kworker/14:0-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 39,
+      "started": 18581048
+    },
+    "4120931": {
+      "name": "kworker/1:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 19,
+      "started": 18608222
+    },
+    "4121232": {
+      "name": "kworker/u97:3-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 151,
+      "started": 18612026
+    },
+    "4121254": {
+      "name": "kworker/u98:3-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 329,
+      "started": 18612292
+    },
+    "4121439": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 2505,
+      "started": 18612901
+    },
+    "4121548": {
+      "name": "kworker/u98:5-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 345,
+      "started": 18613182
+    },
+    "4121839": {
+      "name": "kworker/u96:3-sdma0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 336,
+      "started": 18616436
+    },
+    "4121842": {
+      "name": "kworker/u101:5-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18616442
+    },
+    "4124663": {
+      "name": "kworker/8:2-rcu_gp",
+      "state": "I",
+      "parent": 2,
+      "ticks": 29,
+      "started": 18642317
+    },
+    "4125113": {
+      "name": "kworker/11:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18645253
+    },
+    "4125337": {
+      "name": "kworker/u96:1-gfx_0.0.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 322,
+      "started": 18646654
+    },
+    "4125370": {
+      "name": "kworker/u98:2-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 279,
+      "started": 18647076
+    },
+    "4126117": {
+      "name": "kworker/17:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 15,
+      "started": 18652505
+    },
+    "4126261": {
+      "name": "kworker/u101:7-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18653601
+    },
+    "4126271": {
+      "name": "kworker/u100:7-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18653657
+    },
+    "4126274": {
+      "name": "kworker/u100:15-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18653657
+    },
+    "4127356": {
+      "name": "kworker/u97:2-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 144,
+      "started": 18660080
+    },
+    "4127407": {
+      "name": "kworker/u98:4-flush-zfs-4",
+      "state": "I",
+      "parent": 2,
+      "ticks": 85,
+      "started": 18660087
+    },
+    "4128192": {
+      "name": "kworker/15:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 27,
+      "started": 18663127
+    },
+    "4128926": {
+      "name": "kworker/16:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 38,
+      "started": 18666267
+    },
+    "4129117": {
+      "name": "kworker/2:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 18,
+      "started": 18667059
+    },
+    "4129489": {
+      "name": "kworker/0:2-rcu_gp",
+      "state": "I",
+      "parent": 2,
+      "ticks": 43,
+      "started": 18668892
+    },
+    "4130003": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 266,
+      "started": 18670731
+    },
+    "4130571": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 266,
+      "started": 18674315
+    },
+    "4131101": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 261,
+      "started": 18676875
+    },
+    "4131911": {
+      "name": "kworker/u97:4-events_unbound",
+      "state": "I",
+      "parent": 2,
+      "ticks": 78,
+      "started": 18680078
+    },
+    "4131948": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 255,
+      "started": 18680459
+    },
+    "4132571": {
+      "name": "kworker/7:0-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 7,
+      "started": 18684422
+    },
+    "4132609": {
+      "name": "kworker/6:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18684685
+    },
+    "4132855": {
+      "name": "kworker/23:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18686093
+    },
+    "4132906": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 153,
+      "started": 18686603
+    },
+    "4133146": {
+      "name": "kworker/12:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18687596
+    },
+    "4133722": {
+      "name": "kworker/10:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18689165
+    },
+    "4133887": {
+      "name": "kworker/17:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18689976
+    },
+    "4133987": {
+      "name": "kworker/13:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18690685
+    },
+    "4133990": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 135,
+      "started": 18690699
+    },
+    "4134205": {
+      "name": "kworker/21:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18691575
+    },
+    "4134750": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 133,
+      "started": 18692235
+    },
+    "4134868": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 130,
+      "started": 18693259
+    },
+    "4135108": {
+      "name": "kworker/5:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18695294
+    },
+    "4135140": {
+      "name": "kworker/3:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 21,
+      "started": 18695523
+    },
+    "4135385": {
+      "name": "kworker/15:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18697047
+    },
+    "4135628": {
+      "name": "kworker/4:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 6,
+      "started": 18699150
+    },
+    "4136038": {
+      "name": "kworker/0:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18702273
+    },
+    "4136080": {
+      "name": "kworker/14:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 15,
+      "started": 18702667
+    },
+    "4136247": {
+      "name": "kworker/u96:4-gfx_0.0.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 88,
+      "started": 18703784
+    },
+    "4136398": {
+      "name": "kworker/8:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18704933
+    },
+    "4136399": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 99,
+      "started": 18705034
+    },
+    "4136489": {
+      "name": "kworker/1:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18706024
+    },
+    "4136649": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4992,
+      "ticks": 20,
+      "started": 18706788
+    },
+    "4136859": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 101,
+      "started": 18707083
+    },
+    "4137179": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 100,
+      "started": 18709132
+    },
+    "4137430": {
+      "name": "kworker/u101:0-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710492
+    },
+    "4137431": {
+      "name": "kworker/u101:1-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710499
+    },
+    "4137432": {
+      "name": "kworker/u101:2-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710499
+    },
+    "4137433": {
+      "name": "kworker/u101:3-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137434": {
+      "name": "kworker/u101:4-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137435": {
+      "name": "kworker/u101:6-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137436": {
+      "name": "kworker/u101:8-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137437": {
+      "name": "kworker/u101:9-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18710508
+    },
+    "4137438": {
+      "name": "kworker/u101:10-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137439": {
+      "name": "kworker/u101:11-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137440": {
+      "name": "kworker/u101:12-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137441": {
+      "name": "kworker/u101:13-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137442": {
+      "name": "kworker/u101:14-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18710508
+    },
+    "4137443": {
+      "name": "kworker/u101:15-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710508
+    },
+    "4137452": {
+      "name": "kworker/u100:1-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18710561
+    },
+    "4137469": {
+      "name": "bash",
+      "state": "S",
+      "parent": 2707550,
+      "ticks": 0,
+      "started": 18710799
+    },
+    "4137471": {
+      "name": "bash",
+      "state": "S",
+      "parent": 4137469,
+      "ticks": 0,
+      "started": 18710799
+    },
+    "4137472": {
+      "name": ".cargo-wrapped",
+      "state": "S",
+      "parent": 4137471,
+      "ticks": 489,
+      "started": 18710800
+    },
+    "4137473": {
+      "name": "grep",
+      "state": "S",
+      "parent": 4137471,
+      "ticks": 0,
+      "started": 18710800
+    },
+    "4137474": {
+      "name": "tail",
+      "state": "S",
+      "parent": 4137471,
+      "ticks": 0,
+      "started": 18710800
+    },
+    "4137478": {
+      "name": "crashpad_handle",
+      "state": "S",
+      "parent": 1,
+      "ticks": 0,
+      "started": 18710802
+    },
+    "4137576": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 93,
+      "started": 18711179
+    },
+    "4137631": {
+      "name": "kworker/18:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18711486
+    },
+    "4137704": {
+      "name": "Isolated Servic",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 43,
+      "started": 18712141
+    },
+    "4137740": {
+      "name": "kworker/22:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18712206
+    },
+    "4137777": {
+      "name": "kworker/16:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18712491
+    },
+    "4138034": {
+      "name": "kworker/20:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18713809
+    },
+    "4138111": {
+      "name": "kworker/9:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18713956
+    },
+    "4138289": {
+      "name": "kworker/19:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18714664
+    },
+    "4138545": {
+      "name": "kworker/6:1-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18715601
+    },
+    "4138624": {
+      "name": "z_rd_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18715810
+    },
+    "4138625": {
+      "name": "z_rd_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18715810
+    },
+    "4138698": {
+      "name": "rustc",
+      "state": "S",
+      "parent": 4137472,
+      "ticks": 171323,
+      "started": 18716176
+    },
+    "4138787": {
+      "name": "kworker/u100:2-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18716909
+    },
+    "4138800": {
+      "name": "kworker/u100:3-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18716956
+    },
+    "4138801": {
+      "name": "kworker/u100:4-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18716973
+    },
+    "4138803": {
+      "name": "kworker/u100:5-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18716974
+    },
+    "4138855": {
+      "name": "kworker/u100:6-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138856": {
+      "name": "kworker/u100:8-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138857": {
+      "name": "kworker/u100:9-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138858": {
+      "name": "kworker/u100:10-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138859": {
+      "name": "kworker/u100:11-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138860": {
+      "name": "kworker/u100:12-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138861": {
+      "name": "kworker/u100:13-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138862": {
+      "name": "kworker/u100:14-ttm",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138863": {
+      "name": "kworker/u100:16",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18717192
+    },
+    "4138978": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 72,
+      "started": 18717835
+    },
+    "4139085": {
+      "name": "kworker/12:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18718554
+    },
+    "4139160": {
+      "name": "kworker/u97:0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18718808
+    },
+    "4139166": {
+      "name": "kworker/23:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18718862
+    },
+    "4139344": {
+      "name": "Isolated Web Co",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 1526,
+      "started": 18719824
+    },
+    "4139898": {
+      "name": "Web Content",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 11,
+      "started": 18722449
+    },
+    "4140042": {
+      "name": "kworker/13:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18723066
+    },
+    "4140106": {
+      "name": "kworker/17:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18723360
+    },
+    "4140613": {
+      "name": "kworker/10:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18726542
+    },
+    "4140700": {
+      "name": "z_trim_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18727053
+    },
+    "4140909": {
+      "name": "kworker/3:1-events_freezable",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18728197
+    },
+    "4141145": {
+      "name": "kworker/15:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18729429
+    },
+    "4141172": {
+      "name": "Web Content",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 10,
+      "started": 18729598
+    },
+    "4141529": {
+      "name": "kworker/2:2-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18731166
+    },
+    "4141551": {
+      "name": "kworker/4:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 6,
+      "started": 18731205
+    },
+    "4141747": {
+      "name": "kworker/21:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18732110
+    },
+    "4142237": {
+      "name": "kworker/0:0-rcu_gp",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18734425
+    },
+    "4142277": {
+      "name": "z_trim_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18734734
+    },
+    "4142368": {
+      "name": "kworker/14:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18735288
+    },
+    "4142454": {
+      "name": "kworker/u96:2-comp_1.1.0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 16,
+      "started": 18735794
+    },
+    "4142515": {
+      "name": "kworker/5:2-mm_percpu_wq",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18736270
+    },
+    "4142791": {
+      "name": "kworker/8:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18737701
+    },
+    "4142828": {
+      "name": "kworker/1:0-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18737857
+    },
+    "4142938": {
+      "name": "z_fr_iss_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18738319
+    },
+    "4142943": {
+      "name": "z_fr_iss_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18738319
+    },
+    "4143263": {
+      "name": "spl_kmem_cache",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18739783
+    },
+    "4143264": {
+      "name": "spl_kmem_cache",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18739783
+    },
+    "4143341": {
+      "name": "kworker/7:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18740132
+    },
+    "4143390": {
+      "name": "z_trim_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18740367
+    },
+    "4143481": {
+      "name": "z_wr_int_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 18740877
+    },
+    "4143694": {
+      "name": "Web Content",
+      "state": "S",
+      "parent": 9707,
+      "ticks": 17,
+      "started": 18741716
+    },
+    "4143768": {
+      "name": "z_wr_int_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 1,
+      "started": 18741900
+    },
+    "4143810": {
+      "name": "kworker/u101:16",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742083
+    },
+    "4143871": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 5,
+      "started": 18742412
+    },
+    "4143875": {
+      "name": "z_fr_iss_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143877": {
+      "name": "z_fr_iss_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143880": {
+      "name": "z_fr_iss_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143881": {
+      "name": "z_fr_iss_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143882": {
+      "name": "z_fr_iss_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143883": {
+      "name": "z_fr_iss_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143884": {
+      "name": "z_fr_iss_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143885": {
+      "name": "z_fr_iss_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143887": {
+      "name": "z_fr_iss_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143888": {
+      "name": "z_fr_iss_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143889": {
+      "name": "z_fr_iss_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742414
+    },
+    "4143945": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 18742924
+    },
+    "4143952": {
+      "name": "z_metaslab",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18742926
+    },
+    "4143990": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 18743436
+    },
+    "4144219": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 2,
+      "started": 18743947
+    },
+    "4144220": {
+      "name": "z_wr_int_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18743949
+    },
+    "4144221": {
+      "name": "z_wr_int_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18743949
+    },
+    "4144222": {
+      "name": "z_wr_int_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18743949
+    },
+    "4144223": {
+      "name": "z_wr_int_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18743949
+    },
+    "4144235": {
+      "name": "sleep",
+      "state": "S",
+      "parent": 1959,
+      "ticks": 0,
+      "started": 18744043
+    },
+    "4144248": {
+      "name": "kworker/16:1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744272
+    },
+    "4144286": {
+      "name": "z_wr_int_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744461
+    },
+    "4144288": {
+      "name": "z_wr_int_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744461
+    },
+    "4144290": {
+      "name": "kworker/22:1",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744461
+    },
+    "4144291": {
+      "name": "z_metaslab",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744462
+    },
+    "4144306": {
+      "name": "kworker/19:0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744665
+    },
+    "4144311": {
+      "name": "kworker/9:1-events",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744710
+    },
+    "4144343": {
+      "name": "z_wr_iss",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744972
+    },
+    "4144344": {
+      "name": "z_wr_int_3",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744973
+    },
+    "4144345": {
+      "name": "z_wr_int_0",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744973
+    },
+    "4144346": {
+      "name": "z_wr_int_2",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744973
+    },
+    "4144347": {
+      "name": "z_wr_int_1",
+      "state": "S",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18744973
+    },
+    "4144362": {
+      "name": "(udev-worker)",
+      "state": "S",
+      "parent": 951,
+      "ticks": 0,
+      "started": 18745213
+    },
+    "4144365": {
+      "name": "kworker/18:2",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18745232
+    },
+    "4144366": {
+      "name": "kworker/u98:0",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18745232
+    },
+    "4144367": {
+      "name": "kworker/u98:6",
+      "state": "I",
+      "parent": 2,
+      "ticks": 0,
+      "started": 18745232
+    },
+    "4144371": {
+      "name": "bash",
+      "state": "S",
+      "parent": 3996935,
+      "ticks": 0,
+      "started": 18745262
+    },
+    "4144373": {
+      "name": "nix",
+      "state": "R",
+      "parent": 4144371,
+      "ticks": 89,
+      "started": 18745263
+    },
+    "4144374": {
+      "name": "tail",
+      "state": "S",
+      "parent": 4144371,
+      "ticks": 0,
+      "started": 18745263
+    },
+    "4144379": {
+      "name": "crashpad_handle",
+      "state": "S",
+      "parent": 1,
+      "ticks": 0,
+      "started": 18745268
+    },
+    "4144425": {
+      "name": "nix-daemon",
+      "state": "R",
+      "parent": 1923,
+      "ticks": 20,
+      "started": 18745278
+    },
+    "4144428": {
+      "name": "nix-daemon",
+      "state": "S",
+      "parent": 1923,
+      "ticks": 12,
+      "started": 18745317
+    },
+    "4144431": {
+      "name": "bash",
+      "state": "S",
+      "parent": 3805096,
+      "ticks": 2,
+      "started": 18745326
+    },
+    "4144432": {
+      "name": "python3",
+      "state": "R",
+      "parent": 4144431,
+      "ticks": 24,
+      "started": 18745329
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "original_commit": "31d297386e494cad370ec273a7e494ab669a189a",
+  "original_parent": "15c735b2b57fe31a74a54239d7ee74232b47ee50",
+  "original_checksum_list_sha256": "de40629be5a6b4601d2bccd11f21f4c7b49b48e73c740fadba33d260d4db4891",
+  "edited_host_records": [
+    {
+      "path": "benchmarks/reports/2026-10-01-git-shared-buffers/same-binary.json.host.json",
+      "original_sha256": "64b7af19ad12a7855af4ad72d2fc882f895c2a3f6385c33ae989b167046b3d18",
+      "extracted_sha256": "5f58fc043dd87856b9d1a876e5eb5d0f4c9d7fdaf949cd5d7c01eb60d0f83ac5",
+      "reason": "Neutralize unrelated host process label; retain all numerical observations.",
+      "replacements": 7
+    }
+  ],
+  "omitted_unrelated_artifact_count": 10,
+  "omitted_unrelated_artifact_sha256": [
+    "03007daac802bc3a45ae0ad5c8e40f23561b7305aee12300dff7c75f9a4cb128",
+    "dff8ca8ef787f38977fda425349cfc2081ed6e1edc4e94989a46a3679d79f9b9",
+    "d60c598335baba9ea6014a54e89ba298ab8af69b791876d6df0f218318478a2f",
+    "a81061d98398e8dd5fd265951576cd1c97010e784ced2e9718cc8f403ca628d0",
+    "db567c9b7d385986abe74d1e155b9fffae48e6207252dbd57dee4ddb76e0e918",
+    "916778aa088a53e31c3f940b5ed935a65b190edcdaf2908fad8add978659dbc8",
+    "dc4b785fb77a16cf4f8ec3c2dcb053a23a3facc0c23c6a69c326ad63b9c5e4bb",
+    "14b703cc09992b0aacd3e1e71924cb64ed7d7f5f848d8e253a22f2561193112f",
+    "eb7d5a144e01857bd6bf1b9f31f2f7ccbef88fad00c9845196890bf24e7ac489",
+    "a4768996ff6190b00000d0a93c37f40af1729c77320be02fab1f20ccab1fdf2e"
+  ]
+}

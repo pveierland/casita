@@ -1,0 +1,17 @@
+{
+  "captured_at_utc": "2026-10-01T10:00:30.355982+00:00",
+  "hostname": "skylab-x3",
+  "platform": "Linux-7.2.6-x86_64-with-glibc2.42",
+  "kernel": "7.2.6",
+  "architecture": "x86_64",
+  "cpu": "AMD Ryzen AI 9 HX 370 w/ Radeon 890M",
+  "logical_cpus": 24,
+  "memory_bytes": 100488892416,
+  "cpu_governor": "performance",
+  "filesystem": "zfs zroot/home rw,noatime,xattr,posixacl,casesensitive",
+  "python": "3.13.14",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "casita_revision": "15c735b2b57fe31a74a54239d7ee74232b47ee50",
+  "casita_worktree_dirty": true
+}

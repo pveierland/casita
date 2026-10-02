@@ -4879,7 +4879,37 @@ async fn ingest_cache_requires_a_validated_closure_witness() {
     let object = mutation.stage_blob(b"cached bytes").await.unwrap();
     let key = object.record().key().clone();
     let digest = BlobId::new(key.native_digest().unwrap());
-    mutation.publish_unrooted(vec![object]).await.unwrap();
+    // Seed a verified record without a closure witness, as retained state from
+    // before raw-blob construction proofs. Normal publication now adds one.
+    let prepared = repository
+        .payloads()
+        .publication()
+        .prepare_state_commit()
+        .await
+        .unwrap();
+    let mut records = MetadataMutation::new();
+    records.add_object(object.verified);
+    if let Some(catalog) = prepared.catalog() {
+        records.set_payload_catalog(catalog.to_vec());
+    }
+    let revision = repository.metadata().snapshot().await.unwrap().revision();
+    repository
+        .metadata()
+        .commit(&revision, records)
+        .await
+        .unwrap();
+    prepared.commit().unwrap();
+    assert_eq!(
+        repository
+            .metadata()
+            .snapshot()
+            .await
+            .unwrap()
+            .validated_closures(std::slice::from_ref(&key))
+            .await
+            .unwrap(),
+        vec![false]
+    );
     drop(mutation);
     repository
         .profile

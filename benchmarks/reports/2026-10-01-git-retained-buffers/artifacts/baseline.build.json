@@ -1,0 +1,15 @@
+{
+  "executable_sha256": "afcb093fdbd39ca86a9eff6647d1a103b958763d8c36b71101970b940eb1c4dc",
+  "lockfile_sha256": "bdc3bbc1e97a7bf181c2cd1b52fd38e5d6b58da22fa8400797b7b67bd33265a1",
+  "features": "native,git,experimental",
+  "default_features": false,
+  "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+  "source_head": "f06efa07a5b14f9799336e018b83edc51ccc299e",
+  "source_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tracked_source_sha256": "3b7bd15621718d4f771986d2c32c03ace54323092897ee39391cf4553c05f88f",
+  "untracked_source_files": [],
+  "fixture_sha256": "a934bf2f7443537e73a4e9d1b2e653b230622513612dd5bcc2c71460cd4471d4",
+  "source_root": "/tmp/casita-retained-buffers-baseline",
+  "cargo_artifact_fresh": false
+}

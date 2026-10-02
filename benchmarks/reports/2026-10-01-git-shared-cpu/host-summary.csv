@@ -1,0 +1,13 @@
+case,samples,host_intervals,competing_build_intervals,external_cpu_fraction_max
+disabled-overhead,320,88,0,0.074987122987047
+shared-four,120,60,0,0.03660962785014651
+cpu-boundary,120,164,158,0.3272757257798246
+source-boundary,80,109,109,0.548646598476087
+tiny-shared,80,14,14,0.3324166059742976
+serial-large,40,52,52,0.31196442660892193
+clustered-shared,40,46,46,0.3149249190637297
+memory-control,40,46,10,0.30244008601311395
+disabled-tiny-repeat,40,1,1,0.3140230447756243
+shared-four-repeat,40,59,59,0.3210082697192942
+shared-serial-control,40,61,61,0.31489734941374176
+shared-four-same-binary,40,59,59,0.31005776880936375

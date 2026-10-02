@@ -2717,3 +2717,270 @@ for exact source, binary, dependency, and result provenance.
 The [root-prefix](root-prefix.md) suite checks indexed named-root ranges at
 255 and 257 matches, plus sparse and dense prefixes in a 4,096-root store.
 It is registered in `manifest.json` and included in `benchmark all`.
+
+
+### Chunk upload completion
+
+`chunk-upload-completion` compares production writers using separate immutable
+executables. Controlled stragglers delay one in eight chunk puts; `--delays-ms 0`
+provides the zero-delay control. The timer covers the payload write only. Every
+sample verifies independent FastCDC boundaries and hashes, exact blob identity,
+full Bao-verified readback, and that all started uploads finished. Standard cases
+cover the 512-byte chunker minimum, 2048-byte maximum, and byte-budget admission
+on both sides of one-upload and four-upload windows. Reservations round up in
+64 KiB units even for small chunks; 64 KiB therefore permits only one upload. It is included in `benchmark all`.
+
+```sh
+cargo test --release -p casita --no-default-features --features native,experimental --test chunk_upload_completion --no-run
+benchmark run chunk-upload-completion --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/chunk-completion-smoke.json
+benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576 --delays-ms 0,8 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
+```
+
+Build each source checkout in its own Cargo target directory, freeze both
+executables before subsequent builds, and preserve the same Cargo.lock and settings. Optional `.build.json` fingerprints are checked
+before comparing. Reports retain failed gates, every sample, and paired ranges;
+synthetic storage-delay results are not end-to-end Git import speedups.
+
+
+
+### Streaming chunk manifests
+
+`chunk-manifest-stream` measures writing and closing a payload generated from a
+repeated deterministic 64 KiB block. Both the fixture and verified readback use
+fixed-size buffers. Every sample checks an independently streamed BLAKE3 digest,
+all returned bytes, and the stored manifest identity. Paired runs reject differing
+blob or manifest hashes. The periodic source limits unique payload data in the
+memory backend while retaining one manifest entry per source chunk.
+
+The probe captures Linux process high-water RSS immediately after close, before
+readback; it includes the runtime and backend, not just manifest allocations.
+The runner also preserves whole-process RSS separately. Standard sizes range
+from 64 KiB to 256 MiB, with memory and local backends. Exact flat/page and
+page-tree fanout boundaries (63/64/65 and 4095/4096/4097 entries) are covered by
+the `streaming_chunk_manifests_preserve_flat_and_paged_bytes_with_bounded_buffers`
+unit test. The stalled-first-upload test covers the reorder bound.
+
+```sh
+benchmark run chunk-manifest-stream --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/manifest-smoke.json
+benchmark run chunk-manifest-stream --file-bytes 65536,16777216,67108864 --backend both --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/manifest-paired.json
+```
+
+## Verified Git blob files
+
+`benchmark run git-blob-file` compares metadata-only registration of stored Git
+blobs with rereading the stored payload in the same binary. It is included in
+`benchmark all`; every sample checks identity, length, complete closure and exact
+readback. Both profiles cover empty/one-byte files, both sides of 64 KiB and 4 MiB,
+on memory and local storage. The timed operation includes rooted publication.
+
+```sh
+python3 -m benchmarks.cli run git-blob-file --profile smoke --output /tmp/git-blob-file.json
+```
+
+Use `--repetitions 7 --cpu-affinity 0,1,2,3` for paired investigation runs, choosing
+CPUs allowed on the host. Frozen integration executables can be supplied through
+`--probe-binary` with `--no-build`. The [retained historical report](reports/2026-09-30-git-blob-file/README.md)
+records gains, negative cases, executable fingerprint and measurement limits.
+
+## One-pass verified Git ingestion
+
+`git-verified-stream` compares the existing `stage_object_reader` write-then-read
+path with `stage_object_reader_with_size`, which verifies the native identity
+while writing the same source bytes. Both strategies run in the same executable
+in alternating order, with fresh repositories and deterministic random input.
+Timing covers staging; fixture creation, mutation setup, publication, exhaustive
+closure verification and byte-for-byte readback are excluded. The writer's digest
+and length remain independently checked.
+
+The default matrix covers empty, one-byte, 65535/65536/65537-byte and 4 MiB
+payloads on memory and local backends. The suite is included in `benchmark all`.
+Process RSS includes the fixture and audits, so it cannot establish the importer's
+streaming memory footprint. Source decoding is outside this measurement.
+
+```sh
+benchmark run git-verified-stream --profile smoke --output /tmp/git-verified-stream-smoke.json
+benchmark run git-verified-stream --backend both --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-verified-stream-paired.json
+```
+
+Historical measurements are preserved in
+[the original verified-stream report](reports/2026-09-30-git-verified-stream/README.md).
+They describe the recorded binary and are not measurements of this extracted branch.
+
+## Git closure import
+
+`git-closure-import` measures cold import, source-free warm reuse, a changed root
+sharing a complete subtree, and a changed wide tree sharing individual blobs.
+Every sample checks exact imported/reused counts and exhaustively verifies the
+resulting closure outside the timed region. The suite is included in
+`benchmark all`; both memory and local persistent backends run by default.
+Memory cases use a 64-object publication limit; local cases use the production
+limit, recorded in each sample. Both use a 64-object in-memory spill threshold.
+
+```sh
+benchmark run git-closure-import --profile smoke --output /tmp/git-closure-smoke.json
+benchmark run git-closure-import --counts 1024 --max-buffered-bytes 67108864 --file-bytes 1024 --concurrency 1,4,16 --backend local --repetitions 5 --output /tmp/git-closure-small.json
+benchmark run git-closure-import --counts 16 --max-buffered-bytes 67108864 --file-bytes 4194304 --content random --backend local --repetitions 5 --output /tmp/git-closure-large.json
+benchmark run git-closure-import --counts 256 --max-buffered-bytes 67108864 --file-bytes 4194304 --content mixed --backend local --repetitions 5 --output /tmp/git-closure-mixed.json
+```
+
+`--layout loose|packed|both` selects Git source layout. Repeated contents are
+highly compressible and differ by file index, encouraging Git pack deltas.
+Random contents use a deterministic xorshift sequence; mixed workloads use a
+large file every 16 entries and 1 KiB files otherwise. Source generation and
+Git packing are outside import timing. Cold means a fresh Casita destination,
+not a cold operating-system page cache.
+
+For comparisons, preserve the baseline integration-test executable and supply
+`--baseline-binary /path/to/baseline --probe-binary /path/to/candidate --no-build`.
+Runs alternate baseline/candidate order on successive repetitions and retain
+executable SHA-256 fingerprints, raw process output and all audited samples.
+Builds use `--no-default-features --features native,git,experimental`, matching
+the evaluator library. Use the same flags for both binaries. The per-operation wall time excludes
+fixture creation and audits; process CPU time and peak RSS include them and
+must not be described as import-only measurements. Large-object memory claims
+need a separate import-only measurement to avoid the fixture's high-water mark.
+
+When `/path/to/probe.build.json` exists, the closure harness checks that its
+`executable_sha256` matches the binary and records the build metadata. Paired
+manifests must agree on `lockfile_sha256`, `features`, `default_features`, and
+any recorded `rustc_version` and `rustflags`. Archives must copy the exact
+`Cargo.lock` before building: Git archives omit this repository's ignored lockfile.
+A report without manifests does not establish dependency equality. Preserve each
+built executable outside the shared Cargo target directory before building
+another checkout, which can replace the same test-executable filename.
+
+On Linux, `--cpu-affinity 0,1,2,3` restricts the benchmark and its children to
+those allowed CPUs and restores the caller's affinity afterwards. Choose CPUs
+from the same core class on heterogeneous machines. Reports record the actual
+affinity and available maximum-frequency metadata. This controls placement,
+not exclusive access: competing workloads can still add noise. Paired summaries
+include each workload's median and range of paired wall-time reductions; fewer
+than five pairs are explicitly marked as insufficient samples.
+
+The default source-byte windows include 1023/1024/1025 and 2047/2048/2049
+bytes: the former straddle single-body admission and the latter straddle
+two-body read-ahead for 1 KiB blobs. Paired reports preserve every sample,
+including noisy or negative results.
+
+Historical initial correctness results are preserved in
+[the Git closure report](reports/2026-09-30-git-closure/README.md);
+its recorded timings are not measurements of this extracted branch.
+
+## Git decode and verification workers
+
+`git-object-workers` uses the Git closure-import correctness gates with CPU worker
+counts 1/2/4/8. Its default cases straddle the 16-object staging window (15/16/17
+files) and admission of two 64 KiB bodies (131071/131072/131073-byte source
+windows). Standard runs also include 1 KiB and 4 MiB files and a 64 MiB source
+window. Both loose/packed sources and memory/local stores are included, and the
+suite is registered in `benchmark all`.
+
+With multiple workers requested, the source importer admits a whole window by
+declared body sizes before workers allocate those bodies. The default remains
+one worker, preserving serial header/decode order and staging verification. Parallel
+workers stream completed objects into staging; each window finishes all source
+jobs and writes before publication. Reported
+`peak_source_bytes` excludes pack caches, delta workspace, verifier metadata and
+storage buffers; `peak_decode_workers` counts executing source jobs. Gix cache
+allocation overhead is additional to its configured byte target.
+
+```sh
+benchmark run git-object-workers --profile smoke --output /tmp/git-workers-smoke.json
+benchmark run git-object-workers --counts 16 --file-bytes 4194304 --max-buffered-bytes 67108864 --backend local --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-workers-large.json
+benchmark run git-closure-import --counts 16 --file-bytes 4194304 --max-buffered-bytes 67108864 --content random --decode-workers 2,4,8 --baseline-decode-workers 1 --probe-binary /path/to/probe --baseline-binary /path/to/probe --no-build --repetitions 7 --cpu-affinity 0,1,2,3 --output /tmp/git-workers-paired.json
+```
+
+The last command compares worker counts in the same executable; reports retain
+both the actual worker count and the candidate count identifying each paired
+case. An older baseline without worker support is treated as one worker.
+
+## Git worker result streaming
+
+`git-worker-streaming` checks mixed-size Git closures while completed decode
+results are staged within their admitted window. Smoke cases use 17 files,
+1/4 workers, loose/packed sources and memory/local stores. Byte windows
+65535/65536/65537 straddle the 64 KiB large-body threshold; a 1 MiB window
+provides a concurrent control. Standard cases add 4 MiB bodies and the
+4194303/4194304/4194305-byte boundaries.
+
+Every case checks exact import/reuse counts and exhaustively verifies each
+closure. Started payload writers finish before metadata publication; source
+body windows still exclude pack-cache, delta-workspace and destination buffers.
+The default remains one decode worker.
+
+```sh
+benchmark run git-worker-streaming --profile smoke --output /tmp/git-worker-streaming.json
+```
+
+[The historical report](reports/2026-10-01-git-worker-streaming/README.md)
+retains matched-build comparisons, negative cases and correctness evidence;
+its original timings are not measurements of the extracted branch.
+
+## Retained Git body buffers
+
+`git-retained-buffers` checks clustered packed Git bodies using bounded fixture
+construction and independent streamed payload audits. Its smoke cases cover
+1 MiB minus one byte, exactly 1 MiB and plus one byte with one/four source workers.
+Standard cases add tiny/small/large bodies and 16/64-file sources. Completed
+bodies discard excess allocation capacity before waiting for staging; decoder
+workspace, conversion overlap and allocator-held pages remain additional.
+
+See [the focused corpus guide](git-retained-buffers.md) for reproducible commands
+and measurement limits, and [the historical report](reports/2026-10-01-git-retained-buffers/README.md)
+for preserved memory/latency tradeoffs on the original later source base.
+
+## Git source inflation
+
+`git-source-inflation` covers loose and non-delta packed blobs below, at and above the 1 MiB streaming
+threshold using bounded fixture generation and independent streamed payload
+audits. One/four-worker controls retain exact closure and import/reuse gates.
+Standard cases add 16/64 MiB blobs and source admission boundaries. Delta objects
+and missing, stale or out-of-budget pack hints fall back to gix. The registered
+`git-source-locator` companion covers all three sides of the index-file, index-byte
+and directory-entry caps, asserting exact stream/fallback selection and payload.
+
+See [the focused guide](git-source-inflation.md) for commands and memory limits.
+[The historical report](reports/2026-10-01-git-source-inflation/README.md) retains
+the original combined loose/packed experiment; its timings are not measurements
+of this extracted branch.
+
+## Git delta reconstruction
+
+`git-delta-spill` measures opt-in file-backed blob delta reconstruction with
+streamed fixture generation, independent payload audits, observed delta counts,
+spill reservations and import I/O. `git-delta-disabled` retains the default-path
+control; `git-delta-limits` exercises both sides of chain, work, spill-capacity
+and source-handle limits, including recovery after a full planning window.
+All three suites are registered in `benchmark all`. The retained-buffer suite
+explicitly disables delta spilling to preserve its buffered control.
+
+See [the focused guide](git-delta-spill.md) for commands and resource semantics.
+[The historical report](reports/2026-10-01-git-delta-spill/README.md) retains the
+original experiment and rejected candidates as evidence; its timings do not
+measure this extracted branch with updated dependencies and reordered commits.
+
+## Shared Git import CPU admission
+
+`git-shared-cpu` coordinates explicitly selected source and destination blocking
+jobs across concurrent imports. Its corpus covers disabled, serialized and
+below/at/above four-job limits, source-streaming boundaries and one/four source
+workers. Every destination receives independent identity and streamed payload
+audits; samples report the entire group's completion time.
+
+See [the focused guide](git-shared-cpu.md) for scope and reproducible commands.
+[Historical results](reports/2026-10-01-git-shared-cpu/README.md) retain memory
+benefits and small-workload costs on their original source and dependency set.
+
+## Shared Git producer-buffer admission
+
+`git-shared-buffers` compares independent source and destination buffer budgets
+across concurrent imports, with CPU admission selected separately. It covers
+one/two/four imports, disabled controls and both sides of complete-window
+capacity thresholds. `git-shared-buffer-limits` runs six exact rounding,
+minimum-envelope, cancellation and one-thread progress tests.
+
+The budgets reserve enumerated producer-buffer envelopes; they are not process
+RSS limits. See [the focused guide](git-shared-buffers.md) for ownership and
+exclusions. [Historical results](reports/2026-10-01-git-shared-buffers/README.md)
+retain concurrent memory reductions and their throughput costs on the original
+source and dependency set.

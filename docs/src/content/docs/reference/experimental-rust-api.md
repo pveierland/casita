@@ -128,6 +128,7 @@ links. An arbitrary `ObjectRecord` is not accepted as a publication substitute.
 Publication choices include:
 
 - `publish_unrooted` for verified records only;
+- `publish_closures` for records plus bounded, checked closure targets without named roots;
 - `publish_rooted` for records plus one root;
 - `publish` for records plus a batch of `RootChange` values;
 - `publish_at_revision` for an exact compare-and-swap; and
@@ -138,6 +139,15 @@ Records and root changes commit atomically. A root is published only after its
 resulting closure is complete and valid. Unrelated revision races can be
 retried; an observed root mismatch is returned as
 `ConditionalPublishResult::RootMismatch` without overwriting the changed name.
+
+`publish_closures` verifies staged or existing targets with normal format and
+link checks before atomically publishing records and requested witnesses.
+Staged-object and target counts are each limited by `max_batch_objects`.
+Existing witnesses may be reused; this is a completeness check, not a fresh
+corruption audit. The mutation retains the checked graphs for its lifetime,
+but their witnesses do not become permanent roots. Place staged children
+before their parents to reuse completed checks within one publication
+attempt; a retried commit validates against its new snapshot again.
 
 ## Stable reads and retention
 
@@ -157,6 +167,7 @@ take the required hold internally.
 
 | Workflow | Primary API | Extra capability |
 |---|---|---|
+| Exact-length object ingestion | `MutationSession::stage_object_reader_with_size` | `native`; verifies while writing, with no stored-payload reread |
 | Raw blob import | `Repository::import(BlobImport::new(reader, root))` or `MutationSession::import(BlobImport::new(reader, root))` | `PS: BlobStore`, `SS: MetadataStore`, `native` |
 | Filesystem import and checkout | `Repository::import(FilesystemImport::new(...))`, `FilesystemImport::new(...).reread(true)`, `Repository::checkout` | `PS: BlobStore`, `SS: MetadataStore`, `native` |
 | Tar stream import | `Repository::import(TarImport::new(...))` | `PS: BlobStore`, `SS: MetadataStore`, `native` |
@@ -169,7 +180,11 @@ take the required hold internally.
 | Named graph import | `Repository::import(CopyImport::from_source(source, source_name, destination_name))` | Custom `TransferSource`; built-in sources use `CopyImport::new` |
 | Path-selected transfer | `transfer_path` | Named filesystem root plus a `TransferSource` |
 | Git view publish/read/checkout | `publish_git_view`, `read_git_view`, `checkout_git_tree` | `native` |
-| Native local Git import | `Repository::import(GitImport::new(...))` | `git` |
+| Native local Git view import | `Repository::import(GitImport::new(...))` | `git` |
+| Native Git closure import | `Repository::import(GitClosureImport::new(objects_dir, roots))` | `git`; retained result without a view; `with_decode_workers` bounds CPU workers |
+| Shared import CPU admission | `GitClosureImport::with_cpu_budget(budget)` | `git`; clones of `ImportCpuBudget` share selected source/destination blocking jobs |
+| Shared producer buffers | `GitClosureImport::with_buffer_budget(budget)` | `git`; clones share separate source/writer envelopes; excludes backend-owned payloads and process RSS |
+| Session-scoped Git closure import | `GitClosureImport::new(objects_dir, roots).import(&session)` | `git`; receiving session retains the result |
 | Git fetch service | `GitFetchService` | `git-fetch`; HTTP adapter requires `git-http` |
 | SSH source | `SshTransferSource` | `ssh` |
 | Casitar stream I/O, export, and import | `CasitarReader`, `CasitarWriter`, `Repository::export_casitar`, `Repository::import(CasitarImport::new(...))` | `native` |

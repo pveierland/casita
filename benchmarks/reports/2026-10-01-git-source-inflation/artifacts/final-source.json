@@ -1,0 +1,5 @@
+{
+  "source_head": "98ea56bb61059d7127e9811270c23bf9bfe841e9",
+  "source_patch_sha256": "9d0ef57a90b5f7a1eb3c2202783117475e162f47d92f09539f44dac423279ab5",
+  "description": "Final source after the measured candidate; changes afterward are test-only locator correction, documentation and equivalent lint simplifications."
+}

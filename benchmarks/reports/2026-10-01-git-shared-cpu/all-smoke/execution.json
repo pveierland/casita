@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/home/pveierland/dev/git-import-perf/casita/benchmarks/work/20f9ad52895c4731a9b38ebdeb721664",
+  "finished": true,
+  "revision": "df8bc19307e78ff3662801e36a5034d79e942d56",
+  "diff": " benchmarks/all.py                                  |   1 +\n benchmarks/manifest.json                           |   9 +\n benchmarks/revisions.py                            |   1 +\n benchmarks/suites/git_closure_import.py            |  48 ++++-\n benchmarks/tests/test_revisions.py                 |   1 +\n crates/casita/src/blob/chunked.rs                  |   1 +\n crates/casita/src/blob/chunked/hash_batch.rs       |  65 +++++--\n crates/casita/src/blob/chunked/hash_batch_tests.rs | 132 ++++++++++++++\n crates/casita/src/blob/chunked/overwrite.rs        |   1 +\n crates/casita/src/blob/chunked/tests.rs            |  32 ++++\n crates/casita/src/blob/chunked/upload.rs           |   5 +-\n crates/casita/src/blob/chunked/writer.rs           |   6 +-\n crates/casita/src/experimental.rs                  |   2 +\n crates/casita/src/git/repository/closure_import.rs |   7 +\n .../src/git/repository/closure_import/workers.rs   | 126 ++++++++++---\n .../repository/closure_import/workers/streaming.rs |   3 +-\n .../closure_import/workers/streaming/tests.rs      | 109 +++++++++++\n .../git/repository/closure_import/workers/tests.rs | 200 +++++++++++++++++++++\n crates/casita/src/import.rs                        |   4 +-\n crates/casita/src/importers/git_closure.rs         |  21 +++\n crates/casita/src/importers/mod.rs                 |   1 +\n crates/casita/src/lib.rs                           |   2 +\n crates/casita/tests/git_closure_import.rs          | 179 ++++++++++++------\n 23 files changed, 849 insertions(+), 107 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "git-shared-cpu",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-shared-cpu",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-shared-cpu-v2-all-smoke/bin/git_closure_import",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-shared-cpu-v2-all-smoke/git-shared-cpu.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.473185035982169,
+      "log": "/tmp/casita-shared-cpu-v2-all-smoke/git-shared-cpu.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/home/pveierland/dev/git-import-perf/casita/benchmarks/work/bb7e4d2bae0c4db99258320dc50f08c3",
+  "finished": true,
+  "revision": "98ea56bb61059d7127e9811270c23bf9bfe841e9",
+  "diff": " benchmarks/all.py                                  |   2 +\n benchmarks/manifest.json                           |  18 +++\n benchmarks/revisions.py                            |   5 +\n benchmarks/suites/git_closure_import.py            |  25 ++-\n .../src/git/repository/closure_import/workers.rs   | 171 ++++++++++++++++++---\n crates/casita/src/importers/git_closure.rs         |  24 +--\n crates/casita/tests/git_closure_import.rs          |  55 +++++--\n 7 files changed, 249 insertions(+), 51 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "git-source-inflation",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-source-inflation",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-inflation-all-smoke/bin/git_closure_import",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-inflation-all-smoke/git-source-inflation.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.384459736000281,
+      "log": "/tmp/casita-inflation-all-smoke/git-source-inflation.log"
+    },
+    {
+      "suite": "git-source-locator",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-source-locator",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-inflation-all-smoke/bin/casita-lib-test",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-inflation-all-smoke/git-source-locator.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.6660860239935573,
+      "log": "/tmp/casita-inflation-all-smoke/git-source-locator.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}
