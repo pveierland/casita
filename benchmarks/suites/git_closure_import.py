@@ -56,6 +56,28 @@ def summarize_pairs(samples):
     return summaries
 
 
+def validate_worker_metrics(row, workers):
+    """Reject missing observations rather than inventing zero memory/CPU cost."""
+    def integer(value):
+        return type(value) is int and value >= 0
+    before, after = (row.get(f"parent_hwm_{phase}_import_bytes") for phase in ("before", "after"))
+    if not integer(before) or not integer(after) or before == 0 or after == 0:
+        raise common.BenchmarkError("missing or invalid parent memory observations")
+    cpu = row.get("import_process_cpu")
+    if (not isinstance(cpu, dict) or set(cpu) != {"user_ticks", "system_ticks"}
+            or not all(integer(value) for value in cpu.values())):
+        raise common.BenchmarkError("missing or invalid import CPU observations")
+    if not {"peak_decode_workers", "peak_source_bytes"} <= row.keys():
+        raise common.BenchmarkError("missing source observations")
+    peak, source = row.get("peak_decode_workers"), row.get("peak_source_bytes")
+    if peak is None and source is None and workers == 1:
+        return  # The pre-worker API has neither counter; preserve explicit nulls.
+    if not integer(peak) or not integer(source) or peak > workers:
+        raise common.BenchmarkError("invalid worker/source observations")
+    if row.get("operation") == "warm" and (peak or source):
+        raise common.BenchmarkError("warm import unexpectedly performed source work")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", choices=("smoke", "standard"), default="standard")
@@ -71,6 +93,8 @@ def main(argv=None):
     worker_baseline.add_argument("--match-baseline-decode-workers", action="store_true",
                                  help="use each requested decoder count for both variants")
     parser.add_argument("--content", choices=("repeated", "random", "mixed", "clustered"), default="repeated")
+    parser.add_argument("--probe-target", choices=("git_closure_import", "git_worker_matrix"), default="git_closure_import")
+    parser.add_argument("--worker-metrics", action="store_true", help="require Linux parent memory and import CPU observations")
     parser.add_argument("--bounded-fixture", action="store_true", help="stream fixture generation/readback and capture parent RSS before audits")
     parser.add_argument("--pack-window", type=int, default=16)
     parser.add_argument("--repetitions", type=int, default=1)
@@ -80,6 +104,8 @@ def main(argv=None):
     parser.add_argument("--no-build", action="store_true")
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args(argv)
+    if args.worker_metrics and not pathlib.Path("/proc/self/stat").exists():
+        parser.error("worker observations require Linux /proc")
     if args.pack_window < 0:
         parser.error("pack window must be nonnegative")
     if args.content == "clustered" and args.pack_window == 0:
@@ -93,13 +119,13 @@ def main(argv=None):
     binary = args.probe_binary
     if binary is None:
         built = subprocess.run(["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,git,experimental",
-                                "--test", "git_closure_import", "--no-run", "--message-format=json"],
+                                "--test", args.probe_target, "--no-run", "--message-format=json"],
                                cwd=cli.ROOT, capture_output=True, text=True)
         if built.returncode:
             raise common.BenchmarkError(built.stderr or built.stdout)
         artifacts = [json.loads(line) for line in built.stdout.splitlines() if line.startswith("{")]
         paths = [item["executable"] for item in artifacts if item.get("reason") == "compiler-artifact"
-                 and item.get("target", {}).get("name") == "git_closure_import" and item.get("executable")]
+                 and item.get("target", {}).get("name") == args.probe_target and item.get("executable")]
         if len(paths) != 1:
             raise common.BenchmarkError("expected one Git closure benchmark executable")
         binary = pathlib.Path(paths[0])
@@ -142,6 +168,7 @@ def main(argv=None):
                       decode_workers=args.decode_workers, baseline_decode_workers=None if args.match_baseline_decode_workers else args.baseline_decode_workers or 1,
                       match_baseline_decode_workers=args.match_baseline_decode_workers,
                       bounded_fixture=args.bounded_fixture, pack_window=args.pack_window,
+                      worker_metrics=args.worker_metrics, clock_ticks_per_second=os.sysconf("SC_CLK_TCK") if args.worker_metrics else None,
                       content=args.content, paired=bool(args.baseline_binary), cpu_affinity=args.cpu_affinity,
                       memory_measurement="whole-process peak RSS includes fixture creation and audits",
                       spill_memory_objects=64, metadata_frontier=256,
@@ -191,6 +218,8 @@ def main(argv=None):
                     for row in rows:
                         if not isinstance(row.get("root"), str) or not row["root"]:
                             raise common.BenchmarkError("missing or invalid benchmark root identity")
+                        if args.worker_metrics:
+                            validate_worker_metrics(row, actual_workers)
                         if args.bounded_fixture:
                             if (row.get("payload_correctness") != "independent BLAKE3 and exact streaming readback"
                                     or row.get("bounded_fixture") is not True
