@@ -2806,7 +2806,8 @@ benchmark run git-verified-stream --backend both --repetitions 7 --cpu-affinity 
 `git-closure-import` measures cold import, source-free warm reuse, a changed root
 sharing a complete subtree, and a changed wide tree sharing individual blobs.
 Every sample checks exact imported/reused counts and exhaustively verifies the
-resulting closure outside the timed region. The suite is included in
+resulting closure outside the timed region. It also records `blob_witnesses`,
+which must be zero: present built-in blobs are complete by derivation. The suite is included in
 `benchmark all`; both memory and local persistent backends run by default.
 Memory cases use a 64-object publication limit; local cases use the production
 limit, recorded in each sample. Both use a 64-object in-memory spill threshold.
@@ -2852,6 +2853,19 @@ not exclusive access: competing workloads can still add noise. Paired summaries
 include each workload's median and range of paired wall-time reductions; fewer
 than five pairs are explicitly marked as insufficient samples.
 
+Deriving Git blob completeness instead of storing a witness per blob was
+measured against the preceding commit with 16384 64-byte files:
+
+```sh
+benchmark run git-closure-import --counts 16384 --file-bytes 64 --max-buffered-bytes 67108864 --concurrency 16 --layout packed --backend local --repetitions 11 --baseline-binary /path/to/baseline --probe-binary /path/to/candidate --no-build --output /tmp/git-closure-derived-blobs.json
+```
+
+Cold imports fell from a median 1.66 s to 1.10 s (median paired reduction
+22%; 33% over an earlier seven pairs), and the four-operation sequence by a
+median 20%. Wide deltas probe every present blob either way: their local
+medians stayed within noise, with quiet pairs 1-7% slower. The host was shared
+and paired ranges were wide.
+
 The default source-byte windows include 1023/1024/1025 and 2047/2048/2049
 bytes: the former straddle single-body admission and the latter straddle
 two-body read-ahead for 1 KiB blobs. Paired reports preserve every sample,
@@ -2869,9 +2883,10 @@ requires at least one call per object and none for built-in registries.
 
 Every sample also checks exact imported counts, a source-free warm import and
 an exhaustive closure verification outside the timed region. Defaults straddle
-publication batching: 16 commits (48 objects) fit one 64-object witness batch
-while 64 commits span three, and 4096 commits span three default
-4096-object batches. Custom registries can only be configured over in-memory
+publication batching for custom registries, which witness every object: 16
+commits (48 objects) fit one 64-object witness batch while 64 commits span
+three, and 4096 commits span three default 4096-object batches. Built-in
+registries witness only trees and commits. Custom registries can only be configured over in-memory
 stores, so every case uses the memory backend. The suite is included in
 `benchmark all`.
 

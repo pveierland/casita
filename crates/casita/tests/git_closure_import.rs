@@ -331,6 +331,146 @@ async fn closure_witnesses_survive_reopening_a_local_repository() {
     assert_eq!(imported.report.source_bytes, 0);
 }
 
+/// A present built-in Git blob is its own completeness proof. Imports record
+/// no witness for it unless it was selected, and still stop there later.
+#[tokio::test]
+async fn git_blobs_derive_completeness_without_witness_rows() {
+    let source = Source::new("sha1");
+    let leaf_oid = source.blob(b"leaf contents");
+    let selected = source.blob(b"selected contents");
+    let root = tree(&source.tree(&format!("100644 blob {leaf_oid}\tfile\n")));
+    let leaf = key(GitObjectFormat::Sha1, GitObjectKind::Blob, &leaf_oid);
+    let selected = key(GitObjectFormat::Sha1, GitObjectKind::Blob, &selected);
+    let repository = Repository::<MemoryBlobStore, MemoryMetadataStore>::memory().unwrap();
+    let imported = repository
+        .import(source.request(vec![root.clone(), selected.clone()]))
+        .await
+        .unwrap();
+    assert_eq!(imported.report.imported_objects, 3);
+    // Selected roots keep the stored witness fast root changes require.
+    let witnesses = |keys: Vec<ObjectKey>| {
+        let repository = &repository;
+        async move {
+            repository
+                .metadata()
+                .snapshot()
+                .await
+                .unwrap()
+                .validated_closures(&keys)
+                .await
+                .unwrap()
+        }
+    };
+    assert_eq!(
+        witnesses(vec![root.clone(), leaf.clone(), selected.clone()]).await,
+        [true, false, true]
+    );
+    assert_eq!(
+        repository.verify_closure(&root).await.unwrap(),
+        ClosureStatus::Complete { objects: 2 }
+    );
+
+    let warm = repository
+        .import(GitClosureImport::new(
+            source.0.path().join("nonexistent"),
+            [root.clone(), selected.clone()],
+        ))
+        .await
+        .unwrap();
+    assert_eq!(warm.report.imported_objects, 0);
+    assert_eq!(warm.report.reused_objects, 2);
+    assert_eq!(warm.report.source_bytes, 0);
+
+    // A new tree over the unwitnessed blob reuses it on presence alone.
+    let added = source.blob(b"added contents");
+    let changed = tree(&source.tree(&format!(
+        "100644 blob {leaf_oid}\tfile\n100644 blob {added}\tnew\n"
+    )));
+    let delta = repository
+        .import(source.request(vec![changed.clone()]))
+        .await
+        .unwrap();
+    assert_eq!(delta.report.imported_objects, 2);
+    assert_eq!(delta.report.reused_objects, 1);
+    assert_eq!(
+        witnesses(vec![
+            changed.clone(),
+            key(GitObjectFormat::Sha1, GitObjectKind::Blob, &added)
+        ])
+        .await,
+        [true, false]
+    );
+    assert_eq!(
+        repository.verify_closure(&changed).await.unwrap(),
+        ClosureStatus::Complete { objects: 3 }
+    );
+}
+
+#[path = "support/counting_blob_store.rs"]
+mod counting_blob_store;
+
+/// Publishing a new tree over present Git blobs reads only the tree: the
+/// incremental check settles each unwitnessed blob from its record.
+#[tokio::test]
+async fn incremental_checks_settle_git_blobs_without_reading_them() {
+    use std::sync::{
+        Arc,
+        atomic::{AtomicUsize, Ordering},
+    };
+    const FILES: usize = 8;
+    let source = Source::new("sha1");
+    let mut entries = String::new();
+    for index in 0..FILES {
+        let blob = source.blob(format!("file {index}").as_bytes());
+        entries.push_str(&format!("100644 blob {blob}\tfile{index}\n"));
+    }
+    let first = tree(&source.tree(&entries));
+    let reads = Arc::new(AtomicUsize::new(0));
+    let repository = Repository::new(
+        counting_blob_store::CountingBlobStore {
+            inner: MemoryBlobStore::new(),
+            reads: reads.clone(),
+            writes: Arc::new(AtomicUsize::new(0)),
+        },
+        MemoryMetadataStore::new().unwrap(),
+    );
+    let imported = repository
+        .import(source.request(vec![first]))
+        .await
+        .unwrap();
+    let oid = source.tree(&format!("{entries}120000 blob {}\tlink\n", source.blob(b"file0")));
+    let body = Command::new("git")
+        .arg("-C")
+        .arg(source.0.path())
+        .args(["cat-file", "tree", &oid])
+        .output()
+        .unwrap()
+        .stdout;
+    let session = repository.mutation_session().await.unwrap();
+    let link = source.blob(b"file0");
+    let link = session
+        .stage_object(
+            key(GitObjectFormat::Sha1, GitObjectKind::Blob, &link),
+            b"file0",
+        )
+        .await
+        .unwrap();
+    let staged = session.stage_object(tree(&oid), &body).await.unwrap();
+    reads.store(0, Ordering::SeqCst);
+    session
+        .publish_rooted(vec![link, staged], "changed".try_into().unwrap(), tree(&oid))
+        .await
+        .unwrap();
+    // Only the tree is opened. Stored and newly staged blobs alike are
+    // settled from their records.
+    assert_eq!(reads.load(Ordering::SeqCst), 1);
+    assert_eq!(
+        repository.verify_closure(&tree(&oid)).await.unwrap(),
+        ClosureStatus::Complete { objects: FILES + 2 }
+    );
+    drop(imported);
+}
+
 /// Permanent workload: benchmark run git-closure-import. Correctness audits
 /// deliberately run outside the timed region.
 #[tokio::test]
@@ -395,6 +535,7 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
     let packed = std::env::var("CASITA_GIT_CLOSURE_PACKED").unwrap() == "1";
     let source = Source::new("sha1");
     let mut entries = String::new();
+    let mut blobs = Vec::with_capacity(count);
     for i in 0..count {
         let size = if content == "mixed" && i % 16 != 0 {
             1024
@@ -415,6 +556,7 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         body[..8].copy_from_slice(&(i as u64).to_le_bytes());
         let blob = source.blob(&body);
         entries.push_str(&format!("100644 blob {blob}\tfile{i:08}\n"));
+        blobs.push(key(GitObjectFormat::Sha1, GitObjectKind::Blob, &blob));
     }
     let subtree = source.tree(&entries);
     let first = tree(&source.tree(&format!("040000 tree {subtree}\tshared\n")));
@@ -468,6 +610,24 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
             repository.verify_closure(&root).await.unwrap(),
             ClosureStatus::Complete { objects: reachable }
         );
+        // Present built-in blobs are complete by derivation: no import stores
+        // a witness for one, while the selected tree keeps its own.
+        let snapshot = repository.metadata().snapshot().await.unwrap();
+        let blob_witnesses = snapshot
+            .validated_closures(&blobs)
+            .await
+            .unwrap()
+            .into_iter()
+            .filter(|witnessed| *witnessed)
+            .count();
+        assert_eq!(blob_witnesses, 0);
+        assert_eq!(
+            snapshot
+                .validated_closures(std::slice::from_ref(&root))
+                .await
+                .unwrap(),
+            [true]
+        );
         println!(
             "git_closure_sample {}",
             serde_json::json!({
@@ -478,7 +638,7 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
                 "imported_objects": imported.report.imported_objects,
                 "reused_objects": imported.report.reused_objects,
                 "source_bytes": imported.report.source_bytes,
-                "root": root.to_string(),
+                "root": root.to_string(), "blob_witnesses": blob_witnesses,
                 "correctness": "exact imported/reused counts and exhaustive closure verification"
             })
         );
