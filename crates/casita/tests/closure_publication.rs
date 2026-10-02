@@ -442,3 +442,67 @@ async fn postorder_targets_reuse_only_completed_closure_checks() {
             .all(|valid| valid)
     );
 }
+
+#[tokio::test]
+async fn overlapping_root_changes_check_shared_descendants_once() {
+    use casita::experimental::{RootChange, RootName};
+    use std::sync::{
+        Arc,
+        atomic::{AtomicUsize, Ordering},
+    };
+    let reads = Arc::new(AtomicUsize::new(0));
+    let repository = Repository::new(
+        counting_blob_store::CountingBlobStore {
+            inner: MemoryBlobStore::new(),
+            reads: reads.clone(),
+            writes: Arc::new(AtomicUsize::new(0)),
+        },
+        MemoryMetadataStore::new().unwrap(),
+    );
+    let session = repository.mutation_session().await.unwrap();
+    let mut directory = Directory::new();
+    let mut staged = Vec::new();
+    let mut roots = Vec::new();
+    const DEPTH: usize = 16;
+    for level in 0..DEPTH {
+        let object = session.stage_directory(&directory).await.unwrap();
+        roots.push(RootChange::Set {
+            name: RootName::try_from(format!("level-{level}").as_str()).unwrap(),
+            target: object.record().key().clone(),
+        });
+        staged.push(object);
+        directory = Directory::try_from_iter([(
+            PathComponent::try_from("child").unwrap(),
+            Node::Directory {
+                digest: directory.digest(),
+                size: directory.size(),
+            },
+        )])
+        .unwrap();
+    }
+    // Publish the outermost root first: its closure contains every later root.
+    roots.reverse();
+    reads.store(0, Ordering::SeqCst);
+    session.publish(staged, roots.clone()).await.unwrap();
+    // The first walk proves every directory. Later roots inside that closure
+    // need no walk of their own in the same publication attempt.
+    assert!(
+        reads.load(Ordering::SeqCst) < 2 * DEPTH,
+        "overlapping root checks reopened {} payloads for {DEPTH} directories",
+        reads.load(Ordering::SeqCst),
+    );
+    let snapshot = repository.metadata().snapshot().await.unwrap();
+    for change in roots {
+        let RootChange::Set { name, target } = change else {
+            unreachable!()
+        };
+        assert_eq!(snapshot.root(&name).await.unwrap(), Some(target.clone()));
+        assert_eq!(
+            snapshot
+                .validated_closures(std::slice::from_ref(&target))
+                .await
+                .unwrap(),
+            [true]
+        );
+    }
+}

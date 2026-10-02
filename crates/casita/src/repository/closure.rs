@@ -91,8 +91,9 @@ pub(super) struct ClosureVerifier<'a, PS> {
     pub(super) formats: &'a FormatRegistry,
     pub(super) limits: &'a FormatLimits,
     pub(super) area: SpillArea,
-    /// Requested roots completely checked against this same overlay/snapshot.
-    /// Publication keeps this bounded by its target limit and resets on retry.
+    /// Closures completely checked against this same overlay/snapshot within
+    /// one publication attempt. Publication holds no more keys than it records
+    /// as newly verified and resets this on retry.
     pub(super) completed: Option<&'a BTreeSet<ObjectKey>>,
 }
 

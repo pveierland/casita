@@ -1189,13 +1189,26 @@ where
                     } else {
                         Vec::new()
                     };
+                    // Closures completely checked against this attempt's
+                    // overlay and snapshot. A complete incremental walk proves
+                    // every object it read, so later walks stop there instead of
+                    // auditing shared descendants again: overlapping targets cost
+                    // one check per object rather than one per path. Construction
+                    // shortcuts never enter this set, and a retry starts empty.
+                    let mut completed = BTreeSet::new();
                     if !self.repository.formats.is_builtin() {
                         // Construction proves the built-in format's rules, not
                         // a replacement verifier's additional relations. Audit
                         // those candidates before publishing any proof marks.
                         for target in &constructed_closures {
+                            if completed.contains(target) {
+                                continue;
+                            }
+                            let proven = newly_verified.len();
+                            let mut verifier = self.repository.closure_verifier();
+                            verifier.completed = Some(&completed);
                             let status = verify_closure_with(
-                                self.repository.closure_verifier(),
+                                verifier,
                                 snapshot.as_ref(),
                                 &overlay,
                                 target,
@@ -1210,6 +1223,7 @@ where
                                     status,
                                 });
                             }
+                            completed.extend(newly_verified[proven..].iter().cloned());
                         }
                     }
                     // Requested targets use normal format verification, never
@@ -1219,15 +1233,15 @@ where
                     // child check. Remaining committed targets use canonical order.
                     // A successful prefix is private to this immutable attempt:
                     // neither partial walks nor retries may reuse its proofs.
-                    let mut completed_checks = BTreeSet::new();
                     for target in staged.iter().map(|object| object.record().key())
                         .chain(checked_closures.iter())
                     {
-                        if !checked_closures.contains(target) || completed_checks.contains(target) {
+                        if !checked_closures.contains(target) || completed.contains(target) {
+                            // Already proven in this attempt, and so recorded.
                             continue;
                         }
                         let mut verifier = self.repository.closure_verifier();
-                        verifier.completed = Some(&completed_checks);
+                        verifier.completed = Some(&completed);
                         let status = verify_closure_with(
                             verifier,
                             snapshot.as_ref(),
@@ -1243,9 +1257,9 @@ where
                                 status,
                             });
                         }
-                        completed_checks.insert(target.clone());
+                        completed.insert(target.clone());
+                        newly_verified.push(target.clone());
                     }
-                    newly_verified.extend(checked_closures.iter().cloned());
                     for change in &root_changes {
                         if let RootChange::Set { target, .. } = change {
                             if constructed_closures.contains(target) {
@@ -1255,8 +1269,14 @@ where
                                 debug_assert!(overlay.contains_key(target));
                                 continue;
                             }
+                            if completed.contains(target) {
+                                continue;
+                            }
+                            let proven = newly_verified.len();
+                            let mut verifier = self.repository.closure_verifier();
+                            verifier.completed = Some(&completed);
                             let status = verify_closure_with(
-                                self.repository.closure_verifier(),
+                                verifier,
                                 snapshot.as_ref(),
                                 &overlay,
                                 target,
@@ -1271,6 +1291,7 @@ where
                                     status,
                                 });
                             }
+                            completed.extend(newly_verified[proven..].iter().cloned());
                         }
                     }
 

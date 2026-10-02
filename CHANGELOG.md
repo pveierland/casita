@@ -121,6 +121,11 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 - Checked closure batches reuse completed child checks within each publication
   attempt when staged children precede their parents; retries verify afresh.
 
+- Publication audits of root changes and custom-registry construction proofs
+  reuse every object a complete walk proved earlier in the same attempt. Custom
+  registries audit each object of a Git closure import once instead of once per
+  enclosing commit, removing quadratic cost on linear histories.
+
 - Publishing verified built-in raw blobs records complete-closure witnesses without
   rereading their payloads. Custom registries keep their normal validation rules.
 

@@ -2799,3 +2799,32 @@ including noisy or negative results.
 The original harness validation is preserved in
 [the Git closure report](reports/2026-09-30-git-closure/README.md). It
 checks correctness gates with single samples; its timings do not measure this branch.
+
+## Git closure audit
+
+`git-closure-audit` imports one packed linear Git history whose commits each
+add a distinct tree and blob. A built-in registry trusts the importer's closure
+construction; a custom registry wrapping the native formats must audit every
+imported object with its link verifier before closure witnesses are recorded.
+Each sample reports `link_audits`, the custom verifier's call count during the
+cold import. Linear audit cost is one call per object; the correctness gate
+requires at least one call per object and none for built-in registries.
+
+Every sample also checks exact imported counts, a source-free warm import and
+an exhaustive closure verification outside the timed region. Defaults straddle
+publication batching: 16 commits (48 objects) fit one 64-object witness batch
+while 64 commits span three, and 4096 commits span three default
+4096-object batches. Custom registries can only be configured over in-memory
+stores, so every case uses the memory backend. The suite is included in
+`benchmark all`.
+
+```sh
+benchmark run git-closure-audit --profile smoke --output /tmp/git-closure-audit-smoke.json
+benchmark run git-closure-audit --registry custom --repetitions 5 --output /tmp/git-closure-audit.json
+```
+
+Paired runs accept `--baseline-binary /path/to/baseline --probe-binary
+/path/to/candidate --no-build`, alternate execution order and report each
+variant's deterministic `link_audits` beside paired wall-time reductions. Build
+both executables with `cargo test --release -p casita --no-default-features
+--features native,git,experimental --test git_closure_custom_formats --no-run`.

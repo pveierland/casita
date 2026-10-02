@@ -619,6 +619,15 @@
       "correctness": ["exact imported and reused object counts", "exhaustive closure verification", "zero source bytes for warm imports"]
     },
     {
+      "id": "git-closure-audit",
+      "suite_id": "native-git",
+      "title": "Git closure import audits of linear histories with built-in and custom registries",
+      "kind": "module",
+      "target": "benchmarks.suites.git_closure_audit",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["exact imported object counts", "every object audited by custom registries", "exhaustive closure verification", "zero source bytes for warm imports"]
+    },
+    {
       "id": "git-import-profile",
       "suite_id": "native-git",
       "title": "Stage-level profiling of git-scale initial, unchanged and incremental imports",
