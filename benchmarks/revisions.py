@@ -49,6 +49,18 @@ SUITE_BUILD_SPECS = {
         ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_closure_import", "--no-run", "--message-format=json"),
         "--probe-binary", "git_closure_import", cargo_json_test="git_closure_import", supports_report=False,
     ),
+    "git-worker-matrix-mixed": SuiteBuildSpec(
+        ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_worker_matrix", "--no-run", "--message-format=json"),
+        "--probe-binary", "git_worker_matrix", cargo_json_test="git_worker_matrix", supports_report=False,
+    ),
+    "git-worker-matrix-delta": SuiteBuildSpec(
+        ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_worker_matrix", "--no-run", "--message-format=json"),
+        "--probe-binary", "git_worker_matrix", cargo_json_test="git_worker_matrix", supports_report=False,
+    ),
+    "git-worker-matrix": SuiteBuildSpec(
+        ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_worker_matrix", "--no-run", "--message-format=json"),
+        "--probe-binary", "git_worker_matrix", cargo_json_test="git_worker_matrix", supports_report=False,
+    ),
     "git-retained-buffers": SuiteBuildSpec(
         ("test", "--release", "--no-default-features", "--features", "native,git,experimental", "--test", "git_closure_import", "--no-run", "--message-format=json"),
         "--probe-binary", "git_closure_import", cargo_json_test="git_closure_import", supports_report=False,

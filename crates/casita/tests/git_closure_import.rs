@@ -551,8 +551,8 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
                 .unwrap();
         }
         let hwm_before = bounded.then(bounded_fixture::parent_hwm).flatten();
-        let io_before = delta_metrics.then(bounded_fixture::process_io).flatten();
-        let cpu_before = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
+        let io_before = delta_metrics.then(observations::process_io).flatten();
+        let cpu_before = cpu_metrics.then(observations::process_cpu).flatten();
         let start = std::time::Instant::now();
         let outcomes = futures::future::join_all(
             repositories
@@ -564,10 +564,10 @@ async fn run_git_closure_benchmark<PS: casita::experimental::BlobStore, SS: Meta
         .map(Result::unwrap)
         .collect::<Vec<_>>();
         let nanos = start.elapsed().as_nanos();
-        let cpu_after = cpu_metrics.then(bounded_fixture::process_cpu).flatten();
-        let process_cpu = bounded_fixture::io_delta(cpu_before, cpu_after);
-        let io_after = delta_metrics.then(bounded_fixture::process_io).flatten();
-        let process_io = bounded_fixture::io_delta(io_before, io_after);
+        let cpu_after = cpu_metrics.then(observations::process_cpu).flatten();
+        let process_cpu = observations::io_delta(cpu_before, cpu_after);
+        let io_after = delta_metrics.then(observations::process_io).flatten();
+        let process_io = observations::io_delta(io_before, io_after);
         let hwm_after = bounded.then(bounded_fixture::parent_hwm).flatten();
         // Observe release before readback or audits can hide late cleanup.
         let (
@@ -1110,6 +1110,8 @@ mod inflation;
 
 #[path = "git_closure_import/bounded_fixture.rs"]
 mod bounded_fixture;
+#[path = "git_closure_import/observations.rs"]
+mod observations;
 
 #[path = "git_closure_import/delta_spill.rs"]
 mod delta_spill;

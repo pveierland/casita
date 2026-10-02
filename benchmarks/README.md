@@ -19,6 +19,12 @@ Use an optimized test executable for performance comparisons. The suite runs in
 `--bin-dir` may supply an existing `casita-lib-test` executable. Standalone runs
 accept `--probe-binary`. Both runners retain raw timings and correctness gates.
 
+## Git decoder scaling
+
+The [decoder matrix](git-worker-matrix.md) compares 1/2/4/8 workers with bounded
+fixture generation, audited readback, pre-audit parent memory and import CPU
+observations. It is included in `benchmark all` as `git-worker-matrix`.
+
 ## Filesystem reuse
 
 `benchmark run filesystem-reuse` separates cached tree import from forced rereads
