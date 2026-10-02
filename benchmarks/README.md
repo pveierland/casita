@@ -2796,6 +2796,6 @@ bytes: the former straddle single-body admission and the latter straddle
 two-body read-ahead for 1 KiB blobs. Paired reports preserve every sample,
 including noisy or negative results.
 
-Historical initial correctness results are preserved in
-[the Git closure report](reports/2026-09-30-git-closure/README.md);
-its recorded timings are not measurements of this extracted branch.
+The original harness validation is preserved in
+[the Git closure report](reports/2026-09-30-git-closure/README.md). It
+checks correctness gates with single samples; its timings do not measure this branch.

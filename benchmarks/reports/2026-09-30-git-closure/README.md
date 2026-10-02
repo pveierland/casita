@@ -1,26 +1,26 @@
-# Historical Git closure import evidence
+# Git closure import harness validation
 
-These original results describe the recorded executable and environment from
-2026-09-30. They predate this extraction and updated upstream dependencies.
-The raw JSON remains unchanged; its timings are not current-branch measurements.
+`baseline-validation.json` is a single-sample validation of the
+`git-closure-import` harness against the original closure importer. It was
+captured on 2026-09-30 from a dirty worktree based on
+`c57185a19b2009bec39858101d7621c505a01cb9`, before this feature was extracted
+onto its current base. The raw report and executable fingerprint are unchanged;
+its timings do not measure this branch.
 
-# Git closure import optimization evidence
-
-The initial release baseline passed seven integration tests. Its workload-matrix
-validation contains 64 audited samples: eight files, memory/local backends,
-loose/packed sources, 1 KiB/256 KiB deterministic random files, and staging
-concurrency 1/16. These single samples validate the harness; they do not establish
-speedup or statistical significance.
+The run audits 64 samples: four operations (cold, warm, subtree delta and wide
+delta) for eight random files of 1 KiB or 256 KiB, memory and local backends,
+loose and packed sources, and staging concurrency 1 and 16. Every sample passed
+the suite's exact imported/reused counts, source-free warm import and
+exhaustive closure verification. One sample per configuration validates the
+harness and correctness gates only; it establishes no speedup or significance.
 
 ```sh
 python3 -m benchmarks.suites.git_closure_import --counts 8 --max-buffered-bytes 67108864 --backend both --layout both --file-bytes 1024,262144 --concurrency 1,16 --content random --probe-binary /path/to/closure-baseline --no-build --output baseline-validation.json
 ```
 
-Build the executable with `cargo test --release -p casita --features
-git,experimental --test git_closure_import --no-run`. The JSON records its
-SHA-256, platform, all process output and exact fixture dimensions. Its temporary
-binary path is descriptive; a fresh build may have a different hash.
-
-Further experiments must retain paired before/after runs with at least five
-repetitions and independent correctness gates before a production optimization
-is accepted.
+Build the probe with `cargo test --release -p casita --no-default-features
+--features native,git,experimental --test git_closure_import --no-run`. The JSON
+records its SHA-256, platform, every process output and the exact fixture
+dimensions. Its executable path is descriptive; a fresh build has a different
+hash. Performance claims need paired baseline and candidate runs with at least
+five repetitions, as described in the benchmark README.
