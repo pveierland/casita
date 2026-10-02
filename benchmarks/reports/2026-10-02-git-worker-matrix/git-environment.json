@@ -1,0 +1,5 @@
+{
+  "git_version": "git version 2.54.0",
+  "git_executable": "/nix/store/jwfr8731byzqdhizax9k6paa00zn2yis-git-with-svn-2.54.0/bin/git",
+  "git_exec_path": "/nix/store/jwfr8731byzqdhizax9k6paa00zn2yis-git-with-svn-2.54.0/libexec/git-core"
+}

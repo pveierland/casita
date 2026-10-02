@@ -1,0 +1,21 @@
+{
+  "executable_sha256": "ad989e2d3d2bb7e0cb6e8f4c2ae97c1184bf0792a2bb6343dcb10ec02bcf6c34",
+  "lockfile_sha256": "c616e3ded6fd4749056e0788d6ec8c87d8e1494d549041960e9055c507f39585",
+  "features": "native,git,experimental",
+  "default_features": false,
+  "rustc_version": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "rustflags": "--sysroot=/nix/store/wg64by85cy7816f2aysllgjgc71qmj9q-rust-std-1.96.0-x86_64-unknown-linux-gnu",
+  "source_head": "0220d4a7ab8a6f8379c6e7aa7fac55c2cdf0a73a",
+  "source_patch_sha256": "e3536d3596c18e5b0a2e52f42217bfb60eb613879d2152e69919924b203dcb66",
+  "tracked_source_sha256": "aa44c1ee9ab852c6bdcb789526f53afd563874f581457be7947349b04edffd13",
+  "untracked_source_files": [
+    "crates/casita/tests/git_closure_import/bounded_fixture.rs",
+    "crates/casita/tests/git_worker_matrix.rs",
+    "crates/casita/tests/git_worker_matrix/adapter.rs",
+    "crates/casita/tests/git_worker_matrix/observations.rs"
+  ],
+  "fixture_sha256": "7e2251e3c0b78e8d8162f86384be53f0e9df32d6abe1e1038a84e64d7dd143db",
+  "adapter_sha256": "5ad7c1753ef4ff741e0ad1d81f89800a91038eff6958d171c0467edbe0cab6ab",
+  "source_root": "/tmp/casita-e-matrix/baseline",
+  "cargo_artifact_fresh": false
+}

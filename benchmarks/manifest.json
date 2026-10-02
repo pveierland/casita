@@ -610,6 +610,35 @@
       "correctness": ["identical file identities", "exact payload lengths", "complete closures", "byte-for-byte readback"]
     },
     {
+      "id": "git-worker-matrix-mixed",
+      "suite_id": "native-git",
+      "title": "Mixed Git blob sizes at every decoder count",
+      "kind": "module",
+      "target": "benchmarks.suites.git_worker_matrix",
+      "default_arguments": ["--content", "mixed", "--counts", "32", "--file-bytes", "524288", "--max-buffered-bytes", "67108864"],
+      "profiles": ["smoke", "standard"],
+      "correctness": ["independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification", "validated Linux memory and CPU observations"]
+    },
+    {
+      "id": "git-worker-matrix-delta",
+      "suite_id": "native-git",
+      "title": "Packed Git deltas at every decoder count",
+      "kind": "module",
+      "target": "benchmarks.suites.git_worker_matrix",
+      "default_arguments": ["--content", "clustered", "--layout", "packed", "--counts", "16", "--file-bytes", "4194304", "--max-buffered-bytes", "67108864"],
+      "profiles": ["smoke", "standard"],
+      "correctness": ["independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification", "validated Linux memory and CPU observations"]
+    },
+    {
+      "id": "git-worker-matrix",
+      "suite_id": "native-git",
+      "title": "Git decoder scaling with bounded fixtures and import observations",
+      "kind": "module",
+      "target": "benchmarks.suites.git_worker_matrix",
+      "profiles": ["smoke", "standard"],
+      "correctness": ["independent BLAKE3 and exact streaming readback", "exact imported and reused counts", "exhaustive closure verification", "matched roots and worker settings", "validated Linux memory and CPU observations"]
+    },
+    {
       "id": "git-retained-buffers",
       "suite_id": "native-git",
       "title": "Retained source body capacity around one MiB",
