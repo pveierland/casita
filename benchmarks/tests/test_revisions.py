@@ -75,7 +75,7 @@ class RevisionArgumentTests(unittest.TestCase):
                 "ingest-scheduling",
                 "git-ingest-concurrency",
                 "git-ingest-scheduling",
-                "chunk-upload-completion", "chunk-manifest-stream", "git-import-profile", "pin-growth", "small-blob-pins",
+                "chunk-upload-completion", "chunk-manifest-stream", "chunk-hash-batch", "git-import-profile", "pin-growth", "small-blob-pins",
                 "git-fetch-s3", "git-fetch-local", "git-pack-cached",
                 "git-pack-delayed", "git-pack-boundary",
                 "nixpkgs",
