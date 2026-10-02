@@ -164,6 +164,10 @@ mod git;
 #[cfg(feature = "native")]
 pub mod import;
 #[cfg(feature = "native")]
+mod import_buffer;
+#[cfg(feature = "native")]
+mod import_cpu;
+#[cfg(feature = "native")]
 mod importers;
 mod ipld;
 mod linked;
@@ -255,6 +259,8 @@ pub use casitar::{
 };
 #[cfg(feature = "git")]
 pub use git::repository::NativeGitImportOutcome;
+#[cfg(feature = "git")]
+pub use importers::{GitClosureImportOutcome, GitClosureImportReport};
 #[cfg(feature = "native")]
 pub use spill::SpillMetrics;
 #[cfg(feature = "native")]

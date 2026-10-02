@@ -1,0 +1,14 @@
+
+running 10 tests
+test git::repository::closure_import::workers::streaming::tests::benchmark_git_source_locator ... ignored, run through benchmark run git-source-locator
+test git::repository::closure_import::workers::tests::streaming_window_preserves_staging_errors_and_joins_source_jobs ... ok
+test git::repository::closure_import::workers::tests::streaming_window_stages_before_all_sha1_decoders_finish ... ok
+test git::repository::closure_import::workers::tests::streaming_window_stages_before_all_sha256_decoders_finish ... ok
+test git::repository::closure_import::workers::streaming::tests::loose_lookup_does_not_initialize_optional_pack_indexes ... ok
+test git::repository::closure_import::workers::streaming::tests::inflater_buffers_remain_fixed_and_declared_lengths_are_enforced ... ok
+test git::repository::closure_import::workers::streaming::tests::cancellation_retains_submitted_job_permit_but_drops_waiting_job ... ok
+test git::repository::closure_import::workers::streaming::tests::stale_pack_hints_are_misses_before_stream_selection ... ok
+test git::repository::closure_import::workers::streaming::tests::error_return_drains_inflater_jobs_for_serial_and_grouped_windows ... ok
+test git::repository::closure_import::workers::streaming::tests::optional_index_snapshots_obey_entry_count_and_byte_caps ... ok
+
+test result: ok. 9 passed; 0 failed; 1 ignored; 0 measured; 861 filtered out; finished in 0.19s

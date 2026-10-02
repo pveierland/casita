@@ -1,0 +1,26 @@
+{
+  "git_closure_import": {
+    "path": "/tmp/casita-inflation-all-smoke/bin/git_closure_import",
+    "sha256": "f560b12a83d580061ec6fc7964ef3db8872aeee5f2e6a3df60c8a67e1c1572ff",
+    "source": "/tmp/casita-inflation-all-binaries/git_closure_import",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/f560b12a83d580061ec6fc7964ef3db8872aeee5f2e6a3df60c8a67e1c1572ff"
+  },
+  "casita-lib-test": {
+    "path": "/tmp/casita-inflation-all-smoke/bin/casita-lib-test",
+    "sha256": "fdecba66151d091c9f8c502581ad94ea34ca866c4e915c21bfdc39982337c3a1",
+    "source": "/tmp/casita-inflation-all-binaries/casita-lib-test",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/fdecba66151d091c9f8c502581ad94ea34ca866c4e915c21bfdc39982337c3a1"
+  },
+  "git_closure_import.build.json": {
+    "path": "/tmp/casita-inflation-all-smoke/bin/git_closure_import.build.json",
+    "sha256": "6afdcebdcc1840ff46f77b734232cde1b4570bbeae6fc315a9b4fdcbb1ff03af",
+    "source": "/tmp/casita-inflation-all-binaries/git_closure_import.build.json",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/6afdcebdcc1840ff46f77b734232cde1b4570bbeae6fc315a9b4fdcbb1ff03af"
+  },
+  "casita-lib-test.build.json": {
+    "path": "/tmp/casita-inflation-all-smoke/bin/casita-lib-test.build.json",
+    "sha256": "aff5a840bec6650a33dd4441cb40993c8164ac4a21f97aa41bfaa5a13faa69b3",
+    "source": "/tmp/casita-inflation-all-binaries/casita-lib-test.build.json",
+    "shared_path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/artifacts/aff5a840bec6650a33dd4441cb40993c8164ac4a21f97aa41bfaa5a13faa69b3"
+  }
+}

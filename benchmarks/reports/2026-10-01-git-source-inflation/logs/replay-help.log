@@ -1,0 +1,43 @@
+usage: profile.py [-h] [--profile {smoke,standard}] [--counts COUNTS]
+                  [--max-buffered-bytes MAX_BUFFERED_BYTES]
+                  [--layout {loose,packed,both}]
+                  [--backend {memory,local,both}] [--file-bytes FILE_BYTES]
+                  [--concurrency CONCURRENCY]
+                  [--decode-workers DECODE_WORKERS]
+                  [--baseline-decode-workers BASELINE_DECODE_WORKERS |
+                  --match-baseline-decode-workers]
+                  [--chunk-cpu-limit CHUNK_CPU_LIMIT]
+                  [--baseline-chunk-cpu-limit BASELINE_CHUNK_CPU_LIMIT]
+                  [--content {repeated,random,mixed,clustered}]
+                  [--bounded-fixture] [--pack-window PACK_WINDOW]
+                  [--repetitions REPETITIONS] [--probe-binary PROBE_BINARY]
+                  [--baseline-binary BASELINE_BINARY]
+                  [--cpu-affinity CPU_AFFINITY] [--no-build] --output OUTPUT
+
+Inventory-free cold, warm, cross-root and wide-delta Git closure imports.
+
+options:
+  -h, --help            show this help message and exit
+  --profile {smoke,standard}
+  --counts COUNTS
+  --max-buffered-bytes MAX_BUFFERED_BYTES
+  --layout {loose,packed,both}
+  --backend {memory,local,both}
+  --file-bytes FILE_BYTES
+  --concurrency CONCURRENCY
+  --decode-workers DECODE_WORKERS
+  --baseline-decode-workers BASELINE_DECODE_WORKERS
+  --match-baseline-decode-workers
+                        use each requested decoder count for both variants
+  --chunk-cpu-limit CHUNK_CPU_LIMIT
+  --baseline-chunk-cpu-limit BASELINE_CHUNK_CPU_LIMIT
+  --content {repeated,random,mixed,clustered}
+  --bounded-fixture     stream fixture generation/readback and capture parent
+                        RSS before audits
+  --pack-window PACK_WINDOW
+  --repetitions REPETITIONS
+  --probe-binary PROBE_BINARY
+  --baseline-binary BASELINE_BINARY
+  --cpu-affinity CPU_AFFINITY
+  --no-build
+  --output OUTPUT

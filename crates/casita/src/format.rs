@@ -390,6 +390,9 @@ pub trait ObjectFormat: Send + Sync {
 #[derive(Clone)]
 pub struct FormatRegistry {
     formats: Arc<BTreeMap<NamespaceId, Arc<dyn ObjectFormat>>>,
+    // Namespace spelling alone cannot identify implementation-specific proofs.
+    #[cfg(feature = "native")]
+    builtin: bool,
 }
 
 impl FormatRegistry {
@@ -406,6 +409,8 @@ impl FormatRegistry {
         }
         Ok(Self {
             formats: Arc::new(by_namespace),
+            #[cfg(feature = "native")]
+            builtin: false,
         })
     }
 
@@ -421,7 +426,21 @@ impl FormatRegistry {
         formats.extend(crate::ipld::formats());
         formats.extend(crate::git::formats());
         formats.push(Arc::new(crate::LinkedObjectFormat::default()));
-        Self::new(formats).expect("the built-in namespaces are distinct")
+        Self {
+            formats: Self::new(formats)
+                .expect("the built-in namespaces are distinct")
+                .formats,
+            #[cfg(feature = "native")]
+            builtin: true,
+        }
+    }
+
+    /// Only this factory establishes the provenance needed for private
+    /// construction proofs. Custom registries may add relational checks even
+    /// when they use the spelling of a built-in namespace.
+    #[cfg(feature = "native")]
+    pub(crate) fn is_builtin(&self) -> bool {
+        self.builtin
     }
 
     /// Resolve the verifier for an exact namespace.

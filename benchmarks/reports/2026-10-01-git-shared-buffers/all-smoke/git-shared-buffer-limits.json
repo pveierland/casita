@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "result_schema": "casita.git-shared-buffer-limits.v1",
+  "suite_id": "native-git",
+  "complete": true,
+  "artifacts": [
+    {
+      "path": "/home/pveierland/dev/git-import-perf/casita/benchmarks/reports/2026-10-01-git-shared-buffers/all-smoke/bin/git_import_buffers",
+      "sha256": "058c750d9d0fd634460bf66aa1190cf76182cf935a0c16c8d488f807db49ae4a"
+    }
+  ],
+  "samples": [
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "rounding",
+      "values": [
+        131071,
+        131072,
+        131073
+      ],
+      "wall_seconds": 0.004996398,
+      "max_rss_bytes": 3768320,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "writer-envelope",
+      "values": [
+        "minimum-1",
+        "minimum",
+        "minimum+1"
+      ],
+      "wall_seconds": 0.008101875,
+      "max_rss_bytes": 10039296,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "source-envelope",
+      "values": [
+        589823,
+        589824,
+        589825
+      ],
+      "wall_seconds": 0.073961256,
+      "max_rss_bytes": 21749760,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "window-reuse",
+      "values": [
+        "two imports",
+        "multiple source windows",
+        "one CPU and one blocking thread"
+      ],
+      "wall_seconds": 0.101484561,
+      "max_rss_bytes": 32677888,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "queued-cancellation",
+      "values": [
+        "queued compression",
+        "cancelled producer",
+        "complete reservation recovery"
+      ],
+      "wall_seconds": 0.004157648,
+      "max_rss_bytes": 8622080,
+      "correctness": "exact boundary test passed"
+    },
+    {
+      "repetition": 0,
+      "status": "ok",
+      "implementation": "casita",
+      "case": "single-thread-progress",
+      "values": [
+        "one CPU permit",
+        "one blocking thread",
+        "oversized eligible stream"
+      ],
+      "wall_seconds": 0.076388195,
+      "max_rss_bytes": 31399936,
+      "correctness": "exact boundary test passed"
+    }
+  ],
+  "processes": [
+    {
+      "wall_seconds": 0.004996398,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 3768320,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest reservations_never_round_capacity_up_or_saturate_oversized_requests ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "rounding"
+    },
+    {
+      "wall_seconds": 0.008101875,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 10039296,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\nbuffer_boundary writer_minimum=10944512\ntest pipeline::writer_capacity_boundary_preserves_one_complete_progress_envelope ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "writer-envelope"
+    },
+    {
+      "wall_seconds": 0.073961256,
+      "user_seconds": 0.01,
+      "system_seconds": 0.03,
+      "max_rss_bytes": 21749760,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\nbuffer_boundary source_minimum=589824\ntest pipeline::source_capacity_boundary_and_oversized_buffered_fallback_are_explicit ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.07s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "source-envelope"
+    },
+    {
+      "wall_seconds": 0.101484561,
+      "user_seconds": 0.02,
+      "system_seconds": 0.03,
+      "max_rss_bytes": 32677888,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest pipeline::concurrent_imports_release_source_allowances_between_windows ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.10s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "window-reuse"
+    },
+    {
+      "wall_seconds": 0.004157648,
+      "user_seconds": 0.0,
+      "system_seconds": 0.0,
+      "max_rss_bytes": 8622080,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest pipeline::cancelled_writer_keeps_admission_with_queued_blocking_bytes ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "queued-cancellation"
+    },
+    {
+      "wall_seconds": 0.076388195,
+      "user_seconds": 0.04,
+      "system_seconds": 0.01,
+      "max_rss_bytes": 31399936,
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest pipeline::shared_buffers_and_one_cpu_progress_and_release_after_real_streamed_import ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.07s\n\n",
+      "stderr": "",
+      "repetition": 0,
+      "case": "single-thread-progress"
+    }
+  ],
+  "configuration": {
+    "repetitions": 1,
+    "cases": {
+      "rounding": {
+        "test": "reservations_never_round_capacity_up_or_saturate_oversized_requests",
+        "values": [
+          131071,
+          131072,
+          131073
+        ]
+      },
+      "writer-envelope": {
+        "test": "pipeline::writer_capacity_boundary_preserves_one_complete_progress_envelope",
+        "values": [
+          "minimum-1",
+          "minimum",
+          "minimum+1"
+        ]
+      },
+      "source-envelope": {
+        "test": "pipeline::source_capacity_boundary_and_oversized_buffered_fallback_are_explicit",
+        "values": [
+          589823,
+          589824,
+          589825
+        ]
+      },
+      "window-reuse": {
+        "test": "pipeline::concurrent_imports_release_source_allowances_between_windows",
+        "values": [
+          "two imports",
+          "multiple source windows",
+          "one CPU and one blocking thread"
+        ]
+      },
+      "queued-cancellation": {
+        "test": "pipeline::cancelled_writer_keeps_admission_with_queued_blocking_bytes",
+        "values": [
+          "queued compression",
+          "cancelled producer",
+          "complete reservation recovery"
+        ]
+      },
+      "single-thread-progress": {
+        "test": "pipeline::shared_buffers_and_one_cpu_progress_and_release_after_real_streamed_import",
+        "values": [
+          "one CPU permit",
+          "one blocking thread",
+          "oversized eligible stream"
+        ]
+      }
+    },
+    "timing": "whole test process including fixture construction, all boundary values, and assertions; diagnostic only",
+    "memory_measurement": "whole-process RSS includes fixture and payload audits"
+  },
+  "environment": {
+    "captured_at_utc": "2026-10-01T10:00:33.190660+00:00",
+    "hostname": "skylab-x3",
+    "platform": "Linux-7.2.6-x86_64-with-glibc2.42",
+    "kernel": "7.2.6",
+    "architecture": "x86_64",
+    "cpu": "AMD Ryzen AI 9 HX 370 w/ Radeon 890M",
+    "logical_cpus": 24,
+    "memory_bytes": 100488892416,
+    "cpu_governor": "performance",
+    "filesystem": "zfs zroot/home rw,noatime,xattr,posixacl,casesensitive",
+    "python": "3.13.14",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "casita_revision": "15c735b2b57fe31a74a54239d7ee74232b47ee50",
+    "casita_worktree_dirty": true
+  }
+}

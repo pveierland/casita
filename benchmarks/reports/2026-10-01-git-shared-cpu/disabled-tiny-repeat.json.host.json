@@ -1,0 +1,66 @@
+{
+  "samples": [
+    {
+      "external_cpu_fraction": 0.3140230447756243,
+      "kernel_worker_cpu_fraction": 0.010828380854331873,
+      "top_external_processes": [
+        {
+          "pid": 314017,
+          "name": "rustc",
+          "ticks": 396
+        },
+        {
+          "pid": 313875,
+          "name": "rustc",
+          "ticks": 219
+        },
+        {
+          "pid": 4992,
+          "name": ".ghostty-wrappe",
+          "ticks": 35
+        },
+        {
+          "pid": 240950,
+          "name": "lazygit",
+          "ticks": 16
+        },
+        {
+          "pid": 3805096,
+          "name": "codex",
+          "ticks": 13
+        },
+        {
+          "pid": 2707550,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 2797706,
+          "name": ".claude-wrapped",
+          "ticks": 8
+        },
+        {
+          "pid": 4157431,
+          "name": "Isolated Web Co",
+          "ticks": 8
+        }
+      ],
+      "competing_processes": [
+        {
+          "pid": 313650,
+          "name": ".cargo-wrapped"
+        },
+        {
+          "pid": 313875,
+          "name": "rustc"
+        },
+        {
+          "pid": 314017,
+          "name": "rustc"
+        }
+      ],
+      "paused_build_processes": [],
+      "elapsed_seconds": 1.0004573609912768
+    }
+  ]
+}

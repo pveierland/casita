@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/home/pveierland/dev/git-import-perf/casita/benchmarks/work/711d8643092c4bd891e5a33ac0425b17",
+  "finished": true,
+  "revision": "22fa2ab3e1d78c2828be49dc5d1a858584dd3676",
+  "diff": " benchmarks/all.py                                  |   2 +\n benchmarks/manifest.json                           |  18 ++\n benchmarks/revisions.py                            |   2 +\n benchmarks/suites/git_closure_import.py            |  32 +++-\n benchmarks/tests/test_revisions.py                 |   2 +-\n crates/casita/src/git/objects.rs                   |   8 +-\n crates/casita/src/git/repository/closure_import.rs |   5 +-\n .../src/git/repository/closure_import/workers.rs   | 142 +++++++++++++++-\n .../repository/closure_import/workers/streaming.rs | 103 +++++++++---\n .../closure_import/workers/streaming/tests.rs      | 182 +++++++++++++++++++++\n crates/casita/src/importers/git_closure.rs         |  22 +++\n crates/casita/src/spill.rs                         |  74 ++++++++-\n crates/casita/tests/git_closure_import.rs          |  55 ++++++-\n .../tests/git_closure_import/bounded_fixture.rs    |  32 ++++\n 14 files changed, 633 insertions(+), 46 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "git-delta-spill",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-delta-spill",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-delta-all-smoke/bin/git_closure_import",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-delta-all-smoke/git-delta-spill.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.755394408013672,
+      "log": "/tmp/casita-delta-all-smoke/git-delta-spill.log"
+    },
+    {
+      "suite": "git-delta-limits",
+      "status": "passed",
+      "command": [
+        "/nix/store/05xfwnl62nipbw1ankbcv2crjhb9a918-python3-3.13.14/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "git-delta-limits",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/casita-delta-all-smoke/bin/casita-lib-test",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/casita-delta-all-smoke/git-delta-limits.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.5156230219872668,
+      "log": "/tmp/casita-delta-all-smoke/git-delta-limits.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}

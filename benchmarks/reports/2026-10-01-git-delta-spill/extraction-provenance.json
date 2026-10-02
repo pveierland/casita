@@ -1,0 +1,29 @@
+{
+  "original_source_revision": "f06efa07a5b14f9799336e018b83edc51ccc299e",
+  "original_checksum_manifest_sha256": "2ed01f22cbd135d28d460470d3296428b854f886cf2f8ecbfaeaa5757a161800",
+  "changes": [
+    {
+      "path": "compressible-deltas.json.host.json",
+      "original_sha256": "97310f19a21df9101bf333e444dd9bde1c4b28206cdaebd258c69bb331d47bd7",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 13
+    },
+    {
+      "path": "cpu-check/final-disabled.json.host.json",
+      "original_sha256": "9ed37b285b43078f5a6c1447a9704b75c4f88a9c5440d449b5405b8b818cbf44",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 14
+    },
+    {
+      "path": "cpu-check/isolated-disabled-4m.json.host.json",
+      "original_sha256": "3a0b254e2afe5ac6fcae2a2c156afdd5ae7f26c6ba7ddeade72c0d1c6b4cb79e",
+      "change": "Redact excluded unrelated process names; preserve all numeric observations.",
+      "replacements": 7
+    },
+    {
+      "path": "README.md",
+      "original_sha256": "4edb2381c73b8da7c82dca59cb3da32c5a04aba6cc8adf377736d63f39ac55ca",
+      "change": "Add explicit historical provenance for the reordered extraction."
+    }
+  ]
+}

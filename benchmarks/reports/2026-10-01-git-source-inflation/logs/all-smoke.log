@@ -1,0 +1,4 @@
+results: /tmp/casita-inflation-all-smoke
+running git-source-inflation
+running git-source-locator
+completion ledger: /tmp/casita-inflation-all-smoke/execution.json

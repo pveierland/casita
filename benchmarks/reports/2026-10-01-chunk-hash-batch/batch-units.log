@@ -1,0 +1,121 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+warning: function `fuzz_decode` is never used
+   --> crates/casita/src/sync/sliced.rs:952:8
+    |
+952 | pub fn fuzz_decode(bytes: &[u8]) {
+    |        ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `casita` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 00s
+     Running unittests src/lib.rs (/home/pveierland/dev/casita/target/debug/deps/casita-4ad70a21ff4f098b)
+
+running 104 tests
+test blob::chunked::hash_batch_tests::cancelled_hash_group_keeps_all_queued_chunk_permits ... ok
+test blob::chunked::manifest::tests::manifest_roundtrip_preserves_chunk_order_and_sizes ... ok
+test blob::chunked::manifest::tests::manifest_rejects_chunk_above_the_allocation_limit ... ok
+test blob::chunked::manifest::tests::decompression_cap_accepts_exact_size_and_rejects_larger_output ... ok
+test blob::chunked::tests::benchmark_small_blob_pins ... ignored, permanent durable small-blob staging benchmark; run benchmark small-blob-pins
+test blob::chunked::hash_batch_tests::paused_source_still_uploads_a_partial_hash_batch ... ok
+test blob::chunked::pages::tests::forged_descriptors_pages_and_bounds_are_rejected ... ok
+test blob::chunked::pages::parallel_tests::cancellation_drops_in_flight_page_reads ... ok
+test blob::chunked::tests::cancelled_chunk_hash_keeps_chunk_budget_until_cpu_completion ... ok
+test blob::chunked::tests::cancelled_small_upload_keeps_chunk_budget_until_cpu_completion ... ok
+test blob::chunked::tests::collector_pack_writes_do_not_extend_a_concurrent_staging_pin ... ok
+test blob::chunked::tests::cancelled_blocking_decode_is_drained_before_ownership_release ... ok
+test blob::chunked::tests::build_outboard_rejects_substituted_manifest ... ok
+test blob::chunked::tests::empty_chunk_entries_are_rejected_without_replacing_existing_metadata ... ok
+test blob::chunked::pages::parallel_tests::failed_parallel_leaf_never_returns_partial_manifest ... ok
+test blob::chunked::manifest::tests::chunk_decoder_preserves_legacy_frames_limits_and_error_recovery ... ok
+test blob::chunked::tests::fast_path_digest_matches_cdc_across_minimum_boundary ... ok
+test blob::chunked::tests::fsck_repair_chaos_outboard_publish_failure_is_retryable ... ok
+test blob::chunked::pages::tests::byte_tree_boundaries_and_cross_leaf_reads ... ok
+test blob::chunked::tests::corrupted_chunk_fails_read ... ok
+test blob::chunked::hash_batch_tests::writer_hashes_ready_chunks_in_fewer_jobs_without_changing_content ... ok
+test blob::chunked::pages::tests::chunk_tree_boundaries_share_unchanged_pages_and_bound_the_cache ... ok
+test blob::chunked::pages::streaming_manifest_tests::streaming_chunk_manifests_preserve_flat_and_paged_bytes_with_bounded_buffers ... ok
+test blob::chunked::tests::fsck_repair_rebuilds_an_existing_corrupt_outboard ... ok
+test blob::chunked::hash_batch_tests::hash_jobs_bound_count_and_bytes_and_isolate_oversized_chunks ... ok
+test blob::chunked::tests::fsck_uses_the_authoritative_manifest_catalog ... ok
+test blob::chunked::tests::immutable_cache_control_on_content_objects ... ok
+test blob::chunked::tests::blob_sync_chunk_roundtrip_and_negotiation ... ok
+test blob::chunked::tests::inline_decode_uses_the_declared_size_as_its_work_cap ... ok
+test blob::chunked::pages::parallel_tests::leaves_overlap_with_bounded_concurrency_and_preserve_order ... ok
+test blob::chunked::tests::fsck_repair_chaos_manifest_publish_failure_stays_unreadable_then_retries ... ok
+test blob::chunked::tests::chunk_budget_smaller_than_the_upload_window_still_makes_progress ... ok
+test blob::chunked::tests::fsck_repair_chaos_cancellation_before_manifest_publish_is_retryable ... ok
+test blob::chunked::tests::fsck_repair_chaos_refuses_a_missing_or_corrupt_replica ... ok
+test blob::chunked::tests::chunk_upload_concurrency_bounds_pending_backend_writes ... ok
+test blob::chunked::tests::loose_gc_failed_delete_requires_exact_claim_recovery ... ok
+test blob::chunked::tests::fsck_repair_chaos_retains_its_objects_during_logical_collection ... ok
+test blob::chunked::tests::missing_blob_is_none ... ok
+test blob::chunked::tests::online_dedup_waits_for_deletion_then_revalidates_the_cached_pack ... ok
+test blob::chunked::tests::loose_gc_preserves_physical_pins_and_counts_only_admitted_deletions ... ok
+test blob::chunked::tests::loose_gc_cancellation_keeps_path_claim_until_delete_settles ... ok
+test blob::chunked::tests::paged_gc_cancellation_keeps_claim_until_io_settles ... ok
+test blob::chunked::tests::large_blob_is_chunked ... ok
+test blob::chunked::tests::paged_gc_recovers_an_orphan_descriptor_after_its_last_page_was_deleted ... ok
+test blob::chunked::tests::packed_manifest_deletion_is_published_without_a_pack_rewrite ... ok
+test blob::chunked::tests::put_manifest_elides_single_self_chunk ... ok
+test blob::chunked::tests::fsck_repair_chaos_refuses_an_unavailable_replica_then_retries ... ok
+test blob::chunked::tests::put_chunk_verifies_digest_and_size ... ok
+test blob::chunked::tests::repair_on_read_pins_its_uploaded_representation ... ok
+test blob::chunked::tests::repairing_repository_collects_unrelated_payloads_with_a_live_reader ... ok
+test blob::chunked::tests::repairing_tier_cancellation_releases_the_flight_for_retry ... ok
+test blob::chunked::hash_batch_tests::partial_hash_batches_progress_with_small_budgets_and_one_blocking_thread ... ok
+test blob::chunked::tests::read_after_reopen_with_smaller_avg ... ok
+test blob::chunked::tests::repairing_tier_does_not_mistake_backend_io_for_corruption ... ok
+test blob::chunked::tests::custom_chunk_sizes_match_fastcdc5_and_read_back ... ok
+test blob::chunked::tests::repairing_tier_is_single_flight_and_excludes_gc ... ok
+test blob::chunked::tests::fsck_repair_repairs_a_corrupt_chunk_from_a_verified_replica ... ok
+test blob::chunked::tests::corrupt_packed_outboard_does_not_fall_back_and_can_be_repaired ... ok
+test blob::chunked::tests::seek_from_end_and_beyond ... ok
+test blob::chunked::tests::repairing_tier_rejects_an_unverified_source_with_both_diagnostics ... ok
+test blob::chunked::tests::roundtrip_various_sizes ... ok
+test blob::chunked::tests::sequential_stream_reports_large_chunk_corruption_at_eof ... ok
+test blob::chunked::tests::put_manifest_verifies_binding_and_ceiling ... ok
+test blob::chunked::tests::scoped_verified_reader_rejects_corrupt_proof_before_returning_bytes ... ok
+test blob::chunked::tests::seek_reads_correct_bytes ... ok
+test blob::chunked::tests::repairing_tier_rebuilds_bao_state_from_verified_local_bytes ... ok
+test blob::chunked::tests::stale_negative_catalog_refreshes_to_a_new_manifest ... ok
+test blob::chunked::tests::state_catalog_keeps_retired_manifests_until_catalog_publication ... ok
+test blob::chunked::tests::single_chunk_blob_elides_its_manifest ... ok
+test blob::chunked::tests::the_chunker_minimum_boundary_stores_identical_content ... ok
+test blob::chunked::tests::verified_read_range_edges ... ok
+test blob::chunked::tests::substituted_manifest_is_rejected ... ok
+test blob::chunked::tests::shared_content_deduplicates ... ok
+test blob::chunked::tests::verified_read_roundtrip ... ok
+test blob::chunked::tests::write_after_close_errors ... ok
+test blob::chunked::tests::zero_length_read_is_not_eof ... ok
+test blob::chunked::writer::pin_tests::page_flush_polls_uploads_holding_the_pin_gate ... ok
+test blob::chunked_reader::tests::capacity_stable_admission_and_owner_release ... ok
+test blob::chunked_reader::tests::failures_are_never_cached ... ok
+test blob::chunked_reader::tests::parked_sequential_reads_reuse_verified_chunks ... ok
+test blob::chunked_reader::tests::parking_preserves_position_and_whole_blob_verification ... ok
+test blob::chunked_reader::tests::phase_change_requires_repeated_misses_without_a_hit ... ok
+test blob::chunked_reader::tests::sequential_integrity_and_seek_reuse ... ok
+test blob::chunked_reader::tests::shared_budget_counts_live_clones_and_recovers_after_release ... ok
+test blob::chunked::tests::verified_ranges_and_windows_need_no_preparation_at_proof_boundary ... ok
+test blob::chunked_reader::tests::shared_budget_is_atomic_across_readers ... ok
+test blob::chunked::tests::verified_stream_roundtrip ... ok
+test blob::chunked::tests::paged_overwrite_failed_publication_leaves_old_version_and_reclaims_orphans ... ok
+test blob::chunked::tests::verified_reads_reject_substitution_and_repair_missing_outboards ... ok
+test blob::chunked::tests::blob_coadmits_known_identities_and_bao_path ... ok
+test blob::chunked::tests::repairing_tier_recovers_manifests_chunks_and_elided_blobs ... ok
+test blob::chunked::tests::paged_versions_share_metadata_across_reopen_and_reader_retention ... ok
+test blob::chunked::tests::fsck_repair_chaos_recovers_target_representation_failures ... ok
+test blob::chunked::tests::single_blob_waits_for_claim_without_partial_protection ... ok
+test blob::chunked::tests::a_parked_reader_does_not_block_a_second_reader ... ok
+test blob::chunked::tests::spilled_outboard_upload_uses_bounded_shared_pages ... ok
+test blob::chunked::tests::paged_corruption_never_releases_unauthenticated_data_or_publishes_an_edit ... ok
+test blob::chunked::tests::manifest_publication_rebuilds_flat_metadata_without_changing_identity ... ok
+test blob::chunked::tests::first_verified_byte_and_overwrite_read_bounded_payload_ranges ... ok
+test blob::chunked::tests::ingested_proofs_and_partial_overwrites_roundtrip ... ok
+test blob::chunked::tests::paged_fsck_repairs_a_corrupt_chunk_map_from_a_replica ... ok
+test blob::chunked::tests::paged_fsck_repairs_corrupt_and_missing_outboard_pages ... ok
+test blob::chunked::tests::fsck_repair_chaos_process_abort_before_manifest_publish_is_retryable ... ok
+test blob::chunked::tests::a_parked_reader_does_not_starve_a_second_reader_of_buffers ... ok
+
+test result: ok. 103 passed; 0 failed; 1 ignored; 0 measured; 760 filtered out; finished in 7.40s
+

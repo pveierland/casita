@@ -1,0 +1,39 @@
+   Compiling casita v0.1.0 (/home/pveierland/dev/git-import-perf/casita/crates/casita)
+warning: function `fuzz_decode` is never used
+   --> crates/casita/src/sync/sliced.rs:952:8
+    |
+952 | pub fn fuzz_decode(bytes: &[u8]) {
+    |        ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `casita` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 35.87s
+     Running unittests src/lib.rs (/home/pveierland/dev/casita/target/debug/deps/casita-4ad70a21ff4f098b)
+
+running 3 tests
+test blob::chunked::hash_batch_tests::writer_hashes_ready_chunks_in_fewer_jobs_without_changing_content ... FAILED
+test blob::chunked::hash_batch_tests::partial_hash_batches_progress_with_small_budgets_and_one_blocking_thread ... ok
+test blob::chunked::hash_batch_tests::paused_source_still_uploads_a_partial_hash_batch ... FAILED
+
+failures:
+
+---- blob::chunked::hash_batch_tests::writer_hashes_ready_chunks_in_fewer_jobs_without_changing_content stdout ----
+
+thread 'blob::chunked::hash_batch_tests::writer_hashes_ready_chunks_in_fewer_jobs_without_changing_content' (3560882) panicked at crates/casita/src/blob/chunked/hash_batch_tests.rs:100:5:
+ready chunks should amortize blocking-pool handoffs: 189 jobs for 189 chunks
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- blob::chunked::hash_batch_tests::paused_source_still_uploads_a_partial_hash_batch stdout ----
+
+thread 'blob::chunked::hash_batch_tests::paused_source_still_uploads_a_partial_hash_batch' (3560881) panicked at crates/casita/src/blob/chunked/hash_batch_tests.rs:144:9:
+paused input must not strand already-admitted chunk work
+
+
+failures:
+    blob::chunked::hash_batch_tests::paused_source_still_uploads_a_partial_hash_batch
+    blob::chunked::hash_batch_tests::writer_hashes_ready_chunks_in_fewer_jobs_without_changing_content
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 859 filtered out; finished in 3.00s
+
+error: test failed, to rerun pass `-p casita --lib`
