@@ -325,6 +325,14 @@ async fn chunk_and_upload(
         }
     }
 
+    // Every hashed byte must belong to exactly one manifest entry; the blob
+    // identity would otherwise name content the manifest cannot reproduce.
+    if manifest.size() != hashing.size() {
+        return Err(io::Error::other(
+            "chunk manifest does not cover the hashed payload",
+        ));
+    }
+
     let (blob_digest, outboard) = hashing.finish()?;
     pins.protect(blob_resources(&base_path, blob_digest, outboard.len))
         .await?;
