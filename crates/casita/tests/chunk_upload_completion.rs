@@ -222,32 +222,44 @@ async fn benchmark_chunk_upload_completion() {
 
 #[tokio::test]
 async fn stalled_first_upload_bounds_completed_manifest_metadata() {
-    let (store, backend) = store(Some(usize::MAX), 0, 1024 * 1024, 4);
-    let body = data(1024 * 1024);
-    let write = store.put_slice(&body);
-    tokio::pin!(write);
-    tokio::select! {
-        _ = &mut write => panic!("the first source chunk must remain parked"),
-        _ = async {
-            tokio::time::timeout(Duration::from_secs(5), async {
-                while backend.started.load(Ordering::SeqCst) <= 4 {
-                    tokio::time::sleep(Duration::from_millis(1)).await;
-                }
-            }).await.expect("completion-order admission made no progress");
-            tokio::time::sleep(Duration::from_millis(100)).await;
-        } => {}
+    // A writer buffers 16 upload windows of completed metadata behind a
+    // straggler, never fewer than one 64-entry manifest page. Two uploads
+    // fall below that floor, four meet it, and 32 scale past it. A 4 MiB
+    // budget admits 64 units.
+    for (concurrency, limit) in [(2, 64), (4, 64), (32, 512)] {
+        let (store, backend) = store(Some(usize::MAX), 0, 4 * 1024 * 1024, concurrency);
+        let body = data(1024 * 1024);
+        let write = store.put_slice(&body);
+        tokio::pin!(write);
+        tokio::select! {
+            _ = &mut write => panic!("the first source chunk must remain parked"),
+            _ = async {
+                tokio::time::timeout(Duration::from_secs(5), async {
+                    while backend.started.load(Ordering::SeqCst) <= limit {
+                        tokio::time::sleep(Duration::from_millis(1)).await;
+                    }
+                })
+                .await
+                .expect("completion-order admission stopped before filling its window");
+                // Give an unbounded writer time to overrun the window.
+                tokio::time::sleep(Duration::from_millis(100)).await;
+            } => {}
+        }
+        let started = backend.started.load(Ordering::SeqCst);
+        backend.released.notify_one();
+        // The straggler plus the completed entries that reached the limit,
+        // and at most one more window that was already in flight.
+        assert!(
+            (limit + 1..=limit + concurrency).contains(&started),
+            "a straggler with {concurrency} uploads admitted {started}, outside the window \
+             of {limit} completed entries"
+        );
+        let digest = tokio::time::timeout(Duration::from_secs(5), &mut write)
+            .await
+            .unwrap()
+            .unwrap();
+        audit(&store, digest, &body).await;
     }
-    let started = backend.started.load(Ordering::SeqCst);
-    backend.released.notify_one();
-    assert!(
-        started <= 64 + 4,
-        "a straggler admitted {started} uploads, exceeding the bounded completed-metadata window"
-    );
-    let digest = tokio::time::timeout(Duration::from_secs(5), &mut write)
-        .await
-        .unwrap()
-        .unwrap();
-    audit(&store, digest, &body).await;
 }
 
 #[test]

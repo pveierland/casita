@@ -67,6 +67,10 @@ pub(super) fn open(
     })
 }
 
+/// Upload windows of completed metadata a writer buffers behind its earliest
+/// pending chunk before it stops admitting new chunks.
+const REORDER_WINDOWS: usize = 16;
+
 /// Read `reader` to EOF, chunking it with FastCDC (min/max sized at half and
 /// double the average), deduplicating and uploading each chunk, and writing the
 /// blob manifest. Returns the whole-blob digest and size.
@@ -179,6 +183,11 @@ async fn chunk_and_upload(
         let mut hashes = HashBatch::default();
         let mut reordered = BTreeMap::new();
         let mut next_offset = 0;
+        // Uploads keep flowing behind a straggler until its peers have each
+        // completed REORDER_WINDOWS more uploads. An entry is only chunk
+        // metadata, so even a wide window costs kilobytes.
+        let reorder_limit =
+            super::pages::FANOUT.max(concurrency.get().saturating_mul(REORDER_WINDOWS));
         // A waiting reservation keeps its place in the budget's FIFO queue
         // while this writer drains completions, rather than requeueing behind
         // other writers each time one of its own uploads finishes.
@@ -188,7 +197,7 @@ async fn chunk_and_upload(
         loop {
             // Bound completed metadata behind a straggler. In-flight uploads
             // may contribute at most another concurrency-window of entries.
-            if reordered.len() >= super::pages::FANOUT {
+            if reordered.len() >= reorder_limit {
                 hashes.flush();
                 let completed = uploads
                     .next()
