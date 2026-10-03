@@ -195,6 +195,9 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Fixed
 
+- A cancelled chunked write retains its chunk memory budget while queued
+  hashing or compression still holds the chunk bytes, preventing concurrent
+  writers from exceeding the budget.
 - An S3 repository no longer becomes unreadable after a commit raced a WAL
   collection run by another handle. The collection appends a checkpoint of the
   unchanged state, so the commit found its log position taken, saw the same
