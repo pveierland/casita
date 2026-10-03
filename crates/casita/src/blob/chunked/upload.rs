@@ -42,6 +42,8 @@ impl ChunkUploader<'_> {
         // A cancelled caller cannot stop a running blocking task. Its guard
         // must follow the bytes, including while the task is still queued.
         let (digest, data, guard) = tokio::task::spawn_blocking(move || {
+            #[cfg(test)]
+            super::hash_batch_tests::record_hash_job(std::iter::once(data.as_slice()), false);
             let digest = ChunkId::new(blake3::hash(&data).into());
             (digest, data, guard)
         })
