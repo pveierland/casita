@@ -198,6 +198,9 @@ async fn chunk_and_upload(
             // Bound completed metadata behind a straggler. In-flight uploads
             // may contribute at most another concurrency-window of entries.
             if reordered.len() >= reorder_limit {
+                // Budget is useless until the straggler completes. Leave the
+                // queue rather than hold units other writers could use.
+                admission.set(None.into());
                 hashes.flush();
                 let completed = uploads
                     .next()

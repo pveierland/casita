@@ -262,6 +262,43 @@ async fn stalled_first_upload_bounds_completed_manifest_metadata() {
     }
 }
 
+#[tokio::test]
+async fn a_writer_stalled_behind_a_straggler_leaves_the_budget_to_other_writers() {
+    // Two admission units: the parked first upload holds one. The stalled
+    // writer cannot use the other until the straggler completes, so it must
+    // not keep a queued reservation for it either.
+    let (store, backend) = store(Some(usize::MAX), 0, 2 * 64 * 1024, 4);
+    let body = data(1024 * 1024);
+    let small = data(100);
+    let write = store.put_slice(&body);
+    tokio::pin!(write);
+    tokio::select! {
+        _ = &mut write => panic!("the first source chunk must remain parked"),
+        _ = async {
+            tokio::time::timeout(Duration::from_secs(5), async {
+                while backend.started.load(Ordering::SeqCst) <= 64 {
+                    tokio::time::sleep(Duration::from_millis(1)).await;
+                }
+            })
+            .await
+            .expect("completion-order admission stopped before filling its window");
+            // Let the writer settle into waiting on its straggler.
+            tokio::time::sleep(Duration::from_millis(100)).await;
+            let other = tokio::time::timeout(Duration::from_secs(5), store.put_slice(&small))
+                .await
+                .expect("a stalled writer held budget another writer needed")
+                .unwrap();
+            assert_eq!(other, BlobId::new(Digest::hash(&small)));
+        } => {}
+    }
+    backend.released.notify_one();
+    let digest = tokio::time::timeout(Duration::from_secs(5), &mut write)
+        .await
+        .unwrap()
+        .unwrap();
+    audit(&store, digest, &body).await;
+}
+
 #[test]
 fn paused_source_still_drives_admitted_chunk_uploads() {
     use futures::TryStreamExt;
