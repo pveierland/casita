@@ -100,6 +100,18 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Changed
 
+- Chunked blob writes keep their upload window full past slow uploads. A
+  writer admits the next chunk as soon as any upload completes, buffers the
+  metadata of up to 16 upload windows (never less than one 64-entry manifest
+  page) behind its earliest pending chunk, and stores manifest pages as soon
+  as their prefix completes instead of holding the whole manifest until the
+  end. Chunk boundaries, manifests and blob identities are unchanged.
+- Chunk hashing runs in blocking jobs of up to four chunks and 1 MiB instead
+  of one job per chunk, and a lone chunk of at most 4 KiB is hashed without a
+  blocking job. A new loose chunk costs one existence probe, a pinned writer
+  remembers the chunks it stores so repeated chunks are not probed again, and
+  a loose blob smaller than the maximum chunk size takes one ledger edit, as a
+  packed one does.
 - On macOS, repositories whose state is a `TursoMetadataStore`, including
   `Repository::local` and custom compositions, flush the drive cache
   (`F_FULLFSYNC`) before each deletion batch. Commits sync only to the drive's
@@ -195,6 +207,12 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Fixed
 
+- A cancelled chunked write no longer returns its share of the chunk memory
+  budget while queued hashing or compression still holds the chunk's bytes,
+  which let concurrent writers exceed the budget.
+- A chunked writer waiting on the shared chunk memory budget keeps its place
+  in the queue while its own uploads complete, instead of rejoining behind
+  every later waiter each time one does.
 - An S3 repository no longer becomes unreadable after a commit raced a WAL
   collection run by another handle. The collection appends a checkpoint of the
   unchanged state, so the commit found its log position taken, saw the same
