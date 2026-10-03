@@ -8,6 +8,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::task::{Context, Poll};
 
 use async_trait::async_trait;
+use futures::future::{FusedFuture, FutureExt};
 use futures::stream::{FuturesUnordered, StreamExt};
 use object_store::{ObjectStore, path::Path};
 
@@ -178,6 +179,11 @@ async fn chunk_and_upload(
         let mut hashes = HashBatch::default();
         let mut reordered = BTreeMap::new();
         let mut next_offset = 0;
+        // A waiting reservation keeps its place in the budget's FIFO queue
+        // while this writer drains completions, rather than requeueing behind
+        // other writers each time one of its own uploads finishes.
+        let admission = futures::future::OptionFuture::from(None);
+        futures::pin_mut!(admission);
 
         loop {
             // Bound completed metadata behind a straggler. In-flight uploads
@@ -204,22 +210,28 @@ async fn chunk_and_upload(
             // keep polling this writer's queued uploads so their permits can be
             // released; merely waiting for admission here would deadlock a
             // budget smaller than the per-writer concurrency window.
-            let permit = if let Some(permit) = memory_budget.try_reserve(max) {
+            let permit = if admission.is_terminated()
+                && let Some(permit) = memory_budget.try_reserve(max)
+            {
                 permit
             } else {
                 hashes.flush();
-                if uploads.is_empty() {
-                    memory_budget.reserve(max).await
+                if admission.is_terminated() {
+                    admission.set(Some(memory_budget.reserve(max).fuse()).into());
+                }
+                let permit = if uploads.is_empty() {
+                    (&mut admission).await
                 } else {
                     tokio::select! {
-                        permit = memory_budget.reserve(max) => permit,
+                        permit = &mut admission => permit,
                         completed = uploads.next() => {
                             append_completed(&mut manifest, &mut reordered, &mut next_offset,
                                 completed.expect("the upload queue is nonempty")?, &mut uploads).await?;
                             continue;
                         }
                     }
-                }
+                };
+                permit.expect("admission was pending")
             };
             let chunk = {
                 let next = stream.next();
