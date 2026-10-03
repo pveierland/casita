@@ -195,6 +195,8 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Fixed
 
+- A lone loose chunk whose blob identity is known at EOF is protected
+  together with its blob and Bao path, avoiding a second ledger edit.
 - A cancelled chunked write retains its chunk memory budget while queued
   hashing or compression still holds the chunk bytes, preventing concurrent
   writers from exceeding the budget.
