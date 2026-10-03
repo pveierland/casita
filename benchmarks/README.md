@@ -2730,16 +2730,49 @@ cover the 512-byte chunker minimum, 2048-byte maximum, and byte-budget admission
 on both sides of one-upload and four-upload windows. Reservations round up in
 64 KiB units even for small chunks; 64 KiB therefore permits only one upload.
 `--concurrency` sets the per-writer upload window: 4 by default, with standard
-runs adding 32, the production default, which a 4 MiB budget fully admits. It
-is included in `benchmark all`.
+runs adding 2 and 32, the production default, which a 4 MiB budget fully
+admits. A writer buffers 16 upload windows of completed metadata behind its
+earliest pending chunk, never fewer than 64 entries, so 2 and 4 uploads share
+that floor while 32 buffer 512 entries. Standard runs also add 50 ms
+stragglers: 8 ms stragglers never fill the buffer, while 50 ms stragglers at
+32 uploads filled the former fixed 64-entry buffer and stalled admission.
+Paired against that fixed buffer, 4 MiB writes with a 4 MiB budget and 50 ms
+stragglers took 1.79 s before and 0.90 s after at 32 uploads (50% less, five
+repetitions on four pinned CPUs) and were unchanged at 4. It is included in
+`benchmark all`.
 
 ```sh
 cargo test --release -p casita --no-default-features --features native,experimental --test chunk_upload_completion --no-run
 benchmark run chunk-upload-completion --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/chunk-completion-smoke.json
-benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576,4194304 --delays-ms 0,8 --concurrency 4,32 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
+benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576,4194304 --delays-ms 0,8,50 --concurrency 2,4,32 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
+benchmark run chunk-upload-completion --file-bytes 4194304 --budgets 4194304 --delays-ms 50 --concurrency 4,32 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-window.json
 ```
 
 Build each source checkout in its own Cargo target directory, freeze both
 executables before subsequent builds, and preserve the same Cargo.lock and settings. Optional `.build.json` fingerprints are checked
 before comparing. Reports retain failed gates, every sample, and paired ranges;
 synthetic storage-delay results are not end-to-end Git import speedups.
+
+
+
+### Streaming chunk manifests
+
+`chunk-manifest-stream` measures writing and closing a payload generated from a
+repeated deterministic 64 KiB block. Both the fixture and verified readback use
+fixed-size buffers. Every sample checks an independently streamed BLAKE3 digest,
+all returned bytes, and the stored manifest identity. Paired runs reject differing
+blob or manifest hashes. The periodic source limits unique payload data in the
+memory backend while retaining one manifest entry per source chunk.
+
+The probe captures Linux process high-water RSS immediately after close, before
+readback; it includes the runtime and backend, not just manifest allocations.
+The runner also preserves whole-process RSS separately. Standard sizes range
+from 64 KiB to 256 MiB, with memory and local backends. Exact flat/page and
+page-tree fanout boundaries (63/64/65 and 4095/4096/4097 entries) are covered by
+the `streaming_chunk_manifests_preserve_flat_and_paged_bytes_with_bounded_buffers`
+unit test. The stalled-first-upload test covers the reorder bound.
+
+```sh
+benchmark run chunk-manifest-stream --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/manifest-smoke.json
+benchmark run chunk-manifest-stream --file-bytes 65536,16777216,67108864 --backend both --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/manifest-paired.json
+```
