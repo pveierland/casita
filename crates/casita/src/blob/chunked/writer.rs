@@ -268,8 +268,10 @@ async fn chunk_and_upload(
             uploads.push(async move {
                 let hashed = hashed.await.map_err(io::Error::other)?;
                 if let Some((blob, outboard_len)) = completed {
+                    // As for a small file: admit the chunk and its loose path
+                    // with the blob, so the upload needs no protection of its own.
                     let mut resources = blob_resources(base_path, blob, outboard_len);
-                    resources.insert(PinResource::Chunk(hashed.digest));
+                    resources.extend(uploader.protection_resources(hashed.digest));
                     pins.protect(resources).await?;
                 }
                 let meta = uploader
