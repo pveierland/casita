@@ -100,6 +100,8 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Changed
 
+- Chunked blob writes refill their upload window whenever any upload
+  completes and keep driving uploads while source reads are pending.
 - On macOS, repositories whose state is a `TursoMetadataStore`, including
   `Repository::local` and custom compositions, flush the drive cache
   (`F_FULLFSYNC`) before each deletion batch. Commits sync only to the drive's
@@ -195,6 +197,8 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 
 ### Fixed
 
+- A chunked writer waiting on the shared chunk memory budget keeps its
+  place in the queue while its own uploads complete.
 - A cancelled chunked write retains its chunk memory budget while queued
   hashing or compression still holds the chunk bytes, preventing concurrent
   writers from exceeding the budget.
