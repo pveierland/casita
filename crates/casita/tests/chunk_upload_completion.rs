@@ -107,6 +107,7 @@ fn store(
     barrier: Option<usize>,
     delay_ms: u64,
     budget: usize,
+    concurrency: usize,
 ) -> (ChunkedBlobStore, Arc<DelayedStore>) {
     let backend = Arc::new(DelayedStore {
         inner: Default::default(),
@@ -124,7 +125,7 @@ fn store(
     });
     (
         ChunkedBlobStore::new(backend.clone(), Path::default(), 1024)
-            .with_chunk_upload_concurrency(4.try_into().unwrap())
+            .with_chunk_upload_concurrency(concurrency.try_into().unwrap())
             .with_chunk_memory_budget_bytes(budget),
         backend,
     )
@@ -161,7 +162,7 @@ async fn audit(store: &ChunkedBlobStore, digest: BlobId, body: &[u8]) {
 
 #[tokio::test]
 async fn completed_uploads_allow_new_work_past_an_earlier_straggler() {
-    let (store, backend) = store(Some(4), 0, 1024 * 1024);
+    let (store, backend) = store(Some(4), 0, 1024 * 1024, 4);
     let body = data(64 * 1024);
     let digest = tokio::time::timeout(Duration::from_secs(2), store.put_slice(&body))
         .await
@@ -179,7 +180,7 @@ async fn completed_uploads_allow_new_work_past_an_earlier_straggler() {
 async fn completion_order_preserves_fastcdc_manifests_and_verified_bytes() {
     for size in [0, 1, 511, 512, 513, 2047, 2048, 2049, 65536, 1048576] {
         for budget in [65535, 65536, 65537, 196607, 196608, 196609, 1048576] {
-            let (store, _) = store(None, 0, budget);
+            let (store, _) = store(None, 0, budget, 4);
             let body = data(size);
             let digest = tokio::time::timeout(Duration::from_secs(5), store.put_slice(&body))
                 .await
@@ -202,7 +203,8 @@ async fn benchmark_chunk_upload_completion() {
     let size = env("CASITA_CHUNK_COMPLETION_BYTES", 65536);
     let budget = env("CASITA_CHUNK_COMPLETION_BUDGET", 1048576);
     let delay = env("CASITA_CHUNK_COMPLETION_DELAY_MS", 0);
-    let (store, backend) = store(None, delay as u64, budget);
+    let concurrency = env("CASITA_CHUNK_COMPLETION_CONCURRENCY", 4);
+    let (store, backend) = store(None, delay as u64, budget, concurrency);
     let body = data(size);
     let begin = Instant::now();
     let digest = store.put_slice(&body).await.unwrap();
@@ -213,14 +215,14 @@ async fn benchmark_chunk_upload_completion() {
         backend.completed.load(Ordering::SeqCst)
     );
     println!(
-        "chunk_upload_completion_sample {{\"file_bytes\":{size},\"budget\":{budget},\"delay_ms\":{delay},\"wall_nanos\":{},\"root\":\"{digest}\",\"correctness\":\"reference FastCDC chunks and verified full readback; all uploads completed\"}}",
+        "chunk_upload_completion_sample {{\"file_bytes\":{size},\"budget\":{budget},\"delay_ms\":{delay},\"concurrency\":{concurrency},\"wall_nanos\":{},\"root\":\"{digest}\",\"correctness\":\"reference FastCDC chunks and verified full readback; all uploads completed\"}}",
         elapsed.as_nanos()
     );
 }
 
 #[tokio::test]
 async fn stalled_first_upload_bounds_completed_manifest_metadata() {
-    let (store, backend) = store(Some(usize::MAX), 0, 1024 * 1024);
+    let (store, backend) = store(Some(usize::MAX), 0, 1024 * 1024, 4);
     let body = data(1024 * 1024);
     let write = store.put_slice(&body);
     tokio::pin!(write);

@@ -14,10 +14,10 @@ class ChunkCompletionTests(unittest.TestCase):
         self.assertEqual(len(commands), 1)
         self.assertIn("chunk_upload_completion", commands[0])
 
-    def probe(self, path, root="same", correctness=suite.CORRECTNESS, serial_prefix=False):
+    def probe(self, path, root="same", correctness=suite.CORRECTNESS, serial_prefix=False, concurrency_skew=0):
         prefix = f"test {suite.PROBE} ... " if serial_prefix else ""
         path.write_text("#!" + sys.executable + "\n" + "import os, json\n" +
-            "row = dict(file_bytes=int(os.environ['CASITA_CHUNK_COMPLETION_BYTES']), budget=int(os.environ['CASITA_CHUNK_COMPLETION_BUDGET']), delay_ms=int(os.environ['CASITA_CHUNK_COMPLETION_DELAY_MS']), wall_nanos=100, root=" + repr(root) + ", correctness=" + repr(correctness) + ")\n" +
+            "row = dict(file_bytes=int(os.environ['CASITA_CHUNK_COMPLETION_BYTES']), budget=int(os.environ['CASITA_CHUNK_COMPLETION_BUDGET']), delay_ms=int(os.environ['CASITA_CHUNK_COMPLETION_DELAY_MS']), concurrency=int(os.environ['CASITA_CHUNK_COMPLETION_CONCURRENCY']) + " + repr(concurrency_skew) + ", wall_nanos=100, root=" + repr(root) + ", correctness=" + repr(correctness) + ")\n" +
             "print(" + repr(prefix + "chunk_upload_completion_sample ") + " + json.dumps(row))\nprint('test result: ok. 1 passed; 0 failed;')\n")
         path.chmod(0o755)
         return path
@@ -29,10 +29,41 @@ class ChunkCompletionTests(unittest.TestCase):
             output = directory / "result.json"
             self.assertEqual(suite.main(["--no-build", "--probe-binary", str(probe),
                 "--file-bytes", "65536", "--budgets", "65536", "--delays-ms", "0",
-                "--output", str(output)]), 0)
+                "--concurrency", "4", "--output", str(output)]), 0)
             result = json.loads(output.read_text())
             self.assertTrue(result["complete"])
             self.assertEqual(len(result["samples"]), 1)
+
+    def test_each_concurrency_reaches_the_probe(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = pathlib.Path(temporary)
+            probe = self.probe(directory / "probe")
+            output = directory / "result.json"
+            self.assertEqual(suite.main(["--no-build", "--probe-binary", str(probe),
+                "--file-bytes", "65536", "--budgets", "4194304", "--delays-ms", "8",
+                "--concurrency", "4,32", "--output", str(output)]), 0)
+            result = json.loads(output.read_text())
+            self.assertEqual([sample["concurrency"] for sample in result["samples"]], [4, 32])
+            self.assertEqual(result["configuration"]["upload_concurrency"], [4, 32])
+
+    def test_standard_profile_covers_both_upload_windows(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = pathlib.Path(temporary)
+            probe = self.probe(directory / "probe")
+            output = directory / "result.json"
+            self.assertEqual(suite.main(["--no-build", "--probe-binary", str(probe), "--profile", "standard",
+                "--file-bytes", "65536", "--budgets", "4194304", "--delays-ms", "8",
+                "--output", str(output)]), 0)
+            self.assertEqual(json.loads(output.read_text())["configuration"]["upload_concurrency"], [4, 32])
+
+    def test_a_probe_ignoring_its_concurrency_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = pathlib.Path(temporary)
+            probe = self.probe(directory / "probe", concurrency_skew=1)
+            output = directory / "result.json"
+            with self.assertRaisesRegex(BenchmarkError, "incorrect chunk completion configuration"):
+                suite.main(["--no-build", "--probe-binary", str(probe), "--file-bytes", "65536",
+                    "--budgets", "8192", "--delays-ms", "0", "--output", str(output)])
 
     def test_different_roots_reject_the_pair_and_preserve_failure(self):
         with tempfile.TemporaryDirectory() as temporary:

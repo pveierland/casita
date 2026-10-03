@@ -2728,12 +2728,15 @@ sample verifies independent FastCDC boundaries and hashes, exact blob identity,
 full Bao-verified readback, and that all started uploads finished. Standard cases
 cover the 512-byte chunker minimum, 2048-byte maximum, and byte-budget admission
 on both sides of one-upload and four-upload windows. Reservations round up in
-64 KiB units even for small chunks; 64 KiB therefore permits only one upload. It is included in `benchmark all`.
+64 KiB units even for small chunks; 64 KiB therefore permits only one upload.
+`--concurrency` sets the per-writer upload window: 4 by default, with standard
+runs adding 32, the production default, which a 4 MiB budget fully admits. It
+is included in `benchmark all`.
 
 ```sh
 cargo test --release -p casita --no-default-features --features native,experimental --test chunk_upload_completion --no-run
 benchmark run chunk-upload-completion --profile smoke --probe-binary /path/to/probe --no-build --output /tmp/chunk-completion-smoke.json
-benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576 --delays-ms 0,8 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
+benchmark run chunk-upload-completion --file-bytes 65536,1048576 --budgets 196607,196608,196609,1048576,4194304 --delays-ms 0,8 --concurrency 4,32 --repetitions 5 --cpu-affinity 0,1,2,3 --baseline-binary /path/to/before --probe-binary /path/to/after --no-build --output /tmp/chunk-completion-paired.json
 ```
 
 Build each source checkout in its own Cargo target directory, freeze both
