@@ -61,10 +61,11 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"]
 # separate casita processes on one SQLite-format database coordinated without
 # enabling MVCC (casita deliberately serializes writes). Keep the exact
 # integration revision based on 0.8.0 containing the WAL fixes from
-# tursodatabase/turso#8476 and #8851 until those fixes are available upstream.
+# tursodatabase/turso#8476 and #8851, plus bounded WAL frame-index scans.
+# The pveierland/turso casita branch retains the cachix integration fixes.
 # Downstream consumers inherit this engine directly without needing a Cargo
 # patch or a version wrapper.
-turso = { version = "=0.8.0", git = "https://github.com/cachix/turso.git", rev = "9065e04cb09cb21a6b586dcbe75f1fb8ef3fc549", default-features = false, optional = true }
+turso = { version = "=0.8.0", git = "https://github.com/pveierland/turso.git", rev = "34e03022ae08d2577903cfb0be734bc674cc14a5", default-features = false, optional = true }
 # Handle-rooted filesystem access for import and materialization. Every
 # descendant is resolved relative to an already open directory handle
 # (`openat`/`openat2` on Unix, handle-relative reparse-aware opens on Windows),
