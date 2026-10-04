@@ -84,6 +84,6 @@ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 allow-git = [
   "https://github.com/domenkozar/chroma",
   "https://github.com/yoshidan/google-cloud-rust",
-  "https://github.com/cachix/turso",
+  "https://github.com/pveierland/turso",
 ]
 unused-allowed-source = "deny"
