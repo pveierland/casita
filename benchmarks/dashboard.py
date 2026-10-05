@@ -343,6 +343,54 @@ def normalize_graph_traversal_result(path: pathlib.Path, result: dict[str, Any])
     return normalized_run(path, result, "graph-traversal", observations)
 
 
+GIT_STRATEGY_WORKLOADS = {
+    "casita.git-blob-file.v1": ("git-blob-file", ("backend", "file_bytes", "files")),
+    "casita.git-verified-stream.v1": ("git-verified-stream", ("backend", "file_bytes")),
+}
+
+
+def normalize_git_strategy_result(path: pathlib.Path, result: dict[str, Any]) -> dict[str, Any]:
+    """Keep same-binary strategies and every workload dimension separate."""
+    if result.get("complete") is not True:
+        raise ValueError("incomplete Git strategy matrix cannot be compared")
+    entrypoint, workload = GIT_STRATEGY_WORKLOADS[result["result_schema"]]
+    fields = ("strategy", *workload)
+    groups: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
+    for sample in result.get("samples", []):
+        missing = [field for field in fields if field not in sample]
+        if missing:
+            raise DashboardError(f"Git strategy sample in {path} lacks {missing}")
+        key = tuple(sample[field] for field in fields)
+        if (any(type(value) not in (str, int, bool) for value in key)
+                or type(key[0]) is not str):
+            raise DashboardError(f"Git strategy sample in {path} has an invalid workload {key!r}")
+        groups[tuple((type(value).__name__, value) for value in key)].append(sample)
+    observations = []
+    for typed, samples in sorted(groups.items()):
+        strategy, *values = (value for _type, value in typed)
+        scale = dict(zip(workload, values, strict=True))
+        successful = [sample for sample in samples if sample.get("status") == "ok"]
+        wall, p95_wall = aggregate_metric(successful, "wall_seconds")
+        failures = sample_failures(samples)
+        observations.append({
+            "workload": f"{entrypoint}:" + json.dumps(scale, sort_keys=True),
+            "profile": result.get("configuration", {}).get("profile", "custom"),
+            # Each strategy runs against a freshly prepared repository.
+            "cache_policy": "cold",
+            "operation": strategy,
+            "implementation": "casita",
+            "status": "ok" if len(successful) == len(samples) and not failures else "failed",
+            "samples": len(samples),
+            "successful_samples": len(successful),
+            "failures": failures,
+            "metrics": {name: value for name, value in {
+                "wall_seconds": wall, "p95_wall_seconds": p95_wall,
+            }.items() if value is not None},
+            "scale": scale,
+        })
+    return normalized_run(path, result, result["suite_id"], observations)
+
+
 GIT_CLOSURE_WORKLOADS = {
     "casita.git-closure-import.v1": ("git-closure-import", git_closure_import.WORKLOAD),
     "casita.git-closure-audit.v1": ("git-closure-audit", git_closure_audit.WORKLOAD),
@@ -907,6 +955,8 @@ def normalize_result(path: pathlib.Path) -> dict[str, Any]:
         return normalize_s3_pack_index_result(path, result)
     if result_schema.startswith("casita.s3-pack."):
         return normalize_s3_pack_result(path, result)
+    if result_schema in GIT_STRATEGY_WORKLOADS:
+        return normalize_git_strategy_result(path, result)
     if result_schema in GIT_CLOSURE_WORKLOADS:
         return normalize_git_closure_result(path, result)
     suite_id = result.get("suite_id")
