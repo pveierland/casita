@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import importlib
 import json
 import pathlib
@@ -11,6 +12,46 @@ from benchmarks import all as runner
 from benchmarks import cli
 
 class AllSuiteTests(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch.object(runner.build_manifest, 'write',
+            side_effect=lambda root, executable, command, **kwargs: stamp(executable))
+        self.manifest_writer = patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_prebuilt_source_mismatch_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            binaries = root / 'binaries'
+            binaries.mkdir()
+            probe = binaries / 'online_holds'
+            probe.write_bytes(b'prebuilt')
+            stamp(probe)
+            output = root / 'result'
+            with mock.patch.object(runner.build_manifest, 'source_identity', return_value=('a' * 40, 'f' * 64)), \
+                 mock.patch.object(runner.common, 'environment_metadata', return_value={}), \
+                 mock.patch.object(runner, 'execute', side_effect=AssertionError('stale probes must not run')):
+                with self.assertRaisesRegex(runner.common.BenchmarkError, 'current source'):
+                    runner.main(['--suites', 'online-holds', '--bin-dir', str(binaries), '--output', str(output)])
+            self.assertIn('current source', json.loads((output / 'execution.json').read_text())['build_error'])
+
+    def test_prebuilt_dependency_mismatch_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            binaries = root / 'binaries'
+            binaries.mkdir()
+            probe = binaries / 'online_holds'
+            probe.write_bytes(b'prebuilt')
+            stamp(probe)
+            real_digest = runner.build_manifest.digest
+            def digest(path):
+                return 'd' * 64 if pathlib.Path(path).name == 'Cargo.lock' else real_digest(path)
+            with mock.patch.object(runner.build_manifest, 'source_identity', return_value=('a' * 40, 'b' * 64)), \
+                 mock.patch.object(runner.build_manifest, 'digest', side_effect=digest), \
+                 mock.patch.object(runner.common, 'environment_metadata', return_value={}), \
+                 mock.patch.object(runner, 'execute', side_effect=AssertionError('incompatible probes must not run')):
+                with self.assertRaisesRegex(runner.common.BenchmarkError, 'current lockfile'):
+                    runner.main(['--suites', 'online-holds', '--bin-dir', str(binaries), '--output', str(root / 'output')])
+
     def test_git_closure_import_builds_and_receives_its_integration_probe(self):
         commands = runner.build_commands(["git-closure-import"], pathlib.Path("/build"))
         self.assertEqual(len(commands), 1)
@@ -76,6 +117,8 @@ class AllSuiteTests(unittest.TestCase):
             self.assertEqual((binaries / "git_blob_file").read_bytes(), b"integration probe")
             artifacts = json.loads((root / "artifacts.json").read_text())
             self.assertEqual(artifacts["git_blob_file"]["sha256"], runner.fingerprint(probe))
+            self.assertEqual(artifacts["git_blob_file"]["build"], runner.build_manifest.read(root / "bin/git_blob_file", required=True))
+            self.assertEqual(self.manifest_writer.call_args.kwargs["fixture"], pathlib.Path("crates/casita/tests/git_blob_file.rs"))
 
     def test_git_blob_file_builds_and_receives_its_integration_probe(self):
         commands = runner.build_commands(["git-blob-file"], pathlib.Path("/build"))

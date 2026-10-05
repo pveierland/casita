@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import json
 import pathlib
 import sys
@@ -10,6 +11,13 @@ from benchmarks.suites.repository import BenchmarkError
 
 
 class ChunkHashTests(unittest.TestCase):
+    def setUp(self):
+        from unittest import mock
+        patcher = mock.patch.object(suite.build_manifest, 'write',
+            side_effect=lambda root, executable, command, **kwargs: stamp(executable))
+        self.manifest_writer = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_permanent_suite_builds_its_probe(self):
         commands = all_suites.build_commands(["chunk-hash-batch"], pathlib.Path("/build"))
         self.assertEqual(len(commands), 1)
@@ -23,6 +31,7 @@ class ChunkHashTests(unittest.TestCase):
             "for phase in ['cold', 'duplicate']:\n row.update(phase=phase,chunk_puts=10 if phase=='cold' else 0)\n row.update(" + repr(change or {}) + ")\n prefix = " + repr(prefix) + " if phase=='cold' else ''\n print(prefix+'chunk_hash_sample '+json.dumps(row))\n" +
             "print('test result: ok. 1 passed; 0 failed;')\n")
         path.chmod(0o755)
+        stamp(path)
         return path
 
     def run_pair(self, directory, change=None):

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import itertools
 import json
 import os
@@ -11,7 +10,7 @@ import subprocess
 import statistics
 import tempfile
 
-from benchmarks import cli
+from benchmarks import build_manifest, cli
 from benchmarks.affinity import cpu_affinity, cpu_list
 from benchmarks.suites import git_witness_policy
 from benchmarks.suites import repository as common
@@ -90,8 +89,9 @@ def main(argv=None):
         parser.error("file sizes must be at least 8 bytes to encode distinct objects")
     binary = args.probe_binary
     if binary is None:
-        built = subprocess.run(["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,git,experimental",
-                                "--test", "git_closure_import", "--no-run", "--message-format=json"],
+        command = ["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,git,experimental",
+                                "--test", "git_closure_import", "--no-run", "--message-format=json"]
+        built = subprocess.run(command,
                                cwd=cli.ROOT, capture_output=True, text=True)
         if built.returncode:
             raise common.BenchmarkError(built.stderr or built.stdout)
@@ -101,30 +101,12 @@ def main(argv=None):
         if len(paths) != 1:
             raise common.BenchmarkError("expected one Git closure benchmark executable")
         binary = pathlib.Path(paths[0])
+        build_manifest.write(cli.ROOT, binary, command, fixture='crates/casita/tests/git_closure_import.rs')
     binary = binary.resolve()
     variants = [("candidate", binary)]
     if args.baseline_binary:
         variants.insert(0, ("baseline", args.baseline_binary.resolve()))
-    artifacts = []
-    for variant, executable in variants:
-        with executable.open("rb") as source:
-            digest = hashlib.file_digest(source, "sha256").hexdigest()
-        artifact = dict(variant=variant, path=str(executable), sha256=digest)
-        manifest = pathlib.Path(str(executable) + ".build.json")
-        if manifest.exists():
-            build = json.loads(manifest.read_text())
-            if build.get("executable_sha256") != digest:
-                raise common.BenchmarkError("build manifest fingerprint does not match executable")
-            if not build.get("lockfile_sha256"):
-                raise common.BenchmarkError("build manifest is missing its dependency lockfile fingerprint")
-            artifact["build"] = build
-        artifacts.append(artifact)
-    if len(artifacts) == 2 and all("build" in artifact for artifact in artifacts):
-        for field in ("lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
-            if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
-                raise common.BenchmarkError(f"paired build manifests differ in {field}")
-    if len(artifacts) == 2 and artifacts[0]["sha256"] == artifacts[1]["sha256"]:
-        parser.error("baseline and candidate executables must have distinct hashes")
+    artifacts = build_manifest.artifacts(variants, fixture=False)
     by_variant = {artifact["variant"]: artifact for artifact in artifacts}
     counts = args.counts or ([63, 64, 65] if args.profile == "smoke" else [63, 64, 65, 255, 256, 257, 10000])
     layouts = [False, True] if args.layout == "both" else [args.layout == "packed"]

@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import hashlib
 import json
 import pathlib
@@ -25,6 +26,7 @@ class ChunkManifestTests(unittest.TestCase):
             ", before_rss_bytes=1000, write_peak_rss_bytes=2000, correctness=" + repr(correctness) + ")\n" +
             "print(" + repr(prefix + "chunk_manifest_sample ") + "+json.dumps(row))\nprint('test result: ok. 1 passed; 0 failed;')\n")
         path.chmod(0o755)
+        stamp(path)
         return path
 
     def run_pair(self, directory, **kwargs):
@@ -41,16 +43,12 @@ class ChunkManifestTests(unittest.TestCase):
                 after = self.probe(directory / "after")
                 after.write_text(after.read_text() + "\n# distinct candidate executable\n")
                 for executable, fixture in ((before, "a" * 64), (after, candidate_fixture)):
-                    build = dict(executable_sha256=hashlib.sha256(executable.read_bytes()).hexdigest(),
-                                 fixture_sha256=fixture, lockfile_sha256="c" * 64,
-                                 features=["native", "experimental"], default_features=False,
-                                 rustc_version="same compiler", rustflags="")
-                    pathlib.Path(str(executable) + ".build.json").write_text(json.dumps(build))
+                    stamp(executable, fixture_sha256=fixture)
                 output = directory / "result.json"
                 args = ["--no-build", "--baseline-binary", str(before), "--probe-binary", str(after),
                         "--output", str(output)] + ["--file-bytes", "65536", "--backend", "memory"]
                 if candidate_fixture != "a" * 64:
-                    with self.assertRaisesRegex(BenchmarkError, "paired builds differ in fixture_sha256"):
+                    with self.assertRaisesRegex(BenchmarkError, "paired build manifests differ in fixture_sha256"):
                         suite.main(args)
                     self.assertFalse(output.exists(), "reject incompatible builds before measuring")
                 else:

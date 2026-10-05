@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import itertools
 import json
 import pathlib
@@ -54,6 +55,7 @@ class GitClosureReportTests(unittest.TestCase):
                 # The revisions on either side of derived Git blob completeness.
                 for revision, declared in zip(series, ["stored-blobs", "derived-blobs"]):
                     write_probe(root / revision.label, declared, declared)
+                    stamp(root / revision.label, source_revision=revision.commit)
                 output = root / "output"
                 with (
                     mock.patch.object(revisions, "resolve_revisions", return_value=series),
@@ -93,6 +95,7 @@ class GitClosureReportTests(unittest.TestCase):
                 closure_import.write_probe(root / variant)
             with (root / "baseline").open("a") as probe:
                 probe.write("# baseline\n")
+            stamp(root / "baseline")
             output = root / "paired.json"
             # The dimensions the revision series above leaves fixed.
             varied = {"max_buffered_bytes": [1024, 2048], "file_bytes": [8, 16], "concurrency": [1, 16]}

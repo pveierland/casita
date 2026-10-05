@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import json
 import os
 import pathlib
@@ -34,9 +35,17 @@ def write_probe(path, policy='"derived-blobs"', blob_witnesses="0"):
     path.write_text("#!" + sys.executable + "\n"
                     + FAKE_PROBE.replace("POLICY", policy).replace("BLOB_WITNESSES", blob_witnesses))
     path.chmod(0o755)
+    stamp(path)
 
 
 class GitClosureBenchmarkTests(unittest.TestCase):
+    def setUp(self):
+        from unittest import mock
+        patcher = mock.patch.object(suite.build_manifest, 'write',
+            side_effect=lambda root, executable, command, **kwargs: stamp(executable))
+        self.manifest_writer = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_rejects_stale_build_manifests_and_mismatched_dependency_locks(self):
         import hashlib
         from unittest import mock
@@ -45,9 +54,7 @@ class GitClosureBenchmarkTests(unittest.TestCase):
             binaries = [root / "baseline", root / "candidate"]
             for i, binary in enumerate(binaries):
                 binary.write_bytes(bytes([i]))
-                pathlib.Path(str(binary) + ".build.json").write_text(json.dumps(dict(
-                    executable_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
-                    lockfile_sha256=str(i), features="native,git,experimental", default_features=False)))
+                stamp(binary, lockfile_sha256=str(i) * 64)
             args = ["--probe-binary", str(binaries[1]), "--baseline-binary", str(binaries[0]),
                     "--no-build", "--output", str(root / "report.json")]
             with mock.patch.object(suite.common, "measured_command", side_effect=AssertionError("incompatible builds must not run")):
@@ -134,6 +141,7 @@ class GitClosureBenchmarkTests(unittest.TestCase):
             baseline = root / "baseline"
             baseline.write_text(probe.read_text() + "\n# separate baseline executable\n")
             baseline.chmod(0o755)
+            stamp(baseline)
             paired = root / "paired.json"
             original_affinity = os.sched_getaffinity(0) if hasattr(os, "sched_getaffinity") else None
             affinity_args = (["--cpu-affinity", str(min(original_affinity))]
@@ -157,6 +165,7 @@ class GitClosureBenchmarkTests(unittest.TestCase):
             for root_field in ["", "root=None, ", 'root="", ']:
                 with self.subTest(root_field=root_field):
                     probe.write_text(valid_probe.replace('root="fixture-root", ', root_field))
+                    stamp(probe)
                     with self.assertRaisesRegex(suite.common.BenchmarkError, "root"):
                         suite.main(["--probe-binary", str(probe), "--no-build",
                                     "--output", str(root / "invalid.json"),

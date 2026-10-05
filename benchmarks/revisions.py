@@ -19,7 +19,7 @@ import tomllib
 from collections.abc import Sequence
 from typing import Any
 
-from benchmarks import comparison, dashboard, metrics
+from benchmarks import build_manifest, comparison, dashboard, metrics
 from benchmarks.suites import repository as common
 
 
@@ -492,6 +492,8 @@ def build_artifact(
         raise RevisionBenchmarkError(f"build did not create {built}")
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(built, destination)
+    fixture = pathlib.Path('crates/casita/tests') / (spec.cargo_json_test + '.rs') if spec.cargo_json_test and spec.cargo_json_test != 'casita' else None
+    build_manifest.write(worktree, destination, command, environment=environment, fixture=fixture)
     return destination.resolve()
 
 
@@ -721,8 +723,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                     binary_root / revision.label / build_spec.artifact_name,
                     build_spec,
                 )
-        for revision in revisions:
+        manifests = [build_manifest.read(binaries[revision.label], required=True) for revision in revisions]
+        for revision, manifest in zip(revisions, manifests):
+            if manifest['source_dirty']:
+                raise RevisionBenchmarkError(f'build manifest has uncommitted source changes for {revision.label}')
+            if manifest['source_revision'] != revision.commit:
+                raise RevisionBenchmarkError(f'build manifest source revision differs for {revision.label}')
             execution["builds"][revision.label] = {
+                "build": manifest,
                 "bytes": binaries[revision.label].stat().st_size,
                 "sha256": file_sha256(binaries[revision.label]),
                 "source": "provided" if provided_binaries else "built",

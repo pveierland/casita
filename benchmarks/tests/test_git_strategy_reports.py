@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 """Exercise real suite output through revision reports and dashboard normalization."""
 import itertools
 import json
@@ -42,6 +43,7 @@ class GitStrategyReportTests(unittest.TestCase):
                           for label, digit in [("before", "a"), ("after", "b")]]
                 for revision in series:
                     write_probe(root / revision.label, suite, prefix)
+                    stamp(root / revision.label, source_revision=revision.commit)
                 forwarded = ["--file-bytes", "8,16", "--backend", "both"]
                 if "files" in dimensions:
                     forwarded += ["--files", "1,2"]

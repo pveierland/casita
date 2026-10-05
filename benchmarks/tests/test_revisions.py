@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import json
 import pathlib
 import tempfile
@@ -179,6 +180,31 @@ class RevisionArgumentTests(unittest.TestCase):
 
 
 class RevisionRunnerTests(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch.object(revisions.build_manifest, 'write',
+            side_effect=lambda root, executable, command, **kwargs: stamp(executable))
+        self.manifest_writer = patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_supplied_binaries_cannot_be_relabelled_as_another_or_clean_revision(self):
+        for invalid in ['missing', 'wrong_revision', 'dirty']:
+            with self.subTest(invalid=invalid), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                selected = [spec('before', 'a'), spec('after', 'b')]
+                before, after = root / 'before', root / 'after'
+                before.write_bytes(b'before'); after.write_bytes(b'after')
+                stamp(before, source_revision=selected[0].commit)
+                if invalid != 'missing':
+                    stamp(after, source_revision=('c' * 40 if invalid == 'wrong_revision' else selected[1].commit),
+                          source_dirty=invalid == 'dirty')
+                with mock.patch.object(revisions, 'resolve_revisions', return_value=selected), \
+                     mock.patch.object(revisions, 'git_output', return_value='f' * 40), \
+                     mock.patch.object(revisions, 'invoke_suite', side_effect=AssertionError('invalid builds must not run')):
+                    code = revisions.main(['before', 'after', '--artifact', f'before={before}',
+                                           '--artifact', f'after={after}', '--output-dir', str(root / 'result')])
+                self.assertEqual(code, 2)
+                self.assertEqual(json.loads((root / 'result/execution.json').read_text())['status'], 'failed')
+
     def test_shared_target_build_copies_an_immutable_revision_binary(self):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
@@ -208,6 +234,8 @@ class RevisionRunnerTests(unittest.TestCase):
             after = root / "after"
             before.write_bytes(b"before")
             after.write_bytes(b"after")
+            stamp(before, source_revision=selected[0].commit)
+            stamp(after, source_revision=selected[1].commit)
             output = root / "output"
             with (
                 mock.patch.object(revisions, "resolve_revisions", return_value=selected),
@@ -322,6 +350,7 @@ class RevisionRunnerTests(unittest.TestCase):
         def build(_worktree, _target, destination, _spec):
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(b"test binary")
+            stamp(destination, source_revision=destination.parent.name * 40)
             return destination
 
         def invoke(_suite, _spec, _forwarded, revision, _binary, output):

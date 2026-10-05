@@ -448,6 +448,17 @@ path corpus is also opt-in: pass `--cdcs-store-names NAME,NAME` to include
 `cdcs-corpus`, otherwise it is recorded as skipped. Use `--suites` for
 a subset, `--bin-dir` for prebuilt artifacts, and `--build-dir` to isolate Cargo
 intermediates from shared-cache cleanup. The output directory must be new.
+Each retained executable has a `.build.json` sidecar recording its source commit
+and content fingerprint, dirty state, dependency lockfile, requested features,
+compiler, flags, target, profile, Cargo configuration, and build overrides.
+`--bin-dir` requires these sidecars and rejects binaries whose recorded source
+or dependency lockfile no longer matches the current worktree. Keep the sidecar when copying a probe.
+The Git closure and chunk hashing/streaming/completion paired suites require
+both manifests and matching build conditions; the chunk suites also require
+matching fixture fingerprints. A standalone external probe without a manifest
+is explicitly reported as unverified. These records describe local builds;
+they are not signed attestations of externally supplied artifacts.
+
 The standard profile uses suite defaults; online holds covers both 60 and 300
 imports with all four reader/GC combinations and application readers. Smoke uses
 3 imports and 2 files per import. Physical frontier runs remain opt-in.
@@ -842,7 +853,8 @@ the isolated source and target trees are needed for debugging.
 
 When an exact artifact was already built and retained, pass one
 `--artifact LABEL=PATH` for every revision label. The runner records each
-provided artifact's size and SHA-256 digest in `execution.json` and skips only
+provided artifact's size, SHA-256 digest, and build manifest in `execution.json`.
+The manifest must name the requested revision and a clean source tree. It skips only
 the build step; suite execution and interleaving are unchanged. This is useful
 when several suites consume the same CLI binary.
 

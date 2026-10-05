@@ -1,7 +1,6 @@
 """Measure chunk completion scheduling with deterministic upload stragglers."""
 from __future__ import annotations
 import argparse
-import hashlib
 import itertools
 import json
 import os
@@ -9,7 +8,7 @@ import pathlib
 import statistics
 import subprocess
 import tempfile
-from benchmarks import cli
+from benchmarks import build_manifest, cli
 from benchmarks.suites import repository as common
 from benchmarks.affinity import cpu_affinity, cpu_list
 from benchmarks.suites.metadata_collection import positive_csv
@@ -37,7 +36,8 @@ def main(argv=None):
         parser.error("positive repetitions and a probe binary with --no-build are required")
     binary = args.probe_binary
     if binary is None:
-        built = subprocess.run(["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,experimental", "--test", "chunk_upload_completion", "--no-run", "--message-format=json"], cwd=cli.ROOT, capture_output=True, text=True)
+        command = ["cargo", "test", "--release", "-p", "casita", "--no-default-features", "--features", "native,experimental", "--test", "chunk_upload_completion", "--no-run", "--message-format=json"]
+        built = subprocess.run(command, cwd=cli.ROOT, capture_output=True, text=True)
         if built.returncode:
             raise common.BenchmarkError(built.stderr or built.stdout)
         paths = [item["executable"] for line in built.stdout.splitlines() if line.startswith("{")
@@ -46,28 +46,11 @@ def main(argv=None):
         if len(paths) != 1:
             raise common.BenchmarkError("expected one chunk completion probe")
         binary = pathlib.Path(paths[0])
+        build_manifest.write(cli.ROOT, binary, command, fixture='crates/casita/tests/chunk_upload_completion.rs')
     variants = [("candidate", binary.resolve())]
     if args.baseline_binary:
         variants.insert(0, ("baseline", args.baseline_binary.resolve()))
-    artifacts = []
-    for variant, path in variants:
-        with path.open("rb") as handle:
-            digest = hashlib.file_digest(handle, "sha256").hexdigest()
-        artifact = dict(variant=variant, path=str(path), sha256=digest)
-        manifest = pathlib.Path(str(path) + ".build.json")
-        if manifest.exists():
-            build = json.loads(manifest.read_text())
-            if build.get("executable_sha256") != digest or not build.get("lockfile_sha256"):
-                raise common.BenchmarkError("invalid build fingerprint")
-            artifact["build"] = build
-        artifacts.append(artifact)
-    if len(artifacts) == 2:
-        if artifacts[0]["sha256"] == artifacts[1]["sha256"]:
-            raise common.BenchmarkError("paired executables must differ")
-        if all("build" in a for a in artifacts):
-            for field in ("fixture_sha256", "lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
-                if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
-                    raise common.BenchmarkError(f"paired builds differ in {field}")
+    artifacts = build_manifest.artifacts(variants, fixture=True)
     sizes = args.file_bytes or ([65536] if args.profile == "smoke" else [511, 512, 513, 2047, 2048, 2049, 65536, 1048576])
     budgets = args.budgets or ([196607, 196608, 196609] if args.profile == "smoke" else [65535, 65536, 65537, 196607, 196608, 196609, 262143, 262144, 262145, 1048576, 4194304])
     # The reorder window is max(64, 16 * concurrency): 2 is below its 64-entry

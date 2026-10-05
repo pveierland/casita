@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import json
 import pathlib
 import sys
@@ -31,6 +32,7 @@ def write_probe(path, audits="objects", peak="min(batch, witnesses)", builtin="2
                     + FAKE_PROBE.replace("AUDITS", audits).replace("PEAK", peak)
                     .replace("BUILTIN", builtin).replace("POLICY", policy))
     path.chmod(0o755)
+    stamp(path)
 
 
 def arguments(probe, output, registry="custom", commits="4", batch="64"):

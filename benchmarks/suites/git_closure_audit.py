@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import itertools
 import json
 import os
@@ -11,7 +10,7 @@ import statistics
 import subprocess
 import tempfile
 
-from benchmarks import cli
+from benchmarks import build_manifest, cli
 from benchmarks.affinity import cpu_affinity, cpu_list
 from benchmarks.suites import git_witness_policy
 from benchmarks.suites import repository as common
@@ -37,7 +36,9 @@ def build_probe():
              and row.get("target", {}).get("name") == "git_closure_custom_formats" and row.get("executable")]
     if len(paths) != 1:
         raise common.BenchmarkError("expected one Git closure audit probe executable")
-    return pathlib.Path(paths[0])
+    binary = pathlib.Path(paths[0])
+    build_manifest.write(cli.ROOT, binary, command, fixture='crates/casita/tests/git_closure_custom_formats.rs')
+    return binary
 
 
 def expected_witnesses(commits, registry, policy):
@@ -130,20 +131,6 @@ def summarize_pairs(samples):
     return summaries
 
 
-def fingerprint(variant, executable):
-    with executable.open("rb") as stream:
-        artifact = dict(variant=variant, path=str(executable), sha256=hashlib.file_digest(stream, "sha256").hexdigest())
-    manifest = pathlib.Path(str(executable) + ".build.json")
-    if manifest.exists():
-        build = json.loads(manifest.read_text())
-        if build.get("executable_sha256") != artifact["sha256"]:
-            raise common.BenchmarkError("build manifest fingerprint does not match executable")
-        if not build.get("lockfile_sha256"):
-            raise common.BenchmarkError("build manifest is missing its dependency lockfile fingerprint")
-        artifact["build"] = build
-    return artifact
-
-
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", choices=("smoke", "standard"), default="standard")
@@ -162,15 +149,8 @@ def main(argv=None):
     variants = [("candidate", (args.probe_binary or build_probe()).resolve())]
     if args.baseline_binary:
         variants.insert(0, ("baseline", args.baseline_binary.resolve()))
-    artifacts = [fingerprint(variant, executable) for variant, executable in variants]
-    by_variant = {artifact["variant"]: artifact for artifact in artifacts}
-    if len(artifacts) == 2:
-        if artifacts[0]["sha256"] == artifacts[1]["sha256"]:
-            parser.error("baseline and candidate executables must have distinct hashes")
-        if all("build" in artifact for artifact in artifacts):
-            for field in ("lockfile_sha256", "features", "default_features", "rustc_version", "rustflags"):
-                if artifacts[0]["build"].get(field) != artifacts[1]["build"].get(field):
-                    raise common.BenchmarkError(f"paired build manifests differ in {field}")
+    artifacts = build_manifest.artifacts(variants)
+    by_variant = {artifact['variant']: artifact for artifact in artifacts}
     # Each commit adds three objects. Custom registries witness all three, and
     # built-in ones two under derived-blobs. With 64-object witness batches, 16
     # commits fit in one batch while 64 span three or two. The default

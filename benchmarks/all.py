@@ -9,7 +9,7 @@ import pathlib
 import subprocess
 import sys
 import time
-from benchmarks import cli
+from benchmarks import build_manifest, cli
 from benchmarks import storage
 from benchmarks.suites import repository as common
 
@@ -215,6 +215,8 @@ def build_binaries(output, build_dir, selected=None):
                 if name in artifacts:
                     path.unlink()
                 artifacts[name] = storage.retain_binary(pathlib.Path(executable), path)
+                fixture = pathlib.Path('crates/casita/tests') / (name + '.rs') if target['kind'] == ['test'] else None
+                artifacts[name]['build'] = build_manifest.write(cli.ROOT, path, command, fixture=fixture)
     save(output / "artifacts.json", artifacts)
     return destination
 
@@ -364,8 +366,21 @@ def main(argv=None):
         if args.bin_dir:
             binary_dir = output / "bin"
             binary_dir.mkdir()
-            save(output / "artifacts.json", {path.name: storage.retain_binary(path, binary_dir / path.name)
-                 for path in args.bin_dir.resolve().iterdir() if path.is_file()})
+            current_revision, current_source = build_manifest.source_identity(cli.ROOT, os.environ)
+            artifacts = {}
+            for path in args.bin_dir.resolve().iterdir():
+                if not path.is_file() or path.name.endswith('.build.json'):
+                    continue
+                build = build_manifest.read(path, required=True)
+                if build['source_revision'] != current_revision or build['source_sha256'] != current_source:
+                    raise common.BenchmarkError(f'prebuilt artifact does not match current source: {path}')
+                if build['lockfile_sha256'] != build_manifest.digest(cli.ROOT / 'Cargo.lock'):
+                    raise common.BenchmarkError(f'prebuilt artifact does not match current lockfile: {path}')
+                destination = binary_dir / path.name
+                artifacts[path.name] = storage.retain_binary(path, destination)
+                build_manifest.manifest_path(destination).write_text(json.dumps(build, indent=2) + '\n')
+                artifacts[path.name]['build'] = build
+            save(output / "artifacts.json", artifacts)
         elif set(selected) <= {"filesystem-transports", "erofs-transports", "pin-protocol", "pin-protocol-s3", "pin-http", "remote-pin-cost", "native-fskit", "native-fskit-portable", "native-fskit-repository", "native-fskit-launch", "native-fskit-launch-uncached", "native-fskit-launch-eager", "native-fskit-launch-enumeration-uncached", "native-fskit-launch-density-enumeration-uncached", "native-fskit-launch-density", "native-fskit-launch-density-phases", "native-fskit-launch-capabilities", "native-fskit-launch-zero-times", "native-fskit-first-launch", "native-fskit-workloads", "native-fskit-workloads-readers-16", "native-fskit-workloads-uncached", "native-fskit-workloads-read-trace", "native-fskit-first-launch-uncached", "native-fskit-launch-density-filename-bytes", "native-fskit-launch-profile", "native-fskit-launch-explicit-xattrs", "native-fskit-launch-density-explicit-xattrs"}:
             # These suites need no shared build or build their own probe.
             binary_dir = output / "bin"

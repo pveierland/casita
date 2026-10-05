@@ -1,3 +1,4 @@
+from benchmarks.tests.build_fixtures import stamp
 import hashlib
 import json
 import pathlib
@@ -21,6 +22,7 @@ class ChunkCompletionTests(unittest.TestCase):
             "row = dict(file_bytes=int(os.environ['CASITA_CHUNK_COMPLETION_BYTES']), budget=int(os.environ['CASITA_CHUNK_COMPLETION_BUDGET']), delay_ms=int(os.environ['CASITA_CHUNK_COMPLETION_DELAY_MS']), concurrency=int(os.environ['CASITA_CHUNK_COMPLETION_CONCURRENCY']) + " + repr(concurrency_skew) + ", wall_nanos=100, root=" + repr(root) + ", correctness=" + repr(correctness) + ")\n" +
             "print(" + repr(prefix + "chunk_upload_completion_sample ") + " + json.dumps(row))\nprint('test result: ok. 1 passed; 0 failed;')\n")
         path.chmod(0o755)
+        stamp(path)
         return path
 
     def test_paired_builds_require_matching_fixture_fingerprints(self):
@@ -31,16 +33,12 @@ class ChunkCompletionTests(unittest.TestCase):
                 after = self.probe(directory / "after")
                 after.write_text(after.read_text() + "\n# distinct candidate executable\n")
                 for executable, fixture in ((before, "a" * 64), (after, candidate_fixture)):
-                    build = dict(executable_sha256=hashlib.sha256(executable.read_bytes()).hexdigest(),
-                                 fixture_sha256=fixture, lockfile_sha256="c" * 64,
-                                 features=["native", "experimental"], default_features=False,
-                                 rustc_version="same compiler", rustflags="")
-                    pathlib.Path(str(executable) + ".build.json").write_text(json.dumps(build))
+                    stamp(executable, fixture_sha256=fixture)
                 output = directory / "result.json"
                 args = ["--no-build", "--baseline-binary", str(before), "--probe-binary", str(after),
                         "--output", str(output)] + ["--file-bytes", "65536", "--budgets", "65536", "--delays-ms", "0", "--concurrency", "4"]
                 if candidate_fixture != "a" * 64:
-                    with self.assertRaisesRegex(BenchmarkError, "paired builds differ in fixture_sha256"):
+                    with self.assertRaisesRegex(BenchmarkError, "paired build manifests differ in fixture_sha256"):
                         suite.main(args)
                     self.assertFalse(output.exists(), "reject incompatible builds before measuring")
                 else:
