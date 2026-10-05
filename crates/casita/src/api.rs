@@ -21,7 +21,7 @@ use crate::{
     ErrorKind, IntegrityDisposition, IntegrityIssue, ObjectKey, ObjectRecord, RepositoryGeneration,
     RepositoryRevision, RetryDisposition, RootName, RootRecord,
 };
-pub use objects::ObjectReader;
+pub use objects::{ObjectReader, ProtectedObject};
 
 use crate::metadata::{MetadataError, MetadataMutation, MetadataSnapshot};
 use crate::{
@@ -182,7 +182,9 @@ impl RetainedReader {
         let Some(record) = self.hold.object(key).await.app()? else {
             return Ok(None);
         };
-        open_verified_record(self.hold.repository(), record, self.hold.clone()).await
+        open_verified_record(self.hold.repository(), record, self.hold.clone())
+            .await
+            .map(Some)
     }
 
     pub(crate) fn new(hold: BuiltinRetentionHold) -> Self {
@@ -451,7 +453,7 @@ async fn open_verified_record(
     repository: &BuiltinRepository,
     record: ObjectRecord,
     protection: Arc<dyn Send + Sync>,
-) -> Result<Option<VerifiedReader>, Error> {
+) -> Result<VerifiedReader, Error> {
     let opened = repository
         .payloads()
         .open_verified(&record.payload(), record.payload_size())
@@ -475,12 +477,12 @@ async fn open_verified_record(
             .into_application_error());
         }
     };
-    Ok(Some(VerifiedReader {
+    Ok(VerifiedReader {
         record,
         inner,
         _hold: Some(protection),
         nar_health: crate::nar::store::ReadHealth::new(repository.nar_store.clone()),
-    }))
+    })
 }
 
 /// A seekable payload reader with collection protection.
