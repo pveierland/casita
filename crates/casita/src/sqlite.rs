@@ -299,7 +299,45 @@ impl TursoDb {
         .await?
     }
 
+    /// Read immutable records through a query-only connection. Each statement
+    /// owns its implicit transaction; no SQL view survives the completed call.
+    /// Callers must independently retain the queried objects and bound their
+    /// visibility. Mutable metadata requiring a shared view must use `read`.
+    /// The worker owns cleanup even if its caller is cancelled.
+    pub(crate) async fn read_immutable<T, F>(self: &Arc<Self>, f: F) -> Result<T, Error>
+    where
+        F: for<'a> FnOnce(&'a Connection) -> BoxFuture<'a, Result<T, Error>> + Send + 'static,
+        T: Send + 'static,
+    {
+        let this = self.clone();
+        tokio::task::spawn_blocking(move || {
+            futures::executor::block_on(async move {
+                let mut reader = this.acquire_read_connection().await?;
+                let result = f(&reader).await;
+                let connection = reader.connection.take().expect("live read connection");
+                // A failed/incomplete operation never returns a transaction to
+                // the pool. Statements and cursors must finish before `f` returns.
+                if connection.is_autocommit()?
+                    && let Ok(mut idle) = this.idle_readers.lock()
+                    && idle.len() < IDLE_READ_CONNECTIONS
+                {
+                    idle.push(connection);
+                }
+                result
+            })
+        })
+        .await?
+    }
+
     async fn begin_read_transaction(self: &Arc<Self>) -> Result<ReadConnection, Error> {
+        let connection = self.acquire_read_connection().await?;
+        connection
+            .execute_batch("BEGIN DEFERRED TRANSACTION;")
+            .await?;
+        Ok(connection)
+    }
+
+    async fn acquire_read_connection(self: &Arc<Self>) -> Result<ReadConnection, Error> {
         let cached = self
             .idle_readers
             .lock()
@@ -319,9 +357,6 @@ impl TursoDb {
             connection: Some(connection),
             idle: self.idle_readers.clone(),
         };
-        connection
-            .execute_batch("BEGIN DEFERRED TRANSACTION;")
-            .await?;
         Ok(connection)
     }
 

@@ -131,3 +131,55 @@ async fn idle_object_readers_and_open_payloads_do_not_block_wal_truncation() {
     drop(reader);
     repository.flush().await.unwrap();
 }
+
+#[tokio::test]
+async fn failed_object_decoding_releases_the_implicit_read_transaction() {
+    let directory = tempfile::tempdir().unwrap();
+    let repository = Repository::local(directory.path()).await.unwrap();
+    let key = repository
+        .import(casita::import::BlobImport::new(
+            &b"corrupt metadata, intact payload"[..],
+            "record".parse().unwrap(),
+        ))
+        .await
+        .unwrap();
+    let snapshot = repository.retained_reader().await.unwrap();
+    let reader = snapshot.object_reader().unwrap();
+    drop(snapshot);
+    let path = directory.path().join("casita.sqlite");
+    let database = turso::Builder::new_local(path.to_str().unwrap())
+        .build()
+        .await
+        .unwrap();
+    let connection = database.connect().unwrap();
+    connection
+        .execute(
+            "UPDATE objects SET record = X'FF' WHERE namespace = ?1 AND native_id = ?2",
+            turso::params![key.namespace().as_str(), key.native_id()],
+        )
+        .await
+        .unwrap();
+    for count in [1, 3] {
+        assert_eq!(
+            reader
+                .object_batch(&vec![key.clone(); count])
+                .await
+                .unwrap_err()
+                .kind(),
+            casita::ErrorKind::Corrupt
+        );
+        repository
+            .flush()
+            .await
+            .expect("failed decodes must not leave pooled cursors pinning WAL");
+        assert_eq!(
+            std::fs::metadata(directory.path().join("casita.sqlite-wal"))
+                .unwrap()
+                .len(),
+            0
+        );
+    }
+    drop(reader);
+    drop(connection);
+    drop(database);
+}

@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "purpose": "Reduce repeated immutable-object lookup overhead while retaining WAL checkpoint freedom.",
+  "builds": [
+    {
+      "note": "Same Casita sources and same import_cost benchmark for both; control mnos five integration files at 9869f77, candidate sources saved. Native release thin LTO.",
+      "sha256": {
+        "/tmp/mnos-ingest/evidence/import-object-reader-candidate": "8ea5eb110787c7f7be20463a985afc87c408248c8716e3106a58aab82f820488",
+        "/tmp/mnos-ingest/evidence/import-object-reader-control": "54b2e2b0c888964e5f41c354e5688bbf5c0a9b4a3c9a5e55874c63172228bc8a",
+        "/tmp/mnos-ingest/evidence/object-reader-integration-sources.json": "0293596f69ec385afe017d41e54538383d3e319612d9a1257a0e653629e4eb67",
+        "/tmp/mnos-ingest/mnos-nix-xp/evaluator/crates/mnos-eval-cas/tests/import_cost.rs": "838ad6d7a065c29d77b632ccfaa1ecb81e2988f4f68e432a0f6a31162837f07b",
+        "/tmp/mnos-ingest/mnos-nix-xp/evaluator/Cargo.lock": "642812a975c2ebc20c5d1e10fcdc5c75ae04097c40b80fbfbd6ddbaabbefd723",
+        "/tmp/mnos-ingest/casita/crates/casita/src/api.rs": "ed4454ad0885e3203f6d0cb77f26b793a86d1afaa1d1e1d5204000d26306495c",
+        "/tmp/mnos-ingest/casita/crates/casita/src/api/objects.rs": "d9bc6e9a267963f2a83b91cda4f7912925042ffe4e254c654ea4c3036d9bcfce",
+        "/tmp/mnos-ingest/casita/crates/casita/src/metadata.rs": "3e2d4af0d3c7e53bea493a6585707de7fb80b79c529f1e44c011c3248a17e4ec",
+        "/tmp/mnos-ingest/casita/crates/casita/src/metadata/sqlite.rs": "7adb0bc64372b2b6a40d5b7a79f7b1adac8a2f0d5e5b20cceb37fc194f0bf668",
+        "/tmp/mnos-ingest/casita/crates/casita/src/lib.rs": "adcee7d6ea60e3e124e7e6813e2012fd54b158646e56883123461d4a6d66f42b"
+      }
+    },
+    {
+      "note": "Same mnos ObjectReader candidate integration and read benchmark as object-reader-pair-build.json; only Casita immutable query transaction path changed.",
+      "sha256": {
+        "/tmp/mnos-ingest/casita/crates/casita/src/sqlite.rs": "309a4c48ab981c02950168c12cdcd06e2d7862de61831fd1c0e32f4a17bb44ec",
+        "/tmp/mnos-ingest/casita/crates/casita/src/metadata/sqlite.rs": "acfa7c9ee58acb4e85e356bbd1c07cac1c1b9c3890f006299954b787f062d260",
+        "/tmp/mnos-ingest/mnos-nix-xp/evaluator/crates/mnos-eval-cas/tests/import_cost.rs": "838ad6d7a065c29d77b632ccfaa1ecb81e2988f4f68e432a0f6a31162837f07b",
+        "/tmp/mnos-ingest/evidence/import-object-reader-autocommit": "980ce583aaa5d3bbec539ff7223eb279fffd612297c745ddad31760a13a6601d"
+      }
+    }
+  ],
+  "command": "MNOS_BENCH_DIR=<fresh-directory> MNOS_BENCH_READS=32768 <immutable-import_cost-binary> --ignored --nocapture --exact retained_blob_read_cost",
+  "measurement": "Nine quiet release runs, rotating snapshot control, explicit-transaction ObjectReader and implicit-transaction ObjectReader; 128 held files, full verified byte checks each read. No concurrent builds or benchmarks.",
+  "variant_definitions": {
+    "control": "Permanent protected SQL snapshot; original evaluator strategy.",
+    "candidate": "ObjectReader at e14cade; short explicit transaction plus current-state header lookup for each object read.",
+    "autocommit": "Same evaluator integration and benchmark as candidate; short implicit record query, generation admitted once, no current-state header query."
+  },
+  "scope": [
+    "Comparison between candidate and autocommit isolates the two Casita SQL source changes. The control binary predates the acquisition-helper refactor; its timed retained-snapshot point-read path is unchanged.",
+    "No cache added; no data or pin-ledger writes during timed reads.",
+    "New path improves median read time 9.62% for 128-byte files and 6.30% for 4096-byte files relative to explicit-transaction ObjectReader.",
+    "It remains 6.05% and 8.23% slower than the permanent-snapshot control. Do not claim universal improvement or an end-to-end NAR gain from this microbenchmark."
+  ],
+  "median_seconds": {
+    "control": {
+      "128": 1.654590536,
+      "4096": 1.8959927699999999
+    },
+    "candidate": {
+      "128": 1.941466073,
+      "4096": 2.189963737
+    },
+    "autocommit": {
+      "128": 1.754673401,
+      "4096": 2.052002745
+    }
+  },
+  "samples": [
+    {
+      "variant": "control",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40431616,
+        "read_bytes": 4096,
+        "rss_bytes": 40431616,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.729151077,
+      "write_bytes": 0
+    },
+    {
+      "variant": "control",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41775104,
+        "read_bytes": 8192,
+        "rss_bytes": 41775104,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 1.956379336,
+      "write_bytes": 0
+    },
+    {
+      "variant": "control",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40108032,
+        "read_bytes": 0,
+        "rss_bytes": 40108032,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.654590536,
+      "write_bytes": 0
+    },
+    {
+      "variant": "control",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41472000,
+        "read_bytes": 0,
+        "rss_bytes": 41472000,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 1.8959927699999999,
+      "write_bytes": 0
+    },
+    {
+      "variant": "control",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40071168,
+        "read_bytes": 0,
+        "rss_bytes": 40071168,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.630129653,
+      "write_bytes": 0
+    },
+    {
+      "variant": "control",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41316352,
+        "read_bytes": 4096,
+        "rss_bytes": 41316352,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 1.854698468,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40415232,
+        "read_bytes": 0,
+        "rss_bytes": 40415232,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.9591531899999999,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41590784,
+        "read_bytes": 4096,
+        "rss_bytes": 41590784,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.189963737,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 38469632,
+        "read_bytes": 0,
+        "rss_bytes": 38469632,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.924648165,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 39706624,
+        "read_bytes": 0,
+        "rss_bytes": 39706624,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.147323172,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40480768,
+        "read_bytes": 0,
+        "rss_bytes": 40480768,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.941466073,
+      "write_bytes": 0
+    },
+    {
+      "variant": "candidate",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41639936,
+        "read_bytes": 0,
+        "rss_bytes": 41639936,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.255977999,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40558592,
+        "read_bytes": 0,
+        "rss_bytes": 40558592,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.7869323000000001,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 1,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41705472,
+        "read_bytes": 0,
+        "rss_bytes": 41705472,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.076465917,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40620032,
+        "read_bytes": 4096,
+        "rss_bytes": 40620032,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.697283975,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 2,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 42004480,
+        "read_bytes": 4096,
+        "rss_bytes": 42004480,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.052002745,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 128,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 40022016,
+        "read_bytes": 0,
+        "rss_bytes": 40022016,
+        "wal_bytes": 111272,
+        "write_bytes": 6197248
+      },
+      "wall_seconds": 1.754673401,
+      "write_bytes": 0
+    },
+    {
+      "variant": "autocommit",
+      "trial": 3,
+      "correctness": "passed",
+      "files": 128,
+      "payload_bytes": 4096,
+      "read_bytes": 0,
+      "reads": 32768,
+      "resources": {
+        "peak_rss_bytes": 41529344,
+        "read_bytes": 4096,
+        "rss_bytes": 41529344,
+        "wal_bytes": 111272,
+        "write_bytes": 12480512
+      },
+      "wall_seconds": 2.024555878,
+      "write_bytes": 0
+    }
+  ]
+}

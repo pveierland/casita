@@ -826,19 +826,26 @@ impl MetadataStore for TursoMetadataStore {
             MetadataError::Corruption("metadata generation exceeds SQLite range".into())
         })?;
         let keys = keys.to_vec();
-        self.db.read(move |connection| Box::pin(async move {
+        self.db.read_immutable(move |connection| Box::pin(async move {
             Ok(async {
-                read_snapshot_state(connection).await?;
+                // The generation was already admitted by a retained reader.
+                // Immutable records need no new revision or catalog snapshot.
                 if keys.len() == 1 {
                     let key = &keys[0];
                     let mut statement = connection.prepare_cached(
                         "SELECT record FROM objects WHERE namespace = ?1 AND native_id = ?2 AND created_generation <= ?3"
                     ).await?;
                     let mut rows = statement.query(params![key.namespace().as_str(), key.native_id(), generation]).await?;
-                    return Ok(vec![match rows.next().await? {
+                    let record = match rows.next().await? {
                         Some(row) => Some(decode_stored_record(key, &row.get::<Vec<u8>>(0)?)?),
                         None => None,
-                    }]);
+                    };
+                    // Finish the cursor so its implicit transaction ends before
+                    // returning the connection to the pool.
+                    if rows.next().await?.is_some() {
+                        return Err(MetadataError::Corruption("duplicate object key".into()));
+                    }
+                    return Ok(vec![record]);
                 }
                 read_object_batch(connection, &keys, Some(generation)).await
             }.await)
