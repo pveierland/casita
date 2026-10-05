@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-06",
+  "purpose": "Measure WAL retention independently of immutable read throughput. This does not establish end-to-end ingestion speed.",
+  "build": {
+    "command": "CARGO_TARGET_DIR=/tmp/mnos-ingest/mnos-nix-xp/evaluator/target CARGO_PROFILE_RELEASE_DEBUG=1 CARGO_PROFILE_RELEASE_LTO=thin RUSTFLAGS='-C link-arg=-fuse-ld=mold' cargo bench --no-default-features --features native,git,experimental -p casita --bench retained_wal --no-run",
+    "files": {
+      "/tmp/mnos-ingest/evidence/retained-wal-release": "245cec1e97ce5d3c14ae961a1f35944139fd360868d30580d62c292aad2fe94c",
+      "/tmp/mnos-ingest/casita/crates/casita/benches/retained_wal.rs": "4225122cfa44b068423dc5c26ce7ce6954161c97df7672283ff1fa09bbd14668",
+      "/tmp/mnos-ingest/casita/crates/casita/src/api.rs": "e22330085892b524f02ec672a8420612e89578e34976cd87ba6155cff8d47bbf",
+      "/tmp/mnos-ingest/casita/crates/casita/src/repository/retention.rs": "404d1915113adc9df6f135153be6bf647b3566e04bb78aad22043ae7df2a95ac",
+      "/tmp/mnos-ingest/casita/Cargo.lock": "22ba225c26bc0fd0fc673f45099dd51824d927189879e1474e3de17347d1e8f9"
+    }
+  },
+  "command": "cargo bench --no-default-features --features native,git,experimental -p casita --bench retained_wal",
+  "measurement": "Single quiet release run, sequential cases, no concurrent builds or benchmarks. 512-byte unbatched BlobImport writes replace one root; sentinel held across all writes.",
+  "findings": [
+    "At 1024 writes, held snapshot peak WAL was 27171432 bytes and blocked checkpoint; object guard peak was 4144752 bytes and checkpoint truncated WAL to zero.",
+    "Write times are similar; no throughput improvement is claimed. Read throughput is measured separately because acquiring a full fresh reader on every read regresses it."
+  ],
+  "samples": [
+    {
+      "checkpoint_busy": true,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 819912,
+      "retention": "snapshot",
+      "wal_after_checkpoint_bytes": 819912,
+      "wal_after_writes_bytes": 819912,
+      "write_seconds": 4.287790945,
+      "writes": 32,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/snapshot/32",
+      "wall_seconds": 4.287790945
+    },
+    {
+      "checkpoint_busy": false,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 819912,
+      "retention": "objects",
+      "wal_after_checkpoint_bytes": 0,
+      "wal_after_writes_bytes": 819912,
+      "write_seconds": 4.246491142,
+      "writes": 32,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/objects/32",
+      "wall_seconds": 4.246491142
+    },
+    {
+      "checkpoint_busy": true,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 6583792,
+      "retention": "snapshot",
+      "wal_after_checkpoint_bytes": 6583792,
+      "wal_after_writes_bytes": 6583792,
+      "write_seconds": 32.208083725,
+      "writes": 256,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/snapshot/256",
+      "wall_seconds": 32.208083725
+    },
+    {
+      "checkpoint_busy": false,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 4128272,
+      "retention": "objects",
+      "wal_after_checkpoint_bytes": 0,
+      "wal_after_writes_bytes": 2455552,
+      "write_seconds": 31.998887359,
+      "writes": 256,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/objects/256",
+      "wall_seconds": 31.998887359
+    },
+    {
+      "checkpoint_busy": true,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 27171432,
+      "retention": "snapshot",
+      "wal_after_checkpoint_bytes": 27171432,
+      "wal_after_writes_bytes": 27171432,
+      "write_seconds": 142.840287764,
+      "writes": 1024,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/snapshot/1024",
+      "wall_seconds": 142.840287764
+    },
+    {
+      "checkpoint_busy": false,
+      "correctness": "passed",
+      "payload_bytes": 512,
+      "peak_wal_bytes": 4144752,
+      "retention": "objects",
+      "wal_after_checkpoint_bytes": 0,
+      "wal_after_writes_bytes": 1874632,
+      "write_seconds": 143.373341847,
+      "writes": 1024,
+      "status": "ok",
+      "implementation": "casita",
+      "operation": "retained-wal/objects/1024",
+      "wall_seconds": 143.373341847
+    }
+  ]
+}

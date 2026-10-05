@@ -375,3 +375,8 @@ required-features = ["ssh", "experimental"]
 name = "metadata_verification"
 harness = false
 required-features = ["experimental"]
+
+[[bench]]
+name = "retained_wal"
+harness = false
+required-features = ["native", "experimental"]
