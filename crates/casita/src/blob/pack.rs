@@ -510,6 +510,21 @@ struct FlushHandoffHook {
     resume: tokio::sync::oneshot::Receiver<()>,
 }
 
+#[cfg(test)]
+struct CatalogRaceHook {
+    reached: tokio::sync::oneshot::Sender<()>,
+    resume: tokio::sync::oneshot::Receiver<()>,
+}
+
+#[cfg(test)]
+async fn pause_catalog_race(hook: &StdMutex<Option<CatalogRaceHook>>) {
+    let hook = hook.lock().unwrap().take();
+    if let Some(hook) = hook {
+        let _ = hook.reached.send(());
+        let _ = hook.resume.await;
+    }
+}
+
 #[derive(Clone, Default)]
 struct Batch {
     chunks: Vec<(ChunkMeta, Bytes)>,
@@ -1489,6 +1504,10 @@ pub(crate) struct PackedChunks {
     prepared_index_catalog: StdMutex<Option<PreparedIndexCatalog>>,
     #[cfg(test)]
     flush_handoff_hook: StdMutex<Option<FlushHandoffHook>>,
+    #[cfg(test)]
+    catalog_sync_hook: StdMutex<Option<CatalogRaceHook>>,
+    #[cfg(test)]
+    flush_indexed_hook: StdMutex<Option<CatalogRaceHook>>,
     index_dirty: AtomicBool,
     state_catalog_mode: AtomicBool,
     dirty_packs: Mutex<HashSet<PackId>>,
@@ -1654,6 +1673,10 @@ impl PackedChunks {
             prepared_index_catalog: StdMutex::new(None),
             #[cfg(test)]
             flush_handoff_hook: StdMutex::new(None),
+            #[cfg(test)]
+            catalog_sync_hook: StdMutex::new(None),
+            #[cfg(test)]
+            flush_indexed_hook: StdMutex::new(None),
             index_dirty: AtomicBool::new(false),
             state_catalog_mode: AtomicBool::new(state_catalog_mode),
             dirty_packs: Mutex::new(HashSet::new()),
@@ -2587,25 +2610,23 @@ impl PackedChunks {
         self.read_counters
             .index_hits
             .fetch_add(1, Ordering::Relaxed);
-        let dirty = self.index_dirty.load(Ordering::Acquire);
+        #[cfg(test)]
+        pause_catalog_race(&self.catalog_sync_hook).await;
         {
             let mut current = self.index.write().unwrap();
-            if dirty {
-                let local = current.clone();
-                let pending = self.pending_catalog.lock().unwrap();
-                if !pending.is_empty() {
-                    let delta = encode_index_mutations(&local, &pending)?;
-                    let decoded = decode_index_delta(&delta)?;
-                    lazy.apply(&decoded);
-                    apply_decoded_index_delta(&mut index, decoded);
-                }
-            } else {
-                self.pending_catalog.lock().unwrap().mutations = IndexMutations::default();
+            // Inspect the actual pending changes while excluding writers. A
+            // dirty flag sampled before this lock can miss a newly sealed pack.
+            let pending = self.pending_catalog.lock().unwrap();
+            if !pending.is_empty() {
+                let delta = encode_index_mutations(&current, &pending)?;
+                let decoded = decode_index_delta(&delta)?;
+                lazy.apply(&decoded);
+                apply_decoded_index_delta(&mut index, decoded);
             }
             *current = index;
+            *self.lazy_catalog.write().unwrap() = lazy;
+            self.catalog_run_indexes.lock().unwrap().clear();
         }
-        *self.lazy_catalog.write().unwrap() = lazy;
-        self.catalog_run_indexes.lock().unwrap().clear();
         *self.index_catalog.lock().unwrap() = loaded.witness;
         Ok(())
     }
@@ -3194,8 +3215,10 @@ impl PackedChunks {
                     }
                     index.add_pack(sealed.id, sealed.bytes.len() as u64, sealed.entries);
                     self.record_pack_mutation(sealed.id);
+                    self.index_dirty.store(true, Ordering::Release);
                 }
-                self.index_dirty.store(true, Ordering::Release);
+                #[cfg(test)]
+                pause_catalog_race(&self.flush_indexed_hook).await;
                 // The pack is indexed above, so clearing here leaves no gap.
                 *self.inflight.lock().await = None;
                 Ok(())
@@ -3928,31 +3951,26 @@ impl PackedChunks {
                 self.read_counters
                     .index_hits
                     .fetch_add(1, Ordering::Relaxed);
-                let dirty = self.index_dirty.load(Ordering::Acquire);
                 {
                     let mut current = self.index.write().unwrap();
+                    let dirty = self.index_dirty.load(Ordering::Acquire);
                     if dirty {
-                        let local = current.clone();
-                        index.merge(local.clone());
-                        let pending = self.pending_catalog.lock().unwrap();
-                        if !pending.is_empty() {
-                            let delta = encode_index_mutations(&local, &pending)?;
-                            let decoded = decode_index_delta(&delta)?;
-                            lazy.apply(&decoded);
-                            apply_decoded_index_delta(&mut index, decoded);
-                        }
-                    } else {
-                        self.pending_catalog.lock().unwrap().mutations = IndexMutations::default();
+                        index.merge(current.clone());
+                    }
+                    let pending = self.pending_catalog.lock().unwrap();
+                    if !pending.is_empty() {
+                        let delta = encode_index_mutations(&current, &pending)?;
+                        let decoded = decode_index_delta(&delta)?;
+                        lazy.apply(&decoded);
+                        apply_decoded_index_delta(&mut index, decoded);
                     }
                     *current = index;
+                    *self.lazy_catalog.write().unwrap() = lazy;
+                    self.catalog_run_indexes.lock().unwrap().clear();
                 }
-                *self.lazy_catalog.write().unwrap() = lazy;
                 // Only a successfully installed index may satisfy the next
                 // unchanged-pointer check; overlay decoding can still fail.
                 *self.index_catalog.lock().unwrap() = loaded.witness;
-                if !dirty {
-                    self.index_dirty.store(false, Ordering::Release);
-                }
                 return Ok(());
             }
             // Keep the CAS version needed to repair an invalid catalog, but
@@ -6694,6 +6712,10 @@ fn decode_tombstone_record(bytes: &[u8]) -> io::Result<Vec<Tombstone>> {
 #[cfg(test)]
 #[path = "pack/benchmarks.rs"]
 mod benchmarks;
+
+#[cfg(test)]
+#[path = "pack/catalog_races.rs"]
+mod catalog_races;
 
 #[path = "pack/external.rs"]
 mod external;
