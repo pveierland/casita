@@ -20,6 +20,29 @@ print("test result: ok. 1 passed; 0 failed;")
 
 
 class NativeProbeTests(unittest.TestCase):
+    def test_wal3_publication_requires_every_checkpoint_case(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            output = root / "report.json"
+            arguments = ["--probe", "wal3-publication-checkpoints", "--blobs", "4096",
+                         "--repetitions", "1", "--output", str(output), "--probe-binary"]
+            complete = " ".join(
+                f"wal3_b{batch}_{temperature}_{field} {value}"
+                for batch in (511, 512, 513)
+                for temperature in ("warm", "reopened")
+                for field, value in (("before_nanos", 7), ("after_nanos", 9), ("validated", 1))
+            )
+            incomplete = complete.replace("wal3_b513_reopened_validated 1", "")
+            binary = fake_probe(root, incomplete)
+            with self.assertRaisesRegex(suite.common.BenchmarkError, "missing checkpoint case"):
+                suite.main(arguments + [str(binary)])
+            self.assertFalse(output.exists())
+            binary = fake_probe(root, complete)
+            self.assertEqual(suite.main(arguments + [str(binary)]), 0)
+            metrics = json.loads(output.read_text())["samples"][0]["metrics"]
+            self.assertEqual(metrics["wal3_b511_warm_before_nanos"], 7)
+            self.assertEqual(metrics["wal3_b513_reopened_after_nanos"], 9)
+
     def test_raw_blob_closures_requires_every_batch_to_be_full(self):
         with tempfile.TemporaryDirectory() as directory:
             output = pathlib.Path(directory) / "report.json"

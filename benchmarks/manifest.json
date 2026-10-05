@@ -1775,6 +1775,15 @@
       ]
     },
     {
+      "id": "wal3-publication-checkpoints",
+      "suite_id": "state-and-publication",
+      "title": "WAL3 publication before and after checkpoints at 511/512/513 blobs",
+      "kind": "module",
+      "target": "benchmarks.suites.native_probes",
+      "default_arguments": ["--probe", "wal3-publication-checkpoints"],
+      "profiles": ["custom"]
+    },
+    {
       "id": "raw-blob-closures",
       "suite_id": "state-and-publication",
       "title": "Raw blob publication without stored closure witnesses",
