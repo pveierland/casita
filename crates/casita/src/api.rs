@@ -140,7 +140,25 @@ pub struct RetainedReader {
     pub(crate) hold: Arc<BuiltinRetentionHold>,
 }
 
+/// Collection protection for the immutable objects visible to a retained reader.
+/// Unlike the reader, this guard does not keep a metadata snapshot open. Open a
+/// fresh [`RetainedReader`] for later reads; historical roots and application
+/// metadata require keeping the original reader instead. Clones share protection.
+#[derive(Clone)]
+pub struct ObjectRetention {
+    _protection: Arc<dyn Send + Sync>,
+}
+
 impl RetainedReader {
+    /// Keep this snapshot's immutable objects alive independently of its
+    /// metadata view. Drop the reader and its payload readers to release their
+    /// snapshots; this guard alone does not block database checkpoints.
+    pub fn retain_objects(&self) -> ObjectRetention {
+        ObjectRetention {
+            _protection: self.hold.data_protection(),
+        }
+    }
+
     /// Open a sequential payload reader that authenticates bytes before use.
     /// Writes generate the required proof metadata before publication. Missing
     /// or corrupt proofs fail verification; reads never fall back to EOF only.
