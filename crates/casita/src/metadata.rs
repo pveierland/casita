@@ -678,6 +678,18 @@ pub trait MetadataStore: Send + Sync {
         snapshot.get(keys).await
     }
 
+    /// Read immutable records born no later than `generation`, in input order.
+    /// Callers must already protect that generation against collection. This
+    /// method must not retain a metadata snapshot after returning. Local and
+    /// memory stores support it; other backends must explicitly opt in.
+    async fn object_batch_created_through(
+        &self,
+        _keys: &[ObjectKey],
+        _generation: u64,
+    ) -> Result<Vec<Option<ObjectRecord>>, MetadataError> {
+        Err(MetadataError::UnsupportedMetadata)
+    }
+
     /// Check current record/root values and commit without requiring a global
     /// revision. Implementations must serialize checks and changes together.
     async fn commit_checked(
@@ -936,6 +948,25 @@ impl MemoryMetadataStore {
 
 #[async_trait]
 impl MetadataStore for MemoryMetadataStore {
+    async fn object_batch_created_through(
+        &self,
+        keys: &[ObjectKey],
+        generation: u64,
+    ) -> Result<Vec<Option<ObjectRecord>>, MetadataError> {
+        let state = self.state.lock().map_err(|_| MetadataError::Poisoned)?;
+        keys.iter()
+            .map(|key| {
+                let Some(record) = state.objects.get(key) else {
+                    return Ok(None);
+                };
+                let birth = state.births.get(key).ok_or_else(|| {
+                    MetadataError::Corruption(format!("missing birth generation for {key}"))
+                })?;
+                Ok((*birth <= generation).then(|| record.clone()))
+            })
+            .collect()
+    }
+
     async fn try_collection_lease(&self) -> Result<Option<RepositoryLease>, MetadataError> {
         Ok(Some(RepositoryLease::process_local()))
     }

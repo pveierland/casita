@@ -10,6 +10,8 @@ use futures::TryStreamExt;
 use tokio::io::{AsyncRead, AsyncSeek, AsyncWrite, ReadBuf};
 
 use crate::blob::{BlobGc, BlobReader};
+
+mod objects;
 use crate::metadata::{MetadataStore, RootChange};
 use crate::repository::{
     OwnedRetentionHold, Repository as CoreRepository, RepositoryError, RootRetention,
@@ -19,6 +21,7 @@ use crate::{
     ErrorKind, IntegrityDisposition, IntegrityIssue, ObjectKey, ObjectRecord, RepositoryGeneration,
     RepositoryRevision, RetryDisposition, RootName, RootRecord,
 };
+pub use objects::ObjectReader;
 
 use crate::metadata::{MetadataError, MetadataMutation, MetadataSnapshot};
 use crate::{
@@ -150,6 +153,19 @@ pub struct ObjectRetention {
 }
 
 impl RetainedReader {
+    /// Detach immutable-object reads from this metadata snapshot. The returned
+    /// reader shares existing collection protection, admits no additional pin,
+    /// and never exposes objects born after this reader's generation. It uses
+    /// short metadata transactions, allowing checkpoints between operations.
+    /// Supported by local and in-memory metadata backends.
+    pub fn object_reader(&self) -> Result<ObjectReader, Error> {
+        Ok(ObjectReader::new(
+            self.hold.repository().clone(),
+            self.generation()?,
+            self.hold.data_protection(),
+        ))
+    }
+
     /// Keep this snapshot's immutable objects alive independently of its
     /// metadata view. Drop the reader and its payload readers to release their
     /// snapshots; this guard alone does not block database checkpoints.
@@ -166,40 +182,9 @@ impl RetainedReader {
         let Some(record) = self.hold.object(key).await.app()? else {
             return Ok(None);
         };
-        let opened = self
-            .hold
-            .repository()
-            .payloads()
-            .open_verified(&record.payload(), record.payload_size())
-            .await;
-        let inner = match opened {
-            Ok(Some(inner)) => inner,
-            result => {
-                // Only missing or unauthenticated bytes say anything about
-                // stored content; a busy or throttled backend does not.
-                let damaged = match &result {
-                    Ok(_) => true,
-                    Err(error) => crate::blob::is_damaged_payload_error(error),
-                };
-                if damaged && let Some(store) = &self.hold.repository().nar_store {
-                    store.record_read_failure().await;
-                }
-                return Err(match result {
-                    Err(error) => RepositoryError::Payload(error),
-                    _ => RepositoryError::MissingPayload(record.payload()),
-                }
-                .into_application_error());
-            }
-        };
-        Ok(Some(VerifiedReader {
-            record,
-            inner,
-            _hold: Some(self.hold.clone()),
-            nar_health: crate::nar::store::ReadHealth::new(
-                self.hold.repository().nar_store.clone(),
-            ),
-        }))
+        open_verified_record(self.hold.repository(), record, self.hold.clone()).await
     }
+
     pub(crate) fn new(hold: BuiltinRetentionHold) -> Self {
         Self {
             hold: Arc::new(hold),
@@ -462,6 +447,42 @@ impl IntegrityReport {
     }
 }
 
+async fn open_verified_record(
+    repository: &BuiltinRepository,
+    record: ObjectRecord,
+    protection: Arc<dyn Send + Sync>,
+) -> Result<Option<VerifiedReader>, Error> {
+    let opened = repository
+        .payloads()
+        .open_verified(&record.payload(), record.payload_size())
+        .await;
+    let inner = match opened {
+        Ok(Some(inner)) => inner,
+        result => {
+            // Only missing or unauthenticated bytes say anything about
+            // stored content; a busy or throttled backend does not.
+            let damaged = match &result {
+                Ok(_) => true,
+                Err(error) => crate::blob::is_damaged_payload_error(error),
+            };
+            if damaged && let Some(store) = &repository.nar_store {
+                store.record_read_failure().await;
+            }
+            return Err(match result {
+                Err(error) => RepositoryError::Payload(error),
+                _ => RepositoryError::MissingPayload(record.payload()),
+            }
+            .into_application_error());
+        }
+    };
+    Ok(Some(VerifiedReader {
+        record,
+        inner,
+        _hold: Some(protection),
+        nar_health: crate::nar::store::ReadHealth::new(repository.nar_store.clone()),
+    }))
+}
+
 /// A seekable payload reader with collection protection.
 ///
 /// Implements Tokio's [`AsyncRead`] and [`AsyncSeek`]. Ordinary opens retain the
@@ -471,7 +492,7 @@ pub struct Reader {
     record: ObjectRecord,
     inner: Box<dyn BlobReader>,
     // Drop the physical reader before releasing the collection hold.
-    _hold: Option<Arc<BuiltinRetentionHold>>,
+    _hold: Option<Arc<dyn Send + Sync>>,
     nar_health: crate::nar::store::ReadHealth,
 }
 
@@ -482,7 +503,7 @@ pub struct Reader {
 pub struct VerifiedReader {
     record: ObjectRecord,
     inner: Box<dyn crate::blob::BlobStreamReader>,
-    _hold: Option<Arc<BuiltinRetentionHold>>,
+    _hold: Option<Arc<dyn Send + Sync>>,
     nar_health: crate::nar::store::ReadHealth,
 }
 
