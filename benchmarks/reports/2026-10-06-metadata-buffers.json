@@ -1,0 +1,978 @@
+{
+  "change": "Size metadata scratch buffers from the untrusted length hint; grow geometrically when the hint understates the payload.",
+  "selection": "Direct output removes copying but regressed 256 KiB inputs; hinted scratch preserves small-object gains without that consistent large-input penalty. All investigated variants remain in the permanent benchmark.",
+  "scope": "Microbenchmark of bounded metadata verification, not an end-to-end Git speedup claim.",
+  "build": {
+    "command": "CARGO_TARGET_DIR=/tmp/mnos-ingest/portable-target RUSTFLAGS='-C link-arg=-fuse-ld=mold' cargo bench --no-default-features --features experimental -p casita --bench metadata_verification --no-run",
+    "files": {
+      "/tmp/mnos-ingest/portable-target/release/deps/metadata_verification-57b49070abe3521b": "2bb3366a5fcdd699b4a66c8edd9dd52827495109df7bd98b2a57faf99be4cc09",
+      "/tmp/mnos-ingest/casita/crates/casita/src/format.rs": "cd16125d658a0861e5cb981d6622939a0d695b420c0b285d73b9982590d55c25",
+      "/tmp/mnos-ingest/casita/crates/casita/benches/metadata_verification.rs": "a0b611bc14704dd489b8eeda0d2bfd917bae3b3fbde1d6ff6534a52b5dbe4d19",
+      "/tmp/mnos-ingest/casita/Cargo.lock": "22ba225c26bc0fd0fc673f45099dd51824d927189879e1474e3de17347d1e8f9"
+    }
+  },
+  "platform": "Linux-6.18.34-x86_64-with-glibc2.42",
+  "protocol": {
+    "cpu_affinity": [
+      0
+    ],
+    "orders": [
+      "forward",
+      "reverse"
+    ],
+    "warmup_seconds": 0.25,
+    "measurement_seconds": 1,
+    "sample_count": 10,
+    "build_overlap": false,
+    "command": "CRITERION_HOME=<results> taskset -c 0 <metadata_verification-binary> --bench 'metadata_verification_buffers/(known|unknown)/(0|1|128|1024|16384|65535|65536|65537|262144)/(scratch_64k|production)$' --warm-up-time 0.25 --measurement-time 1",
+    "reverse": "Set CASITA_METADATA_READ_REVERSE=1"
+  },
+  "correctness": [
+    "90 permanent benchmark variant/size/hint cases passed before timing",
+    "4 edge-case tests including limit/EOF, wrong hints, short reads, bounded allocation and bounded read counts",
+    "5 existing format unit tests"
+  ],
+  "measurements": [
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_0/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 304.45446206415386,
+          "upper_bound": 314.7499285498134
+        },
+        "point_estimate": 307.7403338104684,
+        "standard_error": 2.8751294172759723
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_0/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1536.524535021765,
+          "upper_bound": 1619.1638148001582
+        },
+        "point_estimate": 1558.5959537000394,
+        "standard_error": 25.840670681594066
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_1/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 320.8857555463292,
+          "upper_bound": 323.3730075635865
+        },
+        "point_estimate": 323.22529649620014,
+        "standard_error": 0.6091680916946887
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_1/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1502.378007768094,
+          "upper_bound": 1529.4441312997346
+        },
+        "point_estimate": 1515.3044042882407,
+        "standard_error": 7.715201426285939
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_1024/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1322.044457021836,
+          "upper_bound": 1446.5634265683195
+        },
+        "point_estimate": 1333.013480123664,
+        "standard_error": 31.74669886439066
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_1024/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2468.2155861801243,
+          "upper_bound": 2485.48777173913
+        },
+        "point_estimate": 2475.947397342995,
+        "standard_error": 3.5475096021222576
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_128/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 376.2523704395983,
+          "upper_bound": 377.948617159176
+        },
+        "point_estimate": 376.5036963522573,
+        "standard_error": 0.4402512964193793
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_128/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1469.1829894822008,
+          "upper_bound": 1501.8158113730929
+        },
+        "point_estimate": 1495.0424437028048,
+        "standard_error": 7.027686550403558
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_16384/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 6982.512870262579,
+          "upper_bound": 7157.00950717889
+        },
+        "point_estimate": 7057.571957056009,
+        "standard_error": 48.14638536341317
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_16384/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7862.419439153439,
+          "upper_bound": 8196.455185185187
+        },
+        "point_estimate": 8096.972377777778,
+        "standard_error": 91.40078238298419
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_262144/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 104265.89843104871,
+          "upper_bound": 106266.4527938343
+        },
+        "point_estimate": 105449.72772157995,
+        "standard_error": 563.1211157380698
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_262144/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 103544.51445086705,
+          "upper_bound": 106739.51527663089
+        },
+        "point_estimate": 105143.41734104046,
+        "standard_error": 824.2737251956528
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65535/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 30158.24459234609,
+          "upper_bound": 31319.159213810315
+        },
+        "point_estimate": 30574.087936772048,
+        "standard_error": 359.36347161291246
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65535/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 30758.430863254394,
+          "upper_bound": 32037.30926916221
+        },
+        "point_estimate": 31117.98440285205,
+        "standard_error": 284.9499902217099
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65536/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 26654.252760736195,
+          "upper_bound": 27326.477505112474
+        },
+        "point_estimate": 26695.053872699384,
+        "standard_error": 184.4487412795462
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65536/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27732.84751806106,
+          "upper_bound": 28728.481566068516
+        },
+        "point_estimate": 28086.299347471453,
+        "standard_error": 230.18835052118683
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65537/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27742.196541353384,
+          "upper_bound": 28345.99237677527
+        },
+        "point_estimate": 28075.158539205157,
+        "standard_error": 123.54930923277371
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/known_65537/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27839.016547558276,
+          "upper_bound": 28432.336459928534
+        },
+        "point_estimate": 28060.5528330781,
+        "standard_error": 120.45722269316681
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_0/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1497.916572814693,
+          "upper_bound": 1634.5131537150942
+        },
+        "point_estimate": 1552.7937946312545,
+        "standard_error": 35.67502290003247
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_0/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1590.0198026800772,
+          "upper_bound": 1648.411580932473
+        },
+        "point_estimate": 1628.7213517525524,
+        "standard_error": 19.096288986479053
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_1/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1514.2829852320674,
+          "upper_bound": 1554.8181434599155
+        },
+        "point_estimate": 1525.2057046413502,
+        "standard_error": 9.544431317506278
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_1/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1438.2983442020236,
+          "upper_bound": 1461.9395602429577
+        },
+        "point_estimate": 1440.809385315192,
+        "standard_error": 4.89762548498219
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_1024/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2497.5040538683525,
+          "upper_bound": 2535.2485065197807
+        },
+        "point_estimate": 2511.722265847386,
+        "standard_error": 8.611031462873546
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_1024/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2463.042052291815,
+          "upper_bound": 2573.663242176075
+        },
+        "point_estimate": 2499.112762016184,
+        "standard_error": 34.053209484873804
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_128/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1456.2283792440744,
+          "upper_bound": 1467.795528278576
+        },
+        "point_estimate": 1456.4385966082996,
+        "standard_error": 3.60098431476516
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_128/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1451.1668677197104,
+          "upper_bound": 1542.3455952986383
+        },
+        "point_estimate": 1455.8111892787854,
+        "standard_error": 27.531536112504448
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_16384/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7917.38018496011,
+          "upper_bound": 8086.453970331588
+        },
+        "point_estimate": 7978.224840023269,
+        "standard_error": 43.496187197674686
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_16384/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7728.858038348083,
+          "upper_bound": 7939.412566371682
+        },
+        "point_estimate": 7898.967541087231,
+        "standard_error": 49.91147803247563
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_262144/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 108415.96889264582,
+          "upper_bound": 110603.71084812624
+        },
+        "point_estimate": 110198.40828402367,
+        "standard_error": 612.766006822398
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_262144/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 103608.02808988764,
+          "upper_bound": 106938.93033707865
+        },
+        "point_estimate": 103967.73483146066,
+        "standard_error": 965.8807791915766
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65535/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 31653.15728476821,
+          "upper_bound": 36589.01949963208
+        },
+        "point_estimate": 33185.96399006622,
+        "standard_error": 1483.2924128629406
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65535/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 29789.417652635573,
+          "upper_bound": 31095.56313993174
+        },
+        "point_estimate": 30158.895790671217,
+        "standard_error": 357.6392313493349
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65536/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 26953.1918049271,
+          "upper_bound": 26965.915319974145
+        },
+        "point_estimate": 26960.221059577678,
+        "standard_error": 3.39691534783229
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65536/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27803.82576335878,
+          "upper_bound": 27910.401603053433
+        },
+        "point_estimate": 27821.683715012725,
+        "standard_error": 26.811342037892196
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65537/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27095.90043859649,
+          "upper_bound": 27290.747368421053
+        },
+        "point_estimate": 27194.67192982456,
+        "standard_error": 41.5818457665135
+      }
+    },
+    {
+      "order": "forward",
+      "case": "metadata_verification_buffers/unknown_65537/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 28335.180938037865,
+          "upper_bound": 31880.230636833046
+        },
+        "point_estimate": 29974.912335054505,
+        "standard_error": 974.5066303244153
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_0/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 287.2284243059139,
+          "upper_bound": 292.8861199153896
+        },
+        "point_estimate": 289.4121929577685,
+        "standard_error": 1.8290727251928938
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_0/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1417.6175078896058,
+          "upper_bound": 1489.8533558463487
+        },
+        "point_estimate": 1448.5897171802449,
+        "standard_error": 17.80725326805372
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_1/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 326.4862807612283,
+          "upper_bound": 342.8815939338499
+        },
+        "point_estimate": 333.87930547583744,
+        "standard_error": 3.7156895429183976
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_1/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1479.062661201179,
+          "upper_bound": 1633.1249692950134
+        },
+        "point_estimate": 1557.8314695406534,
+        "standard_error": 45.310995451099785
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_1024/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1290.752963311383,
+          "upper_bound": 1293.2725957015703
+        },
+        "point_estimate": 1292.7667040548038,
+        "standard_error": 0.94289320613978
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_1024/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2378.7961380498145,
+          "upper_bound": 2412.2929233855702
+        },
+        "point_estimate": 2405.941121268327,
+        "standard_error": 7.8597389241126185
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_128/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 372.99806693695393,
+          "upper_bound": 388.04536888588865
+        },
+        "point_estimate": 383.6441421961579,
+        "standard_error": 4.8605989233619935
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_128/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1456.230234866027,
+          "upper_bound": 1502.2447279192854
+        },
+        "point_estimate": 1478.0283509299077,
+        "standard_error": 14.755729372706545
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_16384/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 6380.697245322245,
+          "upper_bound": 6493.474061974062
+        },
+        "point_estimate": 6489.752598752599,
+        "standard_error": 29.330079613060757
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_16384/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7529.351832784185,
+          "upper_bound": 7668.563598297638
+        },
+        "point_estimate": 7645.045819604613,
+        "standard_error": 38.12663664310236
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_262144/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 108350.20179640719,
+          "upper_bound": 110717.53243512975
+        },
+        "point_estimate": 110119.45508982036,
+        "standard_error": 486.0456202456882
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_262144/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 110163.40240963855,
+          "upper_bound": 111932.96643717728
+        },
+        "point_estimate": 110655.67034805889,
+        "standard_error": 463.2415518159779
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65535/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 30346.522434735314,
+          "upper_bound": 31176.0486463621
+        },
+        "point_estimate": 30906.742978003385,
+        "standard_error": 245.61386275711712
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65535/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 30158.52467569092,
+          "upper_bound": 30832.708629441626
+        },
+        "point_estimate": 30194.953468697124,
+        "standard_error": 207.24833297140006
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65536/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 26866.111320395736,
+          "upper_bound": 27485.13394216134
+        },
+        "point_estimate": 27226.245941146626,
+        "standard_error": 182.8709366562924
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65536/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 26643.7258382643,
+          "upper_bound": 27377.494082840236
+        },
+        "point_estimate": 26870.799344885883,
+        "standard_error": 262.5075756333766
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65537/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 28634.650390625,
+          "upper_bound": 29733.88654513889
+        },
+        "point_estimate": 28869.763532366072,
+        "standard_error": 272.6622157619635
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/known_65537/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27716.052066559314,
+          "upper_bound": 28325.953904991948
+        },
+        "point_estimate": 27719.929817498658,
+        "standard_error": 171.30421509726148
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_0/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1468.48748380829,
+          "upper_bound": 1498.3219073834198
+        },
+        "point_estimate": 1491.2435739151556,
+        "standard_error": 8.292270907212375
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_0/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1442.3054820565635,
+          "upper_bound": 1467.4010041194645
+        },
+        "point_estimate": 1452.2747337626329,
+        "standard_error": 7.142780937974642
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_1/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1464.424532520325,
+          "upper_bound": 1487.2014697380307
+        },
+        "point_estimate": 1481.1558367208672,
+        "standard_error": 4.072931809018361
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_1/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1438.3740584757431,
+          "upper_bound": 1482.1702518830484
+        },
+        "point_estimate": 1479.3795253907833,
+        "standard_error": 11.812822622106115
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_1024/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2363.0013515851388,
+          "upper_bound": 2423.449868806136
+        },
+        "point_estimate": 2404.2664001340772,
+        "standard_error": 14.301112791715271
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_1024/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 2494.065724478595,
+          "upper_bound": 2567.892069154775
+        },
+        "point_estimate": 2520.2761474341382,
+        "standard_error": 20.248292551097787
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_128/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1463.4946333305106,
+          "upper_bound": 1498.5163222965534
+        },
+        "point_estimate": 1492.1924097439805,
+        "standard_error": 9.50993731247232
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_128/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 1508.073806972719,
+          "upper_bound": 1540.0750690266218
+        },
+        "point_estimate": 1522.9627439398519,
+        "standard_error": 8.376249509203918
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_16384/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7433.144590703414,
+          "upper_bound": 7514.90044881589
+        },
+        "point_estimate": 7436.034605100782,
+        "standard_error": 29.811376428600816
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_16384/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 7455.284236657013,
+          "upper_bound": 8126.768445731624
+        },
+        "point_estimate": 7645.38363673976,
+        "standard_error": 194.63282585758205
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_262144/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 111652.3024691358,
+          "upper_bound": 116719.60771604939
+        },
+        "point_estimate": 115609.34979423869,
+        "standard_error": 1336.8160425347733
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_262144/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 106607.21482035928,
+          "upper_bound": 107092.52951240377
+        },
+        "point_estimate": 106674.04281437126,
+        "standard_error": 101.6228124268183
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65535/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 30151.750084033614,
+          "upper_bound": 30229.577415966385
+        },
+        "point_estimate": 30156.657983193276,
+        "standard_error": 23.400245289413974
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65535/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 31857.393989983306,
+          "upper_bound": 32517.490546744575
+        },
+        "point_estimate": 32140.851952327954,
+        "standard_error": 191.3852748273301
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65536/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27480.839375,
+          "upper_bound": 27755.282651289683
+        },
+        "point_estimate": 27524.1890625,
+        "standard_error": 65.99397090805758
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65536/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 29305.243408360126,
+          "upper_bound": 29907.62838768948
+        },
+        "point_estimate": 29489.113879957127,
+        "standard_error": 153.25715333375788
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65537/production",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 28131.641788041154,
+          "upper_bound": 28816.793449550976
+        },
+        "point_estimate": 28625.64239302694,
+        "standard_error": 131.25635283368766
+      }
+    },
+    {
+      "order": "reverse",
+      "case": "metadata_verification_buffers/unknown_65537/scratch_64k",
+      "median_nanoseconds": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower_bound": 27448.205244578923,
+          "upper_bound": 27974.59058245083
+        },
+        "point_estimate": 27914.292900367407,
+        "standard_error": 152.39673704173387
+      }
+    }
+  ],
+  "tradeoffs": [
+    "Known-length 0/1/128-byte medians improve 74\u201380%, 1 KiB improves about 46%, and known 256 KiB stays within 0.5% in both orders.",
+    "Unknown-length 256 KiB medians regress 6.0% and 8.4%; other large/unknown cases vary by order. This change targets small known metadata and bounded allocation, not every streaming workload.",
+    "Ten samples per case and two orderings are limited evidence; rerun the permanent corpus on deployment hardware."
+  ]
+}

@@ -1375,6 +1375,8 @@
         "--bench",
         "optimization",
         "--bench",
+        "metadata_verification",
+        "--bench",
         "compression_handoff",
         "--bench",
         "git_fetch_fairness",
@@ -2273,7 +2275,7 @@
           ],
           "metrics": [
             "verification latency",
-            "largest read scratch buffer in bytes, emitted as JSON"
+            "largest read buffer in bytes, emitted as JSON"
           ],
           "correctness": [
             "whole-payload identity",
@@ -2281,6 +2283,17 @@
             "EOF observed",
             "configured buffer cap"
           ]
+        },
+        "metadata-verification-buffers": {
+          "runner": "cargo bench --no-default-features --features experimental --bench metadata_verification",
+          "included_in": "benchmark all --suites core-primitives",
+          "payload_sizes_bytes": [0, 1, 128, 1024, 16384, 65535, 65536, 65537, 262144],
+          "length_hints": ["known", "unknown"],
+          "metadata_limit_bytes": 268435456,
+          "variants": ["former 64 KiB scratch helper", "direct output buffer", "small direct/large scratch hybrid", "length-hinted bounded scratch", "production hint-sized scratch with fallback growth"],
+          "variant_order": "forward or reverse via CASITA_METADATA_READ_REVERSE",
+          "metrics": ["bounded metadata read latency", "largest read buffer in bytes, emitted as JSON"],
+          "correctness": ["complete payload bytes", "whole-payload identity", "complete payload size", "EOF observed", "64 KiB read cap"]
         },
         "sliced-transfer": {
           "runner": "cargo bench --features ssh,experimental --bench sliced_transfer",
