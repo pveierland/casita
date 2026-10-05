@@ -1,0 +1,464 @@
+{
+  "scope": "Matched local WAL3 publication comparisons; before/after authenticated object-shard checkpoint. Payload staging excluded.",
+  "protocol": {
+    "repetitions": 3,
+    "order": [
+      {
+        "variant": "control",
+        "repetition": 1,
+        "report": "control-1.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-control",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/control-1.json"
+        ]
+      },
+      {
+        "variant": "candidate",
+        "repetition": 1,
+        "report": "candidate-1.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-candidate",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/candidate-1.json"
+        ]
+      },
+      {
+        "variant": "candidate",
+        "repetition": 2,
+        "report": "candidate-2.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-candidate",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/candidate-2.json"
+        ]
+      },
+      {
+        "variant": "control",
+        "repetition": 2,
+        "report": "control-2.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-control",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/control-2.json"
+        ]
+      },
+      {
+        "variant": "control",
+        "repetition": 3,
+        "report": "control-3.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-control",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/control-3.json"
+        ]
+      },
+      {
+        "variant": "candidate",
+        "repetition": 3,
+        "report": "candidate-3.json",
+        "command": [
+          "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+          "-m",
+          "benchmarks.suites.native_probes",
+          "--probe",
+          "wal3-publication-checkpoints",
+          "--probe-binary",
+          "/tmp/mnos-ingest/evidence/casita-wal3-publication-candidate",
+          "--repetitions",
+          "1",
+          "--output",
+          "/tmp/mnos-ingest/casita/benchmarks/reports/2026-10-06-wal3-batch/candidate-3.json"
+        ]
+      }
+    ],
+    "concurrent_builds_or_benchmarks": false,
+    "gates": "All objects and payloads checked; exact expected unrooted/collectible findings only; no raw-blob closure witnesses."
+  },
+  "builds": [
+    {
+      "variant": "control",
+      "path": "/tmp/mnos-ingest/evidence/casita-wal3-publication-control",
+      "sha256": "d32b1386f7ace9a23e62ed7edcea6f2bd082298f909f511ba7fa478783f6cab1",
+      "provenance": "verified",
+      "build": {
+        "schema_version": 1,
+        "executable_sha256": "d32b1386f7ace9a23e62ed7edcea6f2bd082298f909f511ba7fa478783f6cab1",
+        "source_revision": "6ac295fd6c1daef568669d5380fa62ac4533d071",
+        "source_sha256": "928435a7afae493ea920db8e98d79d4546c6bde84dce793f0e293d63c822be90",
+        "source_dirty": true,
+        "lockfile_sha256": "22ba225c26bc0fd0fc673f45099dd51824d927189879e1474e3de17347d1e8f9",
+        "features": [
+          "experimental",
+          "git",
+          "native",
+          "s3"
+        ],
+        "default_features": false,
+        "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (built from a source tarball)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 21.1.8",
+        "rustflags": "-C link-arg=-fuse-ld=mold",
+        "target": "x86_64-unknown-linux-gnu",
+        "profile": "release",
+        "cargo_config_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "build_environment": {
+          "CARGO_BUILD_JOBS": "6",
+          "CARGO_PROFILE_RELEASE_DEBUG": "1",
+          "CARGO_PROFILE_RELEASE_LTO": "off"
+        },
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "-p",
+          "casita",
+          "--no-default-features",
+          "--features",
+          "native,git,s3,experimental",
+          "--lib",
+          "--no-run",
+          "--message-format=json"
+        ],
+        "fixture_sha256": "dde33ebd0f964398a3501d9e5cc7a379df9b9a131148119d39add1803e1a8013"
+      }
+    },
+    {
+      "variant": "candidate",
+      "path": "/tmp/mnos-ingest/evidence/casita-wal3-publication-candidate",
+      "sha256": "c2153b2f1e46b715dbaa6def0af7b3c49b4f7e5947c6e36fe2701e52eff466cd",
+      "provenance": "verified",
+      "build": {
+        "schema_version": 1,
+        "executable_sha256": "c2153b2f1e46b715dbaa6def0af7b3c49b4f7e5947c6e36fe2701e52eff466cd",
+        "source_revision": "6ac295fd6c1daef568669d5380fa62ac4533d071",
+        "source_sha256": "75e3cd8db93f20aaec10294370f0692a01e14e6dbaed323562605cf7ea99d21e",
+        "source_dirty": true,
+        "lockfile_sha256": "22ba225c26bc0fd0fc673f45099dd51824d927189879e1474e3de17347d1e8f9",
+        "features": [
+          "experimental",
+          "git",
+          "native",
+          "s3"
+        ],
+        "default_features": false,
+        "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (built from a source tarball)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 21.1.8",
+        "rustflags": "-C link-arg=-fuse-ld=mold",
+        "target": "x86_64-unknown-linux-gnu",
+        "profile": "release",
+        "cargo_config_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "build_environment": {
+          "CARGO_BUILD_JOBS": "6",
+          "CARGO_PROFILE_RELEASE_DEBUG": "1",
+          "CARGO_PROFILE_RELEASE_LTO": "off"
+        },
+        "command": [
+          "cargo",
+          "test",
+          "--release",
+          "-p",
+          "casita",
+          "--no-default-features",
+          "--features",
+          "native,git,s3,experimental",
+          "--lib",
+          "--no-run",
+          "--message-format=json"
+        ],
+        "fixture_sha256": "dde33ebd0f964398a3501d9e5cc7a379df9b9a131148119d39add1803e1a8013"
+      }
+    }
+  ],
+  "medians": [
+    {
+      "batch": 511,
+      "temperature": "warm",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.768356,
+            6.150198,
+            5.262462
+          ],
+          "candidate": [
+            4.344604,
+            4.016658,
+            5.447817
+          ]
+        },
+        "control_median_ms": 5.262462,
+        "candidate_median_ms": 4.344604,
+        "change_percent": -17.441608129426868
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            117.956816,
+            179.903787,
+            156.877806
+          ],
+          "candidate": [
+            4.68944,
+            5.414748,
+            7.290586
+          ]
+        },
+        "control_median_ms": 156.877806,
+        "candidate_median_ms": 5.414748,
+        "change_percent": -96.54842954649685
+      }
+    },
+    {
+      "batch": 511,
+      "temperature": "reopened",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.66411,
+            4.774006,
+            4.698335
+          ],
+          "candidate": [
+            3.351696,
+            4.240764,
+            5.260049
+          ]
+        },
+        "control_median_ms": 4.698335,
+        "candidate_median_ms": 4.240764,
+        "change_percent": -9.73900328520635
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            112.229855,
+            167.629714,
+            159.778829
+          ],
+          "candidate": [
+            4.836678,
+            6.114051,
+            7.043672
+          ]
+        },
+        "control_median_ms": 159.778829,
+        "candidate_median_ms": 6.114051,
+        "change_percent": -96.17342858358288
+      }
+    },
+    {
+      "batch": 512,
+      "temperature": "warm",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.138129,
+            4.916907,
+            4.720558
+          ],
+          "candidate": [
+            3.518336,
+            4.685665,
+            5.493691
+          ]
+        },
+        "control_median_ms": 4.720558,
+        "candidate_median_ms": 4.685665,
+        "change_percent": -0.7391710895194858
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            112.353981,
+            165.785747,
+            158.985894
+          ],
+          "candidate": [
+            4.635743,
+            6.645035,
+            7.81622
+          ]
+        },
+        "control_median_ms": 158.985894,
+        "candidate_median_ms": 6.645035,
+        "change_percent": -95.82036189952802
+      }
+    },
+    {
+      "batch": 512,
+      "temperature": "reopened",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.118587,
+            4.778175,
+            4.881364
+          ],
+          "candidate": [
+            3.349855,
+            4.683903,
+            5.204067
+          ]
+        },
+        "control_median_ms": 4.778175,
+        "candidate_median_ms": 4.683903,
+        "change_percent": -1.9729708518419709
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            112.710726,
+            171.745455,
+            156.111111
+          ],
+          "candidate": [
+            5.152991,
+            7.888242,
+            7.856348
+          ]
+        },
+        "control_median_ms": 156.111111,
+        "candidate_median_ms": 7.856348,
+        "change_percent": -94.96746391100888
+      }
+    },
+    {
+      "batch": 513,
+      "temperature": "warm",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.636878,
+            4.734636,
+            4.619103
+          ],
+          "candidate": [
+            3.550974,
+            4.91248,
+            5.340228
+          ]
+        },
+        "control_median_ms": 4.619103,
+        "candidate_median_ms": 4.91248,
+        "change_percent": 6.351384673604388
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            115.030457,
+            163.348631,
+            155.042827
+          ],
+          "candidate": [
+            4.677304,
+            7.127671,
+            7.690239
+          ]
+        },
+        "control_median_ms": 155.042827,
+        "candidate_median_ms": 7.127671,
+        "change_percent": -95.40277280934771
+      }
+    },
+    {
+      "batch": 513,
+      "temperature": "reopened",
+      "before": {
+        "milliseconds": {
+          "control": [
+            3.445288,
+            4.549683,
+            4.647528
+          ],
+          "candidate": [
+            3.525212,
+            4.98479,
+            5.14912
+          ]
+        },
+        "control_median_ms": 4.549683,
+        "candidate_median_ms": 4.98479,
+        "change_percent": 9.563457498027894
+      },
+      "after": {
+        "milliseconds": {
+          "control": [
+            117.862375,
+            158.793515,
+            161.246156
+          ],
+          "candidate": [
+            4.86809,
+            7.8283,
+            7.699308
+          ]
+        },
+        "control_median_ms": 158.793515,
+        "candidate_median_ms": 7.699308,
+        "change_percent": -95.15137126349272
+      }
+    }
+  ],
+  "notes": [
+    "Current Turso pin already includes bounded WAL frame scans (upstream PR9485); this experiment changes the separate WAL3 metadata backend.",
+    "Only wal3.rs and wal3_shard.rs differ between frozen control and candidate production sources.",
+    "This local transport probe does not establish remote S3 latency.",
+    "Pre-checkpoint medians range from17.4% faster to9.6% slower; the largest positive difference is below0.45ms. No uniform pre-checkpoint speedup is claimed.",
+    "The initial batch candidate showed larger pre-checkpoint overhead; the final implementation retains the original in-memory lookup path until an object shard exists.",
+    "The first regression attempt lacked rustfs and failed38 service-dependent tests. Supplying the repository-pinned executable produced81 passing tests for both candidates. No test was disabled to obtain that result.",
+    "The optimized tests ran in the frozen comparison worktree; the two final metadata source files were copied byte-for-byte into the implementation worktree and their hashes verified."
+  ],
+  "validation": {
+    "metadata_suite": {
+      "passed": 81,
+      "failed": 0,
+      "ignored": 3,
+      "rustfs": "1.0.0-rc.1 from Casita devenv.lock nixpkgs54ba4bcec4043e72a4006d825e0d7aff5562008f",
+      "seconds": 63.01
+    },
+    "benchmark_registration_tests": 39,
+    "measured_identity_gates": "All six checkpoint cases passed in each of the six control/candidate invocations.",
+    "source_sha256": {
+      "crates/casita/src/metadata/wal3.rs": "c60193bc52a299b131bb27f93ae387ca81959b68c758b2283cbef88844ef5f93",
+      "crates/casita/src/metadata/wal3_shard.rs": "191e9487b51c31eb76b58d034fe1ba2277cfac2147a582f3de1334ff9333ff71"
+    }
+  }
+}
