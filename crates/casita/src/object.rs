@@ -607,6 +607,7 @@ impl FromStr for RepositoryRevision {
 pub struct RepositoryGeneration(u64);
 
 impl RepositoryGeneration {
+    #[cfg(feature = "native")]
     pub(crate) const fn new(generation: u64) -> Self {
         Self(generation)
     }
