@@ -257,6 +257,23 @@ impl RetainedReader {
         self.hold.object_batch(keys).await.app()
     }
 
+    /// Whether each object has a recorded validation of its complete closure
+    /// in this protected snapshot, preserving input order and duplicates.
+    /// Missing objects and objects without a closure witness return `false`.
+    /// This does not traverse or validate an unwitnessed closure; a complete
+    /// but unwitnessed object can therefore also return `false`.
+    pub async fn validated_closures(&self, keys: &[ObjectKey]) -> Result<Vec<bool>, Error> {
+        Ok(self
+            .hold
+            .snapshot()
+            .validated_payload_batch(keys)
+            .await
+            .app()?
+            .into_iter()
+            .map(|payload| payload.is_some())
+            .collect())
+    }
+
     /// Open content from this exact snapshot. The returned reader keeps the
     /// protection alive even after the session and repository are dropped.
     /// Keys absent from the snapshot return `None`; opaque records do not
