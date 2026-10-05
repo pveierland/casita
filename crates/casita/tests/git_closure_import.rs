@@ -872,3 +872,95 @@ async fn failed_import_checkpoints_never_claim_an_incomplete_tree_is_validated()
         ClosureStatus::Complete { objects: 2 }
     );
 }
+#[tokio::test]
+async fn cancelled_closure_imports_do_not_publish_completeness_and_can_resume() {
+    use casita::experimental::{FormatLimits, FormatRegistry};
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    // Both sides of the closure importer's 256-object discovery frontier.
+    for count in [255usize, 256, 257] {
+        let source = Source::new("sha1");
+        let mut entries = String::new();
+        for index in 0..count {
+            let blob = source.blob(&(index as u64).to_le_bytes());
+            entries.push_str(&format!("100644 blob {blob}\tf{index:04}\n"));
+        }
+        let root = tree(&source.tree(&entries));
+        for cancel_after in [0usize, 4, 16] {
+            let repository = Repository::with_formats(
+                MemoryBlobStore::new(),
+                MemoryMetadataStore::new().unwrap(),
+                FormatRegistry::builtin(),
+                FormatLimits {
+                    max_batch_objects: 1,
+                    ..Default::default()
+                },
+            );
+            let checks = Arc::new(AtomicUsize::new(0));
+            let observed = checks.clone();
+            let request = if cancel_after == 0 {
+                // Pre-cancellation must be observable before opening a source.
+                GitClosureImport::new(source.0.path().join("absent"), [root.clone()])
+            } else {
+                source.request(vec![root.clone()])
+            };
+            let result = repository
+                .import(request.with_cancellation_check(move || {
+                    observed.fetch_add(1, Ordering::SeqCst) >= cancel_after
+                }))
+                .await;
+            assert!(
+                matches!(result, Err(GitClosureImportError::Cancelled)),
+                "{result:?}"
+            );
+            assert!(checks.load(Ordering::SeqCst) > cancel_after);
+            let hold = repository.owned_retention_hold().await.unwrap();
+            assert_eq!(
+                hold.snapshot()
+                    .validated_closures(std::slice::from_ref(&root))
+                    .await
+                    .unwrap(),
+                [false],
+                "an interrupted traversal must not leave a reusable completeness mark",
+            );
+            if cancel_after == 16 {
+                assert!(
+                    hold.object(&root).await.unwrap().is_some(),
+                    "exercise recovery after a parent publication checkpoint"
+                );
+            }
+            let resumed = repository
+                .import(source.request(vec![root.clone()]))
+                .await
+                .unwrap();
+            assert_eq!(
+                resumed.report.imported_objects + resumed.report.reused_objects,
+                count + 1
+            );
+            assert_eq!(
+                repository.verify_closure(&root).await.unwrap(),
+                ClosureStatus::Complete { objects: count + 1 }
+            );
+            repository
+                .mutation_session()
+                .await
+                .unwrap()
+                .publish_rooted(Vec::new(), "resumed".try_into().unwrap(), root.clone())
+                .await
+                .unwrap();
+            assert!(repository.fsck().await.unwrap().is_clean());
+        }
+    }
+}
+
+#[tokio::test]
+async fn application_import_reports_cancellation_without_retrying() {
+    let repository = casita::Repository::memory().unwrap();
+    let error = repository
+        .import(GitClosureImport::new("not-opened", []).with_cancellation_check(|| true))
+        .await
+        .unwrap_err();
+    assert_eq!(error.kind(), casita::ErrorKind::Cancelled);
+    assert_eq!(error.retry_disposition(), casita::RetryDisposition::Never);
+}

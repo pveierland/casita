@@ -84,6 +84,8 @@ pub enum RepositoryError {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum RepositoryErrorCategory {
+    /// The caller cancelled the operation before it completed.
+    Cancelled,
     /// A requested object, root, or payload is absent.
     Absent,
     /// A caller supplied a malformed or over-limit request.
@@ -112,6 +114,7 @@ impl RepositoryErrorCategory {
     /// Stable machine-readable spelling.
     pub const fn as_str(self) -> &'static str {
         match self {
+            Self::Cancelled => "cancelled",
             Self::Absent => "absent",
             Self::InvalidInput => "invalid_input",
             Self::InvalidData => "invalid_data",

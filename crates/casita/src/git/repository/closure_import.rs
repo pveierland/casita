@@ -13,7 +13,9 @@ use gix::odb::HeaderExt;
 use crate::ObjectKey;
 use crate::blob::BlobStore;
 use crate::git::{GitError, GitObjectFormat, GitObjectKind, git_key_parts};
-use crate::importers::{GitClosureImport, GitClosureImportError, GitClosureImportReport};
+use crate::importers::{
+    CancellationCheck, GitClosureImport, GitClosureImportError, GitClosureImportReport,
+};
 use crate::metadata::MetadataStore;
 use crate::repository::{MutationSession, PendingGitWitnesses, RepositoryError};
 use crate::spill::{SpillSet, TraversalQueue};
@@ -102,10 +104,12 @@ impl Source {
         budget: u64,
         payload_limit: u64,
         metadata_limit: u64,
+        cancellation: &CancellationCheck,
     ) -> Result<Vec<(ObjectKey, Vec<u8>)>> {
         let mut decoded = Vec::new();
         let mut bytes = 0u64;
         while decoded.len() < count {
+            cancellation.check()?;
             let Some(key) = pending.front() else { break };
             let (_, kind, oid) = git_key_parts(key)?;
             let oid = gix::ObjectId::from_bytes_or_panic(oid);
@@ -157,6 +161,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     session: &MutationSession<'_, PS, SS>,
     request: &GitClosureImport,
 ) -> Result<GitClosureImportReport> {
+    request.cancellation.check()?;
     let repository = session.repository();
     let limits = repository.limits();
     if limits.max_batch_objects == 0 {
@@ -212,6 +217,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     let mut staged = Vec::new();
     let mut staged_links = 0usize;
     loop {
+        request.cancellation.check()?;
         let mut keys = Vec::new();
         while keys.len() < FRONTIER {
             let Some((_, key)) = queue.pop().await.map_err(RepositoryError::from)? else {
@@ -317,12 +323,14 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
             .await
             .map_err(RepositoryError::from)?;
         while !missing.is_empty() {
+            request.cancellation.check()?;
             let path = request.objects_dir.clone();
             let concurrency = request.concurrency.get().min(limits.max_batch_objects);
             let budget = request.max_buffered_bytes.get();
             let payload_limit = limits.max_payload_bytes;
             let metadata_limit = limits.max_metadata_bytes;
             let roots = roots.clone();
+            let cancellation = request.cancellation.clone();
             let (next_source, next_missing, decoded) = tokio::task::spawn_blocking(move || {
                 let mut source = match source {
                     Some(source)
@@ -338,11 +346,13 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
                     budget,
                     payload_limit,
                     metadata_limit,
+                    &cancellation,
                 )?;
                 Ok::<_, GitClosureImportError>((source, missing, decoded))
             })
             .await
             .map_err(source_error)??;
+            request.cancellation.check()?;
             source = Some(next_source);
             missing = next_missing;
             report.imported_objects += decoded.len();
@@ -359,6 +369,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
                 .buffer_unordered(concurrency)
                 .try_collect()
                 .await?;
+            request.cancellation.check()?;
             for object in objects {
                 for child in object.record().links() {
                     queue
@@ -371,6 +382,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
                 if staged.len() == limits.max_batch_objects
                     || staged_links >= super::MAX_GIT_IMPORT_BATCH_LINKS
                 {
+                    request.cancellation.check()?;
                     session
                         .publish_unrooted(std::mem::take(&mut staged))
                         .await?;
@@ -380,6 +392,7 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
         }
     }
     if !staged.is_empty() {
+        request.cancellation.check()?;
         session.publish_unrooted(staged).await?;
     }
     // Only now does every discovered native record have all its canonical
@@ -387,11 +400,10 @@ pub(crate) async fn import<PS: BlobStore, SS: MetadataStore>(
     // custom registry audits its own before any mark becomes visible.
     // Mark in bounded batches without rereading payloads or retaining an O(N)
     // in-memory inventory. A failed discovery cannot publish any false marks.
-    session
-        .prove_git_closures(&request.roots, pending)
-        .await?
-        .publish()
-        .await?;
+    request.cancellation.check()?;
+    let proof = session.prove_git_closures(&request.roots, pending).await?;
+    request.cancellation.check()?;
+    proof.publish().await?;
     Ok(report)
 }
 
@@ -450,14 +462,18 @@ mod tests {
         let (directory, keys) = loose_blobs(&[b"oversized", b""]);
         let mut keys = VecDeque::from(keys);
         let mut source = open(&directory, 16, &[]);
-        let first = source.decode(&mut keys, 2, 1, 16, 16).unwrap();
+        let first = source
+            .decode(&mut keys, 2, 1, 16, 16, &CancellationCheck::default())
+            .unwrap();
         assert_eq!(
             first.len(),
             1,
             "oversized bodies must occupy their own window"
         );
         assert_eq!(keys.len(), 1);
-        let second = source.decode(&mut keys, 2, 1, 16, 16).unwrap();
+        let second = source
+            .decode(&mut keys, 2, 1, 16, 16, &CancellationCheck::default())
+            .unwrap();
         assert_eq!(second.len(), 1);
         assert!(second[0].1.is_empty());
         assert!(keys.is_empty());
@@ -480,7 +496,16 @@ mod tests {
         ] {
             let mut source = open(&directory, 1024, &roots);
             let mut pending = VecDeque::from([tree.clone()]);
-            let error = source.decode(&mut pending, 1, 1024, 1024, 16).unwrap_err();
+            let error = source
+                .decode(
+                    &mut pending,
+                    1,
+                    1024,
+                    1024,
+                    16,
+                    &CancellationCheck::default(),
+                )
+                .unwrap_err();
             assert_eq!(error.category(), category, "{error}");
             match error {
                 GitClosureImportError::RootKind { root, actual } => {

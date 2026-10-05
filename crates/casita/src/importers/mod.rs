@@ -74,6 +74,8 @@ mod filesystem;
 mod git;
 #[cfg(feature = "git")]
 mod git_closure;
+#[cfg(feature = "git")]
+pub(crate) use git_closure::CancellationCheck;
 mod nar;
 #[cfg(feature = "oci")]
 mod oci;

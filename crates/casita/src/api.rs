@@ -331,7 +331,8 @@ impl Error {
         error: impl std::error::Error + Send + Sync + 'static,
     ) -> Self {
         let mut retry = match kind {
-            ErrorKind::Absent
+            ErrorKind::Cancelled
+            | ErrorKind::Absent
             | ErrorKind::InvalidInput
             | ErrorKind::InvalidData
             | ErrorKind::ImmutableConflict
