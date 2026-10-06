@@ -3017,6 +3017,12 @@ resulting closure outside the timed region. The suite is included in
 `benchmark all`; both memory and local persistent backends run by default.
 Memory cases use a 64-object publication limit; local cases use the production
 limit, recorded in each sample. Both use a 64-object in-memory spill threshold.
+The standard profile includes 509/510/511 and 1022/1023 files, plus two tree
+objects, to exercise the memory backend around eight-publication writer
+boundaries. Finishing a decoded group can extend a writer past the boundary;
+these counts use the suite's small default byte budgets. A wide tree can pin
+all its child keys at once, so these cases measure boundary overhead rather
+than asserting a fixed memory cap.
 Each sample also reports `blob_witnesses`, the stored witnesses among every
 blob imported so far, which must match the probe's declared
 [witness policy](#git-witness-policies) exactly.

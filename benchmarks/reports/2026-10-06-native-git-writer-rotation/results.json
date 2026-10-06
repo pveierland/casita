@@ -1,0 +1,3136 @@
+{
+  "native": {
+    "full": {
+      "near": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-wide-near.json",
+        "sha256": "d1b8322ce245247b180140f583c5fc4456e3d389239cc09baa64c09caded5238",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 54.72136929750559,
+            "peak_rss_bytes": 889892864.0,
+            "observed_peak_wal_bytes": 136108352.0,
+            "observed_pressure_updates": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "file_counts": [
+              454,
+              444,
+              459,
+              451
+            ],
+            "fresh_import_git_seconds": 24.7656376955,
+            "fresh_git_tree_seconds": 18.006333916499997,
+            "fresh_nar_seconds": 4.91336952,
+            "fresh_total_seconds": 48.6849747305,
+            "update_import_git_seconds": 0.26959879,
+            "update_git_tree_seconds": 0.23730412099999998,
+            "update_nar_seconds": 4.8274450474999995,
+            "update_total_seconds": 5.4286610455,
+            "fresh_conversion_observed_peak_wal_bytes": 136108352.0,
+            "update_conversion_observed_peak_wal_bytes": 3024112.0,
+            "process_output_bytes": 615544832.0,
+            "final_process_write_bytes": 611244032.0,
+            "fresh_import_write_bytes": 380162048.0,
+            "fresh_conversion_write_bytes": 229402624.0,
+            "update_import_write_bytes": 669696.0,
+            "update_conversion_write_bytes": 671744.0
+          },
+          "candidate": {
+            "wall_seconds": 57.31152828899212,
+            "peak_rss_bytes": 876025856.0,
+            "observed_peak_wal_bytes": 136345252.0,
+            "observed_pressure_updates": [
+              1,
+              2,
+              1,
+              1
+            ],
+            "file_counts": [
+              452,
+              227,
+              457,
+              457
+            ],
+            "fresh_import_git_seconds": 25.454229064499998,
+            "fresh_git_tree_seconds": 20.9825027815,
+            "fresh_nar_seconds": 5.107204668,
+            "fresh_total_seconds": 51.239910957,
+            "update_import_git_seconds": 0.38094013299999996,
+            "update_git_tree_seconds": 0.344574321,
+            "update_nar_seconds": 5.0915666805,
+            "update_total_seconds": 5.839028665000001,
+            "fresh_conversion_observed_peak_wal_bytes": 136345252.0,
+            "update_conversion_observed_peak_wal_bytes": 2993212.0,
+            "process_output_bytes": 556007424.0,
+            "final_process_write_bytes": 551528448.0,
+            "fresh_import_write_bytes": 319854592.0,
+            "fresh_conversion_write_bytes": 230238208.0,
+            "update_import_write_bytes": 663552.0,
+            "update_conversion_write_bytes": 681984.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 4.733359242902946,
+          "peak_rss_bytes": -1.5582783682148937,
+          "observed_peak_wal_bytes": 0.17405250781377113,
+          "fresh_import_git_seconds": 2.7804306009253876,
+          "fresh_git_tree_seconds": 16.528455369101014,
+          "fresh_nar_seconds": 3.9450553680318245,
+          "fresh_total_seconds": 5.247894736811665,
+          "update_import_git_seconds": 41.2989030848395,
+          "update_git_tree_seconds": 45.203681903189555,
+          "update_nar_seconds": 5.471250949542794,
+          "update_total_seconds": 7.559278725647611,
+          "fresh_conversion_observed_peak_wal_bytes": 0.17405250781377113,
+          "update_conversion_observed_peak_wal_bytes": -1.0217875528419573,
+          "process_output_bytes": -9.672310594592082,
+          "final_process_write_bytes": -9.769516080935736,
+          "fresh_import_write_bytes": -15.863618243134049,
+          "fresh_conversion_write_bytes": 0.3642434360297431,
+          "update_import_write_bytes": -0.917431192660545,
+          "update_conversion_write_bytes": 1.5243902439024293
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": 8.989859541138578,
+            "write_bytes_change_percent": -9.777417561439583,
+            "observed_peak_wal_change_percent": 0.3667999621398188
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": 20.090474380989498,
+            "write_bytes_change_percent": -9.533535335890841,
+            "observed_peak_wal_change_percent": -0.5890483688425485
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": 9.697870770988871,
+            "write_bytes_change_percent": -9.868377006815477,
+            "observed_peak_wal_change_percent": 1.4810781192262201
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": 0.6464889885997804,
+            "write_bytes_change_percent": -9.732780928629847,
+            "observed_peak_wal_change_percent": 0.566072055612743
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed near pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      },
+      "week": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-wide-week.json",
+        "sha256": "98243cff110733b8f98fc597715501da281a249c2888878b76b3072d8f071f08",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 65.79901261899795,
+            "peak_rss_bytes": 988203008.0,
+            "observed_peak_wal_bytes": 136965312.0,
+            "observed_pressure_updates": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "file_counts": [
+              561,
+              283,
+              565,
+              284
+            ],
+            "fresh_import_git_seconds": 26.1397665575,
+            "fresh_git_tree_seconds": 16.951327503,
+            "fresh_nar_seconds": 4.822624482,
+            "fresh_total_seconds": 48.099020222,
+            "update_import_git_seconds": 4.3876222065,
+            "update_git_tree_seconds": 3.056633821,
+            "update_nar_seconds": 9.905835002,
+            "update_total_seconds": 17.3775308595,
+            "fresh_conversion_observed_peak_wal_bytes": 136965312.0,
+            "update_conversion_observed_peak_wal_bytes": 30811452.0,
+            "process_output_bytes": 751792128.0,
+            "final_process_write_bytes": 747274240.0,
+            "fresh_import_write_bytes": 382058496.0,
+            "fresh_conversion_write_bytes": 229355520.0,
+            "update_import_write_bytes": 35047424.0,
+            "update_conversion_write_bytes": 64974848.0
+          },
+          "candidate": {
+            "wall_seconds": 56.228243115503574,
+            "peak_rss_bytes": 932950016.0,
+            "observed_peak_wal_bytes": 137286672.0,
+            "observed_pressure_updates": [
+              1,
+              2,
+              1,
+              1
+            ],
+            "file_counts": [
+              559,
+              283,
+              562,
+              554
+            ],
+            "fresh_import_git_seconds": 20.686774087000003,
+            "fresh_git_tree_seconds": 17.019915035,
+            "fresh_nar_seconds": 4.768033361,
+            "fresh_total_seconds": 42.795984699,
+            "update_import_git_seconds": 4.416770339,
+            "update_git_tree_seconds": 3.0758073855,
+            "update_nar_seconds": 5.706155161,
+            "update_total_seconds": 13.202915679499998,
+            "fresh_conversion_observed_peak_wal_bytes": 137286672.0,
+            "update_conversion_observed_peak_wal_bytes": 30702272.0,
+            "process_output_bytes": 652662784.0,
+            "final_process_write_bytes": 648081408.0,
+            "fresh_import_write_bytes": 318478336.0,
+            "fresh_conversion_write_bytes": 229605376.0,
+            "update_import_write_bytes": 35110912.0,
+            "update_conversion_write_bytes": 64827392.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -14.54546067265915,
+          "peak_rss_bytes": -5.591259240530466,
+          "observed_peak_wal_bytes": 0.23462875038025022,
+          "fresh_import_git_seconds": -20.860907301926257,
+          "fresh_git_tree_seconds": 0.404614517581936,
+          "fresh_nar_seconds": -1.1319795104046904,
+          "fresh_total_seconds": -11.025246457254124,
+          "update_import_git_seconds": 0.6643263965803392,
+          "update_git_tree_seconds": 0.6272771166854207,
+          "update_nar_seconds": -42.396020528830526,
+          "update_total_seconds": -24.02306296419442,
+          "fresh_conversion_observed_peak_wal_bytes": 0.23462875038025022,
+          "update_conversion_observed_peak_wal_bytes": -0.35434876616655675,
+          "process_output_bytes": -13.185738491797562,
+          "final_process_write_bytes": -13.273953080464807,
+          "fresh_import_write_bytes": -16.64147261889446,
+          "fresh_conversion_write_bytes": 0.10893829806233324,
+          "update_import_write_bytes": 0.18114883421960215,
+          "update_conversion_write_bytes": -0.22694320115993483
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": -7.829167244326785,
+            "write_bytes_change_percent": -9.061730238113007,
+            "observed_peak_wal_change_percent": 0.22844770426984073
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": -1.5695332670340179,
+            "write_bytes_change_percent": -7.702431325667602,
+            "observed_peak_wal_change_percent": 0.23250892877089147
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": -11.623365983778577,
+            "write_bytes_change_percent": -8.911376065371602,
+            "observed_peak_wal_change_percent": 0.24081872756060996
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": -17.865922440633575,
+            "write_bytes_change_percent": -17.49985633159712,
+            "observed_peak_wal_change_percent": 0.33927812901068943
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed week pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      },
+      "release": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-wide-release.json",
+        "sha256": "5d8d46abb7c896a5b5d8af69621dd829d72bd980f035198e15dc519c39483599",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 74.14348300200072,
+            "peak_rss_bytes": 1305747456.0,
+            "observed_peak_wal_bytes": 133127532.0,
+            "observed_pressure_updates": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "file_counts": [
+              396,
+              382,
+              377,
+              380
+            ],
+            "fresh_import_git_seconds": 18.507303796499997,
+            "fresh_git_tree_seconds": 12.864744368,
+            "fresh_nar_seconds": 4.3010080434999995,
+            "fresh_total_seconds": 35.8088686885,
+            "update_import_git_seconds": 13.915328406,
+            "update_git_tree_seconds": 9.928651033000001,
+            "update_nar_seconds": 14.178043313,
+            "update_total_seconds": 37.95497677,
+            "fresh_conversion_observed_peak_wal_bytes": 112416292.0,
+            "update_conversion_observed_peak_wal_bytes": 133127532.0,
+            "process_output_bytes": 1043533824.0,
+            "final_process_write_bytes": 1040179200.0,
+            "fresh_import_write_bytes": 299710464.0,
+            "fresh_conversion_write_bytes": 216127488.0,
+            "update_import_write_bytes": 201564160.0,
+            "update_conversion_write_bytes": 252518400.0
+          },
+          "candidate": {
+            "wall_seconds": 73.40723677299684,
+            "peak_rss_bytes": 1247463424.0,
+            "observed_peak_wal_bytes": 133832052.0,
+            "observed_pressure_updates": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "file_counts": [
+              379,
+              378,
+              381,
+              378
+            ],
+            "fresh_import_git_seconds": 18.295877327,
+            "fresh_git_tree_seconds": 12.8736052995,
+            "fresh_nar_seconds": 4.12493511,
+            "fresh_total_seconds": 35.2855277715,
+            "update_import_git_seconds": 13.739562691,
+            "update_git_tree_seconds": 9.93475323,
+            "update_nar_seconds": 14.404043128000001,
+            "update_total_seconds": 38.101840237000005,
+            "fresh_conversion_observed_peak_wal_bytes": 112861252.0,
+            "update_conversion_observed_peak_wal_bytes": 133832052.0,
+            "process_output_bytes": 984592384.0,
+            "final_process_write_bytes": 981237760.0,
+            "fresh_import_write_bytes": 251516928.0,
+            "fresh_conversion_write_bytes": 216942592.0,
+            "update_import_write_bytes": 190490624.0,
+            "update_conversion_write_bytes": 252319744.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -0.993001945948524,
+          "peak_rss_bytes": -4.463652732554124,
+          "observed_peak_wal_bytes": 0.5292068360434943,
+          "fresh_import_git_seconds": -1.1423947638444343,
+          "fresh_git_tree_seconds": 0.06887763368264022,
+          "fresh_nar_seconds": -4.093759688873266,
+          "fresh_total_seconds": -1.461484085276532,
+          "update_import_git_seconds": -1.2631086372651756,
+          "update_git_tree_seconds": 0.06146048420592187,
+          "update_nar_seconds": 1.5940127280664962,
+          "update_total_seconds": 0.38694126435636633,
+          "fresh_conversion_observed_peak_wal_bytes": 0.39581451414534286,
+          "update_conversion_observed_peak_wal_bytes": 0.5292068360434943,
+          "process_output_bytes": -5.6482539084425465,
+          "final_process_write_bytes": -5.6664697775152595,
+          "fresh_import_write_bytes": -16.080031159672824,
+          "fresh_conversion_write_bytes": 0.377140366337847,
+          "update_import_write_bytes": -5.4938020727494425,
+          "update_conversion_write_bytes": -0.07866991078669949
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": -3.91086511631471,
+            "write_bytes_change_percent": 1.7048598644053392,
+            "observed_peak_wal_change_percent": 0.8803469672149289
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": -0.804290511700223,
+            "write_bytes_change_percent": -6.149728410611665,
+            "observed_peak_wal_change_percent": 0.5263319580168124
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": -1.3138087593967507,
+            "write_bytes_change_percent": -5.930991558106468,
+            "observed_peak_wal_change_percent": 0.21035693764028807
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": 0.24680113197628195,
+            "write_bytes_change_percent": -5.402149995866912,
+            "observed_peak_wal_change_percent": 0.27152107038255213
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed release pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      }
+    },
+    "detached": {
+      "near": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-detached-wide-near.json",
+        "sha256": "5299df88bbad03292e8ed41e3b2f6205e6cbe00ea7a18560bae6c94bb216a674",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 55.90219846300897,
+            "peak_rss_bytes": 884557824.0,
+            "observed_peak_wal_bytes": 136153672.0,
+            "observed_pressure_updates": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "file_counts": [
+              449,
+              456,
+              457,
+              453
+            ],
+            "fresh_import_git_seconds": 26.391891076500002,
+            "fresh_git_tree_seconds": 19.235917847499998,
+            "fresh_nar_seconds": 4.881428957000001,
+            "fresh_total_seconds": 50.1077616365,
+            "update_import_git_seconds": 0.374409317,
+            "update_git_tree_seconds": 0.32956097949999996,
+            "update_nar_seconds": 4.7421230885,
+            "update_total_seconds": 5.4311778529999994,
+            "fresh_conversion_observed_peak_wal_bytes": 136153672.0,
+            "update_conversion_observed_peak_wal_bytes": 3005572.0,
+            "process_output_bytes": 615749632.0,
+            "final_process_write_bytes": 611350528.0,
+            "fresh_import_write_bytes": 380538880.0,
+            "fresh_conversion_write_bytes": 229515264.0,
+            "update_import_write_bytes": 669696.0,
+            "update_conversion_write_bytes": 681984.0
+          },
+          "candidate": {
+            "wall_seconds": 56.79488035950635,
+            "peak_rss_bytes": 876582912.0,
+            "observed_peak_wal_bytes": 136510052.0,
+            "observed_pressure_updates": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "file_counts": [
+              447,
+              453,
+              460,
+              452
+            ],
+            "fresh_import_git_seconds": 26.746349064,
+            "fresh_git_tree_seconds": 19.331229338,
+            "fresh_nar_seconds": 4.8816181435,
+            "fresh_total_seconds": 50.929538294,
+            "update_import_git_seconds": 0.3687322335,
+            "update_git_tree_seconds": 0.3360673035,
+            "update_nar_seconds": 4.749923085500001,
+            "update_total_seconds": 5.4631636715,
+            "fresh_conversion_observed_peak_wal_bytes": 136510052.0,
+            "update_conversion_observed_peak_wal_bytes": 2993212.0,
+            "process_output_bytes": 555552768.0,
+            "final_process_write_bytes": 551337984.0,
+            "fresh_import_write_bytes": 320051200.0,
+            "fresh_conversion_write_bytes": 229754880.0,
+            "update_import_write_bytes": 669696.0,
+            "update_conversion_write_bytes": 675840.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 1.5968636673351577,
+          "peak_rss_bytes": -0.9015704551611048,
+          "observed_peak_wal_bytes": 0.26174835740016,
+          "fresh_import_git_seconds": 1.3430564201426964,
+          "fresh_git_tree_seconds": 0.4954870947964096,
+          "fresh_nar_seconds": 0.0038756376804061077,
+          "fresh_total_seconds": 1.6400186930349614,
+          "update_import_git_seconds": -1.516277304605651,
+          "update_git_tree_seconds": 1.9742397931548972,
+          "update_nar_seconds": 0.16448322522282233,
+          "update_total_seconds": 0.5889296827636281,
+          "fresh_conversion_observed_peak_wal_bytes": 0.26174835740016,
+          "update_conversion_observed_peak_wal_bytes": -0.41123619730287775,
+          "process_output_bytes": -9.77619163238087,
+          "final_process_write_bytes": -9.816388675794197,
+          "fresh_import_write_bytes": -15.89526936117539,
+          "fresh_conversion_write_bytes": 0.10440089945389364,
+          "update_import_write_bytes": 0.0,
+          "update_conversion_write_bytes": -0.9009009009009028
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": 13.535177795089881,
+            "write_bytes_change_percent": -10.415619070606297,
+            "observed_peak_wal_change_percent": 0.14674609506226677
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": -1.5981646179744846,
+            "write_bytes_change_percent": -9.809545509375294,
+            "observed_peak_wal_change_percent": 0.3031312754427917
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": 1.170717927585474,
+            "write_bytes_change_percent": -9.904700717421566,
+            "observed_peak_wal_change_percent": -0.0906563307105368
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": 2.022939112364708,
+            "write_bytes_change_percent": -9.733469981043473,
+            "observed_peak_wal_change_percent": 0.5333008865479938
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed near pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      },
+      "week": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-detached-wide-week.json",
+        "sha256": "1cc1a921d0ff34bff776158d934ef10dd678a212c5132b41abf8873fa9a7488f",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 56.392611363509786,
+            "peak_rss_bytes": 971515904.0,
+            "observed_peak_wal_bytes": 137060072.0,
+            "observed_pressure_updates": [
+              2,
+              1,
+              1,
+              1
+            ],
+            "file_counts": [
+              283,
+              555,
+              558,
+              555
+            ],
+            "fresh_import_git_seconds": 23.709960251,
+            "fresh_git_tree_seconds": 15.213821705,
+            "fresh_nar_seconds": 4.797769357,
+            "fresh_total_seconds": 43.721551313000006,
+            "update_import_git_seconds": 3.813059752,
+            "update_git_tree_seconds": 3.1383087365,
+            "update_nar_seconds": 5.7316316975,
+            "update_total_seconds": 12.5743331135,
+            "fresh_conversion_observed_peak_wal_bytes": 137060072.0,
+            "update_conversion_observed_peak_wal_bytes": 30842352.0,
+            "process_output_bytes": 716591104.0,
+            "final_process_write_bytes": 712083456.0,
+            "fresh_import_write_bytes": 382410752.0,
+            "fresh_conversion_write_bytes": 228909056.0,
+            "update_import_write_bytes": 35170304.0,
+            "update_conversion_write_bytes": 65103872.0
+          },
+          "candidate": {
+            "wall_seconds": 72.7538103100087,
+            "peak_rss_bytes": 1038168064.0,
+            "observed_peak_wal_bytes": 137235172.0,
+            "observed_pressure_updates": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "file_counts": [
+              282,
+              284,
+              284,
+              284
+            ],
+            "fresh_import_git_seconds": 26.367665539999997,
+            "fresh_git_tree_seconds": 18.8847073405,
+            "fresh_nar_seconds": 4.7631622665,
+            "fresh_total_seconds": 50.027270859,
+            "update_import_git_seconds": 4.911150962,
+            "update_git_tree_seconds": 3.3408362865,
+            "update_nar_seconds": 14.297494766500002,
+            "update_total_seconds": 22.6282168725,
+            "fresh_conversion_observed_peak_wal_bytes": 137235172.0,
+            "update_conversion_observed_peak_wal_bytes": 30694032.0,
+            "process_output_bytes": 723306496.0,
+            "final_process_write_bytes": 718796800.0,
+            "fresh_import_write_bytes": 318345216.0,
+            "fresh_conversion_write_bytes": 229560320.0,
+            "update_import_write_bytes": 34969600.0,
+            "update_conversion_write_bytes": 65495040.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 29.013018817365555,
+          "peak_rss_bytes": 6.860634985549341,
+          "observed_peak_wal_bytes": 0.1277542010922117,
+          "fresh_import_git_seconds": 11.209235531670302,
+          "fresh_git_tree_seconds": 24.12862268718168,
+          "fresh_nar_seconds": -0.7213162602222156,
+          "fresh_total_seconds": 14.422451529356128,
+          "update_import_git_seconds": 28.798164241303503,
+          "update_git_tree_seconds": 6.453397896915303,
+          "update_nar_seconds": 149.44894440332277,
+          "update_total_seconds": 79.9556021639509,
+          "fresh_conversion_observed_peak_wal_bytes": 0.1277542010922117,
+          "update_conversion_observed_peak_wal_bytes": -0.4808971767133685,
+          "process_output_bytes": 0.9371302493869749,
+          "final_process_write_bytes": 0.9427748873300557,
+          "fresh_import_write_bytes": -16.753068700327756,
+          "fresh_conversion_write_bytes": 0.2845077479153968,
+          "update_import_write_bytes": -0.5706632504512865,
+          "update_conversion_write_bytes": 0.6008367674352755
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": -1.6409689985790843,
+            "write_bytes_change_percent": -8.41633882983176,
+            "observed_peak_wal_change_percent": -0.5682500176310223
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": 31.545217862804108,
+            "write_bytes_change_percent": 1.0957314165215948,
+            "observed_peak_wal_change_percent": 0.25787100441134747
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": 40.631868062293705,
+            "write_bytes_change_percent": 1.103199566785329,
+            "observed_peak_wal_change_percent": 0.4573903601183593
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": 26.576099519707206,
+            "write_bytes_change_percent": 1.0457335682778846,
+            "observed_peak_wal_change_percent": -0.11720860400438182
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed week pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      },
+      "release": {
+        "source": "/tmp/mnos-ingest/evidence/native-git-rotation-detached-wide-release.json",
+        "sha256": "0eff3cf3159a9011724055fc91bbd695901dec5ae46d32449b1f0c94b12a8e3d",
+        "complete_runs": 8,
+        "identities_checked": 16,
+        "medians": {
+          "control": {
+            "wall_seconds": 78.63260599051137,
+            "peak_rss_bytes": 1303969792.0,
+            "observed_peak_wal_bytes": 133284092.0,
+            "observed_pressure_updates": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "file_counts": [
+              379,
+              378,
+              394,
+              399
+            ],
+            "fresh_import_git_seconds": 20.2800118705,
+            "fresh_git_tree_seconds": 14.653659493,
+            "fresh_nar_seconds": 4.3068003595,
+            "fresh_total_seconds": 39.333494120500006,
+            "update_import_git_seconds": 15.809496479500002,
+            "update_git_tree_seconds": 15.502264735,
+            "update_nar_seconds": 4.7629935315,
+            "update_total_seconds": 38.154677315499995,
+            "fresh_conversion_observed_peak_wal_bytes": 112642892.0,
+            "update_conversion_observed_peak_wal_bytes": 133284092.0,
+            "process_output_bytes": 1009659904.0,
+            "final_process_write_bytes": 1006239744.0,
+            "fresh_import_write_bytes": 299159552.0,
+            "fresh_conversion_write_bytes": 216977408.0,
+            "update_import_write_bytes": 201230336.0,
+            "update_conversion_write_bytes": 253179904.0
+          },
+          "candidate": {
+            "wall_seconds": 79.67888625401247,
+            "peak_rss_bytes": 1261805568.0,
+            "observed_peak_wal_bytes": 133673432.0,
+            "observed_pressure_updates": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "file_counts": [
+              400,
+              394,
+              400,
+              378
+            ],
+            "fresh_import_git_seconds": 24.183910599500003,
+            "fresh_git_tree_seconds": 16.013429539,
+            "fresh_nar_seconds": 4.10453346,
+            "fresh_total_seconds": 44.3878492065,
+            "update_import_git_seconds": 16.592624667,
+            "update_git_tree_seconds": 13.5538143165,
+            "update_nar_seconds": 4.796174086500001,
+            "update_total_seconds": 36.8765688755,
+            "fresh_conversion_observed_peak_wal_bytes": 113028112.0,
+            "update_conversion_observed_peak_wal_bytes": 133673432.0,
+            "process_output_bytes": 916879360.0,
+            "final_process_write_bytes": 913541120.0,
+            "fresh_import_write_bytes": 251576320.0,
+            "fresh_conversion_write_bytes": 216483840.0,
+            "update_import_write_bytes": 192866304.0,
+            "update_conversion_write_bytes": 253018112.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 1.330593397384483,
+          "peak_rss_bytes": -3.233527667487557,
+          "observed_peak_wal_bytes": 0.29211288020778436,
+          "fresh_import_git_seconds": 19.24998246514218,
+          "fresh_git_tree_seconds": 9.279388856070781,
+          "fresh_nar_seconds": -4.696454040499864,
+          "fresh_total_seconds": 12.85000277502868,
+          "update_import_git_seconds": 4.953530231120706,
+          "update_git_tree_seconds": -12.56881140792878,
+          "update_nar_seconds": 0.6966323758485382,
+          "update_total_seconds": -3.3498080181136203,
+          "fresh_conversion_observed_peak_wal_bytes": 0.3419834071731742,
+          "update_conversion_observed_peak_wal_bytes": 0.29211288020778436,
+          "process_output_bytes": -9.189286771954453,
+          "final_process_write_bytes": -9.212379510225343,
+          "fresh_import_write_bytes": -15.90563686898422,
+          "fresh_conversion_write_bytes": -0.2274743737375684,
+          "update_import_write_bytes": -4.156446868925368,
+          "update_conversion_write_bytes": -0.06390396609045057
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "wall_change_percent": 10.194257856283851,
+            "write_bytes_change_percent": -12.430876210403774,
+            "observed_peak_wal_change_percent": 0.0030842295914990103
+          },
+          {
+            "trial": 2,
+            "wall_change_percent": 6.546837947802109,
+            "write_bytes_change_percent": -12.545955520566821,
+            "observed_peak_wal_change_percent": 0.336866748572473
+          },
+          {
+            "trial": 3,
+            "wall_change_percent": -3.9810525280520093,
+            "write_bytes_change_percent": -5.616928516811493,
+            "observed_peak_wal_change_percent": 0.7246375061189081
+          },
+          {
+            "trial": 4,
+            "wall_change_percent": -10.237732703476821,
+            "write_bytes_change_percent": 1.1265266902114712,
+            "observed_peak_wal_change_percent": 0.5101408619138326
+          }
+        ],
+        "limitations": [
+          "OS-managed caches and unrestricted recorded CPU affinity.",
+          "Marker polling observes updates, not exact collection counts or durations.",
+          "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+          "Fixed release pair only; no browser or remote-storage claim.",
+          "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+        ]
+      }
+    }
+  },
+  "heap": {
+    "scope": "Sampled live system-allocator heap for one fresh release Git import, conversion and NAR pass, with diagnostic advisory-GC deferral.",
+    "profiles": {
+      "control": {
+        "binary_sha256": "b30daea45062a396a62c561b0129bf548ccd0a51ac5dbe3b88abe10998704b42",
+        "summary_sha256": "4879eae042ca6a7d8a106e66c7bda053b23d24e27510118bfe74a6fcf81978b2",
+        "analysis_sha256": "1132c3158c6affbcf81ac5907c970b4b18cb05a044b9c97226aca3454120bd31",
+        "massif_sha256": "5b9dfdd66ab6ccc517a53b6c48ddcd0896506143cbac8301dd9eda3a231c341c",
+        "identity": {
+          "git_tree": "297fd1a23ea526b5bb33ddad9c385d4cee7baeb3",
+          "imported_objects": 75635,
+          "nar_bytes": 197854544,
+          "nar_hash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+          "revision": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+          "root": "casita.directory.v1:F5T76zsaxZEeO8-7Oxsf20TiUqxmgWH8Ur6JqCF-NR4"
+        },
+        "snapshots": 182,
+        "payload_heap_peak": {
+          "snapshot": 49,
+          "time": 63523,
+          "mem_heap_B": 284526983,
+          "mem_heap_extra_B": 13263729,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 0,
+            "pin_resource_btree_nodes": 60521296,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 70310826,
+            "turso_temporary_buffers": 6329376,
+            "zstd_contexts": 50513908,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 84137577
+          }
+        },
+        "total_profiled_peak": {
+          "snapshot": 49,
+          "time": 63523,
+          "mem_heap_B": 284526983,
+          "mem_heap_extra_B": 13263729,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 0,
+            "pin_resource_btree_nodes": 60521296,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 70310826,
+            "turso_temporary_buffers": 6329376,
+            "zstd_contexts": 50513908,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 84137577
+          }
+        },
+        "category_maxima": {
+          "converted_directory_nodes_and_vectors": 36885120,
+          "pin_resource_btree_nodes": 62089216,
+          "pin_codec_buffers": 16777216,
+          "payload_fetch_cache": 85845363,
+          "turso_temporary_buffers": 46011032,
+          "zstd_contexts": 57593859,
+          "git_loader_typed_allocations": 15235240,
+          "pack_location_indexes": 12714000,
+          "other_or_unresolved": 84137577
+        }
+      },
+      "candidate": {
+        "binary_sha256": "83353cb0b3b8dca71c03d48fafc41a223c0272892a92bc2d966f46af148e9c8b",
+        "summary_sha256": "8aab2028a7e53a7ca47e7697bbac030cf562ff42fb9c06e984b88a4d6f3340ac",
+        "analysis_sha256": "8656ba3327e8c56781f2bc340538db85fde7f801281ff3dbf8bafdbe3eefa18a",
+        "massif_sha256": "0b13274b3a73007d90cd9ef8179c84a417fe045c1eab537e457062a1d3eacf7a",
+        "identity": {
+          "git_tree": "297fd1a23ea526b5bb33ddad9c385d4cee7baeb3",
+          "imported_objects": 75635,
+          "nar_bytes": 197854544,
+          "nar_hash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+          "revision": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+          "root": "casita.directory.v1:F5T76zsaxZEeO8-7Oxsf20TiUqxmgWH8Ur6JqCF-NR4"
+        },
+        "snapshots": 154,
+        "payload_heap_peak": {
+          "snapshot": 69,
+          "time": 110370,
+          "mem_heap_B": 234269164,
+          "mem_heap_extra_B": 11110652,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 35948800,
+            "pin_resource_btree_nodes": 0,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 75387820,
+            "turso_temporary_buffers": 15740032,
+            "zstd_contexts": 55818101,
+            "git_loader_typed_allocations": 15235240,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 23425171
+          }
+        },
+        "total_profiled_peak": {
+          "snapshot": 69,
+          "time": 110370,
+          "mem_heap_B": 234269164,
+          "mem_heap_extra_B": 11110652,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 35948800,
+            "pin_resource_btree_nodes": 0,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 75387820,
+            "turso_temporary_buffers": 15740032,
+            "zstd_contexts": 55818101,
+            "git_loader_typed_allocations": 15235240,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 23425171
+          }
+        },
+        "category_maxima": {
+          "converted_directory_nodes_and_vectors": 36885120,
+          "pin_resource_btree_nodes": 38091504,
+          "pin_codec_buffers": 0,
+          "payload_fetch_cache": 85838859,
+          "turso_temporary_buffers": 46668928,
+          "zstd_contexts": 55818101,
+          "git_loader_typed_allocations": 15235240,
+          "pack_location_indexes": 19071008,
+          "other_or_unresolved": 76012928
+        }
+      }
+    },
+    "payload_heap_peak_change_bytes": -50257819,
+    "payload_heap_peak_change_percent": -17.66363895265427,
+    "limitations": [
+      "The control reuses the previously recorded profile of the byte-identical binary; native timing uses newly paired controls.",
+      "Profiler slowdown, stack threshold and sampling differ from ordinary execution; no timing, RSS or browser-memory claim.",
+      "Live heap excludes untracked mappings, allocator retention and thread stacks.",
+      "Category maxima occur at different times and cannot be summed.",
+      "Zero stack-attributed bytes do not imply zero allocations; hidden frames remain unresolved.",
+      "Original input SQL snapshot remains; wide dependency lists and final selected-root proof are not fixed memory bounds."
+    ]
+  },
+  "alternative_data_only_heap": {
+    "scope": "Sampled live system-allocator heap for one fresh release Git import, conversion and NAR pass, with diagnostic advisory-GC deferral.",
+    "profiles": {
+      "control": {
+        "binary_sha256": "b30daea45062a396a62c561b0129bf548ccd0a51ac5dbe3b88abe10998704b42",
+        "summary_sha256": "4879eae042ca6a7d8a106e66c7bda053b23d24e27510118bfe74a6fcf81978b2",
+        "analysis_sha256": "1132c3158c6affbcf81ac5907c970b4b18cb05a044b9c97226aca3454120bd31",
+        "massif_sha256": "5b9dfdd66ab6ccc517a53b6c48ddcd0896506143cbac8301dd9eda3a231c341c",
+        "identity": {
+          "git_tree": "297fd1a23ea526b5bb33ddad9c385d4cee7baeb3",
+          "imported_objects": 75635,
+          "nar_bytes": 197854544,
+          "nar_hash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+          "revision": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+          "root": "casita.directory.v1:F5T76zsaxZEeO8-7Oxsf20TiUqxmgWH8Ur6JqCF-NR4"
+        },
+        "snapshots": 182,
+        "payload_heap_peak": {
+          "snapshot": 49,
+          "time": 63523,
+          "mem_heap_B": 284526983,
+          "mem_heap_extra_B": 13263729,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 0,
+            "pin_resource_btree_nodes": 60521296,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 70310826,
+            "turso_temporary_buffers": 6329376,
+            "zstd_contexts": 50513908,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 84137577
+          }
+        },
+        "total_profiled_peak": {
+          "snapshot": 49,
+          "time": 63523,
+          "mem_heap_B": 284526983,
+          "mem_heap_extra_B": 13263729,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 0,
+            "pin_resource_btree_nodes": 60521296,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 70310826,
+            "turso_temporary_buffers": 6329376,
+            "zstd_contexts": 50513908,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 84137577
+          }
+        },
+        "category_maxima": {
+          "converted_directory_nodes_and_vectors": 36885120,
+          "pin_resource_btree_nodes": 62089216,
+          "pin_codec_buffers": 16777216,
+          "payload_fetch_cache": 85845363,
+          "turso_temporary_buffers": 46011032,
+          "zstd_contexts": 57593859,
+          "git_loader_typed_allocations": 15235240,
+          "pack_location_indexes": 12714000,
+          "other_or_unresolved": 84137577
+        }
+      },
+      "candidate": {
+        "binary_sha256": "8f17dab4565eeafa06bdbbc054fad9cb2ed87f95fa6b73c8aa22b9058a63d938",
+        "summary_sha256": "3cf837ab60d5456252d01475b6fc882ee4161a50a1aaae5a080d73d1f134be00",
+        "analysis_sha256": "b1b772a6028d13e4fbe9129ffd2692d70af4696a0a0e9509c117ab9b39ef7d33",
+        "massif_sha256": "7a7a186a3b3c8f41d577a66c1d68e1a7820323ee3bb2246926c4ef50f5fd3c15",
+        "identity": {
+          "git_tree": "297fd1a23ea526b5bb33ddad9c385d4cee7baeb3",
+          "imported_objects": 75635,
+          "nar_bytes": 197854544,
+          "nar_hash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+          "revision": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+          "root": "casita.directory.v1:F5T76zsaxZEeO8-7Oxsf20TiUqxmgWH8Ur6JqCF-NR4"
+        },
+        "snapshots": 116,
+        "payload_heap_peak": {
+          "snapshot": 67,
+          "time": 130661,
+          "mem_heap_B": 240853778,
+          "mem_heap_extra_B": 7434158,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 36885120,
+            "pin_resource_btree_nodes": 6569864,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 75390556,
+            "turso_temporary_buffers": 48459456,
+            "zstd_contexts": 34670846,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 26163936
+          }
+        },
+        "total_profiled_peak": {
+          "snapshot": 67,
+          "time": 130661,
+          "mem_heap_B": 240853778,
+          "mem_heap_extra_B": 7434158,
+          "mem_stacks_B": 0,
+          "heap_tree": "peak",
+          "stack_category_bytes": {
+            "converted_directory_nodes_and_vectors": 36885120,
+            "pin_resource_btree_nodes": 6569864,
+            "pin_codec_buffers": 0,
+            "payload_fetch_cache": 75390556,
+            "turso_temporary_buffers": 48459456,
+            "zstd_contexts": 34670846,
+            "git_loader_typed_allocations": 0,
+            "pack_location_indexes": 12714000,
+            "other_or_unresolved": 26163936
+          }
+        },
+        "category_maxima": {
+          "converted_directory_nodes_and_vectors": 36885120,
+          "pin_resource_btree_nodes": 36685344,
+          "pin_codec_buffers": 0,
+          "payload_fetch_cache": 85835859,
+          "turso_temporary_buffers": 50446016,
+          "zstd_contexts": 53710617,
+          "git_loader_typed_allocations": 15235240,
+          "pack_location_indexes": 19071008,
+          "other_or_unresolved": 87422680
+        }
+      }
+    },
+    "payload_heap_peak_change_bytes": -43673205,
+    "payload_heap_peak_change_percent": -15.349407124595981,
+    "limitations": [
+      "The control reuses the previously recorded profile of the byte-identical binary; native timing uses newly paired controls.",
+      "Profiler slowdown, stack threshold and sampling differ from ordinary execution; no timing, RSS or browser-memory claim.",
+      "Live heap excludes untracked mappings, allocator retention and thread stacks.",
+      "Category maxima occur at different times and cannot be summed.",
+      "Zero stack-attributed bytes do not imply zero allocations; hidden frames remain unresolved.",
+      "Original input SQL snapshot remains; wide dependency lists and final selected-root proof are not fixed memory bounds."
+    ]
+  },
+  "threeway_confirmation": {
+    "source_sha256": "e7f43397293b12d5f1e2260f13962bf42629700256d3fe2deb7d6ce8a189a3e8",
+    "complete_runs": 18,
+    "identities_checked": 36,
+    "medians": {
+      "control": {
+        "wall_seconds": 72.06296694849152,
+        "cpu_seconds": 82.3189815,
+        "peak_rss_bytes": 1030526976.0,
+        "final_write_bytes": 781971456.0,
+        "observed_peak_wal_bytes": 137214572.0,
+        "fresh_import_git_seconds": 26.139611362,
+        "fresh_git_tree_seconds": 19.0493063825,
+        "fresh_nar_seconds": 4.7062179215,
+        "fresh_total_seconds": 49.620169118999996,
+        "fresh_import_write_bytes": 382470144.0,
+        "update_import_git_seconds": 5.0212270409999995,
+        "update_git_tree_seconds": 3.38426879,
+        "update_nar_seconds": 14.1956372825,
+        "update_total_seconds": 22.5147638035,
+        "update_import_write_bytes": 34945024.0
+      },
+      "full_guard": {
+        "wall_seconds": 56.56336593598826,
+        "cpu_seconds": 74.6267055,
+        "peak_rss_bytes": 938715136.0,
+        "final_write_bytes": 648611840.0,
+        "observed_peak_wal_bytes": 137344352.0,
+        "fresh_import_git_seconds": 24.160451693,
+        "fresh_git_tree_seconds": 15.2459431825,
+        "fresh_nar_seconds": 4.701314755,
+        "fresh_total_seconds": 44.0887134635,
+        "fresh_import_write_bytes": 318189568.0,
+        "update_import_git_seconds": 3.8278752515,
+        "update_git_tree_seconds": 2.7829288070000002,
+        "update_nar_seconds": 5.551370102,
+        "update_total_seconds": 12.1638089255,
+        "update_import_write_bytes": 35043328.0
+      },
+      "data_only": {
+        "wall_seconds": 64.19026546098758,
+        "cpu_seconds": 78.7136695,
+        "peak_rss_bytes": 963031040.0,
+        "final_write_bytes": 680595456.0,
+        "observed_peak_wal_bytes": 137113632.0,
+        "fresh_import_git_seconds": 22.973121818000003,
+        "fresh_git_tree_seconds": 17.549670821,
+        "fresh_nar_seconds": 4.771267461,
+        "fresh_total_seconds": 45.490906641500004,
+        "fresh_import_write_bytes": 318322688.0,
+        "update_import_git_seconds": 4.9192110125,
+        "update_git_tree_seconds": 3.2765292255,
+        "update_nar_seconds": 9.7946501245,
+        "update_total_seconds": 18.183741394000002,
+        "update_import_write_bytes": 34836480.0
+      }
+    },
+    "comparisons": {
+      "control_to_full_guard": {
+        "pairs": [
+          {
+            "trial": 1,
+            "changes": {
+              "wall_seconds": -24.460098162454315,
+              "cpu_seconds": -10.674894445793647,
+              "peak_rss_bytes": -9.028815541550262,
+              "final_write_bytes": -17.17481857954992,
+              "observed_peak_wal_bytes": 0.13519194105526822,
+              "fresh_import_git_seconds": -14.976773699788804,
+              "fresh_git_tree_seconds": -18.344536324806924,
+              "fresh_nar_seconds": 0.5882414435661731,
+              "fresh_total_seconds": -14.773718812913227,
+              "fresh_import_write_bytes": -16.80602991402662,
+              "update_import_git_seconds": -24.39573342080996,
+              "update_git_tree_seconds": -16.251534452758666,
+              "update_nar_seconds": -61.09960770079872,
+              "update_total_seconds": -46.13782794340197,
+              "update_import_write_bytes": 0.22400377269511385
+            },
+            "before_marker_times": [
+              0.2519522559887264,
+              72.36765303899301
+            ],
+            "after_marker_times": [
+              0.25189086998580024
+            ]
+          },
+          {
+            "trial": 2,
+            "changes": {
+              "wall_seconds": -20.50307356210356,
+              "cpu_seconds": -9.059393706600572,
+              "peak_rss_bytes": -9.471674143162067,
+              "final_write_bytes": -17.189824612870108,
+              "observed_peak_wal_bytes": 0.3068222120357067,
+              "fresh_import_git_seconds": -4.023756019766822,
+              "fresh_git_tree_seconds": -19.148618583261722,
+              "fresh_nar_seconds": -2.3324594634736906,
+              "fresh_total_seconds": -9.503719726260584,
+              "fresh_import_write_bytes": -16.7214800689899,
+              "update_import_git_seconds": -23.472979417166584,
+              "update_git_tree_seconds": -18.68179823387338,
+              "update_nar_seconds": -60.23845265127701,
+              "update_total_seconds": -45.810028273149015,
+              "update_import_write_bytes": -0.4450169809111171
+            },
+            "before_marker_times": [
+              0.20225368699175306,
+              73.36604349399568
+            ],
+            "after_marker_times": [
+              0.2518325560085941
+            ]
+          },
+          {
+            "trial": 3,
+            "changes": {
+              "wall_seconds": -26.646470141186963,
+              "cpu_seconds": -8.206357085301486,
+              "peak_rss_bytes": -11.720131637627452,
+              "final_write_bytes": -16.96433247787147,
+              "observed_peak_wal_bytes": 0.23479119160709772,
+              "fresh_import_git_seconds": -16.3588689991112,
+              "fresh_git_tree_seconds": -24.077253431045786,
+              "fresh_nar_seconds": 5.117659172783506,
+              "fresh_total_seconds": -17.524353515427727,
+              "fresh_import_write_bytes": -16.694019844462325,
+              "update_import_git_seconds": -23.609454190415356,
+              "update_git_tree_seconds": -17.61325202722692,
+              "update_nar_seconds": -61.52092276441843,
+              "update_total_seconds": -46.592139812552055,
+              "update_import_write_bytes": 0.9167842031029716
+            },
+            "before_marker_times": [
+              0.20234131900360808,
+              71.55839124700287
+            ],
+            "after_marker_times": [
+              0.202202753018355
+            ]
+          },
+          {
+            "trial": 4,
+            "changes": {
+              "wall_seconds": 2.2137019768617705,
+              "cpu_seconds": -0.18620042528844083,
+              "peak_rss_bytes": -1.6219910003996918,
+              "final_write_bytes": -8.864444418874918,
+              "observed_peak_wal_bytes": 0.2789357797759129,
+              "fresh_import_git_seconds": 27.620115135446778,
+              "fresh_git_tree_seconds": -13.306500732842363,
+              "fresh_nar_seconds": -0.34945236978281,
+              "fresh_total_seconds": 7.072307259747479,
+              "fresh_import_write_bytes": -16.72808295483761,
+              "update_import_git_seconds": -25.32656179314474,
+              "update_git_tree_seconds": -15.853576154997807,
+              "update_nar_seconds": -1.3562652929361763,
+              "update_total_seconds": -13.541453781387059,
+              "update_import_write_bytes": 0.6312836100070163
+            },
+            "before_marker_times": [
+              0.20212875702418387
+            ],
+            "after_marker_times": [
+              0.25205974298296496
+            ]
+          },
+          {
+            "trial": 5,
+            "changes": {
+              "wall_seconds": -27.052201158781685,
+              "cpu_seconds": -9.165577552659855,
+              "peak_rss_bytes": -12.5528342533473,
+              "final_write_bytes": -17.1186973139955,
+              "observed_peak_wal_bytes": 0.054016732600681294,
+              "fresh_import_git_seconds": -23.89289589425254,
+              "fresh_git_tree_seconds": -22.13006678343714,
+              "fresh_nar_seconds": 0.7207408274849669,
+              "fresh_total_seconds": -20.887550324657212,
+              "fresh_import_write_bytes": -16.870242899810517,
+              "update_import_git_seconds": -1.3734595764891222,
+              "update_git_tree_seconds": -1.6776760249871958,
+              "update_nar_seconds": -60.866907937832984,
+              "update_total_seconds": -41.92764162514847,
+              "update_import_write_bytes": 0.6687001407789772
+            },
+            "before_marker_times": [
+              0.25199731899192557,
+              71.4647873849899
+            ],
+            "after_marker_times": [
+              0.2016399749845732
+            ]
+          },
+          {
+            "trial": 6,
+            "changes": {
+              "wall_seconds": 1.2341730313623067,
+              "cpu_seconds": -1.1827617761376752,
+              "peak_rss_bytes": -0.5133626454594253,
+              "final_write_bytes": -8.369385750412771,
+              "observed_peak_wal_bytes": -0.31485194622171697,
+              "fresh_import_git_seconds": 3.0319437038782704,
+              "fresh_git_tree_seconds": 4.634112763196785,
+              "fresh_nar_seconds": -0.7875482269837142,
+              "fresh_total_seconds": 3.2697084048659786,
+              "fresh_import_write_bytes": -16.89928288558279,
+              "update_import_git_seconds": -8.25254465053784,
+              "update_git_tree_seconds": -0.7952476797840946,
+              "update_nar_seconds": -2.046897868765296,
+              "update_total_seconds": -3.250189455657826,
+              "update_import_write_bytes": -0.29222676797194813
+            },
+            "before_marker_times": [
+              0.2521340870007407,
+              72.63337404699996
+            ],
+            "after_marker_times": [
+              0.3031411699776072,
+              73.53083576599602
+            ]
+          }
+        ],
+        "change_percent": {
+          "wall_seconds": -21.50841363995174,
+          "cpu_seconds": -9.344474214613562,
+          "peak_rss_bytes": -8.909212678387956,
+          "final_write_bytes": -17.054281838134,
+          "observed_peak_wal_bytes": 0.09458179121091259,
+          "fresh_import_git_seconds": -7.571496154212798,
+          "fresh_git_tree_seconds": -19.965888120178644,
+          "fresh_nar_seconds": -0.10418485887787599,
+          "fresh_total_seconds": -11.147595330105297,
+          "fresh_import_write_bytes": -16.806691191038425,
+          "update_import_git_seconds": -23.766138829331606,
+          "update_git_tree_seconds": -17.768682699697735,
+          "update_nar_seconds": -60.893829621558595,
+          "update_total_seconds": -45.9740771359587,
+          "update_import_write_bytes": 0.2813104377893616
+        },
+        "median_paired_changes": {
+          "wall_seconds": -22.481585862278937,
+          "cpu_seconds": -8.632875395951029,
+          "peak_rss_bytes": -9.250244842356164,
+          "final_write_bytes": -17.041514895933485,
+          "observed_peak_wal_bytes": 0.18499156633118297,
+          "fresh_import_git_seconds": -9.500264859777813,
+          "fresh_git_tree_seconds": -18.746577454034323,
+          "fresh_nar_seconds": 0.11939453689168156,
+          "fresh_total_seconds": -12.138719269586906,
+          "fresh_import_write_bytes": -16.767056434432114,
+          "update_import_git_seconds": -23.54121680379097,
+          "update_git_tree_seconds": -16.052555303878236,
+          "update_nar_seconds": -60.552680294554996,
+          "update_total_seconds": -43.86883494914874,
+          "update_import_write_bytes": 0.42764369135106506
+        }
+      },
+      "control_to_data_only": {
+        "pairs": [
+          {
+            "trial": 1,
+            "changes": {
+              "wall_seconds": -26.96885940134116,
+              "cpu_seconds": -8.395517472415115,
+              "peak_rss_bytes": -6.686131505425252,
+              "final_write_bytes": -17.321526813549546,
+              "observed_peak_wal_bytes": -0.4746739263718158,
+              "fresh_import_git_seconds": -23.54797448304897,
+              "fresh_git_tree_seconds": -18.118213681337348,
+              "fresh_nar_seconds": 4.48619855580854,
+              "fresh_total_seconds": -18.867829296924064,
+              "fresh_import_write_bytes": -17.042644083039793,
+              "update_import_git_seconds": -23.458083613870684,
+              "update_git_tree_seconds": -15.9651348342161,
+              "update_nar_seconds": -59.61398581148335,
+              "update_total_seconds": -44.955579637682305,
+              "update_import_write_bytes": 0.11789672247111138
+            },
+            "before_marker_times": [
+              0.2519522559887264,
+              72.36765303899301
+            ],
+            "after_marker_times": [
+              0.20209950499702245
+            ]
+          },
+          {
+            "trial": 2,
+            "changes": {
+              "wall_seconds": -1.9157525082855509,
+              "cpu_seconds": -1.8675196888362167,
+              "peak_rss_bytes": -2.125376290632486,
+              "final_write_bytes": -8.83588626029378,
+              "observed_peak_wal_bytes": -1.365659649649098,
+              "fresh_import_git_seconds": -4.544363605865753,
+              "fresh_git_tree_seconds": 1.4186794067110986,
+              "fresh_nar_seconds": 0.4110725228800405,
+              "fresh_total_seconds": -1.85478465854505,
+              "fresh_import_write_bytes": -18.115204559332387,
+              "update_import_git_seconds": -2.008939509182195,
+              "update_git_tree_seconds": -4.750478303864436,
+              "update_nar_seconds": -1.8418673485867565,
+              "update_total_seconds": -2.317068208676132,
+              "update_import_write_bytes": 0.5387047663660827
+            },
+            "before_marker_times": [
+              0.20225368699175306,
+              73.36604349399568
+            ],
+            "after_marker_times": [
+              0.2521063439780846,
+              71.95917579098023
+            ]
+          },
+          {
+            "trial": 3,
+            "changes": {
+              "wall_seconds": 0.6579703500208645,
+              "cpu_seconds": -0.12114275605212832,
+              "peak_rss_bytes": -7.561858920140862,
+              "final_write_bytes": -8.143822343267171,
+              "observed_peak_wal_bytes": 0.3100447786606342,
+              "fresh_import_git_seconds": 7.475525705448116,
+              "fresh_git_tree_seconds": -5.991910199050043,
+              "fresh_nar_seconds": -1.2488186753426334,
+              "fresh_total_seconds": 1.1515334870731309,
+              "fresh_import_write_bytes": -16.635022794314825,
+              "update_import_git_seconds": -1.4606104620756954,
+              "update_git_tree_seconds": -1.2058217715681496,
+              "update_nar_seconds": -0.1663859221194608,
+              "update_total_seconds": -0.6075339847437466,
+              "update_import_write_bytes": -0.058768218147631224
+            },
+            "before_marker_times": [
+              0.20234131900360808,
+              71.55839124700287
+            ],
+            "after_marker_times": [
+              0.2521824980212841,
+              72.07093891801196
+            ]
+          },
+          {
+            "trial": 4,
+            "changes": {
+              "wall_seconds": -10.774973792579367,
+              "cpu_seconds": 2.478391442767225,
+              "peak_rss_bytes": -2.0706816745961087,
+              "final_write_bytes": -9.118158073387105,
+              "observed_peak_wal_bytes": -0.3149274932953805,
+              "fresh_import_git_seconds": -2.7676578020162546,
+              "fresh_git_tree_seconds": -22.116393741553043,
+              "fresh_nar_seconds": 3.4763949672188987,
+              "fresh_total_seconds": -10.448829502481072,
+              "fresh_import_write_bytes": -16.729154169166172,
+              "update_import_git_seconds": -25.06441503899549,
+              "update_git_tree_seconds": -12.835192966774411,
+              "update_nar_seconds": 0.608131515023258,
+              "update_total_seconds": -11.95080550908939,
+              "update_import_write_bytes": -0.7131166705634739
+            },
+            "before_marker_times": [
+              0.20212875702418387
+            ],
+            "after_marker_times": [
+              0.20201942999847233
+            ]
+          },
+          {
+            "trial": 5,
+            "changes": {
+              "wall_seconds": 1.183951852817633,
+              "cpu_seconds": -0.16240827638506206,
+              "peak_rss_bytes": -1.5118874635273172,
+              "final_write_bytes": -8.146499816744335,
+              "observed_peak_wal_bytes": 0.054016732600681294,
+              "fresh_import_git_seconds": 1.5965323857284996,
+              "fresh_git_tree_seconds": -5.811715912589088,
+              "fresh_nar_seconds": -1.342493923332022,
+              "fresh_total_seconds": -1.5468911362996551,
+              "fresh_import_write_bytes": -16.806012011176175,
+              "update_import_git_seconds": 27.200724066951132,
+              "update_git_tree_seconds": 17.605297547885467,
+              "update_nar_seconds": 0.3441720094809586,
+              "update_total_seconds": 7.622369450763111,
+              "update_import_write_bytes": -0.1994368840919747
+            },
+            "before_marker_times": [
+              0.25199731899192557,
+              71.4647873849899
+            ],
+            "after_marker_times": [
+              0.25273106299573556,
+              72.27358559699496
+            ]
+          },
+          {
+            "trial": 6,
+            "changes": {
+              "wall_seconds": -22.58151514114477,
+              "cpu_seconds": -6.895751522306648,
+              "peak_rss_bytes": -11.098564026172685,
+              "final_write_bytes": -17.290007732982215,
+              "observed_peak_wal_bytes": 0.22489424730123275,
+              "fresh_import_git_seconds": -23.361891990492467,
+              "fresh_git_tree_seconds": -9.919676207211081,
+              "fresh_nar_seconds": 0.2625946308781213,
+              "fresh_total_seconds": -16.054027344298184,
+              "fresh_import_write_bytes": -16.793321203039714,
+              "update_import_git_seconds": 2.068398893905221,
+              "update_git_tree_seconds": 0.8591266932538089,
+              "update_nar_seconds": -59.80538268697897,
+              "update_total_seconds": -36.87116564132514,
+              "update_import_write_bytes": 0.30391583869082694
+            },
+            "before_marker_times": [
+              0.2521340870007407,
+              72.63337404699996
+            ],
+            "after_marker_times": [
+              0.202259812009288
+            ]
+          }
+        ],
+        "change_percent": {
+          "wall_seconds": -10.924753477234873,
+          "cpu_seconds": -4.379684896854574,
+          "peak_rss_bytes": -6.549652514870219,
+          "final_write_bytes": -12.964156072724986,
+          "observed_peak_wal_bytes": -0.07356361538627398,
+          "fresh_import_git_seconds": -12.113759076782705,
+          "fresh_git_tree_seconds": -7.872389321627315,
+          "fresh_nar_seconds": 1.3822041517207673,
+          "fresh_total_seconds": -8.321742047265335,
+          "fresh_import_write_bytes": -16.771885859932635,
+          "update_import_git_seconds": -2.0316951945611006,
+          "update_git_tree_seconds": -3.1835404096256847,
+          "update_nar_seconds": -31.00239228727982,
+          "update_total_seconds": -19.23636617865263,
+          "update_import_write_bytes": -0.31061360839242935
+        },
+        "median_paired_changes": {
+          "wall_seconds": -6.345363150432458,
+          "cpu_seconds": -1.0149639826106394,
+          "peak_rss_bytes": -4.405753898028869,
+          "final_write_bytes": -8.977022166840442,
+          "observed_peak_wal_bytes": -0.1304553803473496,
+          "fresh_import_git_seconds": -3.6560107039410035,
+          "fresh_git_tree_seconds": -7.955793203130562,
+          "fresh_nar_seconds": 0.3368335768790809,
+          "fresh_total_seconds": -6.151807080513061,
+          "fresh_import_write_bytes": -16.799666607107945,
+          "update_import_git_seconds": -1.7347749856289452,
+          "update_git_tree_seconds": -2.9781500377162926,
+          "update_nar_seconds": -1.0041266353531086,
+          "update_total_seconds": -7.133936858882761,
+          "update_import_write_bytes": 0.02956425216174008
+        }
+      },
+      "full_guard_to_data_only": {
+        "pairs": [
+          {
+            "trial": 1,
+            "changes": {
+              "wall_seconds": -3.321107358971853,
+              "cpu_seconds": 2.5517764118345276,
+              "peak_rss_bytes": 2.575193507780482,
+              "final_write_bytes": -0.17712998810698322,
+              "observed_peak_wal_bytes": -0.6090424910615622,
+              "fresh_import_git_seconds": -10.081010985158157,
+              "fresh_git_tree_seconds": 0.2771677892490443,
+              "fresh_nar_seconds": 3.8751618045030467,
+              "fresh_total_seconds": -4.803812189133927,
+              "fresh_import_write_bytes": -0.28441264284978507,
+              "update_import_git_seconds": 1.2402075297657467,
+              "update_git_tree_seconds": 0.34197595940550496,
+              "update_nar_seconds": 3.819040892669534,
+              "update_total_seconds": 2.1949510399940086,
+              "update_import_write_bytes": -0.10586989765909438
+            },
+            "before_marker_times": [
+              0.25189086998580024
+            ],
+            "after_marker_times": [
+              0.20209950499702245
+            ]
+          },
+          {
+            "trial": 2,
+            "changes": {
+              "wall_seconds": 23.381181998700985,
+              "cpu_seconds": 7.908319848408962,
+              "peak_rss_bytes": 8.114916279515727,
+              "final_write_bytes": 10.08805779425348,
+              "observed_peak_wal_bytes": -1.6673660124028156,
+              "fresh_import_git_seconds": -0.5424337987285255,
+              "fresh_git_tree_seconds": 25.438400222206802,
+              "fresh_nar_seconds": 2.809051985216837,
+              "fresh_total_seconds": 8.45220935554314,
+              "fresh_import_write_bytes": -1.673570197329488,
+              "update_import_git_seconds": 28.047661786011346,
+              "update_git_tree_seconds": 17.131859322314845,
+              "update_nar_seconds": 146.86698379852098,
+              "update_total_seconds": 80.26016378768884,
+              "update_import_write_bytes": 0.9881190448182586
+            },
+            "before_marker_times": [
+              0.2518325560085941
+            ],
+            "after_marker_times": [
+              0.2521063439780846,
+              71.95917579098023
+            ]
+          },
+          {
+            "trial": 3,
+            "changes": {
+              "wall_seconds": 37.223076440577515,
+              "cpu_seconds": 8.808032966686753,
+              "peak_rss_bytes": 4.710329540159308,
+              "final_write_bytes": 10.622555821874613,
+              "observed_peak_wal_bytes": 0.07507731213776125,
+              "fresh_import_git_seconds": 28.49602153790345,
+              "fresh_git_tree_seconds": 23.820717833976612,
+              "fresh_nar_seconds": -6.056525514577404,
+              "fresh_total_seconds": 22.644123203077072,
+              "fresh_import_write_bytes": 0.07081970590507858,
+              "update_import_git_seconds": 28.994221069645356,
+              "update_git_tree_seconds": 19.915132784560274,
+              "update_nar_seconds": 159.4490857113498,
+              "update_total_seconds": 86.10082049049355,
+              "update_import_write_bytes": -0.9666899604006574
+            },
+            "before_marker_times": [
+              0.202202753018355
+            ],
+            "after_marker_times": [
+              0.2521824980212841,
+              72.07093891801196
+            ]
+          },
+          {
+            "trial": 4,
+            "changes": {
+              "wall_seconds": -12.707372415081297,
+              "cpu_seconds": 2.6695626049794807,
+              "peak_rss_bytes": -0.45608838678392605,
+              "final_write_bytes": -0.2783915156871375,
+              "observed_peak_wal_bytes": -0.5922113836304366,
+              "fresh_import_git_seconds": -23.81111543835519,
+              "fresh_git_tree_seconds": -10.162114902712382,
+              "fresh_nar_seconds": 3.8392637351062575,
+              "fresh_total_seconds": -16.363836000772736,
+              "fresh_import_write_bytes": -0.0012864052691186068,
+              "update_import_git_seconds": 0.3510575653729475,
+              "update_git_tree_seconds": 3.5870605669270805,
+              "update_nar_seconds": 1.9914055502794792,
+              "update_total_seconds": 1.8397814234299759,
+              "update_import_write_bytes": -1.3359665427509326
+            },
+            "before_marker_times": [
+              0.25205974298296496
+            ],
+            "after_marker_times": [
+              0.20201942999847233
+            ]
+          },
+          {
+            "trial": 5,
+            "changes": {
+              "wall_seconds": 38.70734067392421,
+              "cpu_seconds": 9.911627149381875,
+              "peak_rss_bytes": 12.625848643062065,
+              "final_write_bytes": 10.825357718184403,
+              "observed_peak_wal_bytes": 0.0,
+              "fresh_import_git_seconds": 33.49152300495444,
+              "fresh_git_tree_seconds": 20.955907109185958,
+              "fresh_nar_seconds": -2.0484705869577624,
+              "fresh_total_seconds": 24.44704881181996,
+              "fresh_import_write_bytes": 0.07726582017668626,
+              "update_import_git_seconds": 28.972103777279656,
+              "update_git_tree_seconds": 19.61199938456819,
+              "update_nar_seconds": 156.41769336824632,
+              "update_total_seconds": 85.32460616817212,
+              "update_import_write_bytes": -0.8623703531057014
+            },
+            "before_marker_times": [
+              0.2016399749845732
+            ],
+            "after_marker_times": [
+              0.25273106299573556,
+              72.27358559699496
+            ]
+          },
+          {
+            "trial": 6,
+            "changes": {
+              "wall_seconds": -23.525344712530018,
+              "cpu_seconds": -5.781369575646977,
+              "peak_rss_bytes": -10.639822253707077,
+              "final_write_bytes": -9.735416547870212,
+              "observed_peak_wal_bytes": 0.5414509624159347,
+              "fresh_import_git_seconds": -25.617138477197564,
+              "fresh_git_tree_seconds": -13.909220029748182,
+              "fresh_nar_seconds": 1.058478889589809,
+              "fresh_total_seconds": -18.711910828106546,
+              "fresh_import_write_bytes": 0.1275099496400145,
+              "update_import_git_seconds": 11.249296784451435,
+              "update_git_tree_seconds": 1.6676362113156262,
+              "update_nar_seconds": -58.96544730235348,
+              "update_total_seconds": -34.75043103082689,
+              "update_import_write_bytes": 0.5978898007034106
+            },
+            "before_marker_times": [
+              0.3031411699776072,
+              73.53083576599602
+            ],
+            "after_marker_times": [
+              0.202259812009288
+            ]
+          }
+        ],
+        "change_percent": {
+          "wall_seconds": 13.483814831017193,
+          "cpu_seconds": 5.476543514305332,
+          "peak_rss_bytes": 2.590338971587647,
+          "final_write_bytes": 4.931087289433389,
+          "observed_peak_wal_bytes": -0.16798652193575903,
+          "fresh_import_git_seconds": -4.9143529685912295,
+          "fresh_git_tree_seconds": 15.110430433351763,
+          "fresh_nar_seconds": 1.4879392179730777,
+          "fresh_total_seconds": 3.180390326337945,
+          "fresh_import_write_bytes": 0.0418366952872562,
+          "update_import_git_seconds": 28.51022275536139,
+          "update_git_tree_seconds": 17.73672460676785,
+          "update_nar_seconds": 76.4366263559201,
+          "update_total_seconds": 49.490521475390146,
+          "update_import_write_bytes": -0.5902635731400818
+        },
+        "median_paired_changes": {
+          "wall_seconds": 10.030037319864565,
+          "cpu_seconds": 5.288941226694222,
+          "peak_rss_bytes": 3.642761523969895,
+          "final_write_bytes": 4.955463903073248,
+          "observed_peak_wal_bytes": -0.2961056918152183,
+          "fresh_import_git_seconds": -5.311722391943341,
+          "fresh_git_tree_seconds": 10.616537449217502,
+          "fresh_nar_seconds": 1.933765437403323,
+          "fresh_total_seconds": 1.8241985832046064,
+          "fresh_import_write_bytes": 0.034766650317979986,
+          "update_import_git_seconds": 19.64847928523139,
+          "update_git_tree_seconds": 10.359459944620962,
+          "update_nar_seconds": 75.34301234559526,
+          "update_total_seconds": 41.227557413841424,
+          "update_import_write_bytes": -0.4841201253823979
+        }
+      }
+    },
+    "run_context": [
+      {
+        "variant": "control",
+        "trial": 1,
+        "wall_seconds": 72.4456742949842,
+        "cpu_seconds": 82.777137,
+        "load_start": [
+          0.96240234375,
+          2.44921875,
+          3.64013671875
+        ],
+        "load_end": [
+          3.52490234375,
+          2.89794921875,
+          3.7080078125
+        ],
+        "available_disk_bytes": 40243109888,
+        "observed_completion_marker_seconds": [
+          0.2519522559887264,
+          72.36765303899301
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.251952255988726,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.311300097
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 18.616981648
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.675215985
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.027122349
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.403766405
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.10434684
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 1,
+        "wall_seconds": 54.72539124797913,
+        "cpu_seconds": 73.940765,
+        "load_start": [
+          3.52490234375,
+          2.89794921875,
+          3.7080078125
+        ],
+        "load_end": [
+          3.9365234375,
+          3.078125,
+          3.720703125
+        ],
+        "available_disk_bytes": 40031346688,
+        "observed_completion_marker_seconds": [
+          0.25189086998580024
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.2518908699858,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 22.370716224
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 15.201782687
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.702717543
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.8007189820000002
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.850602135
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.486646252
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 1,
+        "wall_seconds": 52.907902252016356,
+        "cpu_seconds": 75.827568,
+        "load_start": [
+          3.9365234375,
+          3.078125,
+          3.720703125
+        ],
+        "load_end": [
+          3.13916015625,
+          2.9892578125,
+          3.6513671875
+        ],
+        "available_disk_bytes": 39833055232,
+        "observed_completion_marker_seconds": [
+          0.20209950499702245
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20209950499702,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 20.115521864
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 15.243917132
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.884955457
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.847855785
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.860350509
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.696183516
+          }
+        ]
+      },
+      {
+        "variant": "control",
+        "trial": 2,
+        "wall_seconds": 73.46364600601373,
+        "cpu_seconds": 82.382853,
+        "load_start": [
+          3.13916015625,
+          2.9892578125,
+          3.6513671875
+        ],
+        "load_end": [
+          3.478515625,
+          3.10107421875,
+          3.63916015625
+        ],
+        "available_disk_bytes": 39634833408,
+        "observed_completion_marker_seconds": [
+          0.20225368699175306,
+          73.36604349399568
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20225368699175,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 27.038135778
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 18.911369738
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.773253844
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 4.998312669
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.387949838
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.108029506
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 2,
+        "wall_seconds": 72.0562643649755,
+        "cpu_seconds": 80.844337,
+        "load_start": [
+          3.478515625,
+          3.10107421875,
+          3.63916015625
+        ],
+        "load_end": [
+          3.50439453125,
+          3.12451171875,
+          3.599609375
+        ],
+        "available_disk_bytes": 39424266240,
+        "observed_completion_marker_seconds": [
+          0.2521063439780846,
+          71.95917579098023
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.252106343978085,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 25.809424576
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.179661446
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.792875379
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 4.897899591
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.227006016
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 13.848178317
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 2,
+        "wall_seconds": 58.401340623997385,
+        "cpu_seconds": 74.919466,
+        "load_start": [
+          3.50439453125,
+          3.12451171875,
+          3.599609375
+        ],
+        "load_end": [
+          3.53125,
+          3.14501953125,
+          3.5751953125
+        ],
+        "available_disk_bytes": 39230328832,
+        "observed_completion_marker_seconds": [
+          0.2518325560085941
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.251832556008594,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 25.950187162
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 15.290103678
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.661919633
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.825059765
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.755019885
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.609570832
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 3,
+        "wall_seconds": 52.580000630026916,
+        "cpu_seconds": 74.365253,
+        "load_start": [
+          3.53125,
+          3.14501953125,
+          3.5751953125
+        ],
+        "load_end": [
+          3.1064453125,
+          3.1259765625,
+          3.54443359375
+        ],
+        "available_disk_bytes": 39031934976,
+        "observed_completion_marker_seconds": [
+          0.202202753018355
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.202202753018355,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 20.295325817
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 15.154088152
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.759348942
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.831239285
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.785156303
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.496060898
+          }
+        ]
+      },
+      {
+        "variant": "control",
+        "trial": 3,
+        "wall_seconds": 71.68025960199884,
+        "cpu_seconds": 81.013511,
+        "load_start": [
+          3.1064453125,
+          3.1259765625,
+          3.54443359375
+        ],
+        "load_end": [
+          2.73046875,
+          3.0078125,
+          3.4716796875
+        ],
+        "available_disk_bytes": 38833696768,
+        "observed_completion_marker_seconds": [
+          0.20234131900360808,
+          71.55839124700287
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20234131900361,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 24.264767315
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.959878741
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.52763977
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.015331733
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.380587742
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.283245059
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 3,
+        "wall_seconds": 72.15189445699798,
+        "cpu_seconds": 80.915369,
+        "load_start": [
+          2.73046875,
+          3.0078125,
+          3.4716796875
+        ],
+        "load_end": [
+          2.60400390625,
+          2.890625,
+          3.39111328125
+        ],
+        "available_disk_bytes": 38623203328,
+        "observed_completion_marker_seconds": [
+          0.2521824980212841,
+          72.07093891801196
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.252182498021284,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.078686233
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 18.763900731
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.471097759
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 4.942077273
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.339823879
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.25947975
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 4,
+        "wall_seconds": 60.05990264299908,
+        "cpu_seconds": 72.90947200000001,
+        "load_start": [
+          2.60400390625,
+          2.890625,
+          3.39111328125
+        ],
+        "load_end": [
+          3.359375,
+          2.9853515625,
+          3.3876953125
+        ],
+        "available_disk_bytes": 38429188096,
+        "observed_completion_marker_seconds": [
+          0.25205974298296496
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.252059742982965,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.430127145
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 16.634092393
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.636543001
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.807837608
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.768753082
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.480883539
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 4,
+        "wall_seconds": 52.42786714201793,
+        "cpu_seconds": 74.855836,
+        "load_start": [
+          3.359375,
+          2.9853515625,
+          3.3876953125
+        ],
+        "load_end": [
+          4.04541015625,
+          3.158203125,
+          3.419921875
+        ],
+        "available_disk_bytes": 38231064576,
+        "observed_completion_marker_seconds": [
+          0.20201942999847233
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20201942999847,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 20.13681906
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 14.943716811
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.814552115
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.82120531
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.868069932
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.590030158
+          }
+        ]
+      },
+      {
+        "variant": "control",
+        "trial": 4,
+        "wall_seconds": 58.75915017400985,
+        "cpu_seconds": 73.045483,
+        "load_start": [
+          4.04541015625,
+          3.158203125,
+          3.419921875
+        ],
+        "load_end": [
+          4.43798828125,
+          3.36865234375,
+          3.47314453125
+        ],
+        "available_disk_bytes": 38032666624,
+        "observed_completion_marker_seconds": [
+          0.20212875702418387
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.202128757024184,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 20.710001019
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.187243027
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.652802329
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.099320052
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.290398992
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.556240906
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 5,
+        "wall_seconds": 72.37998235199484,
+        "cpu_seconds": 82.310793,
+        "load_start": [
+          4.43798828125,
+          3.36865234375,
+          3.47314453125
+        ],
+        "load_end": [
+          3.5517578125,
+          3.2841796875,
+          3.43310546875
+        ],
+        "available_disk_bytes": 37817647104,
+        "observed_completion_marker_seconds": [
+          0.25273106299573556,
+          72.27358559699496
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.252731062995736,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.454817163
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 18.29081037
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.674636098
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 4.940522434
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.326052435
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.376517751
+          }
+        ]
+      },
+      {
+        "variant": "control",
+        "trial": 5,
+        "wall_seconds": 71.53306529999827,
+        "cpu_seconds": 82.44469000000001,
+        "load_start": [
+          3.42724609375,
+          3.2626953125,
+          3.42529296875
+        ],
+        "load_end": [
+          3.14453125,
+          3.17138671875,
+          3.376953125
+        ],
+        "available_disk_bytes": 37623812096,
+        "observed_completion_marker_seconds": [
+          0.25199731899192557,
+          71.4647873849899
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.251997318991926,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.039094585
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.419411392
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.738246773
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.884036408
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.82814848
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.327207513
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 5,
+        "wall_seconds": 52.18179658000008,
+        "cpu_seconds": 74.888158,
+        "load_start": [
+          3.14453125,
+          3.17138671875,
+          3.376953125
+        ],
+        "load_end": [
+          3.5517578125,
+          3.31884765625,
+          3.41845703125
+        ],
+        "available_disk_bytes": 37413326848,
+        "observed_completion_marker_seconds": [
+          0.2016399749845732
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20163997498457,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.817600824
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 15.121882682
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.772397252
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.830690738
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 2.780701311
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.606679306
+          }
+        ]
+      },
+      {
+        "variant": "data_only",
+        "trial": 6,
+        "wall_seconds": 56.324266556999646,
+        "cpu_seconds": 76.583002,
+        "load_start": [
+          3.5517578125,
+          3.31884765625,
+          3.41845703125
+        ],
+        "load_end": [
+          2.6806640625,
+          3.10791015625,
+          3.33740234375
+        ],
+        "available_disk_bytes": 37215195136,
+        "observed_completion_marker_seconds": [
+          0.202259812009288
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.20225981200929,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 20.109937745
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 16.808531272
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.749659543
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.214622316
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.438654616
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.741121932
+          }
+        ]
+      },
+      {
+        "variant": "full_guard",
+        "trial": 6,
+        "wall_seconds": 73.65089302498382,
+        "cpu_seconds": 81.282228,
+        "load_start": [
+          2.6806640625,
+          3.10791015625,
+          3.33740234375
+        ],
+        "load_end": [
+          3.05224609375,
+          3.09326171875,
+          3.31201171875
+        ],
+        "available_disk_bytes": 37016981504,
+        "observed_completion_marker_seconds": [
+          0.3031411699776072,
+          73.53083576599602
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.30314116997761,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 27.035714052
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 19.524194435
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.699911967
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 4.687330587
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.382250974
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 13.990945568
+          }
+        ]
+      },
+      {
+        "variant": "control",
+        "trial": 6,
+        "wall_seconds": 72.75299517897656,
+        "cpu_seconds": 82.25511,
+        "load_start": [
+          3.05224609375,
+          3.09326171875,
+          3.31201171875
+        ],
+        "load_end": [
+          2.74267578125,
+          2.97119140625,
+          3.25
+        ],
+        "available_disk_bytes": 36823195648,
+        "observed_completion_marker_seconds": [
+          0.2521340870007407,
+          72.63337404699996
+        ],
+        "first_observed_marker_plus_cooldown_seconds": 60.25213408700074,
+        "stages": [
+          {
+            "stage": "import_git",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 26.240128139
+          },
+          {
+            "stage": "git_tree",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 18.659492511
+          },
+          {
+            "stage": "nar",
+            "revision": "8011f7ddcb2cded6007d3d27de69bbeef2597071",
+            "wall_seconds": 4.737219858
+          },
+          {
+            "stage": "import_git",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 5.108948874
+          },
+          {
+            "stage": "git_tree",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 3.409363861
+          },
+          {
+            "stage": "nar",
+            "revision": "4e88a2abe84cf88c18ac500ca7b4e0b0e07ada8a",
+            "wall_seconds": 14.283310343
+          }
+        ]
+      }
+    ],
+    "observed_marker_counts": {
+      "control": [
+        2,
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      "full_guard": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "data_only": [
+        1,
+        2,
+        2,
+        1,
+        2,
+        1
+      ]
+    },
+    "limitations": [
+      "All6permutations retained; no runs excluded for timing or marker changes.",
+      "This follows an adverse initial data-only week matrix; confirmation does not invalidate or replace it.",
+      "Marker updates record collection completion; first-observed time plus60s is an approximate eligibility point, not its next start or duration. Unmodified-stage differences alone do not establish a cause.",
+      "WAL samples are lower-bound observations; OS caches and ambient workload are unmanaged."
+    ]
+  },
+  "variability": {
+    "results": {
+      "full": {
+        "near": {
+          "source_sha256": "d1b8322ce245247b180140f583c5fc4456e3d389239cc09baa64c09caded5238",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": 8.989859541138578,
+              "cpu_change_percent": -2.496771862743241,
+              "rss_change_percent": 3.974843005041784,
+              "write_change_percent": -9.777417561439583,
+              "control_marker_times": [
+                0.20214762102114037
+              ],
+              "candidate_marker_times": [
+                0.20252719399286434
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": 20.090474380989498,
+              "cpu_change_percent": 26.976460199678677,
+              "rss_change_percent": 0.49864007252946596,
+              "write_change_percent": -9.533535335890841,
+              "control_marker_times": [
+                0.30291758800740354
+              ],
+              "candidate_marker_times": [
+                0.25253822800004855,
+                68.84484274199349
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": 9.697870770988871,
+              "cpu_change_percent": 0.7076812792972786,
+              "rss_change_percent": -6.319930539393825,
+              "write_change_percent": -9.868377006815477,
+              "control_marker_times": [
+                0.2020812619884964
+              ],
+              "candidate_marker_times": [
+                0.20215359498979524
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": 0.6464889885997804,
+              "cpu_change_percent": -3.2013578511325025,
+              "rss_change_percent": -3.554068270033006,
+              "write_change_percent": -9.732780928629847,
+              "control_marker_times": [
+                0.2523257129942067
+              ],
+              "candidate_marker_times": [
+                0.2524383039854001
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": 9.343865156063725,
+            "cpu_change_percent": -0.8945452917229813,
+            "rss_change_percent": -1.52771409875177,
+            "write_change_percent": -9.755099245034714
+          }
+        },
+        "week": {
+          "source_sha256": "98243cff110733b8f98fc597715501da281a249c2888878b76b3072d8f071f08",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": -7.829167244326785,
+              "cpu_change_percent": 3.159599754501241,
+              "rss_change_percent": -4.488295113295115,
+              "write_change_percent": -9.061730238113007,
+              "control_marker_times": [
+                0.25211111700627953
+              ],
+              "candidate_marker_times": [
+                0.2025185730017256
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": -1.5695332670340179,
+              "cpu_change_percent": -1.8996755725883663,
+              "rss_change_percent": -0.3305691149357082,
+              "write_change_percent": -7.702431325667602,
+              "control_marker_times": [
+                0.2520827029948123,
+                72.17589831299847
+              ],
+              "candidate_marker_times": [
+                0.20204072701744735,
+                71.05361149201053
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": -11.623365983778577,
+              "cpu_change_percent": 2.6225293088273816,
+              "rss_change_percent": -6.603633839655664,
+              "write_change_percent": -8.911376065371602,
+              "control_marker_times": [
+                0.25188903498928994
+              ],
+              "candidate_marker_times": [
+                0.20227103200159036
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": -17.865922440633575,
+              "cpu_change_percent": -11.205118113089318,
+              "rss_change_percent": -9.164990215801383,
+              "write_change_percent": -17.49985633159712,
+              "control_marker_times": [
+                0.2529567049932666,
+                72.91584013600368
+              ],
+              "candidate_marker_times": [
+                0.20244367301347665
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": -9.72626661405268,
+            "cpu_change_percent": 0.36142686811950764,
+            "rss_change_percent": -5.54596447647539,
+            "write_change_percent": -8.986553151742305
+          }
+        },
+        "release": {
+          "source_sha256": "5d8d46abb7c896a5b5d8af69621dd829d72bd980f035198e15dc519c39483599",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": -3.91086511631471,
+              "cpu_change_percent": 8.652424538768933,
+              "rss_change_percent": -6.440517729305439,
+              "write_change_percent": 1.7048598644053392,
+              "control_marker_times": [
+                0.2518805779982358,
+                64.0105151880125
+              ],
+              "candidate_marker_times": [
+                0.2028661160147749,
+                73.97797334502684
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": -0.804290511700223,
+              "cpu_change_percent": -1.5670601481668323,
+              "rss_change_percent": -3.766760734786889,
+              "write_change_percent": -6.149728410611665,
+              "control_marker_times": [
+                0.1512911939935293,
+                73.88229393199435
+              ],
+              "candidate_marker_times": [
+                0.15141709099407308,
+                73.29590478300815
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": -1.3138087593967507,
+              "cpu_change_percent": -4.141366966888038,
+              "rss_change_percent": -1.5225329120758024,
+              "write_change_percent": -5.930991558106468,
+              "control_marker_times": [
+                0.20160231299814768,
+                74.23026297800243
+              ],
+              "candidate_marker_times": [
+                0.20182214700616896,
+                73.22604739299277
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": 0.24680113197628195,
+              "cpu_change_percent": 1.4330311520957872,
+              "rss_change_percent": -4.83459593562311,
+              "write_change_percent": -5.402149995866912,
+              "control_marker_times": [
+                0.20164237299468368,
+                73.16830230498454
+              ],
+              "candidate_marker_times": [
+                0.20168883999576792,
+                73.32163606700487
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": -1.0590496355484869,
+            "cpu_change_percent": -0.06701449803552251,
+            "rss_change_percent": -4.300678335204999,
+            "write_change_percent": -5.66657077698669
+          }
+        }
+      },
+      "detached": {
+        "near": {
+          "source_sha256": "5299df88bbad03292e8ed41e3b2f6205e6cbe00ea7a18560bae6c94bb216a674",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": 13.535177795089881,
+              "cpu_change_percent": 1.9200071517459172,
+              "rss_change_percent": -2.5065659125466544,
+              "write_change_percent": -10.415619070606297,
+              "control_marker_times": [
+                0.20183556599658914
+              ],
+              "candidate_marker_times": [
+                0.3029075329832267
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": -1.5981646179744846,
+              "cpu_change_percent": 1.4772014022160995,
+              "rss_change_percent": 1.4255788778135603,
+              "write_change_percent": -9.809545509375294,
+              "control_marker_times": [
+                0.2521450929925777
+              ],
+              "candidate_marker_times": [
+                0.2524511549854651
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": 1.170717927585474,
+              "cpu_change_percent": -0.045983646917968635,
+              "rss_change_percent": -2.7188984598120913,
+              "write_change_percent": -9.904700717421566,
+              "control_marker_times": [
+                0.2524749700096436
+              ],
+              "candidate_marker_times": [
+                0.2524151749967132
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": 2.022939112364708,
+              "cpu_change_percent": -0.6211839973851108,
+              "rss_change_percent": 1.4203077954049403,
+              "write_change_percent": -9.733469981043473,
+              "control_marker_times": [
+                0.2522858510201331
+              ],
+              "candidate_marker_times": [
+                0.2525776880211197
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": 1.596828519975091,
+            "cpu_change_percent": 0.7156088776490654,
+            "rss_change_percent": -0.543129058570857,
+            "write_change_percent": -9.85712311339843
+          }
+        },
+        "week": {
+          "source_sha256": "1cc1a921d0ff34bff776158d934ef10dd678a212c5132b41abf8873fa9a7488f",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": -1.6409689985790843,
+              "cpu_change_percent": -0.8764407002433194,
+              "rss_change_percent": -0.2276118959873008,
+              "write_change_percent": -8.41633882983176,
+              "control_marker_times": [
+                0.25234647101024166,
+                73.62918265801272
+              ],
+              "candidate_marker_times": [
+                0.25209624698618427,
+                72.41437726799631
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": 31.545217862804108,
+              "cpu_change_percent": 7.004534745553137,
+              "rss_change_percent": 3.1225865263282193,
+              "write_change_percent": 1.0957314165215948,
+              "control_marker_times": [
+                0.251949390018126
+              ],
+              "candidate_marker_times": [
+                0.25199231901206076,
+                72.66149969099206
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": 40.631868062293705,
+              "cpu_change_percent": 11.469223758754076,
+              "rss_change_percent": 8.433254921906453,
+              "write_change_percent": 1.103199566785329,
+              "control_marker_times": [
+                0.20243386199581437
+              ],
+              "candidate_marker_times": [
+                0.3030771620105952,
+                68.42724239800009
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": 26.576099519707206,
+              "cpu_change_percent": 12.161220500754943,
+              "rss_change_percent": 7.348939862354786,
+              "write_change_percent": 1.0457335682778846,
+              "control_marker_times": [
+                0.2519925849919673
+              ],
+              "candidate_marker_times": [
+                0.2526386129902676,
+                72.66697042100714
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": 29.060658691255657,
+            "cpu_change_percent": 9.236879252153607,
+            "rss_change_percent": 5.235763194341503,
+            "write_change_percent": 1.0707324923997397
+          }
+        },
+        "release": {
+          "source_sha256": "0eff3cf3159a9011724055fc91bbd695901dec5ae46d32449b1f0c94b12a8e3d",
+          "pairs": [
+            {
+              "trial": 1,
+              "wall_change_percent": 10.194257856283851,
+              "cpu_change_percent": -9.62920655626327,
+              "rss_change_percent": -2.07036855966819,
+              "write_change_percent": -12.430876210403774,
+              "control_marker_times": [
+                0.20222943602129817,
+                69.79193690401735
+              ],
+              "candidate_marker_times": [
+                0.3026989680074621,
+                68.22529821799253
+              ]
+            },
+            {
+              "trial": 2,
+              "wall_change_percent": 6.546837947802109,
+              "cpu_change_percent": -9.425382820656425,
+              "rss_change_percent": -3.7558390480349035,
+              "write_change_percent": -12.545955520566821,
+              "control_marker_times": [
+                0.20222443799139,
+                74.02464560201042
+              ],
+              "candidate_marker_times": [
+                0.25250092800706625,
+                65.61428465100471
+              ]
+            },
+            {
+              "trial": 3,
+              "wall_change_percent": -3.9810525280520093,
+              "cpu_change_percent": -1.419151489628212,
+              "rss_change_percent": -3.063073815932882,
+              "write_change_percent": -5.616928516811493,
+              "control_marker_times": [
+                0.25218081500497647,
+                68.37250884997775
+              ],
+              "candidate_marker_times": [
+                0.2524398000095971,
+                67.46434848100762
+              ]
+            },
+            {
+              "trial": 4,
+              "wall_change_percent": -10.237732703476821,
+              "cpu_change_percent": 9.217686145575964,
+              "rss_change_percent": -5.534392184571901,
+              "write_change_percent": 1.1265266902114712,
+              "control_marker_times": [
+                0.20188507001148537,
+                66.26795254999888
+              ],
+              "candidate_marker_times": [
+                0.20224723999854177,
+                72.95860619199811
+              ]
+            }
+          ],
+          "median_paired_changes": {
+            "wall_change_percent": 1.2828927098750498,
+            "cpu_change_percent": -5.422267155142318,
+            "rss_change_percent": -3.4094564319838927,
+            "write_change_percent": -9.023902363607633
+          }
+        }
+      }
+    },
+    "limitations": [
+      "All pairs are retained, including mismatched marker counts.",
+      "Marker receipt times do not measure collection duration; no subtraction or adjusted throughput is inferred.",
+      "CPU totals include asynchronous collection, setup, ingestion, conversion, NAR and process shutdown.",
+      "Median paired changes differ from the primary ratio of independent medians; both are descriptive estimates, not confidence bounds."
+    ]
+  }
+}

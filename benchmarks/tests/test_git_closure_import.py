@@ -172,6 +172,21 @@ class GitClosureBenchmarkTests(unittest.TestCase):
                                     "--counts", "3", "--max-buffered-bytes", "1024",
                                     "--backend", "local", "--layout", "loose"])
 
+    def test_standard_profile_covers_owned_writer_rotation_boundaries(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            probe = root / "probe"
+            write_probe(probe)
+            output = root / "result.json"
+            suite.main(["--probe-binary", str(probe), "--no-build", "--output", str(output),
+                        "--profile", "standard", "--max-buffered-bytes", "1024",
+                        "--backend", "memory", "--layout", "loose"])
+            report = json.loads(output.read_text())
+            counts = {row["files"] for row in report["samples"]}
+            # Each cold fixture adds two trees to these leaf counts; the
+            # memory backend publishes 64 objects at a time.
+            self.assertTrue({509, 510, 511, 1022, 1023} <= counts, counts)
+
     def test_blob_witnesses_must_match_the_probes_declared_witness_policy(self):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)

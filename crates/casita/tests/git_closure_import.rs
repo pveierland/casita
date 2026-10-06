@@ -964,3 +964,6 @@ async fn application_import_reports_cancellation_without_retrying() {
     assert_eq!(error.kind(), casita::ErrorKind::Cancelled);
     assert_eq!(error.retry_disposition(), casita::RetryDisposition::Never);
 }
+
+#[path = "git_closure_import/rotation.rs"]
+mod rotation;

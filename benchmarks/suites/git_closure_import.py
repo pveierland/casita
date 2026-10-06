@@ -108,7 +108,8 @@ def main(argv=None):
         variants.insert(0, ("baseline", args.baseline_binary.resolve()))
     artifacts = build_manifest.artifacts(variants, fixture=False)
     by_variant = {artifact["variant"]: artifact for artifact in artifacts}
-    counts = args.counts or ([63, 64, 65] if args.profile == "smoke" else [63, 64, 65, 255, 256, 257, 10000])
+    counts = args.counts or ([63, 64, 65] if args.profile == "smoke" else
+                            [63, 64, 65, 255, 256, 257, 509, 510, 511, 1022, 1023, 10000])
     layouts = [False, True] if args.layout == "both" else [args.layout == "packed"]
     backends = ["memory", "local"] if args.backend == "both" else [args.backend]
     result = dict(schema_version=1, result_schema="casita.git-closure-import.v1", suite_id="native-git",
