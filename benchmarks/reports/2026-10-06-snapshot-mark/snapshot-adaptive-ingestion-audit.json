@@ -1,0 +1,91 @@
+{
+  "source": "/tmp/mnos-ingest/evidence/snapshot-adaptive-ingestion.json",
+  "sha256": "8438e109162bb479a9fb559c0e58c4843f7f9c5c85d83dec948e967115ccabab",
+  "complete_runs": 8,
+  "identities_checked": 16,
+  "medians": {
+    "control": {
+      "wall_seconds": 79.53197239649307,
+      "peak_rss_bytes": 1331595264.0,
+      "observed_pressure_updates": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "file_counts": [
+        398,
+        397,
+        378,
+        395
+      ],
+      "fresh_import_git_seconds": 23.048686843,
+      "fresh_git_tree_seconds": 15.417978545,
+      "fresh_nar_seconds": 3.467089765,
+      "fresh_total_seconds": 42.2841199435,
+      "update_import_git_seconds": 16.944972806000003,
+      "update_git_tree_seconds": 15.6753105145,
+      "update_nar_seconds": 3.860480404,
+      "update_total_seconds": 36.666606191
+    },
+    "candidate": {
+      "wall_seconds": 80.07813807699131,
+      "peak_rss_bytes": 1342126080.0,
+      "observed_pressure_updates": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "file_counts": [
+        397,
+        379,
+        398,
+        382
+      ],
+      "fresh_import_git_seconds": 22.9344215085,
+      "fresh_git_tree_seconds": 15.173999033,
+      "fresh_nar_seconds": 3.413915574,
+      "fresh_total_seconds": 41.719413462999995,
+      "update_import_git_seconds": 17.449830751,
+      "update_git_tree_seconds": 16.958839458,
+      "update_nar_seconds": 3.9364425455000003,
+      "update_total_seconds": 38.024456717999996
+    }
+  },
+  "change_percent": {
+    "wall_seconds": 0.6867246769329594,
+    "peak_rss_bytes": 0.7908421038061109,
+    "fresh_import_git_seconds": -0.49575637552947693,
+    "fresh_git_tree_seconds": -1.582435150547823,
+    "fresh_nar_seconds": -1.5336837118204882,
+    "fresh_total_seconds": -1.335504868623416,
+    "update_import_git_seconds": 2.9793966079499024,
+    "update_git_tree_seconds": 8.18822020981791,
+    "update_nar_seconds": 1.9676862346275081,
+    "update_total_seconds": 3.7032348178798413
+  },
+  "pairs": [
+    {
+      "trial": 1,
+      "wall_change_percent": -0.5971322602710938
+    },
+    {
+      "trial": 2,
+      "wall_change_percent": 3.0147357752528636
+    },
+    {
+      "trial": 3,
+      "wall_change_percent": -6.57491365358327
+    },
+    {
+      "trial": 4,
+      "wall_change_percent": 3.6362074700928337
+    }
+  ],
+  "limitations": [
+    "OS-managed caches and unrestricted recorded CPU affinity.",
+    "Marker polling observes updates, not exact collection counts or durations.",
+    "Release pair only; no near/week or browser claim."
+  ]
+}

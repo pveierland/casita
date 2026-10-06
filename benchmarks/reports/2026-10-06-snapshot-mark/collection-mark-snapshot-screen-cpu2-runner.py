@@ -18,7 +18,7 @@ from benchmarks.suites.metadata_collection import CARGO_ARGUMENTS, positive_csv
 from benchmarks.suites.pack.catalog import parse_probe_binary
 
 PROBE = "repository::collection_mark_tests::benchmark_collection_mark"
-MODES = ("named", "pins", "snapshot-full", "snapshot-partial", "snapshot-sparse", "snapshot-forward")
+MODES = ("named", "pins", "snapshot-full", "snapshot-partial", "snapshot-sparse")
 CORRECTNESS = "exact marked keys, cardinality, spill boundary and reopened revision"
 
 
@@ -40,7 +40,7 @@ def parse_sample(stdout, parents, shape, memory_limit, iterations, strategy="cur
     if not isinstance(case, dict) or any(type(case.get(k)) is not type(v) or case[k] != v for k, v in required.items()):
         raise common.BenchmarkError("wrong mark configuration or correctness gate")
     cutoff = {"snapshot-full": parents, "snapshot-partial": max(1, parents // 2), "snapshot-sparse": 1}.get(mode, 0)
-    scanned = parents if mode == "snapshot-forward" else ((2 * cutoff if shape == "distinct" else cutoff + 1) if cutoff else 0)
+    scanned = (2 * cutoff if shape == "distinct" else cutoff + 1) if cutoff else 0
     samples = case.get("samples")
     order = [(i, mode) for i in range(iterations + 1)]
     if not isinstance(samples, list) or len(samples) != len(order):
@@ -64,7 +64,7 @@ def save(args, result):
              "Timing includes root/pin traversal, spill writes and queue cleanup; fixture setup, audit and returned mark-set cleanup are excluded.",
              "Each process measures one mode and strategy; pins never follows named marking. First/warm label iterations, not a cold OS cache.",
              "Legacy/current use the same executable and fixture. Matching strategies are adjacent, with reversed order on even repetitions.",
-             "Snapshot modes cover all, half, or one parent generation, or old parents with newer leaves; closure-only pins call the same unchanged function under both strategy labels.",
+             "Snapshot modes cover all, half, or one parent generation; closure-only pins call the same unchanged function under both strategy labels.",
              "Process RSS includes setup and audits. This is a traversal probe, not full vacuum or ingestion timing.",
              "", f"Complete: {result['complete']}", "",
              "| Parents | Shape | Memory keys | Strategy | Operation | Repetition | ms | Record reads | Scanned records |",
@@ -91,8 +91,7 @@ def main(argv=None):
     parser.add_argument("--output", type=pathlib.Path, required=True)
     parser.add_argument("--report", type=pathlib.Path)
     args = parser.parse_args(argv)
-    boundaries = [127, 128, 255, 256, 257, 511, 512, 513]
-    parents = args.parents or (boundaries if args.profile == "smoke" else [*boundaries, 8192])
+    parents = args.parents or ([127, 128, 255, 256] if args.profile == "smoke" else [127, 128, 255, 256, 257, 8192])
     iterations = args.iterations if args.iterations is not None else (1 if args.profile == "smoke" else 3)
     shapes = args.shape or ["shared", "distinct", "chain"]
     if len(shapes) != len(set(shapes)):

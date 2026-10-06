@@ -91,8 +91,7 @@ def main(argv=None):
     parser.add_argument("--output", type=pathlib.Path, required=True)
     parser.add_argument("--report", type=pathlib.Path)
     args = parser.parse_args(argv)
-    boundaries = [127, 128, 255, 256, 257, 511, 512, 513]
-    parents = args.parents or (boundaries if args.profile == "smoke" else [*boundaries, 8192])
+    parents = args.parents or ([127, 128, 255, 256] if args.profile == "smoke" else [127, 128, 255, 256, 257, 8192])
     iterations = args.iterations if args.iterations is not None else (1 if args.profile == "smoke" else 3)
     shapes = args.shape or ["shared", "distinct", "chain"]
     if len(shapes) != len(set(shapes)):

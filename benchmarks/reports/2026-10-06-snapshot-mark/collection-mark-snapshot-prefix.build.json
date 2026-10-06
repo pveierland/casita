@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "executable_sha256": "565e1d084ed50dd20aa7ffe229e179cde7ee3fd32cdc840faf43e131f434ad23",
+  "source_revision": "360539bb44ed343ec81efd29f77115ff3a41a1e0",
+  "source_sha256": "48780b15b47af8af6f181a9ca0397de19144e0686f909fecb6c62c3c0801b0dd",
+  "source_dirty": true,
+  "lockfile_sha256": "22ba225c26bc0fd0fc673f45099dd51824d927189879e1474e3de17347d1e8f9",
+  "features": [
+    "experimental",
+    "git",
+    "native"
+  ],
+  "default_features": false,
+  "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (built from a source tarball)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 21.1.8",
+  "rustflags": "-C link-arg=-fuse-ld=mold",
+  "target": "x86_64-unknown-linux-gnu",
+  "profile": "release",
+  "cargo_config_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "build_environment": {},
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--release",
+    "--no-default-features",
+    "--features",
+    "native,git,experimental",
+    "-p",
+    "casita",
+    "--lib",
+    "--no-run",
+    "--message-format=json"
+  ]
+}

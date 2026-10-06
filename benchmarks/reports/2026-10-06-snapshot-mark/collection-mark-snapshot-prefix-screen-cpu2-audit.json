@@ -1,0 +1,2169 @@
+{
+  "source": "/tmp/mnos-ingest/evidence/collection-mark-snapshot-prefix-screen-cpu2.json",
+  "sha256": "349dcefbd8286a024d33e438cabbaa46bda93ba874861f43f57c897d428d82f0",
+  "processes": 240,
+  "exact_mark_audits": 960,
+  "note": "Medians of independent process means; warm iterations are subsamples. No end-to-end claim.",
+  "rows": [
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 256.294272,
+      "current_ms": 278.2685525,
+      "median_change_percent": 8.573847682401592,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 265.962008,
+          "current": 245.385022,
+          "change_percent": -7.736814049020124
+        },
+        {
+          "repetition": 2,
+          "current": 259.029763,
+          "legacy": 243.032817,
+          "change_percent": 6.582216425529075
+        },
+        {
+          "repetition": 3,
+          "legacy": 246.626536,
+          "current": 310.980949,
+          "change_percent": 26.09387215331931
+        },
+        {
+          "repetition": 4,
+          "current": 297.507342,
+          "legacy": 302.677253,
+          "change_percent": -1.7080606318308322
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 275.7736845,
+      "current_ms": 293.6069073333333,
+      "median_change_percent": 6.466615139753595,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 291.553975,
+          "current": 276.1832846666667,
+          "change_percent": -5.271987916931442
+        },
+        {
+          "repetition": 2,
+          "current": 270.5150713333333,
+          "legacy": 257.50013966666666,
+          "change_percent": 5.05433965337434
+        },
+        {
+          "repetition": 3,
+          "legacy": 276.519996,
+          "current": 312.9462023333333,
+          "change_percent": 13.17308218582982
+        },
+        {
+          "repetition": 4,
+          "current": 311.03053,
+          "legacy": 275.027373,
+          "change_percent": 13.090754061051225
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 344.89004650000004,
+      "current_ms": 266.50977950000004,
+      "median_change_percent": -22.726160930248817,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 281.214587,
+          "current": 211.475531,
+          "change_percent": -24.799231342860605
+        },
+        {
+          "repetition": 2,
+          "current": 262.466211,
+          "legacy": 342.778565,
+          "change_percent": -23.429806353264837
+        },
+        {
+          "repetition": 3,
+          "legacy": 398.931195,
+          "current": 290.74621,
+          "change_percent": -27.11870777616174
+        },
+        {
+          "repetition": 4,
+          "current": 270.553348,
+          "legacy": 347.001528,
+          "change_percent": -22.0310787795724
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 369.3819966666667,
+      "current_ms": 291.2114798333333,
+      "median_change_percent": -21.162514020377408,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 300.6990673333333,
+          "current": 231.79752833333333,
+          "change_percent": -22.913785403803956
+        },
+        {
+          "repetition": 2,
+          "current": 278.4988236666667,
+          "legacy": 366.510034,
+          "change_percent": -24.01331537169684
+        },
+        {
+          "repetition": 3,
+          "legacy": 434.035691,
+          "current": 327.6230376666667,
+          "change_percent": -24.51702833197036
+        },
+        {
+          "repetition": 4,
+          "current": 303.924136,
+          "legacy": 372.25395933333334,
+          "change_percent": -18.35570089186015
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 355.79903249999995,
+      "current_ms": 253.629671,
+      "median_change_percent": -28.715469174301354,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 356.440298,
+          "current": 300.427016,
+          "change_percent": -15.714632243966985
+        },
+        {
+          "repetition": 2,
+          "current": 233.329561,
+          "legacy": 367.916769,
+          "change_percent": -36.58088441193067
+        },
+        {
+          "repetition": 3,
+          "legacy": 355.157767,
+          "current": 273.929781,
+          "change_percent": -22.87095864075528
+        },
+        {
+          "repetition": 4,
+          "current": 230.938489,
+          "legacy": 301.621084,
+          "change_percent": -23.434235452850505
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 357.459813,
+      "current_ms": 272.5448001666667,
+      "median_change_percent": -23.755121483637463,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 391.9921323333333,
+          "current": 302.5293286666667,
+          "change_percent": -22.82260185533298
+        },
+        {
+          "repetition": 2,
+          "current": 241.61121166666666,
+          "legacy": 340.3328256666667,
+          "change_percent": -29.007373534015567
+        },
+        {
+          "repetition": 3,
+          "legacy": 374.5868003333333,
+          "current": 296.9759826666667,
+          "change_percent": -20.71904765400252
+        },
+        {
+          "repetition": 4,
+          "current": 248.11361766666667,
+          "legacy": 336.19087733333333,
+          "change_percent": -26.198587054263832
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 295.5479745,
+      "current_ms": 260.6973625,
+      "median_change_percent": -11.791862914628105,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 285.997124,
+          "current": 245.776942,
+          "change_percent": -14.063142117471084
+        },
+        {
+          "repetition": 2,
+          "current": 320.162259,
+          "legacy": 305.098825,
+          "change_percent": 4.937231075865345
+        },
+        {
+          "repetition": 3,
+          "legacy": 258.577137,
+          "current": 224.542242,
+          "change_percent": -13.162375991501529
+        },
+        {
+          "repetition": 4,
+          "current": 275.617783,
+          "legacy": 318.078308,
+          "change_percent": -13.349079120478724
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 322.931988,
+      "current_ms": 288.7888306666666,
+      "median_change_percent": -10.572863204042015,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 317.897341,
+          "current": 281.747722,
+          "change_percent": -11.371475736879466
+        },
+        {
+          "repetition": 2,
+          "current": 305.611399,
+          "legacy": 327.966635,
+          "change_percent": -6.816314104634447
+        },
+        {
+          "repetition": 3,
+          "legacy": 278.2436786666667,
+          "current": 245.43200833333336,
+          "change_percent": -11.792422559450644
+        },
+        {
+          "repetition": 4,
+          "current": 295.8299393333333,
+          "legacy": 340.0802986666667,
+          "change_percent": -13.011738553166186
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 246.0006535,
+      "current_ms": 250.312126,
+      "median_change_percent": 1.7526264417017101,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 189.032879,
+          "current": 186.230795,
+          "change_percent": -1.482326257116362
+        },
+        {
+          "repetition": 2,
+          "current": 255.961635,
+          "legacy": 253.871033,
+          "change_percent": 0.8234897756137505
+        },
+        {
+          "repetition": 3,
+          "legacy": 269.214525,
+          "current": 272.121199,
+          "change_percent": 1.079686915109801
+        },
+        {
+          "repetition": 4,
+          "current": 244.662617,
+          "legacy": 238.130274,
+          "change_percent": 2.743180398809786
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 274.8357095,
+      "current_ms": 267.96574583333336,
+      "median_change_percent": -2.4996619541052256,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 206.12730633333334,
+          "current": 204.08067766666665,
+          "change_percent": -0.9928954601274631
+        },
+        {
+          "repetition": 2,
+          "current": 273.032709,
+          "legacy": 290.32555,
+          "change_percent": -5.95636209076329
+        },
+        {
+          "repetition": 3,
+          "legacy": 289.809117,
+          "current": 288.3029186666667,
+          "change_percent": -0.5197208248397867
+        },
+        {
+          "repetition": 4,
+          "current": 262.89878266666665,
+          "legacy": 259.862302,
+          "change_percent": 1.1684960239698894
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 101.28250299999999,
+      "current_ms": 99.03747200000001,
+      "median_change_percent": -2.2166030000265513,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 77.215941,
+          "current": 79.723639,
+          "change_percent": 3.2476428669049096
+        },
+        {
+          "repetition": 2,
+          "current": 94.525654,
+          "legacy": 96.903243,
+          "change_percent": -2.453570103943792
+        },
+        {
+          "repetition": 3,
+          "legacy": 121.190859,
+          "current": 119.357891,
+          "change_percent": -1.5124639062093048
+        },
+        {
+          "repetition": 4,
+          "current": 103.54929,
+          "legacy": 105.661763,
+          "change_percent": -1.999278584817854
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 103.16415866666667,
+      "current_ms": 101.16597066666665,
+      "median_change_percent": -1.9369013675149982,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 84.33482733333332,
+          "current": 80.66707766666667,
+          "change_percent": -4.3490332317511875
+        },
+        {
+          "repetition": 2,
+          "current": 97.07926633333332,
+          "legacy": 101.508475,
+          "change_percent": -4.363388048797578
+        },
+        {
+          "repetition": 3,
+          "legacy": 118.699297,
+          "current": 117.66897833333333,
+          "change_percent": -0.868007387328229
+        },
+        {
+          "repetition": 4,
+          "current": 105.252675,
+          "legacy": 104.81984233333333,
+          "change_percent": 0.4129300875021613
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 35.745072,
+      "current_ms": 16.636464,
+      "median_change_percent": -53.45802073080173,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 39.298083,
+          "current": 17.716926,
+          "change_percent": -54.91656425072948
+        },
+        {
+          "repetition": 2,
+          "current": 15.321744,
+          "legacy": 31.328315,
+          "change_percent": -51.09298409442064
+        },
+        {
+          "repetition": 3,
+          "legacy": 49.462698,
+          "current": 23.239084,
+          "change_percent": -53.01695026826074
+        },
+        {
+          "repetition": 4,
+          "current": 15.556002,
+          "legacy": 32.192061,
+          "change_percent": -51.677520740284386
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 33.9616245,
+      "current_ms": 15.098176166666667,
+      "median_change_percent": -55.543421762210855,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 36.316015,
+          "current": 16.032538666666667,
+          "change_percent": -55.85270391956092
+        },
+        {
+          "repetition": 2,
+          "current": 13.847020333333335,
+          "legacy": 30.572576666666667,
+          "change_percent": -54.70770918556313
+        },
+        {
+          "repetition": 3,
+          "legacy": 48.711503666666665,
+          "current": 20.403414,
+          "change_percent": -58.11376684320653
+        },
+        {
+          "repetition": 4,
+          "current": 14.163813666666666,
+          "legacy": 31.607234,
+          "change_percent": -55.18806338236788
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 45.570864,
+      "current_ms": 19.516578000000003,
+      "median_change_percent": -57.173122721570515,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 53.336375,
+          "current": 23.64521,
+          "change_percent": -55.66775957308685
+        },
+        {
+          "repetition": 2,
+          "current": 16.254329,
+          "legacy": 45.607232,
+          "change_percent": -64.36019401484397
+        },
+        {
+          "repetition": 3,
+          "legacy": 41.471316,
+          "current": 18.586679,
+          "change_percent": -55.18184424145113
+        },
+        {
+          "repetition": 4,
+          "current": 20.446477,
+          "legacy": 45.534496,
+          "change_percent": -55.09673149780772
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 44.96326966666667,
+      "current_ms": 18.15492016666667,
+      "median_change_percent": -59.62277587627097,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 51.326726666666666,
+          "current": 21.884998,
+          "change_percent": -57.361399369711094
+        },
+        {
+          "repetition": 2,
+          "current": 15.622493666666665,
+          "legacy": 45.512172,
+          "change_percent": -65.67403184654279
+        },
+        {
+          "repetition": 3,
+          "legacy": 40.224911666666664,
+          "current": 17.376997666666668,
+          "change_percent": -56.800408138455815
+        },
+        {
+          "repetition": 4,
+          "current": 18.93284266666667,
+          "legacy": 44.41436733333334,
+          "change_percent": -57.37225631387657
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 76.62092849999999,
+      "current_ms": 63.0786435,
+      "median_change_percent": -17.674394274666085,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 81.294142,
+          "current": 61.153738,
+          "change_percent": -24.774729770811778
+        },
+        {
+          "repetition": 2,
+          "current": 58.949674,
+          "legacy": 63.267121,
+          "change_percent": -6.8241559466567185
+        },
+        {
+          "repetition": 3,
+          "legacy": 79.115836,
+          "current": 66.899135,
+          "change_percent": -15.441536887760376
+        },
+        {
+          "repetition": 4,
+          "current": 65.003549,
+          "legacy": 74.126021,
+          "change_percent": -12.306706709645166
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 75.57967583333334,
+      "current_ms": 63.30425583333333,
+      "median_change_percent": -16.24169442995429,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 77.74799566666667,
+          "current": 62.114683666666664,
+          "change_percent": -20.107672057586633
+        },
+        {
+          "repetition": 2,
+          "current": 56.07956033333333,
+          "legacy": 62.929534,
+          "change_percent": -10.885149199844168
+        },
+        {
+          "repetition": 3,
+          "legacy": 78.92670233333332,
+          "current": 66.56227833333334,
+          "change_percent": -15.665704551776372
+        },
+        {
+          "repetition": 4,
+          "current": 64.493828,
+          "legacy": 73.411356,
+          "change_percent": -12.147341345935637
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 79.99803600000001,
+      "current_ms": 82.29121549999999,
+      "median_change_percent": 2.8665447486735607,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 77.794891,
+          "current": 76.774999,
+          "change_percent": -1.31100125842456
+        },
+        {
+          "repetition": 2,
+          "current": 87.090353,
+          "legacy": 82.201181,
+          "change_percent": 5.947812355639992
+        },
+        {
+          "repetition": 3,
+          "legacy": 170.764311,
+          "current": 139.495712,
+          "change_percent": -18.310968384957206
+        },
+        {
+          "repetition": 4,
+          "current": 77.492078,
+          "legacy": 74.780093,
+          "change_percent": 3.6266135694696278
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "chain",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 81.84959616666667,
+      "current_ms": 85.70367616666667,
+      "median_change_percent": 4.7087342888682215,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 79.96517266666667,
+          "current": 80.004518,
+          "change_percent": 0.0492030868204818
+        },
+        {
+          "repetition": 2,
+          "current": 91.40283433333333,
+          "legacy": 83.73401966666667,
+          "change_percent": 9.15854117262629
+        },
+        {
+          "repetition": 3,
+          "legacy": 176.727085,
+          "current": 140.20057033333333,
+          "change_percent": -20.668317290848016
+        },
+        {
+          "repetition": 4,
+          "current": 79.60697666666667,
+          "legacy": 79.246899,
+          "change_percent": 0.4543744565533858
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 475.201013,
+      "current_ms": 480.4686385,
+      "median_change_percent": 1.108504686626155,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 560.833203,
+          "current": 582.941719,
+          "change_percent": 3.9420840067488028
+        },
+        {
+          "repetition": 2,
+          "current": 544.103826,
+          "legacy": 540.380276,
+          "change_percent": 0.6890610492970684
+        },
+        {
+          "repetition": 3,
+          "legacy": 407.830511,
+          "current": 416.101062,
+          "change_percent": 2.0279382677182767
+        },
+        {
+          "repetition": 4,
+          "current": 416.833451,
+          "legacy": 410.02175,
+          "change_percent": 1.6613023577407793
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 498.381213,
+      "current_ms": 493.07021266666663,
+      "median_change_percent": -1.0656501880084601,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 583.8681423333334,
+          "current": 585.4589206666666,
+          "change_percent": 0.2724550661346026
+        },
+        {
+          "repetition": 2,
+          "current": 553.0574523333333,
+          "legacy": 563.457645,
+          "change_percent": -1.845780735953384
+        },
+        {
+          "repetition": 3,
+          "legacy": 433.0909326666667,
+          "current": 430.5623573333333,
+          "change_percent": -0.5838439788531713
+        },
+        {
+          "repetition": 4,
+          "current": 433.082973,
+          "legacy": 433.304781,
+          "change_percent": -0.05118983443666014
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 450.65189,
+      "current_ms": 456.79474000000005,
+      "median_change_percent": 1.3631031260070925,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 467.63391,
+          "current": 430.003778,
+          "change_percent": -8.046921148211862
+        },
+        {
+          "repetition": 2,
+          "current": 483.585702,
+          "legacy": 450.758421,
+          "change_percent": 7.282677254741743
+        },
+        {
+          "repetition": 3,
+          "legacy": 374.826609,
+          "current": 389.547339,
+          "change_percent": 3.9273439095675267
+        },
+        {
+          "repetition": 4,
+          "current": 497.325183,
+          "legacy": 450.545359,
+          "change_percent": 10.382933275315342
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 478.33530083333335,
+      "current_ms": 501.1887893333334,
+      "median_change_percent": 4.777713135573669,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 475.5529436666667,
+          "current": 487.106391,
+          "change_percent": 2.429476567688238
+        },
+        {
+          "repetition": 2,
+          "current": 515.2711876666667,
+          "legacy": 502.9782403333333,
+          "change_percent": 2.4440316394575223
+        },
+        {
+          "repetition": 3,
+          "legacy": 405.5257656666667,
+          "current": 432.799187,
+          "change_percent": 6.725447219980452
+        },
+        {
+          "repetition": 4,
+          "current": 523.2556666666667,
+          "legacy": 481.117658,
+          "change_percent": 8.758358369516905
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 455.661304,
+      "current_ms": 380.323453,
+      "median_change_percent": -16.533739059834673,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 473.893554,
+          "current": 397.148575,
+          "change_percent": -16.19456064599688
+        },
+        {
+          "repetition": 2,
+          "current": 363.498331,
+          "legacy": 496.519646,
+          "change_percent": -26.790745556924044
+        },
+        {
+          "repetition": 3,
+          "legacy": 424.444843,
+          "current": 347.328123,
+          "change_percent": -18.16884367234496
+        },
+        {
+          "repetition": 4,
+          "current": 397.177821,
+          "legacy": 437.429054,
+          "change_percent": -9.201774009277397
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 476.2976203333333,
+      "current_ms": 409.966989,
+      "median_change_percent": -13.926299125095841,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 489.387618,
+          "current": 430.879645,
+          "change_percent": -11.95534395396166
+        },
+        {
+          "repetition": 2,
+          "current": 389.054333,
+          "legacy": 529.1209576666666,
+          "change_percent": -26.47156999494721
+        },
+        {
+          "repetition": 3,
+          "legacy": 440.949867,
+          "current": 370.004013,
+          "change_percent": -16.089324276857077
+        },
+        {
+          "repetition": 4,
+          "current": 456.0946386666667,
+          "legacy": 463.2076226666667,
+          "change_percent": -1.535593036887184
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 632.836421,
+      "current_ms": 476.80435,
+      "median_change_percent": -24.655987838601344,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 661.388125,
+          "current": 654.160963,
+          "change_percent": -1.092726301972824
+        },
+        {
+          "repetition": 2,
+          "current": 462.107371,
+          "legacy": 485.368419,
+          "change_percent": -4.792451896216187
+        },
+        {
+          "repetition": 3,
+          "legacy": 604.284717,
+          "current": 486.872714,
+          "change_percent": -19.429914359392942
+        },
+        {
+          "repetition": 4,
+          "current": 466.735986,
+          "legacy": 790.892791,
+          "change_percent": -40.98618784856265
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 617.863323,
+      "current_ms": 542.9306025000001,
+      "median_change_percent": -12.127717848045815,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 684.5845586666667,
+          "current": 624.8279043333333,
+          "change_percent": -8.728893104121216
+        },
+        {
+          "repetition": 2,
+          "current": 486.0223406666667,
+          "legacy": 517.3004846666666,
+          "change_percent": -6.046416913789409
+        },
+        {
+          "repetition": 3,
+          "legacy": 551.1420873333334,
+          "current": 587.3308873333334,
+          "change_percent": 6.566147066557249
+        },
+        {
+          "repetition": 4,
+          "current": 498.5303176666667,
+          "legacy": 700.8775256666667,
+          "change_percent": -28.870551642746655
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 466.487065,
+      "current_ms": 481.180032,
+      "median_change_percent": 3.149705126336144,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 427.892514,
+          "current": 427.239371,
+          "change_percent": -0.15264183845945523
+        },
+        {
+          "repetition": 2,
+          "current": 556.713362,
+          "legacy": 496.438321,
+          "change_percent": 12.141496425695951
+        },
+        {
+          "repetition": 3,
+          "legacy": 436.535809,
+          "current": 428.295163,
+          "change_percent": -1.8877365453425998
+        },
+        {
+          "repetition": 4,
+          "current": 534.064901,
+          "legacy": 522.050324,
+          "change_percent": 2.301421232333123
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 464.1414095,
+      "current_ms": 507.60542383333336,
+      "median_change_percent": 9.36439055936753,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 458.2820723333333,
+          "current": 479.205506,
+          "change_percent": 4.565623429285703
+        },
+        {
+          "repetition": 2,
+          "current": 556.1463253333334,
+          "legacy": 470.0007466666667,
+          "change_percent": 18.328817406701425
+        },
+        {
+          "repetition": 3,
+          "legacy": 449.4769486666667,
+          "current": 465.865234,
+          "change_percent": 3.646079155326576
+        },
+        {
+          "repetition": 4,
+          "current": 536.0053416666667,
+          "legacy": 582.5373413333334,
+          "change_percent": -7.987814061869836
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 56.790508,
+      "current_ms": 55.7696585,
+      "median_change_percent": -1.7975706433194905,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 56.56499,
+          "current": 54.635307,
+          "change_percent": -3.41144407521331
+        },
+        {
+          "repetition": 2,
+          "current": 66.553625,
+          "legacy": 64.122183,
+          "change_percent": 3.7918889941722433
+        },
+        {
+          "repetition": 3,
+          "legacy": 57.016026,
+          "current": 56.90401,
+          "change_percent": -0.19646406082387546
+        },
+        {
+          "repetition": 4,
+          "current": 47.845888,
+          "legacy": 48.371282,
+          "change_percent": -1.0861692687822444
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 53.42703016666667,
+      "current_ms": 53.944427833333336,
+      "median_change_percent": 0.9684192908582689,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 53.34505433333334,
+          "current": 54.23972366666666,
+          "change_percent": 1.677136417825853
+        },
+        {
+          "repetition": 2,
+          "current": 63.428596,
+          "legacy": 62.695481666666666,
+          "change_percent": 1.1693256257780726
+        },
+        {
+          "repetition": 3,
+          "legacy": 53.509006,
+          "current": 53.649132,
+          "change_percent": 0.26187367412506823
+        },
+        {
+          "repetition": 4,
+          "current": 45.59433166666666,
+          "legacy": 46.625009,
+          "change_percent": -2.2105675804445113
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 36.630726499999994,
+      "current_ms": 40.0085685,
+      "median_change_percent": 9.221334990448549,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 44.153629,
+          "current": 43.598431,
+          "change_percent": -1.2574232573272837
+        },
+        {
+          "repetition": 2,
+          "current": 41.271931,
+          "legacy": 36.498673,
+          "change_percent": 13.077894640169529
+        },
+        {
+          "repetition": 3,
+          "legacy": 35.039298,
+          "current": 38.745206,
+          "change_percent": 10.576433352060889
+        },
+        {
+          "repetition": 4,
+          "current": 35.219832,
+          "legacy": 36.76278,
+          "change_percent": -4.197038417660481
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 34.63571316666667,
+      "current_ms": 37.59128166666667,
+      "median_change_percent": 8.533297656606154,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 41.153340666666665,
+          "current": 40.822871,
+          "change_percent": -0.80302026837481
+        },
+        {
+          "repetition": 2,
+          "current": 38.27707066666667,
+          "legacy": 34.51670133333334,
+          "change_percent": 10.894347339332455
+        },
+        {
+          "repetition": 3,
+          "legacy": 33.109822333333334,
+          "current": 36.90549266666667,
+          "change_percent": 11.463880099145207
+        },
+        {
+          "repetition": 4,
+          "current": 34.274845666666664,
+          "legacy": 34.754725,
+          "change_percent": -1.3807599781996194
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 52.6643615,
+      "current_ms": 34.519648000000004,
+      "median_change_percent": -34.453495652842946,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 48.997248,
+          "current": 30.660816,
+          "change_percent": -37.42339161579034
+        },
+        {
+          "repetition": 2,
+          "current": 31.574086,
+          "legacy": 54.438287,
+          "change_percent": -42.00022127808687
+        },
+        {
+          "repetition": 3,
+          "legacy": 50.890436,
+          "current": 37.46521,
+          "change_percent": -26.380646453883795
+        },
+        {
+          "repetition": 4,
+          "current": 41.337028,
+          "legacy": 66.744885,
+          "change_percent": -38.06712229708688
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 50.4298665,
+      "current_ms": 34.318008500000005,
+      "median_change_percent": -31.949039563687908,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 48.516246,
+          "current": 29.226364,
+          "change_percent": -39.75963432949862
+        },
+        {
+          "repetition": 2,
+          "current": 30.41138666666667,
+          "legacy": 51.557754333333335,
+          "change_percent": -41.01491218944544
+        },
+        {
+          "repetition": 3,
+          "legacy": 49.30197866666666,
+          "current": 38.22463033333334,
+          "change_percent": -22.4683646233103
+        },
+        {
+          "repetition": 4,
+          "current": 39.19655733333334,
+          "legacy": 64.95949066666667,
+          "change_percent": -39.65999897618244
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 74.890005,
+      "current_ms": 65.4320855,
+      "median_change_percent": -12.629081143738741,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 71.891897,
+          "current": 58.50326,
+          "change_percent": -18.623290744435362
+        },
+        {
+          "repetition": 2,
+          "current": 71.483516,
+          "legacy": 88.807916,
+          "change_percent": -19.507720460414824
+        },
+        {
+          "repetition": 3,
+          "legacy": 77.888113,
+          "current": 73.014211,
+          "change_percent": -6.2575684687598
+        },
+        {
+          "repetition": 4,
+          "current": 59.380655,
+          "legacy": 64.033597,
+          "change_percent": -7.266407351753179
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 71.47561166666667,
+      "current_ms": 61.66869016666667,
+      "median_change_percent": -13.720654180247537,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 67.002087,
+          "current": 54.74232033333334,
+          "change_percent": -18.297589247729952
+        },
+        {
+          "repetition": 2,
+          "current": 69.26612933333332,
+          "legacy": 86.629343,
+          "change_percent": -20.043109026772466
+        },
+        {
+          "repetition": 3,
+          "legacy": 75.94913633333333,
+          "current": 68.59506,
+          "change_percent": -9.68289659155175
+        },
+        {
+          "repetition": 4,
+          "current": 54.630761,
+          "legacy": 61.890641,
+          "change_percent": -11.730174195481357
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 62.9694675,
+      "current_ms": 66.7599225,
+      "median_change_percent": 6.019512551856976,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 79.863158,
+          "current": 83.777438,
+          "change_percent": 4.901233682745176
+        },
+        {
+          "repetition": 2,
+          "current": 55.574271,
+          "legacy": 52.421897,
+          "change_percent": 6.013467997924615
+        },
+        {
+          "repetition": 3,
+          "legacy": 49.361135,
+          "current": 48.438656,
+          "change_percent": -1.8688366870008077
+        },
+        {
+          "repetition": 4,
+          "current": 77.945574,
+          "legacy": 73.517038,
+          "change_percent": 6.023822668154821
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 60.32075866666667,
+      "current_ms": 61.82747783333333,
+      "median_change_percent": 2.497845186253067,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 75.915535,
+          "current": 76.32276433333332,
+          "change_percent": 0.5364242421967091
+        },
+        {
+          "repetition": 2,
+          "current": 51.94646766666666,
+          "legacy": 51.24510866666667,
+          "change_percent": 1.3686359893626543
+        },
+        {
+          "repetition": 3,
+          "legacy": 47.14880133333334,
+          "current": 47.71032233333334,
+          "change_percent": 1.1909549853243329
+        },
+        {
+          "repetition": 4,
+          "current": 71.708488,
+          "legacy": 69.39640866666667,
+          "change_percent": 3.331698826720264
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 338.5849255,
+      "current_ms": 356.6627175,
+      "median_change_percent": 5.339219391797756,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 371.462382,
+          "current": 326.795113,
+          "change_percent": -12.024708601583233
+        },
+        {
+          "repetition": 2,
+          "current": 300.212224,
+          "legacy": 288.144622,
+          "change_percent": 4.188036520077731
+        },
+        {
+          "repetition": 3,
+          "legacy": 345.205318,
+          "current": 403.873927,
+          "change_percent": 16.995279603427193
+        },
+        {
+          "repetition": 4,
+          "current": 386.530322,
+          "legacy": 331.964533,
+          "change_percent": 16.437234576502192
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 366.2493815,
+      "current_ms": 380.35204416666664,
+      "median_change_percent": 3.8505628620881582,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 372.6585723333333,
+          "current": 356.5018583333333,
+          "change_percent": -4.335527262619432
+        },
+        {
+          "repetition": 2,
+          "current": 303.4426026666667,
+          "legacy": 319.461148,
+          "change_percent": -5.014238956323192
+        },
+        {
+          "repetition": 3,
+          "legacy": 428.7245423333333,
+          "current": 489.5261663333333,
+          "change_percent": 14.181978869016266
+        },
+        {
+          "repetition": 4,
+          "current": 404.20223,
+          "legacy": 359.8401906666667,
+          "change_percent": 12.328261401580765
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 230.6857345,
+      "current_ms": 222.6109405,
+      "median_change_percent": -3.5003438845066515,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 226.696146,
+          "current": 205.245733,
+          "change_percent": -9.46218688693543
+        },
+        {
+          "repetition": 2,
+          "current": 237.396844,
+          "legacy": 213.212127,
+          "change_percent": 11.343030689806866
+        },
+        {
+          "repetition": 3,
+          "legacy": 311.275781,
+          "current": 268.956325,
+          "change_percent": -13.59548624825393
+        },
+        {
+          "repetition": 4,
+          "current": 207.825037,
+          "legacy": 234.675323,
+          "change_percent": -11.441461188486347
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 247.9938975,
+      "current_ms": 234.85079266666668,
+      "median_change_percent": -5.299769456356618,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 246.79510633333334,
+          "current": 222.43093466666664,
+          "change_percent": -9.872226410259232
+        },
+        {
+          "repetition": 2,
+          "current": 231.65898133333334,
+          "legacy": 248.03854366666667,
+          "change_percent": -6.603635907226357
+        },
+        {
+          "repetition": 3,
+          "legacy": 309.8854273333333,
+          "current": 291.0864306666667,
+          "change_percent": -6.066434562101952
+        },
+        {
+          "repetition": 4,
+          "current": 238.042604,
+          "legacy": 247.94925133333334,
+          "change_percent": -3.995433452636332
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 331.7214585,
+      "current_ms": 238.9377445,
+      "median_change_percent": -27.97036839870278,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 380.206577,
+          "current": 256.031604,
+          "change_percent": -32.65986979494044
+        },
+        {
+          "repetition": 2,
+          "current": 334.771073,
+          "legacy": 416.940698,
+          "change_percent": -19.70774870243058
+        },
+        {
+          "repetition": 3,
+          "legacy": 283.23634,
+          "current": 221.843885,
+          "change_percent": -21.675345402359024
+        },
+        {
+          "repetition": 4,
+          "current": 210.475892,
+          "legacy": 269.065499,
+          "change_percent": -21.77522098438939
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 344.13669849999997,
+      "current_ms": 261.27884016666667,
+      "median_change_percent": -24.077019014388345,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 384.75434466666667,
+          "current": 280.1660593333333,
+          "change_percent": -27.183133025812566
+        },
+        {
+          "repetition": 2,
+          "current": 418.359497,
+          "legacy": 418.96098333333333,
+          "change_percent": -0.14356619285830208
+        },
+        {
+          "repetition": 3,
+          "legacy": 303.5190523333333,
+          "current": 242.391621,
+          "change_percent": -20.13956977771578
+        },
+        {
+          "repetition": 4,
+          "current": 229.06419433333335,
+          "legacy": 295.0080283333333,
+          "change_percent": -22.353233697589136
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 463.6477225,
+      "current_ms": 378.8875385,
+      "median_change_percent": -18.281160434256204,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 464.520775,
+          "current": 430.434732,
+          "change_percent": -7.337894198596395
+        },
+        {
+          "repetition": 2,
+          "current": 386.153101,
+          "legacy": 441.047321,
+          "change_percent": -12.446333394688057
+        },
+        {
+          "repetition": 3,
+          "legacy": 540.700429,
+          "current": 371.621976,
+          "change_percent": -31.27026425939824
+        },
+        {
+          "repetition": 4,
+          "current": 365.653044,
+          "legacy": 462.77467,
+          "change_percent": -20.9868068189644
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 483.9446365,
+      "current_ms": 400.25831816666664,
+      "median_change_percent": -17.292539687715568,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 500.7422926666667,
+          "current": 458.867867,
+          "change_percent": -8.362470332527238
+        },
+        {
+          "repetition": 2,
+          "current": 411.3293303333333,
+          "legacy": 449.142011,
+          "change_percent": -8.418869698356213
+        },
+        {
+          "repetition": 3,
+          "legacy": 467.1469803333333,
+          "current": 389.187306,
+          "change_percent": -16.688468001592373
+        },
+        {
+          "repetition": 4,
+          "current": 382.745511,
+          "legacy": 530.7462093333334,
+          "change_percent": -27.88539903454722
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 364.5703805,
+      "current_ms": 409.88472950000005,
+      "median_change_percent": 12.429520176008936,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 339.815405,
+          "current": 377.527641,
+          "change_percent": 11.097859439303527
+        },
+        {
+          "repetition": 2,
+          "current": 392.055511,
+          "legacy": 380.138477,
+          "change_percent": 3.13491917315174
+        },
+        {
+          "repetition": 3,
+          "legacy": 452.169856,
+          "current": 427.713948,
+          "change_percent": -5.408566642708701
+        },
+        {
+          "repetition": 4,
+          "current": 540.752039,
+          "legacy": 349.002284,
+          "change_percent": 54.942263644326175
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 380.62987933333335,
+      "current_ms": 440.85907133333336,
+      "median_change_percent": 15.823558598576227,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 377.83208566666667,
+          "current": 434.8433726666667,
+          "change_percent": 15.089053884718751
+        },
+        {
+          "repetition": 2,
+          "current": 372.9257976666667,
+          "legacy": 383.427673,
+          "change_percent": -2.7389455881378977
+        },
+        {
+          "repetition": 3,
+          "legacy": 455.322111,
+          "current": 450.3680363333333,
+          "change_percent": -1.088037357945637
+        },
+        {
+          "repetition": 4,
+          "current": 446.87477,
+          "legacy": 364.50885,
+          "change_percent": 22.596411582325103
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 41.914627499999995,
+      "current_ms": 42.478899999999996,
+      "median_change_percent": 1.346242430521416,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 37.687441,
+          "current": 44.391857,
+          "change_percent": 17.78952304031469
+        },
+        {
+          "repetition": 2,
+          "current": 39.800754,
+          "legacy": 43.230337,
+          "change_percent": -7.933278428988421
+        },
+        {
+          "repetition": 3,
+          "legacy": 53.200414,
+          "current": 61.564717,
+          "change_percent": 15.722251710296842
+        },
+        {
+          "repetition": 4,
+          "current": 40.565943,
+          "legacy": 40.598918,
+          "change_percent": -0.08122137639234861
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 40.46471483333333,
+      "current_ms": 41.36939433333333,
+      "median_change_percent": 2.2357243927856763,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 38.413860666666665,
+          "current": 43.277376333333336,
+          "change_percent": 12.660835391864044
+        },
+        {
+          "repetition": 2,
+          "current": 38.723945,
+          "legacy": 41.096015666666666,
+          "change_percent": -5.772021029743457
+        },
+        {
+          "repetition": 3,
+          "legacy": 52.41201733333334,
+          "current": 58.93841166666667,
+          "change_percent": 12.452095273926101
+        },
+        {
+          "repetition": 4,
+          "current": 39.461412333333335,
+          "legacy": 39.833414,
+          "change_percent": -0.9338935062574882
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "first",
+      "legacy_ms": 37.3042925,
+      "current_ms": 19.028441,
+      "median_change_percent": -48.99128297366852,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 56.469741,
+          "current": 37.965746,
+          "change_percent": -32.76798276797479
+        },
+        {
+          "repetition": 2,
+          "current": 18.003317,
+          "legacy": 32.907571,
+          "change_percent": -45.291261393920564
+        },
+        {
+          "repetition": 3,
+          "legacy": 37.119061,
+          "current": 19.684457,
+          "change_percent": -46.96941013674889
+        },
+        {
+          "repetition": 4,
+          "current": 18.372425,
+          "legacy": 37.489524,
+          "change_percent": -50.99317612034765
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-forward",
+      "phase": "warm",
+      "legacy_ms": 34.6328325,
+      "current_ms": 16.487107833333333,
+      "median_change_percent": -52.39457288590723,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 51.92467833333333,
+          "current": 33.519643333333335,
+          "change_percent": -35.44564086049385
+        },
+        {
+          "repetition": 2,
+          "current": 15.426320333333335,
+          "legacy": 30.994871333333332,
+          "change_percent": -50.229442260200166
+        },
+        {
+          "repetition": 3,
+          "legacy": 34.116083333333336,
+          "current": 16.78765466666667,
+          "change_percent": -50.7925499458955
+        },
+        {
+          "repetition": 4,
+          "current": 16.186561,
+          "legacy": 35.14958166666666,
+          "change_percent": -53.9494917649328
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "first",
+      "legacy_ms": 42.166722,
+      "current_ms": 22.7610205,
+      "median_change_percent": -46.02136609053936,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 54.029071,
+          "current": 41.236701,
+          "change_percent": -23.676827610084217
+        },
+        {
+          "repetition": 2,
+          "current": 20.47035,
+          "legacy": 37.522176,
+          "change_percent": -45.44466184477148
+        },
+        {
+          "repetition": 3,
+          "legacy": 39.913618,
+          "current": 22.783793,
+          "change_percent": -42.917244435220084
+        },
+        {
+          "repetition": 4,
+          "current": 22.738248,
+          "legacy": 44.419826,
+          "change_percent": -48.810587416528826
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-full",
+      "phase": "warm",
+      "legacy_ms": 38.6183985,
+      "current_ms": 20.461920833333334,
+      "median_change_percent": -47.01509739371161,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 48.595478666666665,
+          "current": 37.922747333333334,
+          "change_percent": -21.96239573344121
+        },
+        {
+          "repetition": 2,
+          "current": 18.004784,
+          "legacy": 35.48663966666666,
+          "change_percent": -49.26320392935861
+        },
+        {
+          "repetition": 3,
+          "legacy": 36.670358,
+          "current": 20.794536,
+          "change_percent": -43.293337905236704
+        },
+        {
+          "repetition": 4,
+          "current": 20.129305666666667,
+          "legacy": 40.566439,
+          "change_percent": -50.379411743124244
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "first",
+      "legacy_ms": 58.081464,
+      "current_ms": 50.202171,
+      "median_change_percent": -13.565933875220493,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 54.680838,
+          "current": 48.092128,
+          "change_percent": -12.049394707520754
+        },
+        {
+          "repetition": 2,
+          "current": 54.293554,
+          "legacy": 61.48209,
+          "change_percent": -11.692081385001707
+        },
+        {
+          "repetition": 3,
+          "legacy": 54.583867,
+          "current": 43.297854,
+          "change_percent": -20.676462882338477
+        },
+        {
+          "repetition": 4,
+          "current": 52.312214,
+          "legacy": 73.657807,
+          "change_percent": -28.97940336453406
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-partial",
+      "phase": "warm",
+      "legacy_ms": 57.35052016666666,
+      "current_ms": 48.340036166666664,
+      "median_change_percent": -15.711250698013867,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 53.47868666666666,
+          "current": 45.984904,
+          "change_percent": -14.012652766466582
+        },
+        {
+          "repetition": 2,
+          "current": 50.695168333333335,
+          "legacy": 61.22235366666666,
+          "change_percent": -17.195002646664005
+        },
+        {
+          "repetition": 3,
+          "legacy": 51.750315,
+          "current": 41.63139866666666,
+          "change_percent": -19.553342493341997
+        },
+        {
+          "repetition": 4,
+          "current": 55.92189533333334,
+          "legacy": 64.96197733333334,
+          "change_percent": -13.915958797887985
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "first",
+      "legacy_ms": 45.0856435,
+      "current_ms": 51.307505,
+      "median_change_percent": 13.800094701986442,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 42.348245,
+          "current": 42.191067,
+          "change_percent": -0.3711558767075296
+        },
+        {
+          "repetition": 2,
+          "current": 54.428316,
+          "legacy": 47.823042,
+          "change_percent": 13.811906820983921
+        },
+        {
+          "repetition": 3,
+          "legacy": 40.969183,
+          "current": 50.953283,
+          "change_percent": 24.369780573852307
+        },
+        {
+          "repetition": 4,
+          "current": 51.661727,
+          "legacy": 53.324077,
+          "change_percent": -3.117447302463394
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "snapshot-sparse",
+      "phase": "warm",
+      "legacy_ms": 42.50043083333333,
+      "current_ms": 47.33620716666667,
+      "median_change_percent": 11.378181911371609,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 40.471823,
+          "current": 40.19991366666667,
+          "change_percent": -0.6718484940333225
+        },
+        {
+          "repetition": 2,
+          "current": 51.322587,
+          "legacy": 44.529038666666665,
+          "change_percent": 15.256445090108839
+        },
+        {
+          "repetition": 3,
+          "legacy": 40.324800333333336,
+          "current": 45.76523433333334,
+          "change_percent": 13.491533634458763
+        },
+        {
+          "repetition": 4,
+          "current": 48.90718,
+          "legacy": 52.251554666666664,
+          "change_percent": -6.40052662165127
+        }
+      ]
+    }
+  ]
+}

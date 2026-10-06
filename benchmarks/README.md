@@ -629,6 +629,9 @@ cache. The paging investigation's paired results remain in the report above.
 The [named-root marking comparison](reports/2026-10-06-collection-mark/README.md)
 records the measured component gain and explains why it does not establish a
 speedup for the unrooted Git-ingestion fixture.
+The [snapshot-pin marking comparison](reports/2026-10-06-snapshot-mark/README.md)
+records the separate snapshot traversal gain, the bounded all-miss fallback,
+its adverse-case tradeoffs and the inconclusive release-ingestion result.
 
 ```console
 $ benchmark run collection-mark --profile smoke --repetitions 1 --output benchmarks/results/collection-mark.json
@@ -643,19 +646,40 @@ All shapes check the exact marked set, cardinality, reopened revision and
 whether the mark set spilled. Repeat `--shape shared|distinct|chain` to select
 shapes; the default runs all three.
 
-Smoke uses 127, 128, 255 and 256 parents; standard adds 257 and 8,192. Both
+Smoke uses 127, 128, 255, 256, 257, 511, 512 and 513 parents; standard adds 8,192. Both
 use memory limits of 256 and 250,000 keys. Shared and chain graphs contain `parents + 1`
 objects and distinct graphs contain `2 * parents`, so the small cases straddle
 the configured 256-key spill threshold in both shapes. The 255/256/257 parent
 cases also cover the traversal's 256-key frontier boundary. The 250,000-key
 limit is the production default and keeps these fixtures' mark sets in memory.
+The 511/512/513 cases bracket two full frontiers, covering the fallback after
+two consecutive snapshot-dependency batches avoid no metadata reads.
 Override with `--parents`, `--memory-limits`, `--iterations` and `--repetitions`.
-Use `--strategy legacy|current` or `--mode named|pins` to select a single path.
+Use `--strategy legacy|current` to select an algorithm, or repeat `--mode` to
+select traversal modes: `named`, `pins`, `snapshot-full`, `snapshot-partial`,
+`snapshot-sparse`, and `snapshot-forward`. The default includes all modes.
+
+`pins` protects every parent through closure pins without a snapshot pin.
+`snapshot-full` protects the final generation without closure pins. Partial
+and sparse modes combine closure pins with a snapshot generation covering
+half the parents (rounded down, at least one) or just the first parent.
+Fixture commits stop at that generation boundary as well as the 512-parent
+batch limit. These cases expose the cost of filtering when few queued keys
+are already marked. Streamed snapshot records and subsequent metadata lookups
+are counted separately; every iteration verifies the exact generation-scan
+count and the full final marked set.
+
+`snapshot-forward` publishes unrooted parents first and their leaves later,
+then pins only the parent generation. Distinct leaves make every queued
+membership check miss; shared leaves and chains exercise repeated and mixed
+old/new dependencies. This is a counterexample to assuming every dependency
+of a snapshot-pinned object belongs to the pinned generation.
 
 Each process runs one strategy and mode. Named roots and pins use independent
 processes; pins therefore provide an independent unchanged-path control. The
 legacy named-root implementation is frozen from commit `3576508` and compiled
-into the same executable as the current path. Matching legacy/current cases
+into the same executable as the current path. The legacy pin implementation
+is frozen from `360539b`. Matching legacy/current cases
 run adjacently, with order reversed on even repetitions. Case-pair order uses
 a fixed shuffle. Each iteration creates fresh traversal state; first/warm
 labels distinguish iterations, not cold OS caches. Warm iterations within a
