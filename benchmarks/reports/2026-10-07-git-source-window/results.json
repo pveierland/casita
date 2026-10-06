@@ -1,0 +1,2071 @@
+{
+  "corpus": {
+    "registered_cases": 8,
+    "checked_samples": 68,
+    "cases": [
+      {
+        "case": "git-closure-source-window-32",
+        "samples": 12,
+        "threshold_bytes": 33554432,
+        "file_bytes": 1048576,
+        "oversized": false,
+        "cold_source_bytes": {
+          "31": 32507129,
+          "32": 33555745,
+          "33": 34604361
+        },
+        "raw_sha256": "df057ef3c025109c6a7b0acd2ead5d14dec40aa192789cde341f3b094619ec3a"
+      },
+      {
+        "case": "git-closure-source-window-128",
+        "samples": 12,
+        "threshold_bytes": 134217728,
+        "file_bytes": 1048576,
+        "oversized": false,
+        "cold_source_bytes": {
+          "127": 133174265,
+          "128": 134222881,
+          "129": 135271497
+        },
+        "raw_sha256": "57de25c9329f4131b4d1513a93c6f293ccfc6921f309edb97335ff6414b48ba9"
+      },
+      {
+        "case": "git-closure-source-window-oversized-32",
+        "samples": 4,
+        "threshold_bytes": 33554432,
+        "file_bytes": 34603008,
+        "oversized": true,
+        "cold_source_bytes": {
+          "2": 69206129
+        },
+        "raw_sha256": "a3e866857480c81179e3eca30a770714a95ac4b954a067d8cb27e51021b1daa7"
+      },
+      {
+        "case": "git-closure-source-window-oversized-128",
+        "samples": 4,
+        "threshold_bytes": 134217728,
+        "file_bytes": 135266304,
+        "oversized": true,
+        "cold_source_bytes": {
+          "2": 270532721
+        },
+        "raw_sha256": "1146bfcb3a40852a358e23c9f5c3a597339f647df1f6fab9ac3dbb5f50d46f1d"
+      },
+      {
+        "case": "git-view-source-window-32",
+        "samples": 12,
+        "threshold_bytes": 33554432,
+        "file_bytes": 65536,
+        "oversized": false,
+        "cold_source_bytes": {
+          "511": 33506468,
+          "512": 33572038,
+          "513": 33637608
+        },
+        "raw_sha256": "9d1b5863e8dc5c64342ed1aed5baf791e96daf05bc44570c9c17a582dc8486df"
+      },
+      {
+        "case": "git-view-source-window-128",
+        "samples": 16,
+        "threshold_bytes": 134217728,
+        "file_bytes": 65536,
+        "oversized": false,
+        "cold_source_bytes": {
+          "2046": 134156418,
+          "2047": 134221988,
+          "2048": 134287558,
+          "2049": 134353128
+        },
+        "raw_sha256": "a78da76410608ae65f2f30c290fde2052df1c89caa35e0c0eb8a9a2f956a79b7"
+      },
+      {
+        "case": "git-view-source-window-oversized-32",
+        "samples": 4,
+        "threshold_bytes": 33554432,
+        "file_bytes": 34603008,
+        "oversized": true,
+        "cold_source_bytes": {
+          "2": 69206282
+        },
+        "raw_sha256": "dd62ee12bd08d75df02058e4c375a9a72b2d64ca051c51ea5d6cb5199e4a2261"
+      },
+      {
+        "case": "git-view-source-window-oversized-128",
+        "samples": 4,
+        "threshold_bytes": 134217728,
+        "file_bytes": 135266304,
+        "oversized": true,
+        "cold_source_bytes": {
+          "2": 270532874
+        },
+        "raw_sha256": "4c0dd38e7add946866bbe6a5f82410885ab80a5e19fb5818e821a909f6e85f13"
+      }
+    ],
+    "limitations": [
+      "Threshold is a reopening trigger, not an RSS or strict group-byte cap.",
+      "Native inventories describe unique reachable/new raw objects; they are not a count of delta-base decoding or OS reads.",
+      "These are correctness/threshold qualification cases, not baseline/candidate performance comparisons."
+    ]
+  },
+  "correctness": {
+    "casita-lib-test": {
+      "passed": 857,
+      "ignored": 53,
+      "all_summaries": [
+        [
+          "857",
+          "0",
+          "53"
+        ]
+      ]
+    },
+    "git_closure_import": {
+      "passed": 16,
+      "ignored": 1,
+      "all_summaries": [
+        [
+          "16",
+          "0",
+          "1"
+        ]
+      ]
+    },
+    "git_closure_custom_formats": {
+      "passed": 10,
+      "ignored": 1,
+      "all_summaries": [
+        [
+          "10",
+          "0",
+          "1"
+        ]
+      ]
+    },
+    "git_import_cli": {
+      "passed": 1,
+      "ignored": 0,
+      "all_summaries": [
+        [
+          "1",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    "git_blob_file": {
+      "passed": 6,
+      "ignored": 1,
+      "all_summaries": [
+        [
+          "6",
+          "0",
+          "1"
+        ]
+      ]
+    }
+  },
+  "view": {
+    "runs": 4,
+    "operation_samples": 16,
+    "roots": {
+      "initial-import": "git.view.v1:XViC7NlQ_Gqq1iAZT43EC37ihDQU8Gt3E0rPweBc60Y",
+      "incremental-import": "git.view.v1:iUi0GRnUdkxR6ndJVoAZom5hWlmoxhDVP-Gp2WFhYmk"
+    },
+    "comparisons": [
+      {
+        "concurrency": 1,
+        "operation": "initial-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 19.07284928,
+            "cpu_seconds": 2.535,
+            "max_rss_bytes": 321054720.0,
+            "input_bytes": 0.0,
+            "output_bytes": 165179392.0
+          },
+          "candidate": {
+            "wall_seconds": 19.9867191485,
+            "cpu_seconds": 2.47,
+            "max_rss_bytes": 225413120.0,
+            "input_bytes": 0.0,
+            "output_bytes": 165187584.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 4.791470089675043,
+          "cpu_seconds": -2.564102564102566,
+          "max_rss_bytes": -29.789812777086723,
+          "output_bytes": 0.004959456443565102
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": -5.793464797171987,
+              "cpu_seconds": -4.597701149425292,
+              "max_rss_bytes": -28.388720530073453,
+              "output_bytes": 0.00495921049368242
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": 21.124424731342373,
+              "cpu_seconds": -0.40650406504064707,
+              "max_rss_bytes": -31.17291384096642,
+              "output_bytes": 0.004959702417850487
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 1,
+        "operation": "incremental-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 6.3725267715,
+            "cpu_seconds": 0.8,
+            "max_rss_bytes": 188719104.0,
+            "input_bytes": 0.0,
+            "output_bytes": 43446272.0
+          },
+          "candidate": {
+            "wall_seconds": 5.5394492325,
+            "cpu_seconds": 0.785,
+            "max_rss_bytes": 172423168.0,
+            "input_bytes": 0.0,
+            "output_bytes": 43438080.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -13.07295471438098,
+          "cpu_seconds": -1.8750000000000044,
+          "max_rss_bytes": -8.635021921257113,
+          "output_bytes": -0.018855472800982653
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": 0.10390176551473562,
+              "cpu_seconds": 2.564102564102577,
+              "max_rss_bytes": -8.070466502215723,
+              "output_bytes": 0.07544322897019562
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": -27.531755023394133,
+              "cpu_seconds": -6.0975609756097615,
+              "max_rss_bytes": -9.19312026586676,
+              "output_bytes": -0.11310084825636446
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 16,
+        "operation": "initial-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 4.1566180455,
+            "cpu_seconds": 1.6500000000000001,
+            "max_rss_bytes": 360775680.0,
+            "input_bytes": 2048.0,
+            "output_bytes": 141991936.0
+          },
+          "candidate": {
+            "wall_seconds": 6.1069545025,
+            "cpu_seconds": 1.5999999999999999,
+            "max_rss_bytes": 255469568.0,
+            "input_bytes": 2048.0,
+            "output_bytes": 142000128.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 46.9212334559211,
+          "cpu_seconds": -3.03030303030305,
+          "max_rss_bytes": -29.188805631244318,
+          "input_bytes": 0.0,
+          "output_bytes": 0.00576934171812038
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": 48.324028255019556,
+              "cpu_seconds": -4.216867469879537,
+              "max_rss_bytes": -29.23586150416306,
+              "input_bytes": -100.0,
+              "output_bytes": 0.011537684963514039
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": 45.51737943103411,
+              "cpu_seconds": -1.8292682926829396,
+              "max_rss_bytes": -29.141924663433205,
+              "output_bytes": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 16,
+        "operation": "incremental-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 1.781080132,
+            "cpu_seconds": 0.66,
+            "max_rss_bytes": 208410624.0,
+            "input_bytes": 0.0,
+            "output_bytes": 37576704.0
+          },
+          "candidate": {
+            "wall_seconds": 2.8117426685,
+            "cpu_seconds": 0.6799999999999999,
+            "max_rss_bytes": 194516992.0,
+            "input_bytes": 0.0,
+            "output_bytes": 37629952.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": 57.86727491831905,
+          "cpu_seconds": 3.0303030303030054,
+          "max_rss_bytes": -6.666470131580238,
+          "output_bytes": 0.14170481796380585
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": 56.636751018160524,
+              "cpu_seconds": 8.955223880596996,
+              "max_rss_bytes": -7.208159589671304,
+              "output_bytes": 0.04358247984310726
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": 59.11396558816839,
+              "cpu_seconds": -3.076923076923077,
+              "max_rss_bytes": -6.120516159583289,
+              "output_bytes": 0.2399127589967298
+            }
+          }
+        ]
+      }
+    ],
+    "source_sha256": "25a2af65c1fa0d4daed8e8bfc100ddc60c867dbcbd8f3024bd9e6daafc9ca781",
+    "limitations": [
+      "Two balanced pairs are a screen; expand adverse or inconsistent outcomes.",
+      "Native CLI uses system allocator; production evaluator MiMalloc qualification is separate.",
+      "I/O includes waited timer/shell children; OS block I/O differs from logical decoded bytes.",
+      "Source fixtures are warmed by generation, packing and validation; no remote/cold-cache claim.",
+      "Unique reachable bytes do not count repeated delta decoding or source reopen events."
+    ]
+  },
+  "view_confirmation": {
+    "runs": 4,
+    "operation_samples": 16,
+    "roots": {
+      "initial-import": "git.view.v1:XViC7NlQ_Gqq1iAZT43EC37ihDQU8Gt3E0rPweBc60Y",
+      "incremental-import": "git.view.v1:iUi0GRnUdkxR6ndJVoAZom5hWlmoxhDVP-Gp2WFhYmk"
+    },
+    "comparisons": [
+      {
+        "concurrency": 1,
+        "operation": "initial-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 23.4513724775,
+            "cpu_seconds": 2.595,
+            "max_rss_bytes": 323645440.0,
+            "input_bytes": 0.0,
+            "output_bytes": 165195776.0
+          },
+          "candidate": {
+            "wall_seconds": 18.4362666015,
+            "cpu_seconds": 2.36,
+            "max_rss_bytes": 226588672.0,
+            "input_bytes": 0.0,
+            "output_bytes": 165224448.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -21.385127377136037,
+          "cpu_seconds": -9.055876685934505,
+          "max_rss_bytes": -29.98860975764095,
+          "output_bytes": 0.017356375988697437
+        },
+        "pairs": [
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": -6.694359629383017,
+              "cpu_seconds": -5.343511450381689,
+              "max_rss_bytes": -29.841607206113054,
+              "output_bytes": 0.00991792913640488
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -36.47529598428855,
+              "cpu_seconds": -12.84046692607006,
+              "max_rss_bytes": -30.135720254222264,
+              "output_bytes": 0.024794822840989994
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 1,
+        "operation": "incremental-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 6.813304295,
+            "cpu_seconds": 0.875,
+            "max_rss_bytes": 190105600.0,
+            "input_bytes": 0.0,
+            "output_bytes": 43450368.0
+          },
+          "candidate": {
+            "wall_seconds": 5.7629362324999995,
+            "cpu_seconds": 0.765,
+            "max_rss_bytes": 173813760.0,
+            "input_bytes": 0.0,
+            "output_bytes": 43462656.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -15.416426700196284,
+          "cpu_seconds": -12.571428571428566,
+          "max_rss_bytes": -8.569889577161327,
+          "output_bytes": 0.02828054298642524
+        },
+        "pairs": [
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": 4.1771243749644915,
+              "cpu_seconds": -10.112359550561777,
+              "max_rss_bytes": -9.876146395817265,
+              "output_bytes": 0.09428625306431293
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -35.15419239715627,
+              "cpu_seconds": -15.116279069767458,
+              "max_rss_bytes": -7.249171306627378,
+              "output_bytes": -0.037700282752117786
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 16,
+        "operation": "initial-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 6.4262917905,
+            "cpu_seconds": 1.6500000000000001,
+            "max_rss_bytes": 360953856.0,
+            "input_bytes": 0.0,
+            "output_bytes": 141963264.0
+          },
+          "candidate": {
+            "wall_seconds": 5.142991758,
+            "cpu_seconds": 1.61,
+            "max_rss_bytes": 256065536.0,
+            "input_bytes": 0.0,
+            "output_bytes": 141971456.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -19.969526351061507,
+          "cpu_seconds": -2.4242424242424288,
+          "max_rss_bytes": -29.058650643698904,
+          "output_bytes": 0.005770506939040132
+        },
+        "pairs": [
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": -5.390980737547613,
+              "cpu_seconds": 1.2499999999999956,
+              "max_rss_bytes": -29.49919626887636,
+              "output_bytes": 0.028857530372561335
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -34.951745379902874,
+              "cpu_seconds": -5.882352941176472,
+              "max_rss_bytes": -28.61595513542413,
+              "output_bytes": -0.017308524448289564
+            }
+          }
+        ]
+      },
+      {
+        "concurrency": 16,
+        "operation": "incremental-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 2.8407128285,
+            "cpu_seconds": 0.64,
+            "max_rss_bytes": 208558080.0,
+            "input_bytes": 0.0,
+            "output_bytes": 37675008.0
+          },
+          "candidate": {
+            "wall_seconds": 2.2447759840000003,
+            "cpu_seconds": 0.655,
+            "max_rss_bytes": 196139008.0,
+            "input_bytes": 0.0,
+            "output_bytes": 37609472.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -20.978426207716183,
+          "cpu_seconds": 2.34375,
+          "max_rss_bytes": -5.954730691805377,
+          "output_bytes": -0.17395085888236572
+        },
+        "pairs": [
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": -5.029700901814149,
+              "cpu_seconds": 6.451612903225823,
+              "max_rss_bytes": -6.712277744015993,
+              "output_bytes": -0.21734405564007853
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -36.803554326593805,
+              "cpu_seconds": -1.5151515151515138,
+              "max_rss_bytes": -5.194396348181963,
+              "output_bytes": -0.13051990428540883
+            }
+          }
+        ]
+      }
+    ],
+    "source_sha256": "4c2047cee32a75bacb1000bc9f871d37b63b938318f5374b8a10bf1d82c54983",
+    "limitations": [
+      "Two balanced pairs are a screen; expand adverse or inconsistent outcomes.",
+      "Native CLI uses system allocator; production evaluator MiMalloc qualification is separate.",
+      "I/O includes waited timer/shell children; OS block I/O differs from logical decoded bytes.",
+      "Source fixtures are warmed by generation, packing and validation; no remote/cold-cache claim.",
+      "Unique reachable bytes do not count repeated delta decoding or source reopen events."
+    ]
+  },
+  "view_paired": {
+    "operation_samples": 16,
+    "pairs_per_operation": 4,
+    "roots": {
+      "initial-import": "git.view.v1:XViC7NlQ_Gqq1iAZT43EC37ihDQU8Gt3E0rPweBc60Y",
+      "incremental-import": "git.view.v1:iUi0GRnUdkxR6ndJVoAZom5hWlmoxhDVP-Gp2WFhYmk"
+    },
+    "comparisons": [
+      {
+        "operation": "initial-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 4.253130458,
+            "cpu_seconds": 1.705,
+            "max_rss_bytes": 361689088.0,
+            "input_bytes": 0.0,
+            "output_bytes": 141946880.0
+          },
+          "candidate": {
+            "wall_seconds": 4.235973810000001,
+            "cpu_seconds": 1.6400000000000001,
+            "max_rss_bytes": 256974848.0,
+            "input_bytes": 0.0,
+            "output_bytes": 141934592.0
+          }
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": 3.8909395491927956,
+              "cpu_seconds": -7.558139534883724,
+              "max_rss_bytes": -28.50730783110791,
+              "output_bytes": 0.005769175296399531
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": 1.3891690573744953,
+              "cpu_seconds": 0.0,
+              "max_rss_bytes": -28.824107061295333,
+              "output_bytes": 0.0
+            }
+          },
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": -2.1840058099435344,
+              "cpu_seconds": -9.944751381215466,
+              "max_rss_bytes": -28.436883740961537,
+              "output_bytes": 0.034637032760853614
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -2.221218472245101,
+              "cpu_seconds": -2.3668639053254337,
+              "max_rss_bytes": -29.705110215905496,
+              "output_bytes": -0.11539682081758151
+            }
+          }
+        ],
+        "change_percent": {
+          "wall_seconds": -0.4033887079040399,
+          "cpu_seconds": -3.8123167155425186,
+          "max_rss_bytes": -28.951451253071813,
+          "output_bytes": -0.00865675948636957
+        }
+      },
+      {
+        "operation": "incremental-import",
+        "medians": {
+          "control": {
+            "wall_seconds": 1.8247064865,
+            "cpu_seconds": 0.685,
+            "max_rss_bytes": 211560448.0,
+            "input_bytes": 0.0,
+            "output_bytes": 37687296.0
+          },
+          "candidate": {
+            "wall_seconds": 1.831724726,
+            "cpu_seconds": 0.675,
+            "max_rss_bytes": 197404672.0,
+            "input_bytes": 2048.0,
+            "output_bytes": 37687296.0
+          }
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": -2.8138501518952586,
+              "cpu_seconds": -10.810810810810823,
+              "max_rss_bytes": -6.976115018937934,
+              "output_bytes": 0.1957372770769794
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": -1.0597987250537733,
+              "cpu_seconds": 4.477611940298498,
+              "max_rss_bytes": -8.476775030495476,
+              "output_bytes": -0.34759939170107
+            }
+          },
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": 1.8437163283011593,
+              "cpu_seconds": -1.4285714285714346,
+              "max_rss_bytes": -5.564254119857514,
+              "output_bytes": 0.37028969723371663
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": 0.31871569106998177,
+              "cpu_seconds": 0.0,
+              "max_rss_bytes": -6.566771208425292,
+              "output_bytes": -0.19552465783184703
+            }
+          }
+        ],
+        "change_percent": {
+          "wall_seconds": 0.38462292713508095,
+          "cpu_seconds": -1.4598540145985384,
+          "max_rss_bytes": -6.691125932953213,
+          "output_bytes": 0.0
+        }
+      }
+    ],
+    "source_sha256": "a3a090e10ab4c0138573759f9a586fbf0310e2e091d6ab91c88c63b2bd03bc74",
+    "limitations": [
+      "Distinct controlled experiment; do not pool with earlier fixture-per-variant screen timings.",
+      "Only concurrency16; one delta-packed fixture, warm source cache, system allocator.",
+      "Fixture fsync removes its pending writes before timing; unrelated host I/O remains uncontrolled.",
+      "Waited child I/O includes GNU time/shell wrapper; memory is GNU-time CLI peakRSS."
+    ]
+  },
+  "production": {
+    "runs": 8,
+    "exact_full_outputs_checked": 8,
+    "reference": {
+      "nixpkgsNarHash": "sha256-CJz71xhCLlRkdFUSQEL0pIAAfcnWFXMzd9vXhPrnrEg=",
+      "outputNames": [
+        "checks",
+        "devShells",
+        "hydraJobs",
+        "overlays",
+        "packages"
+      ],
+      "packageNames": [
+        "default",
+        "dockerImage",
+        "nix",
+        "nix-armv6l-linux",
+        "nix-armv7l-linux",
+        "nix-ccacheStdenv",
+        "nix-clang11Stdenv",
+        "nix-clangStdenv",
+        "nix-gccStdenv",
+        "nix-libcxxStdenv",
+        "nix-static",
+        "nix-stdenv"
+      ],
+      "systemNames": [
+        "aarch64-darwin",
+        "aarch64-linux",
+        "i686-linux",
+        "x86_64-darwin",
+        "x86_64-linux"
+      ]
+    },
+    "fixture": {
+      "scope": "Full production evaluator CLI; local archive and local Git transport of identical pinned nixpkgs input",
+      "expressions": {
+        "archive": {
+          "path": "/tmp/mnos-ingest/evidence/evaluator-integrated-archive.nix",
+          "sha256": "21632f505fb283d599b32e4871f10881f4dbe2b22c9155a0541e80a43be7c8fa"
+        },
+        "git": {
+          "path": "/tmp/mnos-ingest/evidence/evaluator-integrated-git.nix",
+          "sha256": "4eacd37ddae18e0f53112159cc7f623c0f7c80c811035a4b8cbe724b577654b0"
+        }
+      },
+      "reference": {
+        "path": "/tmp/mnos-ingest/evidence/evaluator-integrated-reference.json",
+        "sha256": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3"
+      },
+      "archive": {
+        "path": "/tmp/mnos-ingest/evidence/nix-2.18.1-pinned-nixpkgs.tar.gz",
+        "sha256": "c73cf41ab739a04a3246eef7dde65550b67d777c592b3d8da0ada9f67eb60225",
+        "bytes": 38504473
+      },
+      "nix_revision": "f5f4de6a550327b4b1a06123c2e450f1b92c73b6",
+      "nixpkgs_revision": "31ed632c692e6a36cfc18083b88ece892f863ed4",
+      "nixpkgs_nar_hash": "sha256-CJz71xhCLlRkdFUSQEL0pIAAfcnWFXMzd9vXhPrnrEg=",
+      "change": {
+        "from": "type = \"tarball\"; url = \"file:///tmp/mnos-ingest/evidence/nix-2.18.1-pinned-nixpkgs.tar.gz\";",
+        "to": "type = \"git\"; url = \"file:///home/pveierland/dev/nixpkgs\"; rev = \"31ed632c692e6a36cfc18083b88ece892f863ed4\"; shallow = true;"
+      },
+      "retained_reference_origin": "Previously evaluated full output; not claimed as a CppNix output"
+    },
+    "builds": [
+      {
+        "variant": "control",
+        "path": "/tmp/mnos-ingest/evidence/evaluator-integrated-candidate",
+        "sha256": "6a3c64fb7e450e89bec56d4e6b8e0a80bc29434a1cf9fc04f1a9c36cd1f9977f",
+        "provenance": "verified",
+        "build": {
+          "schema_version": 2,
+          "executable_sha256": "6a3c64fb7e450e89bec56d4e6b8e0a80bc29434a1cf9fc04f1a9c36cd1f9977f",
+          "source_revision": "d27fb6d8f6ca65827a119328f3ce9c0ec64d5ae3",
+          "source_sha256": "6fbfb5bcb7cfc33e2303d80d3a6eccb4c3eb9ff7be14ee28b7863d5dcdacb5fb",
+          "source_dirty": false,
+          "lockfile_sha256": "58857fe892a9b0ae5249b009345e5fb20d34e0250b251e06cfb3484a799d1293",
+          "features": [],
+          "default_features": true,
+          "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (built from a source tarball)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 21.1.8",
+          "rustflags_source": "configuration",
+          "rustflags": "",
+          "target": "x86_64-unknown-linux-gnu",
+          "profile": "release",
+          "cargo_config_sha256": "357c5b967e307ed7d0ba5e84b90e2e15c234e2d7a0b6a5ffa4ea4d668b8202ef",
+          "build_environment": {},
+          "command": [
+            "cargo",
+            "build",
+            "--locked",
+            "--offline",
+            "--release",
+            "-p",
+            "mnos-eval-server",
+            "--message-format=json"
+          ],
+          "casita_source_revision": "90435a1145c10a7492136110f07a3db04df88e7a",
+          "casita_source_sha256": "6fdc3defb6812ac1f4615d76337ced2847eb11a52216c579448ae9f17687a83d",
+          "evaluator_source_sha256": "6fbfb5bcb7cfc33e2303d80d3a6eccb4c3eb9ff7be14ee28b7863d5dcdacb5fb",
+          "allocator": "mimalloc::MiMalloc production executable; default-features=false, no_thp",
+          "reference_libraries": {
+            "LIBARCHIVE": {
+              "path": "/nix/store/hd3akpv03rsvr62h5yk68xxq330mrlx8-libarchive-3.8.4-lib/lib/libarchive.so",
+              "sha256": "9adf6a856ac9b8e70c8170b22694c38229dae27b875a7fe6be536742c1378a27",
+              "include": "/nix/store/hb68cqi6gwbaqgz2azagw53pdqr480p5-libarchive-3.8.4-dev/include",
+              "version": "3.8.4"
+            },
+            "ZLIB": {
+              "path": "/nix/store/xdxxfabbd8w0dadijsd8rkgvnhpn3rkf-zlib-1.3.1/lib/libz.so",
+              "sha256": "571e464d7a9f48f7da70eb0cfc54e0a8bb5412ed78409350de3e798f13e81864",
+              "include": "/nix/store/rvajhfqp83qa64vrm5zrzjaqmxkkn26z-zlib-1.3.1-dev/include",
+              "version": "1.3.1"
+            },
+            "LIBBROTLIDEC": {
+              "path": "/nix/store/ka7244lkykijn9k6p4c8a2acz8yz9pnd-brotli-1.1.0-lib/lib/libbrotlidec.so",
+              "sha256": "17606077182f08337299d5ede51f1aafd925456912a3108df962d9a7bab4a95c",
+              "include": "/nix/store/xfss14xgrnzf92zjvzas6hqaq5i08cpn-brotli-1.1.0-dev/include",
+              "version": "1.1.0"
+            },
+            "LIBGIT2": {
+              "path": "/nix/store/y1pzkk1f1j93c8y3835zzcdyzk2w4w6x-libgit2-1.9.2-lib/lib/libgit2.so",
+              "sha256": "5bd97e06057e0f1b6a96ac3235724a91b2ca5ed9e2b2726c70ca95f6d0f8fb8e",
+              "include": "/nix/store/53vyd09nyql5hfxmyxxdjvl93q0x9inl-libgit2-1.9.2-dev/include",
+              "version": "1.9.2"
+            },
+            "LIBCURL": {
+              "path": "/nix/store/6lyiyj6j012vphfg6x6xky561h975bkd-curl-8.18.0/lib/libcurl.so",
+              "sha256": "e1546015adfb040327066a9e040e0fd15c23fd5fdfec40b8a1b051f514fd2d01",
+              "include": "/nix/store/8q0r9x9y1xp7jg8zgjahac9ygi968zi2-curl-8.18.0-dev/include",
+              "version": "8.18.0"
+            }
+          },
+          "binding_toolchain": {
+            "LIBCLANG_PATH": "/nix/store/a3kjvvlm7f8abcmxh6f8dndiwc4vp726-clang-21.1.8-lib/lib",
+            "BINDGEN_EXTRA_CLANG_ARGS": "-B/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/lib/gcc/x86_64-unknown-linux-gnu/15.3.0 --gcc-toolchain=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0 -B/nix/store/a3kjvvlm7f8abcmxh6f8dndiwc4vp726-clang-21.1.8-lib/lib -nostdlibinc -resource-dir=/nix/store/mn2y6cydn5phwf2hxgfc3n7zjf48d5xg-clang-wrapper-21.1.8/resource-root -idirafter /nix/store/lbjwxax9n0457lgd83rqwpd1l9lgfl7r-glibc-2.42-84-dev/include -fmacro-prefix-map=/nix/store/lbjwxax9n0457lgd83rqwpd1l9lgfl7r-glibc-2.42-84-dev/include=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-glibc-2.42-84-dev/include  -cxx-isystem /nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0 -fmacro-prefix-map=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-gcc-15.3.0/include/c++/15.3.0 -cxx-isystem /nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu -fmacro-prefix-map=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu   -frandom-seed=b0jwx3ja7g -isystem /nix/store/lck8j0ci1qqbhqhqcmwh9w4nj4xans2n-xdotool-4.20260303.1/include -isystem /nix/store/bbd9g4knw3chjhwczbw0srbhz6ghzkgy-imagemagick-7.1.2-31-dev/include -isystem /nix/store/5ca54qw9hzpc1f3dk5x3c9cg3bdb93iv-curl-8.22.0-dev/include -isystem /nix/store/dn0mhjwb80g3s416i3j5nb6sfbm73983-brotli-1.2.0-dev/include -isystem /nix/store/64qispf60bs1g3p7qmj8qd8q7md6barx-krb5-1.22.2-dev/include -isystem /nix/store/0dxp0bh6cjmxcsn77q5z9zaixv8f1aml-nghttp2-1.70.0-dev/include -isystem /nix/store/9ycqykfw4zc1544kfimyz37k9a4zfv5n-nghttp3-1.16.0-dev/include -isystem /nix/store/ainq5bmz60y52n0c88wbq0lsx771f3jy-ngtcp2-1.23.0-dev/include -isystem /nix/store/r6bfmzfg56fhr4nnq7xjkk06shs589a1-libidn2-2.3.8-dev/include -isystem /nix/store/mij14pdz6mld0xqg5c6s07mrhglwrz7r-openssl-3.6.4-dev/include -isystem /nix/store/9dd9sszhpxxqjfxwf51g173rypgbp7pf-libpsl-0.21.5-dev/include -isystem /nix/store/v7pn8qkgz9w1r8mhy13z1prna98cc2by-libssh2-1.11.1-dev/include -isystem /nix/store/k0jg46fv3kwkn14pq3wzryan72rki8yp-zlib-1.3.2-dev/include -isystem /nix/store/sqg55j6303c9x9jgjvf8rpi3q79x9ngv-zstd-1.5.7-dev/include -isystem /nix/store/cmyf4p98lh45zcrc1iy4lwd8nhzk2nsi-bzip2-1.0.8-dev/include -isystem /nix/store/xa5glgq2k665cnhn8qmslcfq4rw71ja8-freetype-2.14.3-dev/include -isystem /nix/store/qd2kgq5l737ck0slyfp9av1a72mwqnw0-libpng-apng-1.6.58-dev/include -isystem /nix/store/yl2lwwx4p4bbv99b9vb03s60qk05fh7i-libjpeg-turbo-3.1.4.1-dev/include -isystem /nix/store/vasjqwfyay1kag87xllnrlca8dzzzmgs-lcms2-2.19.1-dev/include -isystem /nix/store/4wy6f83dfr1s7sj4fivjryx8p50rrhiy-libx11-1.8.13-dev/include -isystem /nix/store/kd572hl0kxkhdx9d3lnbp4f1fzq3h4cd-xorgproto-2025.1/include -isystem /nix/store/ik3gj9ydkjlf9pjj75g1n9shpldhb7pk-libxt-1.3.1-dev/include -isystem /nix/store/ww768ivqk9wvsldbd4299qsw7qbql8rb-libsm-1.2.6-dev/include -isystem /nix/store/yanlsh7g4wk22v14ymbn8kj8471970s6-libice-1.1.2-dev/include -isystem /nix/store/9wh3vnl7plpk052nczlzyh3v7zb3jhkw-libwebp-1.6.0/include -isystem /nix/store/r7fdjqyx0jhyzqjiykkxxfljmcvcr8v1-fftw-double-3.3.11-dev/include -isystem /nix/store/nrhw8ay4r9vyb0b6sj7rz91wmhx9aa15-nix-2.34.8-dev/include -isystem /nix/store/md7xcvr2bddhxqfwpihjg0rdb0f9yhw3-nix-cmd-2.34.8-dev/include -isystem /nix/store/kn5a85s018r96dnhnnmnayyfcj375adv-nix-util-2.34.8-dev/include -isystem /nix/store/20ndisq4ywlcrcflny4fngncwp3azyqz-boost-1.89.0-dev/include -isystem /nix/store/hq8zqc1b5y0llk0h278b2vv2gxrz9mr5-libarchive-3.8.9-dev/include -isystem /nix/store/k4rkzppks3mqyyzvqlymjinlgn0jx598-attr-2.6.0-dev/include -isystem /nix/store/pys089iipaa8lzifk454xmbw7gvk8k71-acl-2.4.0-dev/include -isystem /nix/store/hl8ixlmpd3qzdqd0xy0j6rl665fgb2wy-nlohmann_json-3.12.0/include -isystem /nix/store/dzjdhjxdlwbsnkw55waj4ym711vnwq3n-nix-store-2.34.8-dev/include -isystem /nix/store/5k79435lajqs3z2wh1p9fw2zchm5gr3f-nix-fetchers-2.34.8-dev/include -isystem /nix/store/yvcw9kql0qlr6wy1bww2r5wypbnxn5m7-nix-expr-2.34.8-dev/include -isystem /nix/store/7k31v9zl7a7n9wgw2m9qvdcblczk1lgw-boehm-gc-8.2.12-dev/include -isystem /nix/store/lv7lkvli198brr0bby46zszmhr7hfyzn-nix-flake-2.34.8-dev/include -isystem /nix/store/27bk6kppddrj91x10x2gbj2lncybvwbr-nix-main-2.34.8-dev/include -isystem /nix/store/5h9y2snj51c9cm5g67vwbnplbkhrcbdv-nix-expr-c-2.34.8-dev/include -isystem /nix/store/8p0grw5dpqfj9hjk53jr7gfh7miwgh2c-nix-store-c-2.34.8-dev/include -isystem /nix/store/qphkirx7h5pn1n14dffk9n8yypw2mbsi-nix-util-c-2.34.8-dev/include -isystem /nix/store/xxmxv2mp2bk3gpby7pld4rbnvfbcs856-nix-fetchers-c-2.34.8-dev/include -isystem /nix/store/rcij2qxqhimang3v9k7b42pzghhgbl4z-nix-flake-c-2.34.8-dev/include -isystem /nix/store/835xi3sgkfba6dh8mlkap04yy8b75ngb-nix-main-c-2.34.8-dev/include -isystem /nix/store/6yfz5ayq5c8nhhf4bb2fs6d72wmkpz99-jq-1.8.2-dev/include -isystem /nix/store/v6wsd9nyglmwh32yn7w8z11dq9cksg4m-nodejs-24.20.0/include -isystem /nix/store/irqa3dbpy5a8gv7dddn9l5ylj3wdzj4z-binaryen-132/include -isystem /nix/store/x592iv55rd0y71r02yrj3ks1g5v76yf6-lld-21.1.8-dev/include -isystem /nix/store/gh2fiw8477mnkclx3mcm618xhyiwa1p2-postgresql-17.11-dev/include -isystem /nix/store/7y2nfyd4k237pk5fp9qkfi7xr9gb1mfc-libxcrypt-4.5.2/include -isystem /nix/store/4vv8w9x9ra7i5ibfi8snl0z5hasiczmy-wayland-1.26.0-dev/include -isystem /nix/store/lr83fac9a1fhd2r78bwxcqyhf0xlqlf5-libglvnd-1.7.0-dev/include -isystem /nix/store/xwixks9ysshzqiy1q11nf1ywrck80zmg-libxkbcommon-1.13.2-dev/include -isystem /nix/store/v19083s3pgrsmcd1v105yyk1h5zmz0ra-libxcb-1.17.0-dev/include -isystem /nix/store/jr17b44fj30vgbzvhjzgzjm0gjpi8r2n-libxcursor-1.2.3-dev/include -isystem /nix/store/rzw9pk9wbxws9481820l95xz4sfh0zc4-libxi-1.8.3-dev/include -isystem /nix/store/yhw1drfdik9d8r6cbcm7j4vj2kgc0fay-libxext-1.3.7-dev/include -isystem /nix/store/d3m5c4v1fwmplwk6zp9gxjcf2ifzb0nf-libxau-1.0.12-dev/include -isystem /nix/store/9y29ks5m15jg5mjkvchr92nh0m6qp5ys-libxfixes-6.0.2-dev/include -isystem /nix/store/5xlnby5qflx0r9lb90jhaxsivm9p1alq-libxrandr-1.5.5-dev/include -isystem /nix/store/1al8rdq1rmqhg177937vx64f7x3k24xi-libxrender-0.9.12-dev/include -isystem /nix/store/pb2zc346kzybb73749kgsgcglhyrpwn1-fontconfig-2.18.3-dev/include -isystem /nix/store/0xwilh0zi4ssrl7nfkkkh6g01z8wdhnm-expat-2.8.4-dev/include -isystem /nix/store/dbs6l5vkvajsk94mlqf4r1dgyp2c8q6k-dbus-1.16.2-dev/include -isystem /nix/store/lvghc7l14dmga907c7v9zkn901hkgshq-alsa-lib-1.2.16.1-dev/include -isystem /nix/store/jrmk7s69c1ydqqsq0a751m57621rm6v6-pipewire-1.6.8-dev/include -isystem /nix/store/lck8j0ci1qqbhqhqcmwh9w4nj4xans2n-xdotool-4.20260303.1/include -isystem /nix/store/bbd9g4knw3chjhwczbw0srbhz6ghzkgy-imagemagick-7.1.2-31-dev/include -isystem /nix/store/5ca54qw9hzpc1f3dk5x3c9cg3bdb93iv-curl-8.22.0-dev/include -isystem /nix/store/dn0mhjwb80g3s416i3j5nb6sfbm73983-brotli-1.2.0-dev/include -isystem /nix/store/64qispf60bs1g3p7qmj8qd8q7md6barx-krb5-1.22.2-dev/include -isystem /nix/store/0dxp0bh6cjmxcsn77q5z9zaixv8f1aml-nghttp2-1.70.0-dev/include -isystem /nix/store/9ycqykfw4zc1544kfimyz37k9a4zfv5n-nghttp3-1.16.0-dev/include -isystem /nix/store/ainq5bmz60y52n0c88wbq0lsx771f3jy-ngtcp2-1.23.0-dev/include -isystem /nix/store/r6bfmzfg56fhr4nnq7xjkk06shs589a1-libidn2-2.3.8-dev/include -isystem /nix/store/mij14pdz6mld0xqg5c6s07mrhglwrz7r-openssl-3.6.4-dev/include -isystem /nix/store/9dd9sszhpxxqjfxwf51g173rypgbp7pf-libpsl-0.21.5-dev/include -isystem /nix/store/v7pn8qkgz9w1r8mhy13z1prna98cc2by-libssh2-1.11.1-dev/include -isystem /nix/store/k0jg46fv3kwkn14pq3wzryan72rki8yp-zlib-1.3.2-dev/include -isystem /nix/store/sqg55j6303c9x9jgjvf8rpi3q79x9ngv-zstd-1.5.7-dev/include -isystem /nix/store/cmyf4p98lh45zcrc1iy4lwd8nhzk2nsi-bzip2-1.0.8-dev/include -isystem /nix/store/xa5glgq2k665cnhn8qmslcfq4rw71ja8-freetype-2.14.3-dev/include -isystem /nix/store/qd2kgq5l737ck0slyfp9av1a72mwqnw0-libpng-apng-1.6.58-dev/include -isystem /nix/store/yl2lwwx4p4bbv99b9vb03s60qk05fh7i-libjpeg-turbo-3.1.4.1-dev/include -isystem /nix/store/vasjqwfyay1kag87xllnrlca8dzzzmgs-lcms2-2.19.1-dev/include -isystem /nix/store/4wy6f83dfr1s7sj4fivjryx8p50rrhiy-libx11-1.8.13-dev/include -isystem /nix/store/kd572hl0kxkhdx9d3lnbp4f1fzq3h4cd-xorgproto-2025.1/include -isystem /nix/store/ik3gj9ydkjlf9pjj75g1n9shpldhb7pk-libxt-1.3.1-dev/include -isystem /nix/store/ww768ivqk9wvsldbd4299qsw7qbql8rb-libsm-1.2.6-dev/include -isystem /nix/store/yanlsh7g4wk22v14ymbn8kj8471970s6-libice-1.1.2-dev/include -isystem /nix/store/9wh3vnl7plpk052nczlzyh3v7zb3jhkw-libwebp-1.6.0/include -isystem /nix/store/r7fdjqyx0jhyzqjiykkxxfljmcvcr8v1-fftw-double-3.3.11-dev/include -isystem /nix/store/nrhw8ay4r9vyb0b6sj7rz91wmhx9aa15-nix-2.34.8-dev/include -isystem /nix/store/md7xcvr2bddhxqfwpihjg0rdb0f9yhw3-nix-cmd-2.34.8-dev/include -isystem /nix/store/kn5a85s018r96dnhnnmnayyfcj375adv-nix-util-2.34.8-dev/include -isystem /nix/store/20ndisq4ywlcrcflny4fngncwp3azyqz-boost-1.89.0-dev/include -isystem /nix/store/hq8zqc1b5y0llk0h278b2vv2gxrz9mr5-libarchive-3.8.9-dev/include -isystem /nix/store/k4rkzppks3mqyyzvqlymjinlgn0jx598-attr-2.6.0-dev/include -isystem /nix/store/pys089iipaa8lzifk454xmbw7gvk8k71-acl-2.4.0-dev/include -isystem /nix/store/hl8ixlmpd3qzdqd0xy0j6rl665fgb2wy-nlohmann_json-3.12.0/include -isystem /nix/store/dzjdhjxdlwbsnkw55waj4ym711vnwq3n-nix-store-2.34.8-dev/include -isystem /nix/store/5k79435lajqs3z2wh1p9fw2zchm5gr3f-nix-fetchers-2.34.8-dev/include -isystem /nix/store/yvcw9kql0qlr6wy1bww2r5wypbnxn5m7-nix-expr-2.34.8-dev/include -isystem /nix/store/7k31v9zl7a7n9wgw2m9qvdcblczk1lgw-boehm-gc-8.2.12-dev/include -isystem /nix/store/lv7lkvli198brr0bby46zszmhr7hfyzn-nix-flake-2.34.8-dev/include -isystem /nix/store/27bk6kppddrj91x10x2gbj2lncybvwbr-nix-main-2.34.8-dev/include -isystem /nix/store/5h9y2snj51c9cm5g67vwbnplbkhrcbdv-nix-expr-c-2.34.8-dev/include -isystem /nix/store/8p0grw5dpqfj9hjk53jr7gfh7miwgh2c-nix-store-c-2.34.8-dev/include -isystem /nix/store/qphkirx7h5pn1n14dffk9n8yypw2mbsi-nix-util-c-2.34.8-dev/include -isystem /nix/store/xxmxv2mp2bk3gpby7pld4rbnvfbcs856-nix-fetchers-c-2.34.8-dev/include -isystem /nix/store/rcij2qxqhimang3v9k7b42pzghhgbl4z-nix-flake-c-2.34.8-dev/include -isystem /nix/store/835xi3sgkfba6dh8mlkap04yy8b75ngb-nix-main-c-2.34.8-dev/include -isystem /nix/store/6yfz5ayq5c8nhhf4bb2fs6d72wmkpz99-jq-1.8.2-dev/include -isystem /nix/store/v6wsd9nyglmwh32yn7w8z11dq9cksg4m-nodejs-24.20.0/include -isystem /nix/store/irqa3dbpy5a8gv7dddn9l5ylj3wdzj4z-binaryen-132/include -isystem /nix/store/x592iv55rd0y71r02yrj3ks1g5v76yf6-lld-21.1.8-dev/include -isystem /nix/store/gh2fiw8477mnkclx3mcm618xhyiwa1p2-postgresql-17.11-dev/include -isystem /nix/store/7y2nfyd4k237pk5fp9qkfi7xr9gb1mfc-libxcrypt-4.5.2/include -isystem /nix/store/4vv8w9x9ra7i5ibfi8snl0z5hasiczmy-wayland-1.26.0-dev/include -isystem /nix/store/lr83fac9a1fhd2r78bwxcqyhf0xlqlf5-libglvnd-1.7.0-dev/include -isystem /nix/store/xwixks9ysshzqiy1q11nf1ywrck80zmg-libxkbcommon-1.13.2-dev/include -isystem /nix/store/v19083s3pgrsmcd1v105yyk1h5zmz0ra-libxcb-1.17.0-dev/include -isystem /nix/store/jr17b44fj30vgbzvhjzgzjm0gjpi8r2n-libxcursor-1.2.3-dev/include -isystem /nix/store/rzw9pk9wbxws9481820l95xz4sfh0zc4-libxi-1.8.3-dev/include -isystem /nix/store/yhw1drfdik9d8r6cbcm7j4vj2kgc0fay-libxext-1.3.7-dev/include -isystem /nix/store/d3m5c4v1fwmplwk6zp9gxjcf2ifzb0nf-libxau-1.0.12-dev/include -isystem /nix/store/9y29ks5m15jg5mjkvchr92nh0m6qp5ys-libxfixes-6.0.2-dev/include -isystem /nix/store/5xlnby5qflx0r9lb90jhaxsivm9p1alq-libxrandr-1.5.5-dev/include -isystem /nix/store/1al8rdq1rmqhg177937vx64f7x3k24xi-libxrender-0.9.12-dev/include -isystem /nix/store/pb2zc346kzybb73749kgsgcglhyrpwn1-fontconfig-2.18.3-dev/include -isystem /nix/store/0xwilh0zi4ssrl7nfkkkh6g01z8wdhnm-expat-2.8.4-dev/include -isystem /nix/store/dbs6l5vkvajsk94mlqf4r1dgyp2c8q6k-dbus-1.16.2-dev/include -isystem /nix/store/lvghc7l14dmga907c7v9zkn901hkgshq-alsa-lib-1.2.16.1-dev/include -isystem /nix/store/jrmk7s69c1ydqqsq0a751m57621rm6v6-pipewire-1.6.8-dev/include"
+          },
+          "allocator_source_sha256": "48023371d64aec63f09f763bbd45e9834ec7c0c769f72ba276d5398b595bec48"
+        }
+      },
+      {
+        "variant": "candidate",
+        "path": "/tmp/mnos-ingest/evidence/evaluator-source-window-32",
+        "sha256": "664e72807b978267b58c81195df08b708c312c274d4c736c8a6de1064539d85a",
+        "provenance": "verified",
+        "build": {
+          "schema_version": 2,
+          "executable_sha256": "664e72807b978267b58c81195df08b708c312c274d4c736c8a6de1064539d85a",
+          "source_revision": "bbb4d06018d74a3297013387e0d40d4c9dbaabaa",
+          "source_sha256": "6fbfb5bcb7cfc33e2303d80d3a6eccb4c3eb9ff7be14ee28b7863d5dcdacb5fb",
+          "source_dirty": false,
+          "lockfile_sha256": "58857fe892a9b0ae5249b009345e5fb20d34e0250b251e06cfb3484a799d1293",
+          "features": [],
+          "default_features": true,
+          "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (built from a source tarball)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 21.1.8",
+          "rustflags_source": "configuration",
+          "rustflags": "",
+          "target": "x86_64-unknown-linux-gnu",
+          "profile": "release",
+          "cargo_config_sha256": "357c5b967e307ed7d0ba5e84b90e2e15c234e2d7a0b6a5ffa4ea4d668b8202ef",
+          "build_environment": {},
+          "command": [
+            "cargo",
+            "build",
+            "--locked",
+            "--offline",
+            "--release",
+            "-p",
+            "mnos-eval-server",
+            "--message-format=json"
+          ],
+          "casita_source_revision": "90435a1145c10a7492136110f07a3db04df88e7a",
+          "casita_source_sha256": "3990f48f92a3bc25114c3d9ac1830c711773b4c5b13e56c7cb67ca74ecb84aa6",
+          "evaluator_source_sha256": "6fbfb5bcb7cfc33e2303d80d3a6eccb4c3eb9ff7be14ee28b7863d5dcdacb5fb",
+          "allocator": "mimalloc::MiMalloc production executable; default-features=false, no_thp",
+          "reference_libraries": {
+            "LIBARCHIVE": {
+              "path": "/nix/store/hd3akpv03rsvr62h5yk68xxq330mrlx8-libarchive-3.8.4-lib/lib/libarchive.so",
+              "sha256": "9adf6a856ac9b8e70c8170b22694c38229dae27b875a7fe6be536742c1378a27",
+              "include": "/nix/store/hb68cqi6gwbaqgz2azagw53pdqr480p5-libarchive-3.8.4-dev/include",
+              "version": "3.8.4"
+            },
+            "ZLIB": {
+              "path": "/nix/store/xdxxfabbd8w0dadijsd8rkgvnhpn3rkf-zlib-1.3.1/lib/libz.so",
+              "sha256": "571e464d7a9f48f7da70eb0cfc54e0a8bb5412ed78409350de3e798f13e81864",
+              "include": "/nix/store/rvajhfqp83qa64vrm5zrzjaqmxkkn26z-zlib-1.3.1-dev/include",
+              "version": "1.3.1"
+            },
+            "LIBBROTLIDEC": {
+              "path": "/nix/store/ka7244lkykijn9k6p4c8a2acz8yz9pnd-brotli-1.1.0-lib/lib/libbrotlidec.so",
+              "sha256": "17606077182f08337299d5ede51f1aafd925456912a3108df962d9a7bab4a95c",
+              "include": "/nix/store/xfss14xgrnzf92zjvzas6hqaq5i08cpn-brotli-1.1.0-dev/include",
+              "version": "1.1.0"
+            },
+            "LIBGIT2": {
+              "path": "/nix/store/y1pzkk1f1j93c8y3835zzcdyzk2w4w6x-libgit2-1.9.2-lib/lib/libgit2.so",
+              "sha256": "5bd97e06057e0f1b6a96ac3235724a91b2ca5ed9e2b2726c70ca95f6d0f8fb8e",
+              "include": "/nix/store/53vyd09nyql5hfxmyxxdjvl93q0x9inl-libgit2-1.9.2-dev/include",
+              "version": "1.9.2"
+            },
+            "LIBCURL": {
+              "path": "/nix/store/6lyiyj6j012vphfg6x6xky561h975bkd-curl-8.18.0/lib/libcurl.so",
+              "sha256": "e1546015adfb040327066a9e040e0fd15c23fd5fdfec40b8a1b051f514fd2d01",
+              "include": "/nix/store/8q0r9x9y1xp7jg8zgjahac9ygi968zi2-curl-8.18.0-dev/include",
+              "version": "8.18.0"
+            }
+          },
+          "binding_toolchain": {
+            "LIBCLANG_PATH": "/nix/store/a3kjvvlm7f8abcmxh6f8dndiwc4vp726-clang-21.1.8-lib/lib",
+            "BINDGEN_EXTRA_CLANG_ARGS": "-B/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/lib/gcc/x86_64-unknown-linux-gnu/15.3.0 --gcc-toolchain=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0 -B/nix/store/a3kjvvlm7f8abcmxh6f8dndiwc4vp726-clang-21.1.8-lib/lib -nostdlibinc -resource-dir=/nix/store/mn2y6cydn5phwf2hxgfc3n7zjf48d5xg-clang-wrapper-21.1.8/resource-root -idirafter /nix/store/lbjwxax9n0457lgd83rqwpd1l9lgfl7r-glibc-2.42-84-dev/include -fmacro-prefix-map=/nix/store/lbjwxax9n0457lgd83rqwpd1l9lgfl7r-glibc-2.42-84-dev/include=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-glibc-2.42-84-dev/include  -cxx-isystem /nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0 -fmacro-prefix-map=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-gcc-15.3.0/include/c++/15.3.0 -cxx-isystem /nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu -fmacro-prefix-map=/nix/store/8sjgd7q3mdks1rb7rbcv0sallhvrhai5-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-gcc-15.3.0/include/c++/15.3.0/x86_64-unknown-linux-gnu   -frandom-seed=b0jwx3ja7g -isystem /nix/store/lck8j0ci1qqbhqhqcmwh9w4nj4xans2n-xdotool-4.20260303.1/include -isystem /nix/store/bbd9g4knw3chjhwczbw0srbhz6ghzkgy-imagemagick-7.1.2-31-dev/include -isystem /nix/store/5ca54qw9hzpc1f3dk5x3c9cg3bdb93iv-curl-8.22.0-dev/include -isystem /nix/store/dn0mhjwb80g3s416i3j5nb6sfbm73983-brotli-1.2.0-dev/include -isystem /nix/store/64qispf60bs1g3p7qmj8qd8q7md6barx-krb5-1.22.2-dev/include -isystem /nix/store/0dxp0bh6cjmxcsn77q5z9zaixv8f1aml-nghttp2-1.70.0-dev/include -isystem /nix/store/9ycqykfw4zc1544kfimyz37k9a4zfv5n-nghttp3-1.16.0-dev/include -isystem /nix/store/ainq5bmz60y52n0c88wbq0lsx771f3jy-ngtcp2-1.23.0-dev/include -isystem /nix/store/r6bfmzfg56fhr4nnq7xjkk06shs589a1-libidn2-2.3.8-dev/include -isystem /nix/store/mij14pdz6mld0xqg5c6s07mrhglwrz7r-openssl-3.6.4-dev/include -isystem /nix/store/9dd9sszhpxxqjfxwf51g173rypgbp7pf-libpsl-0.21.5-dev/include -isystem /nix/store/v7pn8qkgz9w1r8mhy13z1prna98cc2by-libssh2-1.11.1-dev/include -isystem /nix/store/k0jg46fv3kwkn14pq3wzryan72rki8yp-zlib-1.3.2-dev/include -isystem /nix/store/sqg55j6303c9x9jgjvf8rpi3q79x9ngv-zstd-1.5.7-dev/include -isystem /nix/store/cmyf4p98lh45zcrc1iy4lwd8nhzk2nsi-bzip2-1.0.8-dev/include -isystem /nix/store/xa5glgq2k665cnhn8qmslcfq4rw71ja8-freetype-2.14.3-dev/include -isystem /nix/store/qd2kgq5l737ck0slyfp9av1a72mwqnw0-libpng-apng-1.6.58-dev/include -isystem /nix/store/yl2lwwx4p4bbv99b9vb03s60qk05fh7i-libjpeg-turbo-3.1.4.1-dev/include -isystem /nix/store/vasjqwfyay1kag87xllnrlca8dzzzmgs-lcms2-2.19.1-dev/include -isystem /nix/store/4wy6f83dfr1s7sj4fivjryx8p50rrhiy-libx11-1.8.13-dev/include -isystem /nix/store/kd572hl0kxkhdx9d3lnbp4f1fzq3h4cd-xorgproto-2025.1/include -isystem /nix/store/ik3gj9ydkjlf9pjj75g1n9shpldhb7pk-libxt-1.3.1-dev/include -isystem /nix/store/ww768ivqk9wvsldbd4299qsw7qbql8rb-libsm-1.2.6-dev/include -isystem /nix/store/yanlsh7g4wk22v14ymbn8kj8471970s6-libice-1.1.2-dev/include -isystem /nix/store/9wh3vnl7plpk052nczlzyh3v7zb3jhkw-libwebp-1.6.0/include -isystem /nix/store/r7fdjqyx0jhyzqjiykkxxfljmcvcr8v1-fftw-double-3.3.11-dev/include -isystem /nix/store/nrhw8ay4r9vyb0b6sj7rz91wmhx9aa15-nix-2.34.8-dev/include -isystem /nix/store/md7xcvr2bddhxqfwpihjg0rdb0f9yhw3-nix-cmd-2.34.8-dev/include -isystem /nix/store/kn5a85s018r96dnhnnmnayyfcj375adv-nix-util-2.34.8-dev/include -isystem /nix/store/20ndisq4ywlcrcflny4fngncwp3azyqz-boost-1.89.0-dev/include -isystem /nix/store/hq8zqc1b5y0llk0h278b2vv2gxrz9mr5-libarchive-3.8.9-dev/include -isystem /nix/store/k4rkzppks3mqyyzvqlymjinlgn0jx598-attr-2.6.0-dev/include -isystem /nix/store/pys089iipaa8lzifk454xmbw7gvk8k71-acl-2.4.0-dev/include -isystem /nix/store/hl8ixlmpd3qzdqd0xy0j6rl665fgb2wy-nlohmann_json-3.12.0/include -isystem /nix/store/dzjdhjxdlwbsnkw55waj4ym711vnwq3n-nix-store-2.34.8-dev/include -isystem /nix/store/5k79435lajqs3z2wh1p9fw2zchm5gr3f-nix-fetchers-2.34.8-dev/include -isystem /nix/store/yvcw9kql0qlr6wy1bww2r5wypbnxn5m7-nix-expr-2.34.8-dev/include -isystem /nix/store/7k31v9zl7a7n9wgw2m9qvdcblczk1lgw-boehm-gc-8.2.12-dev/include -isystem /nix/store/lv7lkvli198brr0bby46zszmhr7hfyzn-nix-flake-2.34.8-dev/include -isystem /nix/store/27bk6kppddrj91x10x2gbj2lncybvwbr-nix-main-2.34.8-dev/include -isystem /nix/store/5h9y2snj51c9cm5g67vwbnplbkhrcbdv-nix-expr-c-2.34.8-dev/include -isystem /nix/store/8p0grw5dpqfj9hjk53jr7gfh7miwgh2c-nix-store-c-2.34.8-dev/include -isystem /nix/store/qphkirx7h5pn1n14dffk9n8yypw2mbsi-nix-util-c-2.34.8-dev/include -isystem /nix/store/xxmxv2mp2bk3gpby7pld4rbnvfbcs856-nix-fetchers-c-2.34.8-dev/include -isystem /nix/store/rcij2qxqhimang3v9k7b42pzghhgbl4z-nix-flake-c-2.34.8-dev/include -isystem /nix/store/835xi3sgkfba6dh8mlkap04yy8b75ngb-nix-main-c-2.34.8-dev/include -isystem /nix/store/6yfz5ayq5c8nhhf4bb2fs6d72wmkpz99-jq-1.8.2-dev/include -isystem /nix/store/v6wsd9nyglmwh32yn7w8z11dq9cksg4m-nodejs-24.20.0/include -isystem /nix/store/irqa3dbpy5a8gv7dddn9l5ylj3wdzj4z-binaryen-132/include -isystem /nix/store/x592iv55rd0y71r02yrj3ks1g5v76yf6-lld-21.1.8-dev/include -isystem /nix/store/gh2fiw8477mnkclx3mcm618xhyiwa1p2-postgresql-17.11-dev/include -isystem /nix/store/7y2nfyd4k237pk5fp9qkfi7xr9gb1mfc-libxcrypt-4.5.2/include -isystem /nix/store/4vv8w9x9ra7i5ibfi8snl0z5hasiczmy-wayland-1.26.0-dev/include -isystem /nix/store/lr83fac9a1fhd2r78bwxcqyhf0xlqlf5-libglvnd-1.7.0-dev/include -isystem /nix/store/xwixks9ysshzqiy1q11nf1ywrck80zmg-libxkbcommon-1.13.2-dev/include -isystem /nix/store/v19083s3pgrsmcd1v105yyk1h5zmz0ra-libxcb-1.17.0-dev/include -isystem /nix/store/jr17b44fj30vgbzvhjzgzjm0gjpi8r2n-libxcursor-1.2.3-dev/include -isystem /nix/store/rzw9pk9wbxws9481820l95xz4sfh0zc4-libxi-1.8.3-dev/include -isystem /nix/store/yhw1drfdik9d8r6cbcm7j4vj2kgc0fay-libxext-1.3.7-dev/include -isystem /nix/store/d3m5c4v1fwmplwk6zp9gxjcf2ifzb0nf-libxau-1.0.12-dev/include -isystem /nix/store/9y29ks5m15jg5mjkvchr92nh0m6qp5ys-libxfixes-6.0.2-dev/include -isystem /nix/store/5xlnby5qflx0r9lb90jhaxsivm9p1alq-libxrandr-1.5.5-dev/include -isystem /nix/store/1al8rdq1rmqhg177937vx64f7x3k24xi-libxrender-0.9.12-dev/include -isystem /nix/store/pb2zc346kzybb73749kgsgcglhyrpwn1-fontconfig-2.18.3-dev/include -isystem /nix/store/0xwilh0zi4ssrl7nfkkkh6g01z8wdhnm-expat-2.8.4-dev/include -isystem /nix/store/dbs6l5vkvajsk94mlqf4r1dgyp2c8q6k-dbus-1.16.2-dev/include -isystem /nix/store/lvghc7l14dmga907c7v9zkn901hkgshq-alsa-lib-1.2.16.1-dev/include -isystem /nix/store/jrmk7s69c1ydqqsq0a751m57621rm6v6-pipewire-1.6.8-dev/include -isystem /nix/store/lck8j0ci1qqbhqhqcmwh9w4nj4xans2n-xdotool-4.20260303.1/include -isystem /nix/store/bbd9g4knw3chjhwczbw0srbhz6ghzkgy-imagemagick-7.1.2-31-dev/include -isystem /nix/store/5ca54qw9hzpc1f3dk5x3c9cg3bdb93iv-curl-8.22.0-dev/include -isystem /nix/store/dn0mhjwb80g3s416i3j5nb6sfbm73983-brotli-1.2.0-dev/include -isystem /nix/store/64qispf60bs1g3p7qmj8qd8q7md6barx-krb5-1.22.2-dev/include -isystem /nix/store/0dxp0bh6cjmxcsn77q5z9zaixv8f1aml-nghttp2-1.70.0-dev/include -isystem /nix/store/9ycqykfw4zc1544kfimyz37k9a4zfv5n-nghttp3-1.16.0-dev/include -isystem /nix/store/ainq5bmz60y52n0c88wbq0lsx771f3jy-ngtcp2-1.23.0-dev/include -isystem /nix/store/r6bfmzfg56fhr4nnq7xjkk06shs589a1-libidn2-2.3.8-dev/include -isystem /nix/store/mij14pdz6mld0xqg5c6s07mrhglwrz7r-openssl-3.6.4-dev/include -isystem /nix/store/9dd9sszhpxxqjfxwf51g173rypgbp7pf-libpsl-0.21.5-dev/include -isystem /nix/store/v7pn8qkgz9w1r8mhy13z1prna98cc2by-libssh2-1.11.1-dev/include -isystem /nix/store/k0jg46fv3kwkn14pq3wzryan72rki8yp-zlib-1.3.2-dev/include -isystem /nix/store/sqg55j6303c9x9jgjvf8rpi3q79x9ngv-zstd-1.5.7-dev/include -isystem /nix/store/cmyf4p98lh45zcrc1iy4lwd8nhzk2nsi-bzip2-1.0.8-dev/include -isystem /nix/store/xa5glgq2k665cnhn8qmslcfq4rw71ja8-freetype-2.14.3-dev/include -isystem /nix/store/qd2kgq5l737ck0slyfp9av1a72mwqnw0-libpng-apng-1.6.58-dev/include -isystem /nix/store/yl2lwwx4p4bbv99b9vb03s60qk05fh7i-libjpeg-turbo-3.1.4.1-dev/include -isystem /nix/store/vasjqwfyay1kag87xllnrlca8dzzzmgs-lcms2-2.19.1-dev/include -isystem /nix/store/4wy6f83dfr1s7sj4fivjryx8p50rrhiy-libx11-1.8.13-dev/include -isystem /nix/store/kd572hl0kxkhdx9d3lnbp4f1fzq3h4cd-xorgproto-2025.1/include -isystem /nix/store/ik3gj9ydkjlf9pjj75g1n9shpldhb7pk-libxt-1.3.1-dev/include -isystem /nix/store/ww768ivqk9wvsldbd4299qsw7qbql8rb-libsm-1.2.6-dev/include -isystem /nix/store/yanlsh7g4wk22v14ymbn8kj8471970s6-libice-1.1.2-dev/include -isystem /nix/store/9wh3vnl7plpk052nczlzyh3v7zb3jhkw-libwebp-1.6.0/include -isystem /nix/store/r7fdjqyx0jhyzqjiykkxxfljmcvcr8v1-fftw-double-3.3.11-dev/include -isystem /nix/store/nrhw8ay4r9vyb0b6sj7rz91wmhx9aa15-nix-2.34.8-dev/include -isystem /nix/store/md7xcvr2bddhxqfwpihjg0rdb0f9yhw3-nix-cmd-2.34.8-dev/include -isystem /nix/store/kn5a85s018r96dnhnnmnayyfcj375adv-nix-util-2.34.8-dev/include -isystem /nix/store/20ndisq4ywlcrcflny4fngncwp3azyqz-boost-1.89.0-dev/include -isystem /nix/store/hq8zqc1b5y0llk0h278b2vv2gxrz9mr5-libarchive-3.8.9-dev/include -isystem /nix/store/k4rkzppks3mqyyzvqlymjinlgn0jx598-attr-2.6.0-dev/include -isystem /nix/store/pys089iipaa8lzifk454xmbw7gvk8k71-acl-2.4.0-dev/include -isystem /nix/store/hl8ixlmpd3qzdqd0xy0j6rl665fgb2wy-nlohmann_json-3.12.0/include -isystem /nix/store/dzjdhjxdlwbsnkw55waj4ym711vnwq3n-nix-store-2.34.8-dev/include -isystem /nix/store/5k79435lajqs3z2wh1p9fw2zchm5gr3f-nix-fetchers-2.34.8-dev/include -isystem /nix/store/yvcw9kql0qlr6wy1bww2r5wypbnxn5m7-nix-expr-2.34.8-dev/include -isystem /nix/store/7k31v9zl7a7n9wgw2m9qvdcblczk1lgw-boehm-gc-8.2.12-dev/include -isystem /nix/store/lv7lkvli198brr0bby46zszmhr7hfyzn-nix-flake-2.34.8-dev/include -isystem /nix/store/27bk6kppddrj91x10x2gbj2lncybvwbr-nix-main-2.34.8-dev/include -isystem /nix/store/5h9y2snj51c9cm5g67vwbnplbkhrcbdv-nix-expr-c-2.34.8-dev/include -isystem /nix/store/8p0grw5dpqfj9hjk53jr7gfh7miwgh2c-nix-store-c-2.34.8-dev/include -isystem /nix/store/qphkirx7h5pn1n14dffk9n8yypw2mbsi-nix-util-c-2.34.8-dev/include -isystem /nix/store/xxmxv2mp2bk3gpby7pld4rbnvfbcs856-nix-fetchers-c-2.34.8-dev/include -isystem /nix/store/rcij2qxqhimang3v9k7b42pzghhgbl4z-nix-flake-c-2.34.8-dev/include -isystem /nix/store/835xi3sgkfba6dh8mlkap04yy8b75ngb-nix-main-c-2.34.8-dev/include -isystem /nix/store/6yfz5ayq5c8nhhf4bb2fs6d72wmkpz99-jq-1.8.2-dev/include -isystem /nix/store/v6wsd9nyglmwh32yn7w8z11dq9cksg4m-nodejs-24.20.0/include -isystem /nix/store/irqa3dbpy5a8gv7dddn9l5ylj3wdzj4z-binaryen-132/include -isystem /nix/store/x592iv55rd0y71r02yrj3ks1g5v76yf6-lld-21.1.8-dev/include -isystem /nix/store/gh2fiw8477mnkclx3mcm618xhyiwa1p2-postgresql-17.11-dev/include -isystem /nix/store/7y2nfyd4k237pk5fp9qkfi7xr9gb1mfc-libxcrypt-4.5.2/include -isystem /nix/store/4vv8w9x9ra7i5ibfi8snl0z5hasiczmy-wayland-1.26.0-dev/include -isystem /nix/store/lr83fac9a1fhd2r78bwxcqyhf0xlqlf5-libglvnd-1.7.0-dev/include -isystem /nix/store/xwixks9ysshzqiy1q11nf1ywrck80zmg-libxkbcommon-1.13.2-dev/include -isystem /nix/store/v19083s3pgrsmcd1v105yyk1h5zmz0ra-libxcb-1.17.0-dev/include -isystem /nix/store/jr17b44fj30vgbzvhjzgzjm0gjpi8r2n-libxcursor-1.2.3-dev/include -isystem /nix/store/rzw9pk9wbxws9481820l95xz4sfh0zc4-libxi-1.8.3-dev/include -isystem /nix/store/yhw1drfdik9d8r6cbcm7j4vj2kgc0fay-libxext-1.3.7-dev/include -isystem /nix/store/d3m5c4v1fwmplwk6zp9gxjcf2ifzb0nf-libxau-1.0.12-dev/include -isystem /nix/store/9y29ks5m15jg5mjkvchr92nh0m6qp5ys-libxfixes-6.0.2-dev/include -isystem /nix/store/5xlnby5qflx0r9lb90jhaxsivm9p1alq-libxrandr-1.5.5-dev/include -isystem /nix/store/1al8rdq1rmqhg177937vx64f7x3k24xi-libxrender-0.9.12-dev/include -isystem /nix/store/pb2zc346kzybb73749kgsgcglhyrpwn1-fontconfig-2.18.3-dev/include -isystem /nix/store/0xwilh0zi4ssrl7nfkkkh6g01z8wdhnm-expat-2.8.4-dev/include -isystem /nix/store/dbs6l5vkvajsk94mlqf4r1dgyp2c8q6k-dbus-1.16.2-dev/include -isystem /nix/store/lvghc7l14dmga907c7v9zkn901hkgshq-alsa-lib-1.2.16.1-dev/include -isystem /nix/store/jrmk7s69c1ydqqsq0a751m57621rm6v6-pipewire-1.6.8-dev/include"
+          },
+          "allocator_source_sha256": "48023371d64aec63f09f763bbd45e9834ec7c0c769f72ba276d5398b595bec48",
+          "casita_source_dirty": true,
+          "candidate_patch_sha256": "4e64d8fc16d34af6e11fbad0dbfc4c737e85490f776c9e9ea1cbf9357925d3a0",
+          "source_reopen_trigger_bytes": 33554432
+        }
+      }
+    ],
+    "order": [
+      [
+        "git",
+        "control",
+        1
+      ],
+      [
+        "git",
+        "candidate",
+        1
+      ],
+      [
+        "git",
+        "candidate",
+        2
+      ],
+      [
+        "git",
+        "control",
+        2
+      ],
+      [
+        "git",
+        "control",
+        3
+      ],
+      [
+        "git",
+        "candidate",
+        3
+      ],
+      [
+        "git",
+        "candidate",
+        4
+      ],
+      [
+        "git",
+        "control",
+        4
+      ]
+    ],
+    "samples": [
+      {
+        "transport": "git",
+        "variant": "control",
+        "trial": 1,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.19490205901093,
+          "max_rss_bytes": 1157554176,
+          "user_seconds": 28.982842,
+          "system_seconds": 13.798012,
+          "input_blocks": 200,
+          "output_blocks": 774712
+        },
+        "started_unix_seconds": 1791322535.5442674,
+        "runner_wall_seconds": 49.06366672998411,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            2.095703125,
+            3.05908203125,
+            3.9599609375
+          ],
+          "load_end": [
+            2.96630859375,
+            3.13037109375,
+            3.9345703125
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15972130816,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-control-1/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1157554176,
+        "observed_peak_wal_bytes": 43807992,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "45af3e8894b0fbcb125509e71f147cd32ab4b527ecc0cbaf57c668342d5227f6",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "d90c537473c36693f00052cec519b4be85a7c5396cca6b5b299623c1c083b5f4"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "candidate",
+        "trial": 1,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.44731272099307,
+          "max_rss_bytes": 1088868352,
+          "user_seconds": 28.398123,
+          "system_seconds": 13.545723,
+          "input_blocks": 1424,
+          "output_blocks": 775040
+        },
+        "started_unix_seconds": 1791322586.5576737,
+        "runner_wall_seconds": 49.334152553987224,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            2.96923828125,
+            3.1279296875,
+            3.92919921875
+          ],
+          "load_end": [
+            3.802734375,
+            3.31396484375,
+            3.94873046875
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15841234944,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-candidate-1/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1088868352,
+        "observed_peak_wal_bytes": 43663792,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "9bcf51851eaa877d10a734c7182ed8caf50a773af09617dee966010dc0bfaef9",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "bf21a4c17376795bc250402a3e367cdd571771c38e44d9bc9419b084802e8a01"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "candidate",
+        "trial": 2,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.69801469601225,
+          "max_rss_bytes": 1048571904,
+          "user_seconds": 28.945173,
+          "system_seconds": 13.735044,
+          "input_blocks": 736,
+          "output_blocks": 776424
+        },
+        "started_unix_seconds": 1791322637.8303378,
+        "runner_wall_seconds": 49.6273092039919,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            3.802734375,
+            3.31396484375,
+            3.94873046875
+          ],
+          "load_end": [
+            4.142578125,
+            3.4560546875,
+            3.96044921875
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15710478336,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-candidate-2/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1048571904,
+        "observed_peak_wal_bytes": 43812112,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "e45e493d51cb5d7c9afe3c2e59520c62a6a42474f12392419c60b79310f7c1bc",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "09eb13f96ada853d8914644db6c5ad62dd21195278b433ebd3a9eff266646005"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "control",
+        "trial": 2,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.44808399101021,
+          "max_rss_bytes": 1143148544,
+          "user_seconds": 28.825096,
+          "system_seconds": 13.803482,
+          "input_blocks": 24976,
+          "output_blocks": 775888
+        },
+        "started_unix_seconds": 1791322689.4255037,
+        "runner_wall_seconds": 49.34949809400132,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            4.142578125,
+            3.4560546875,
+            3.96044921875
+          ],
+          "load_end": [
+            3.98486328125,
+            3.4853515625,
+            3.9404296875
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15579762688,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-control-2/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1143148544,
+        "observed_peak_wal_bytes": 44702032,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.2 GiB     2.2 GiB     2.2 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "c6f0d5f32448bda899cfce4ea2cb0716cfa477ea1abddcd9a49aa9043bfd212b",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "5e99677377ffadf2576e39165827f22c0facab574452bbbcef544635ac2307a1"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "control",
+        "trial": 3,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.195773489977,
+          "max_rss_bytes": 1164120064,
+          "user_seconds": 27.82986,
+          "system_seconds": 13.268148,
+          "input_blocks": 1000,
+          "output_blocks": 781144
+        },
+        "started_unix_seconds": 1791322740.688065,
+        "runner_wall_seconds": 49.137958643987076,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            3.98486328125,
+            3.4853515625,
+            3.9404296875
+          ],
+          "load_end": [
+            3.76025390625,
+            3.48974609375,
+            3.91552734375
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15448743936,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-control-3/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1164120064,
+        "observed_peak_wal_bytes": 44854472,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "42b94161939618aac86bc8a86d3c9d8bd61b578bf5f8d194009a0187bdbcf34d",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "2190ca0b6d8b6d73515e698ff0561c64d59111e1faf822f13233e05785848df8"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "candidate",
+        "trial": 3,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.19175062398426,
+          "max_rss_bytes": 1075798016,
+          "user_seconds": 28.270723,
+          "system_seconds": 13.007331,
+          "input_blocks": 192,
+          "output_blocks": 777072
+        },
+        "started_unix_seconds": 1791322791.7584784,
+        "runner_wall_seconds": 49.0192890559847,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            3.619140625,
+            3.46484375,
+            3.90478515625
+          ],
+          "load_end": [
+            3.74853515625,
+            3.5185546875,
+            3.89990234375
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15318028288,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-candidate-3/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1075798016,
+        "observed_peak_wal_bytes": 43717352,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "8de600694e3d6052bcb085ac494077e2f1a9df7d162423bcbdaa45bb0b4628f3",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "a654f12eb3d8a6f69723a3768e4818270fb93914512801b4b7626b719e6f9afe"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "candidate",
+        "trial": 4,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 46.940087362978375,
+          "max_rss_bytes": 1082503168,
+          "user_seconds": 27.910074,
+          "system_seconds": 13.576462,
+          "input_blocks": 152,
+          "output_blocks": 775472
+        },
+        "started_unix_seconds": 1791322842.649342,
+        "runner_wall_seconds": 48.874894200998824,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            3.74853515625,
+            3.5185546875,
+            3.89990234375
+          ],
+          "load_end": [
+            3.2919921875,
+            3.4228515625,
+            3.84619140625
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15186722816,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-candidate-4/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1082503168,
+        "observed_peak_wal_bytes": 42567872,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.4 GiB     2.4 GiB     2.4 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "85dd4cf91279d23980cd4d231d65791910d596b8a31e3f32a218bd43ced3487b",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "c4f07eab37780a23ee26cbbba94926b4680329551aa9c49d59aa2e52fb33179e"
+        }
+      },
+      {
+        "transport": "git",
+        "variant": "control",
+        "trial": 4,
+        "process": {
+          "exit_code": 0,
+          "wall_seconds": 47.94509042499703,
+          "max_rss_bytes": 1153323008,
+          "user_seconds": 28.035064,
+          "system_seconds": 12.950598,
+          "input_blocks": 248,
+          "output_blocks": 775176
+        },
+        "started_unix_seconds": 1791322893.3834524,
+        "runner_wall_seconds": 49.736650105012814,
+        "protocol": {
+          "repetitions_per_transport_variant": 4,
+          "fresh_process_and_store": true,
+          "stores_retained": true,
+          "concurrent_owned_builds_tests_profiles": false,
+          "sample_interval_seconds": 0.25,
+          "load_start": [
+            3.2919921875,
+            3.4228515625,
+            3.84619140625
+          ],
+          "load_end": [
+            3.23291015625,
+            3.38818359375,
+            3.81005859375
+          ],
+          "cpu_affinity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "available_bytes_start": 15055990784,
+          "environment_overrides": {
+            "XDG_CACHE_HOME": "/tmp/mnos-ingest/evidence/evaluator-source-window-final-git-control-4/cache",
+            "MIMALLOC_SHOW_STATS": "1",
+            "MNOS_EVAL_IMPORT_TRACE": "1"
+          },
+          "memory_scope": "Sampled /proc is evaluator process only; wait4 resources are separate; neither is summed process-tree/cgroup memory"
+        },
+        "sampled_server_peak_rss_bytes": 1153323008,
+        "observed_peak_wal_bytes": 41418392,
+        "maximum_sampled_import_threads": 2,
+        "mimalloc_reserved_rows": [
+          "3.0 GiB     3.0 GiB     3.0 GiB                          "
+        ],
+        "mimalloc_committed_rows": [
+          "2.3 GiB     2.3 GiB     2.3 GiB                          "
+        ],
+        "artifacts": {
+          ".json": "060eb91a6fb2e22704f1eeacc2b984cf8647ac3b9a766627d011f10379f5baa1",
+          "-stdout.json": "d61d5111fc808211ff64198150b227c163c15c96da24a53276dab778c59bddb3",
+          "-stderr.log": "c5653144c895927cc13d7217c959ba5a6509b5a016c23a76ab87620c80125142"
+        }
+      }
+    ],
+    "comparisons": {
+      "git": {
+        "medians": {
+          "control": {
+            "wall_seconds": 47.321928740493604,
+            "cpu_seconds": 41.863293,
+            "wait4_peak_rss_bytes": 1155438592.0,
+            "sampled_server_peak_rss_bytes": 1155438592.0,
+            "output_bytes": 397072384.0,
+            "input_bytes": 319488.0,
+            "observed_peak_wal_bytes": 44255012.0
+          },
+          "candidate": {
+            "wall_seconds": 47.319531672488665,
+            "cpu_seconds": 41.715191000000004,
+            "wait4_peak_rss_bytes": 1079150592.0,
+            "sampled_server_peak_rss_bytes": 1079150592.0,
+            "output_bytes": 397285376.0,
+            "input_bytes": 237568.0,
+            "observed_peak_wal_bytes": 43690572.0
+          }
+        },
+        "change_percent": {
+          "wall_seconds": -0.005065448659291594,
+          "cpu_seconds": -0.35377532293027203,
+          "wait4_peak_rss_bytes": -6.602514450201092,
+          "sampled_server_peak_rss_bytes": -6.602514450201092,
+          "output_bytes": 0.05364059768004914,
+          "input_bytes": -25.64102564102564,
+          "observed_peak_wal_bytes": -1.2754261596404026
+        },
+        "pairs": [
+          {
+            "trial": 1,
+            "change_percent": {
+              "wall_seconds": 0.5348261167414492,
+              "cpu_seconds": -1.9565013826044808,
+              "wait4_peak_rss_bytes": -5.933702752241632,
+              "sampled_server_peak_rss_bytes": -5.933702752241632,
+              "output_bytes": 0.04233831410898059,
+              "input_bytes": 612.0,
+              "observed_peak_wal_bytes": -0.3291636831927791
+            }
+          },
+          {
+            "trial": 2,
+            "change_percent": {
+              "wall_seconds": 0.5267456216975885,
+              "cpu_seconds": 0.12113704566922845,
+              "wait4_peak_rss_bytes": -8.273346495204038,
+              "sampled_server_peak_rss_bytes": -8.273346495204038,
+              "output_bytes": 0.06908213556595655,
+              "input_bytes": -97.05317104420243,
+              "observed_peak_wal_bytes": -1.990781985033696
+            }
+          },
+          {
+            "trial": 3,
+            "change_percent": {
+              "wall_seconds": -0.008523784430802817,
+              "cpu_seconds": 0.43808935946481053,
+              "wait4_peak_rss_bytes": -7.587022226600848,
+              "sampled_server_peak_rss_bytes": -7.587022226600848,
+              "output_bytes": -0.5212867281832789,
+              "input_bytes": -80.80000000000001,
+              "observed_peak_wal_bytes": -2.5351318370217313
+            }
+          },
+          {
+            "trial": 4,
+            "change_percent": {
+              "wall_seconds": -2.0961542737954253,
+              "cpu_seconds": 1.2220712697040392,
+              "wait4_peak_rss_bytes": -6.140503528392283,
+              "sampled_server_peak_rss_bytes": -6.140503528392283,
+              "output_bytes": 0.03818487672477833,
+              "input_bytes": -38.70967741935484,
+              "observed_peak_wal_bytes": 2.7752888137231313
+            }
+          }
+        ]
+      }
+    },
+    "limitations": [
+      "Production CLI evaluation, not server-socket sessions, browser, concurrent jobs or cancellation lifecycle.",
+      "Only pinned local archive/Git transports; no remote transfer or original OOM claim.",
+      "Mimalloc reserved/committed text is distinct from Linux RSS; no cross-allocator comparison.",
+      "Sampled /proc RSS is evaluator process only; wait4 accounting separate; neither sums process-tree/cgroup memory.",
+      "WAL peak is a250ms sampled lower bound; wall includes up to one polling interval of exit-observation delay.",
+      "OS caches, host load and scheduler remain uncontrolled; pairs and adverse observations are retained.",
+      "One source-reopening constant differs; four balanced pairs qualify this fixture; no universal improvement claim.",
+      "Synthetic901+ fault trials are excluded from all performance comparisons."
+    ]
+  },
+  "native": {
+    "near": {
+      "source": "/tmp/mnos-ingest/evidence/source-window-native-wide-near.json",
+      "sha256": "28e2267ff4729e2c03456b1763fd449594353ed2b1c671ed33735fea0c78708e",
+      "complete_runs": 8,
+      "identities_checked": 16,
+      "medians": {
+        "control": {
+          "wall_seconds": 69.8283039220114,
+          "peak_rss_bytes": 882923520.0,
+          "observed_peak_wal_bytes": 136460612.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "file_counts": [
+            227,
+            233,
+            232,
+            225
+          ],
+          "fresh_import_git_seconds": 30.4709268315,
+          "fresh_git_tree_seconds": 22.579256038,
+          "fresh_nar_seconds": 8.3718924685,
+          "fresh_total_seconds": 61.0782481975,
+          "update_import_git_seconds": 0.37520714450000003,
+          "update_git_tree_seconds": 0.33239004,
+          "update_nar_seconds": 7.9349535819999995,
+          "update_total_seconds": 8.648181510499999,
+          "fresh_conversion_observed_peak_wal_bytes": 136460612.0,
+          "update_conversion_observed_peak_wal_bytes": 3011752.0,
+          "process_output_bytes": 556070912.0,
+          "final_process_write_bytes": 551538688.0,
+          "fresh_import_write_bytes": 319936512.0,
+          "fresh_conversion_write_bytes": 229896192.0,
+          "update_import_write_bytes": 677888.0,
+          "update_conversion_write_bytes": 681984.0
+        },
+        "candidate": {
+          "wall_seconds": 63.00942522150581,
+          "peak_rss_bytes": 873314304.0,
+          "observed_peak_wal_bytes": 137115692.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            1,
+            1
+          ],
+          "file_counts": [
+            227,
+            233,
+            459,
+            454
+          ],
+          "fresh_import_git_seconds": 28.052814650000002,
+          "fresh_git_tree_seconds": 20.1952093935,
+          "fresh_nar_seconds": 6.4516855205,
+          "fresh_total_seconds": 54.299782277999995,
+          "update_import_git_seconds": 0.3463513125,
+          "update_git_tree_seconds": 0.2957752125,
+          "update_nar_seconds": 6.1484217525,
+          "update_total_seconds": 6.7905482775,
+          "fresh_conversion_observed_peak_wal_bytes": 137115692.0,
+          "update_conversion_observed_peak_wal_bytes": 2993212.0,
+          "process_output_bytes": 556337152.0,
+          "final_process_write_bytes": 551925760.0,
+          "fresh_import_write_bytes": 319725568.0,
+          "fresh_conversion_write_bytes": 230496256.0,
+          "update_import_write_bytes": 669696.0,
+          "update_conversion_write_bytes": 681984.0
+        }
+      },
+      "change_percent": {
+        "wall_seconds": -9.765207398022069,
+        "peak_rss_bytes": -1.0883406979576238,
+        "observed_peak_wal_bytes": 0.4800506097686341,
+        "fresh_import_git_seconds": -7.9358012142913275,
+        "fresh_git_tree_seconds": -10.558570399696709,
+        "fresh_nar_seconds": -22.936354656070325,
+        "fresh_total_seconds": -11.09800316731654,
+        "update_import_git_seconds": -7.6906403364075615,
+        "update_git_tree_seconds": -11.01562113594018,
+        "update_nar_seconds": -22.514710527767267,
+        "update_total_seconds": -21.480044454948064,
+        "fresh_conversion_observed_peak_wal_bytes": 0.4800506097686341,
+        "update_conversion_observed_peak_wal_bytes": -0.6155885345141332,
+        "process_output_bytes": 0.04787878564667114,
+        "final_process_write_bytes": 0.07018038959398787,
+        "fresh_import_write_bytes": -0.06593308112329277,
+        "fresh_conversion_write_bytes": 0.261015197676695,
+        "update_import_write_bytes": -1.2084592145015116,
+        "update_conversion_write_bytes": 0.0
+      },
+      "pairs": [
+        {
+          "trial": 1,
+          "wall_change_percent": -0.9554711177251263,
+          "write_bytes_change_percent": -0.06899212154483081,
+          "observed_peak_wal_change_percent": -0.20487476751950284
+        },
+        {
+          "trial": 2,
+          "wall_change_percent": 2.584276290743981,
+          "write_bytes_change_percent": 0.3115751275301504,
+          "observed_peak_wal_change_percent": 1.4855684107932587
+        },
+        {
+          "trial": 3,
+          "wall_change_percent": -18.7600929937366,
+          "write_bytes_change_percent": -0.6937068754224285,
+          "observed_peak_wal_change_percent": 1.131550018493943
+        },
+        {
+          "trial": 4,
+          "wall_change_percent": -16.752970051983528,
+          "write_bytes_change_percent": 0.09133640758314243,
+          "observed_peak_wal_change_percent": -1.0659259441348268
+        }
+      ],
+      "limitations": [
+        "OS-managed caches and unrestricted recorded CPU affinity.",
+        "Marker polling observes updates, not exact collection counts or durations.",
+        "All poll intervals retained including absent WAL; errors or observation gaps above1s reject the run. An in-flight poll may finish after process exit; wall ends at wait4 before joining it.",
+        "Process exit uses50ms polling; observed wall can include up to one polling interval of exit delay.",
+        "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+        "Fixed near pair only; no browser or remote-storage claim.",
+        "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+      ]
+    },
+    "week": {
+      "source": "/tmp/mnos-ingest/evidence/source-window-native-wide-week.json",
+      "sha256": "b4da1cd620c6a17c204d4c8bf651454231673e26ccd160ee3bdf6f83f120f080",
+      "complete_runs": 8,
+      "identities_checked": 16,
+      "medians": {
+        "control": {
+          "wall_seconds": 79.12264925599447,
+          "peak_rss_bytes": 973248512.0,
+          "observed_peak_wal_bytes": 137016812.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "file_counts": [
+            299,
+            283,
+            303,
+            283
+          ],
+          "fresh_import_git_seconds": 26.7876637265,
+          "fresh_git_tree_seconds": 22.2134199385,
+          "fresh_nar_seconds": 5.97519473,
+          "fresh_total_seconds": 55.4661282255,
+          "update_import_git_seconds": 5.7084825355,
+          "update_git_tree_seconds": 7.7465441115,
+          "update_nar_seconds": 7.4569470765000005,
+          "update_total_seconds": 24.272882606499998,
+          "fresh_conversion_observed_peak_wal_bytes": 137016812.0,
+          "update_conversion_observed_peak_wal_bytes": 30694032.0,
+          "process_output_bytes": 687951872.0,
+          "final_process_write_bytes": 683431936.0,
+          "fresh_import_write_bytes": 318148608.0,
+          "fresh_conversion_write_bytes": 229859328.0,
+          "update_import_write_bytes": 35166208.0,
+          "update_conversion_write_bytes": 64882688.0
+        },
+        "candidate": {
+          "wall_seconds": 76.24175921398273,
+          "peak_rss_bytes": 982579200.0,
+          "observed_peak_wal_bytes": 137072432.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "file_counts": [
+            301,
+            283,
+            300,
+            285
+          ],
+          "fresh_import_git_seconds": 27.2748285725,
+          "fresh_git_tree_seconds": 20.169933511,
+          "fresh_nar_seconds": 6.075569429,
+          "fresh_total_seconds": 53.386785087,
+          "update_import_git_seconds": 4.5408725355,
+          "update_git_tree_seconds": 5.4392101785,
+          "update_nar_seconds": 12.498148104,
+          "update_total_seconds": 23.1022723695,
+          "fresh_conversion_observed_peak_wal_bytes": 137072432.0,
+          "update_conversion_observed_peak_wal_bytes": 30774372.0,
+          "process_output_bytes": 687978496.0,
+          "final_process_write_bytes": 683429888.0,
+          "fresh_import_write_bytes": 318193664.0,
+          "fresh_conversion_write_bytes": 229689344.0,
+          "update_import_write_bytes": 34885632.0,
+          "update_conversion_write_bytes": 64618496.0
+        }
+      },
+      "change_percent": {
+        "wall_seconds": -3.6410434548151627,
+        "peak_rss_bytes": 0.958715876259153,
+        "observed_peak_wal_bytes": 0.04059355869410197,
+        "fresh_import_git_seconds": 1.8186164010938644,
+        "fresh_git_tree_seconds": -9.19933280493318,
+        "fresh_nar_seconds": 1.6798565324748882,
+        "fresh_total_seconds": -3.7488521463880375,
+        "update_import_git_seconds": -20.453947134616747,
+        "update_git_tree_seconds": -29.785332656593113,
+        "update_nar_seconds": 67.60408751440599,
+        "update_total_seconds": -4.82270794111006,
+        "fresh_conversion_observed_peak_wal_bytes": 0.04059355869410197,
+        "update_conversion_observed_peak_wal_bytes": 0.26174469356128327,
+        "process_output_bytes": 0.0038700381645329074,
+        "final_process_write_bytes": -0.0002996640765751124,
+        "fresh_import_write_bytes": 0.014161935292822392,
+        "fresh_conversion_write_bytes": -0.07395131686802614,
+        "update_import_write_bytes": -0.7978568516685103,
+        "update_conversion_write_bytes": -0.40718411666298415
+      },
+      "pairs": [
+        {
+          "trial": 1,
+          "wall_change_percent": -3.582229656626401,
+          "write_bytes_change_percent": 0.2492613891577733,
+          "observed_peak_wal_change_percent": 0.5569436034026154
+        },
+        {
+          "trial": 2,
+          "wall_change_percent": -6.696903412707023,
+          "write_bytes_change_percent": -0.12020805678834012,
+          "observed_peak_wal_change_percent": -0.08409416587101814
+        },
+        {
+          "trial": 3,
+          "wall_change_percent": 1.2098676001531583,
+          "write_bytes_change_percent": -0.10620946022834588,
+          "observed_peak_wal_change_percent": 0.2622456055204392
+        },
+        {
+          "trial": 4,
+          "wall_change_percent": -2.156785419431584,
+          "write_bytes_change_percent": -0.3043577198771241,
+          "observed_peak_wal_change_percent": -0.7220861249496946
+        }
+      ],
+      "limitations": [
+        "OS-managed caches and unrestricted recorded CPU affinity.",
+        "Marker polling observes updates, not exact collection counts or durations.",
+        "All poll intervals retained including absent WAL; errors or observation gaps above1s reject the run. An in-flight poll may finish after process exit; wall ends at wait4 before joining it.",
+        "Process exit uses50ms polling; observed wall can include up to one polling interval of exit delay.",
+        "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+        "Fixed week pair only; no browser or remote-storage claim.",
+        "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+      ]
+    },
+    "release": {
+      "source": "/tmp/mnos-ingest/evidence/source-window-native-wide-release.json",
+      "sha256": "33aa6b3c189250cb97ac4f1961d0347cf4f86a24281b736d4800baa8853c9ca4",
+      "complete_runs": 8,
+      "identities_checked": 16,
+      "medians": {
+        "control": {
+          "wall_seconds": 93.81063256200287,
+          "peak_rss_bytes": 1250394112.0,
+          "observed_peak_wal_bytes": 133556012.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "file_counts": [
+            396,
+            395,
+            396,
+            398
+          ],
+          "fresh_import_git_seconds": 27.6191498765,
+          "fresh_git_tree_seconds": 18.8726465375,
+          "fresh_nar_seconds": 4.9413883955,
+          "fresh_total_seconds": 51.4994850015,
+          "update_import_git_seconds": 19.973772207,
+          "update_git_tree_seconds": 17.7142671445,
+          "update_nar_seconds": 5.4337353515,
+          "update_total_seconds": 42.899737934,
+          "fresh_conversion_observed_peak_wal_bytes": 112350372.0,
+          "update_conversion_observed_peak_wal_bytes": 133556012.0,
+          "process_output_bytes": 915036160.0,
+          "final_process_write_bytes": 911661056.0,
+          "fresh_import_write_bytes": 250413056.0,
+          "fresh_conversion_write_bytes": 217038848.0,
+          "update_import_write_bytes": 192798720.0,
+          "update_conversion_write_bytes": 251392000.0
+        },
+        "candidate": {
+          "wall_seconds": 86.0637950865057,
+          "peak_rss_bytes": 1149779968.0,
+          "observed_peak_wal_bytes": 133455072.0,
+          "observed_pressure_updates": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "file_counts": [
+            400,
+            397,
+            376,
+            397
+          ],
+          "fresh_import_git_seconds": 23.066181946,
+          "fresh_git_tree_seconds": 16.6736598685,
+          "fresh_nar_seconds": 5.0633600305,
+          "fresh_total_seconds": 44.969368434,
+          "update_import_git_seconds": 17.147109717,
+          "update_git_tree_seconds": 16.928239472999998,
+          "update_nar_seconds": 5.479214398,
+          "update_total_seconds": 40.771830992999995,
+          "fresh_conversion_observed_peak_wal_bytes": 112731472.0,
+          "update_conversion_observed_peak_wal_bytes": 133455072.0,
+          "process_output_bytes": 918003712.0,
+          "final_process_write_bytes": 914618368.0,
+          "fresh_import_write_bytes": 251035648.0,
+          "fresh_conversion_write_bytes": 217257984.0,
+          "update_import_write_bytes": 192880640.0,
+          "update_conversion_write_bytes": 252909568.0
+        }
+      },
+      "change_percent": {
+        "wall_seconds": -8.257952498483567,
+        "peak_rss_bytes": -8.046594512434812,
+        "observed_peak_wal_bytes": -0.07557877664091661,
+        "fresh_import_git_seconds": -16.484822852472846,
+        "fresh_git_tree_seconds": -11.651713312335964,
+        "fresh_nar_seconds": 2.468367698258178,
+        "fresh_total_seconds": -12.679964794424247,
+        "update_import_git_seconds": -14.151871067245725,
+        "update_git_tree_seconds": -4.437257635826331,
+        "update_nar_seconds": 0.8369757369107944,
+        "update_total_seconds": -4.960186340237627,
+        "fresh_conversion_observed_peak_wal_bytes": 0.33920670952474197,
+        "update_conversion_observed_peak_wal_bytes": -0.07557877664091661,
+        "process_output_bytes": 0.3243098065108141,
+        "final_process_write_bytes": 0.3243872248942514,
+        "fresh_import_write_bytes": 0.2486260141324248,
+        "fresh_conversion_write_bytes": 0.10096625651090374,
+        "update_import_write_bytes": 0.042489908646703434,
+        "update_conversion_write_bytes": 0.6036659877800332
+      },
+      "pairs": [
+        {
+          "trial": 1,
+          "wall_change_percent": -6.670321163116244,
+          "write_bytes_change_percent": 0.7619469666823475,
+          "observed_peak_wal_change_percent": 0.20115115546390783
+        },
+        {
+          "trial": 2,
+          "wall_change_percent": -17.804115061005977,
+          "write_bytes_change_percent": 0.15421444774192938,
+          "observed_peak_wal_change_percent": -0.09865274944553803
+        },
+        {
+          "trial": 3,
+          "wall_change_percent": -9.364598883190045,
+          "write_bytes_change_percent": 7.978587012753313,
+          "observed_peak_wal_change_percent": 0.19446840627133088
+        },
+        {
+          "trial": 4,
+          "wall_change_percent": -0.7863480254840294,
+          "write_bytes_change_percent": 0.14763161201156727,
+          "observed_peak_wal_change_percent": -0.3968619263983175
+        }
+      ],
+      "limitations": [
+        "OS-managed caches and unrestricted recorded CPU affinity.",
+        "Marker polling observes updates, not exact collection counts or durations.",
+        "All poll intervals retained including absent WAL; errors or observation gaps above1s reject the run. An in-flight poll may finish after process exit; wall ends at wait4 before joining it.",
+        "Process exit uses50ms polling; observed wall can include up to one polling interval of exit delay.",
+        "50ms WAL polling gives lower-bound peaks; stage labels follow observed stdout and can lag by a poll.",
+        "Fixed release pair only; no browser or remote-storage claim.",
+        "Process write_bytes is cumulative; Conversion deltas subtract the immediately preceding import-stage counter. Update import deltas subtract the preceding NAR-stage counter; fresh import writes include process/repository startup. rusage output_blocks is also retained independently."
+      ]
+    }
+  }
+}

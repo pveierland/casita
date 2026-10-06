@@ -1,0 +1,59 @@
+{
+  "compressed_and_original_hash_pairs_verified": 380,
+  "byte_identical_reproduced_audits": [
+    {
+      "audit": "source-window-corpus-audit.json",
+      "sha256": "9e234fb500e2a063e7036c64ee9d1f66449489d4e9496c7cb1c01fd321f7148a"
+    },
+    {
+      "audit": "source-window-view-screen-audit.json",
+      "sha256": "b8961d0d943fcbf82914f3c46ec05588971d3f44978fb3a25ab87e4afbb3de98"
+    },
+    {
+      "audit": "source-window-view-confirmation-audit.json",
+      "sha256": "9bb9250cd70582bcf90234aee8548cb63b5a8e1748bffb9ad4ee6d327f9a9f3e"
+    },
+    {
+      "audit": "source-window-view-paired-audit.json",
+      "sha256": "54600e299bb522682dca813cdbbc76f513cdcf2ddd8fc1a4f8d22d67b996cf53"
+    },
+    {
+      "audit": "evaluator-source-window-mappings-audit.json",
+      "sha256": "afcbb8111898ee616b35fb16ec411e82441b2a3673034f9ba5d295a76d612a0d"
+    },
+    {
+      "audit": "evaluator-source-window-screen-audit.json",
+      "sha256": "7b248df4631f5c1efb692f06a49d857b67f2e48334d24edb53e264889d10ab59"
+    },
+    {
+      "audit": "evaluator-source-window-final-audit.json",
+      "sha256": "309ae85f1352b01e0056370dcf5ac617e5182b7e73103b614b791b7843d39c9b"
+    },
+    {
+      "audit": "source-window-native-wide-near-audit.json",
+      "sha256": "bcb07529911f46dcc62a189254a6197fb4feedada878ec814214c6116e71bf64"
+    },
+    {
+      "audit": "source-window-native-wide-near-audit-io.json",
+      "sha256": "752ea261c09a5effa4ea55c7f41731a4b08c239720f4e5e7efe4dbaabedc232c"
+    },
+    {
+      "audit": "source-window-native-wide-week-audit.json",
+      "sha256": "e80fa09ef89ac2408897405b05fdd1c242ee20621084c140b4a3ce61e375b84a"
+    },
+    {
+      "audit": "source-window-native-wide-week-audit-io.json",
+      "sha256": "736fe2442e6ffc3bfff373fd14cbb1c1770675f5ef1eb31bb1763c1151d50bdf"
+    },
+    {
+      "audit": "source-window-native-wide-release-audit.json",
+      "sha256": "2d73e4d69410fa488fd00e46719206e4ee75a947471ad6ff0c651dfa7c91d078"
+    },
+    {
+      "audit": "source-window-native-wide-release-audit-io.json",
+      "sha256": "cf6edf77faafdd4090738b39ddf6f90f8bf76325a566129228f2ba03a865f8de"
+    }
+  ],
+  "aggregate_results_byte_identical": true,
+  "all_frozen_protocol_hashes_verified": true
+}
