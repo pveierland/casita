@@ -1381,6 +1381,8 @@
         "--bench",
         "object_reads",
         "--bench",
+        "local_range_read",
+        "--bench",
         "compression_handoff",
         "--bench",
         "git_fetch_fairness",
@@ -2295,6 +2297,40 @@
             "complete payload size",
             "EOF observed",
             "configured buffer cap"
+          ]
+        },
+        "local-range-read": {
+          "runner": "cargo bench --no-default-features --features native,experimental --bench local_range_read",
+          "included_in": "benchmark all --suites core-primitives",
+          "payload_sizes_bytes": [
+            1,
+            128,
+            4096,
+            65535,
+            65536,
+            65537,
+            1048576
+          ],
+          "backends": [
+            "local filesystem",
+            "in-memory"
+          ],
+          "strategies": [
+            "get_range",
+            "get_ranges with one identical range"
+          ],
+          "concurrency": [
+            1,
+            16
+          ],
+          "reads_per_iteration": 64,
+          "metrics": [
+            "complete verified working-set read latency"
+          ],
+          "correctness": [
+            "exact returned range count",
+            "complete bytes on every iteration",
+            "nonzero file offset"
           ]
         },
         "protected-object-reads": {

@@ -385,3 +385,8 @@ required-features = ["native", "experimental"]
 name = "object_reads"
 harness = false
 required-features = ["native", "experimental"]
+
+[[bench]]
+name = "local_range_read"
+harness = false
+required-features = ["native", "experimental"]

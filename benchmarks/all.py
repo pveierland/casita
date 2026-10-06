@@ -13,7 +13,7 @@ from benchmarks import build_manifest, cli
 from benchmarks import storage
 from benchmarks.suites import repository as common
 
-CORE_BENCHES = ("write_path", "hash_inputs", "tar_import", "filesystem_import", "dedup", "repairing", "optimization", "metadata_verification", "retained_wal", "object_reads", "compression_handoff", "git_fetch_fairness", "verified_io", "overwrite_pages", "manifest_reads", "nar_associations", "nar_import", "bao_packing", "cdcs", "sliced_transfer")
+CORE_BENCHES = ("write_path", "hash_inputs", "tar_import", "filesystem_import", "dedup", "repairing", "optimization", "metadata_verification", "retained_wal", "object_reads", "local_range_read", "compression_handoff", "git_fetch_fairness", "verified_io", "overwrite_pages", "manifest_reads", "nar_associations", "nar_import", "bao_packing", "cdcs", "sliced_transfer")
 
 # Bounded defaults. Frontier sizes remain explicit opt-in suite arguments.
 SMOKE = {
