@@ -461,6 +461,15 @@ intermediates from shared-cache cleanup. The output directory must be new.
 Each retained executable has a `.build.json` sidecar recording its source commit
 and content fingerprint, dirty state, dependency lockfile, requested features,
 compiler, flags, target, profile, Cargo configuration, and build overrides.
+Schema 2 records whether flags came from `CARGO_ENCODED_RUSTFLAGS`, `RUSTFLAGS`,
+or configuration. Empty environment overrides are distinct from unset variables;
+the encoded variable takes precedence. This follows
+[Cargo's flag-source order](https://doc.rust-lang.org/cargo/reference/config.html#buildrustflags).
+Legacy schema 1 sidecars remain readable for individual probes, but comparing
+multiple probes requires rebuilding them with schema 2. Revision runs also
+reject legacy or differing environment flag sources/values before timing;
+other settings (such as dependency or checked-in configuration changes across
+revisions) remain recorded for interpretation.
 `--bin-dir` requires these sidecars and rejects binaries whose recorded source
 or dependency lockfile no longer matches the current worktree. Keep the sidecar when copying a probe.
 The Git closure and chunk hashing/streaming/completion paired suites require

@@ -726,6 +726,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     build_spec,
                 )
         manifests = [build_manifest.read(binaries[revision.label], required=True) for revision in revisions]
+        build_manifest.require_matching_rustflags(manifests)
         for revision, manifest in zip(revisions, manifests):
             if manifest['source_dirty']:
                 raise RevisionBenchmarkError(f'build manifest has uncommitted source changes for {revision.label}')

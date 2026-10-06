@@ -11,7 +11,7 @@ import tomllib
 from benchmarks.suites.repository import BenchmarkError
 
 MATCHED_FIELDS = ('lockfile_sha256', 'features', 'default_features', 'rustc_version',
-                  'rustflags', 'target', 'profile', 'build_environment', 'cargo_config_sha256')
+                  'rustflags_source', 'rustflags', 'target', 'profile', 'build_environment', 'cargo_config_sha256')
 REQUIRED_FIELDS = ('schema_version', 'executable_sha256', 'source_revision', 'source_sha256', 'source_dirty', *MATCHED_FIELDS)
 
 
@@ -36,11 +36,16 @@ def read(executable, *, required=False):
         raise BenchmarkError(f'invalid build manifest {path}: {error}') from error
     if not isinstance(build, dict):
         raise BenchmarkError(f'invalid build manifest {path}: expected an object')
-    for field in REQUIRED_FIELDS:
+    schema = build.get('schema_version')
+    if type(schema) is not int or schema not in (1, 2):
+        raise BenchmarkError(f'unsupported build manifest schema: {path}')
+    # Legacy sidecars remain readable for archived single-probe results, but
+    # cannot establish whether an empty rustflags value overrode configuration.
+    required_fields = REQUIRED_FIELDS if schema == 2 else tuple(
+        field for field in REQUIRED_FIELDS if field != 'rustflags_source')
+    for field in required_fields:
         if field not in build or build[field] is None:
             raise BenchmarkError(f'build manifest is missing {field}: {path}')
-    if build['schema_version'] != 1:
-        raise BenchmarkError(f'unsupported build manifest schema: {path}')
     for field in ('executable_sha256', 'source_sha256', 'lockfile_sha256', 'cargo_config_sha256',
                   *(('fixture_sha256',) if 'fixture_sha256' in build else ())):
         value = build[field]
@@ -55,9 +60,25 @@ def read(executable, *, required=False):
             raise BenchmarkError(f'invalid {field} in build manifest: {path}')
     if not isinstance(build['rustflags'], str):
         raise BenchmarkError(f'invalid rustflags in build manifest: {path}')
+    if schema == 2:
+        if build['rustflags_source'] not in ('configuration', 'RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS'):
+            raise BenchmarkError(f'invalid rustflags_source in build manifest: {path}')
+        if build['rustflags_source'] == 'configuration' and build['rustflags']:
+            raise BenchmarkError(f'configuration rustflags must be recorded through config/environment: {path}')
     if build['executable_sha256'] != digest(executable):
         raise BenchmarkError(f'build manifest fingerprint does not match executable: {executable}')
     return build
+
+
+def require_matching_rustflags(builds):
+    """Check flag origins as well as values before comparing two or more builds."""
+    if len(builds) < 2:
+        return
+    if any(build['schema_version'] != 2 for build in builds):
+        raise BenchmarkError('paired build manifests require rustflags_source; rebuild legacy probes')
+    for field in ('rustflags_source', 'rustflags'):
+        if any(build[field] != builds[0][field] for build in builds[1:]):
+            raise BenchmarkError(f'paired build manifests differ in {field}')
 
 
 def artifacts(variants, *, fixture=False):
@@ -71,6 +92,7 @@ def artifacts(variants, *, fixture=False):
             row['build'] = build
         result.append(row)
     if paired:
+        require_matching_rustflags([row['build'] for row in result])
         if len({r['sha256'] for r in result}) != len(result):
             raise BenchmarkError('paired executables must have distinct fingerprints')
         fields = (*MATCHED_FIELDS, 'fixture_sha256') if fixture else MATCHED_FIELDS
@@ -143,11 +165,15 @@ def write(root, executable, command, *, environment=None, fixture=None):
     features = sorted(set(option('--features', '').replace(',', ' ').split()))
     if '--all-features' in command:
         features = ['*']
-    build = dict(schema_version=1, executable_sha256=digest(executable), source_revision=revision,
+    # Presence matters: even an empty override suppresses lower-priority flags.
+    rustflags_source = next((key for key in ('CARGO_ENCODED_RUSTFLAGS', 'RUSTFLAGS')
+                             if key in environment), 'configuration')
+    build = dict(schema_version=2, executable_sha256=digest(executable), source_revision=revision,
                  source_sha256=source_sha, source_dirty=bool(_run(root, environment, 'git', 'status', '--porcelain')),
                  lockfile_sha256=digest(lockfile), features=features,
                  default_features='--no-default-features' not in command, rustc_version=rustc,
-                 rustflags=environment.get('CARGO_ENCODED_RUSTFLAGS', environment.get('RUSTFLAGS', '')),
+                 rustflags_source=rustflags_source,
+                 rustflags=environment.get(rustflags_source, '') if rustflags_source != 'configuration' else '',
                  target=target, profile=option('--profile', 'release' if '--release' in command or 'bench' in command else 'dev'),
                  cargo_config_sha256=config_hash.hexdigest(),
                  build_environment={key: value for key, value in sorted(environment.items())

@@ -1,0 +1,38 @@
+[
+  {
+    "path": "build-manifest-flags-red.log.gz",
+    "bytes": 728,
+    "sha256": "0cd3763fc86fb0a347b5ac58eae41f15000929d15373f53281cd60e0b40e74e6",
+    "uncompressed_sha256": "c0ed6bacc4d10878f0b84c55107e344f880d86b4d7f789ae13a3f4faa49e6c46"
+  },
+  {
+    "path": "build-manifest-flags-green.log.gz",
+    "bytes": 5751,
+    "sha256": "a44e140925f58aa1cbf6c2c27a84a75c81742b401832ca738d4a55367045371c",
+    "uncompressed_sha256": "426285717387641b711597fdc2ede2d30214c66cdfc81fcee8eb5bf88689fc21"
+  },
+  {
+    "path": "build-manifest-flags-revisions-red.log.gz",
+    "bytes": 684,
+    "sha256": "efb3bd31d3bbc063ab5d8bce398386fe888c0d6e6ad76cde720a35c7e7dfa25b",
+    "uncompressed_sha256": "8d3a701ea8ff222ac04346d33472fe513cb2c85d09076f17c38b62220d14a3c0"
+  },
+  {
+    "path": "build-manifest-flags-final-green.log.gz",
+    "bytes": 4912,
+    "sha256": "4d9ee3501dcdf689d7e1f3cf4ab08568d2ba66bfbe8ec56dbf4f3cc1d3456356",
+    "uncompressed_sha256": "b3b100454ab727034122c983340a54920c6c5aab61e47d7af8ebba33260fce97"
+  },
+  {
+    "path": "build-manifest-flags-cargo.json.gz",
+    "bytes": 537,
+    "sha256": "9bc640c9a69e1f131de5bf6d4d01fbc05a282a2b11addcc4bf2e2d73992e6d6d",
+    "uncompressed_sha256": "30c994e5c1dfff042a7853a83b35804f37eee9db505dce8da292aafe934d02f2"
+  },
+  {
+    "path": "implementation.patch.gz",
+    "bytes": 4562,
+    "sha256": "a7e3647a7cf728a1bc4cd3940d112dfbca75756ec19f4a8977660941b1d5eeeb",
+    "uncompressed_sha256": "66f4fc680427dc01a1c018e75f91b33ab94bd8397718cada780a52f082deb1ce"
+  }
+]

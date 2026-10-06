@@ -11,6 +11,31 @@ from benchmarks.suites.repository import BenchmarkError
 from benchmarks.tests.build_fixtures import stamp
 
 class BuildManifestTests(unittest.TestCase):
+    def test_flag_source_must_be_known_and_consistent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            probe = pathlib.Path(directory) / 'probe'
+            probe.write_bytes(b'probe')
+            for source in (None, '', 'unknown', [], False):
+                with self.subTest(source=source):
+                    stamp(probe, schema_version=2, rustflags_source=source)
+                    with self.assertRaisesRegex(BenchmarkError, 'rustflags_source'):
+                        build_manifest.read(probe, required=True)
+            stamp(probe, schema_version=2, rustflags_source='configuration', rustflags='-C opt-level=1')
+            with self.assertRaisesRegex(BenchmarkError, 'rustflags'):
+                build_manifest.read(probe, required=True)
+
+    def test_legacy_flags_remain_readable_but_cannot_qualify_a_pair(self):
+        with tempfile.TemporaryDirectory() as directory:
+            probes = [pathlib.Path(directory) / name for name in ('before', 'after')]
+            for probe in probes:
+                probe.write_bytes(probe.name.encode())
+                document = stamp(probe, schema_version=1)
+                document.pop('rustflags_source', None)
+                build_manifest.manifest_path(probe).write_text(json.dumps(document))
+                self.assertEqual(build_manifest.read(probe, required=True), document)
+            with self.assertRaisesRegex(BenchmarkError, 'rebuild'):
+                build_manifest.artifacts(list(zip(('baseline', 'candidate'), probes)))
+
     def test_paired_comparison_requires_both_manifests(self):
         with tempfile.TemporaryDirectory() as directory:
             before, after = [pathlib.Path(directory) / name for name in ('before', 'after')]
@@ -101,6 +126,29 @@ class ManifestWriterTests(unittest.TestCase):
                 self.assertEqual(original['build_environment']['CARGO_PROFILE_RELEASE_LTO'], 'thin')
                 self.assertEqual(original['fixture_sha256'], build_manifest.digest(root / 'fixture.rs'))
                 self.assertEqual(original['rustflags'], '-C target-cpu=native')
+                # Identical values can come from different Cargo flag sources:
+                # unset uses configuration; an empty override suppresses it.
+                other = pathlib.Path(directory) / 'other-probe'
+                other.write_bytes(b'different built executable')
+                clean = {key: value for key, value in environment.items()
+                         if key not in {'RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS'}}
+                pairs = [({}, {'RUSTFLAGS': ''}),
+                         ({}, {'CARGO_ENCODED_RUSTFLAGS': ''}),
+                         ({'RUSTFLAGS': '-C opt-level=1'},
+                          {'CARGO_ENCODED_RUSTFLAGS': '-C opt-level=1'})]
+                for before, after in pairs:
+                    with self.subTest(before=before, after=after):
+                        build_manifest.write(root, binary, command, environment=clean | before)
+                        build_manifest.write(root, other, command, environment=clean | after)
+                        with self.assertRaisesRegex(BenchmarkError, 'rustflags_source'):
+                            build_manifest.artifacts([('baseline', binary), ('candidate', other)])
+                # The lower-priority variable must not change an encoded build.
+                encoded = {'CARGO_ENCODED_RUSTFLAGS': '-C\x1fopt-level=1'}
+                build_manifest.write(root, binary, command, environment=clean | encoded)
+                build_manifest.write(root, other, command,
+                                     environment=clean | encoded | {'RUSTFLAGS': '-C opt-level=2'})
+                self.assertEqual(len(build_manifest.artifacts(
+                    [('baseline', binary), ('candidate', other)])), 2)
                 (root / 'fixture.rs').write_text('fixture changed without a commit\n')
                 dirty = build_manifest.write(root, binary, command, environment=environment, fixture='fixture.rs')
                 self.assertFalse(original['source_dirty'])
