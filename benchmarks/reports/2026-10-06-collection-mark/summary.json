@@ -1,0 +1,328 @@
+{
+  "scope": "Named-root traversal microbenchmark only; not an ingestion speedup.",
+  "source_base": "357650876f04dc42ea330f40c28805de89319abb",
+  "comparison": "Legacy and current algorithm in the same executable; independent processes for mode/strategy; adjacent four-pair AB/BA schedule on CPU2.",
+  "builds": [
+    "collection-mark-strategies.build.json",
+    "collection-mark-shapes.build.json"
+  ],
+  "validation": {
+    "native_passed": 847,
+    "native_failed": 0,
+    "native_ignored": 52,
+    "python_tests": 35,
+    "benchmark_all_smoke": "passed",
+    "timed_processes": 608,
+    "exact_mark_audits": 2432
+  },
+  "matrices": [
+    {
+      "path": "collection-mark-strategies-screen-cpu2-audit.json",
+      "processes": 32,
+      "exact_mark_audits": 128
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2-audit.json",
+      "processes": 384,
+      "exact_mark_audits": 1536
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2-audit.json",
+      "processes": 192,
+      "exact_mark_audits": 768
+    }
+  ],
+  "retained_root_census": [
+    {
+      "case": "normal-1",
+      "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-1/cas-7/casita.sqlite",
+      "named_roots": 0,
+      "objects": 247671
+    },
+    {
+      "case": "normal-2",
+      "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-2/cas-226/casita.sqlite",
+      "named_roots": 0,
+      "objects": 247671
+    },
+    {
+      "case": "normal-3",
+      "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-3/cas-299/casita.sqlite",
+      "named_roots": 0,
+      "objects": 247671
+    },
+    {
+      "case": "deferred-1",
+      "path": "/tmp/mnos-ingest/evidence/release-pressure-deferred-1/cas-80/casita.sqlite",
+      "named_roots": 0,
+      "objects": 247671
+    }
+  ],
+  "notes": [
+    "The unchanged pin mode is an independent control only in the same-binary v2/v3 experiments.",
+    "Earlier v1 measurements use different binaries and pins after named in the same process; retained as exploratory, not causal evidence.",
+    "The release-ingestion fixture publishes unrooted objects and retains snapshot pins; four retained stores have no named roots.",
+    "Existing Turso WAL PR9485 was already in the baseline; this change neither adds nor duplicates it."
+  ],
+  "artifacts": [
+    {
+      "path": "collection-mark-strategies-screen-cpu2.json.gz",
+      "sha256": "0027c6673182a28b69b0f63c68a6384f5ad10420f4136023da39dd5c661f2f05",
+      "source_sha256": "49a13469f5a7350ec8aee9ecb87bafbeb85b070ac82d2d85c95fe4c2dda1b95c"
+    },
+    {
+      "path": "collection-mark-strategies-screen-cpu2-audit.json",
+      "sha256": "838fc7b2b63dab5f240c4a899766abdd08fb97347c057d6b47b7c93c089e3a76",
+      "source_sha256": "838fc7b2b63dab5f240c4a899766abdd08fb97347c057d6b47b7c93c089e3a76"
+    },
+    {
+      "path": "collection-mark-strategies-screen-cpu2-protocol.json",
+      "sha256": "13d5733f8d95da650e9425e24a0c3050a5d16577b80328c92a3317eadba34a4e",
+      "source_sha256": "13d5733f8d95da650e9425e24a0c3050a5d16577b80328c92a3317eadba34a4e"
+    },
+    {
+      "path": "collection-mark-strategies-screen-cpu2-runner.py",
+      "sha256": "4cfd21f29e4ef63210a71d2f0b6e2c85e146ee9fc4aaf51ca121bb72e794a5b5",
+      "source_sha256": "4cfd21f29e4ef63210a71d2f0b6e2c85e146ee9fc4aaf51ca121bb72e794a5b5"
+    },
+    {
+      "path": "collection-mark-strategies-screen-cpu2-launcher.py",
+      "sha256": "03d00e4335e66ec34b7387a178b5966aca204f6d125ab1c8d700a91da7e58653",
+      "source_sha256": "03d00e4335e66ec34b7387a178b5966aca204f6d125ab1c8d700a91da7e58653"
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2.json.gz",
+      "sha256": "d431fbc01063abdf6e2f4384c8d605fc6fbae369f39b16aa44d1f7409956ff52",
+      "source_sha256": "5115c0f7c6a2c725552fdb4607e4c206c2d022b526d9c609bd699b507dc161fd"
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2-audit.json",
+      "sha256": "0cb69f3089321263d58440636013b22a7808fc100d0b62e2a06f842b5dccaefd",
+      "source_sha256": "0cb69f3089321263d58440636013b22a7808fc100d0b62e2a06f842b5dccaefd"
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2-protocol.json",
+      "sha256": "5fcc125d0e63996517179018465c8f7cef4b0d089dda68a6b26f165d36c77658",
+      "source_sha256": "5fcc125d0e63996517179018465c8f7cef4b0d089dda68a6b26f165d36c77658"
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2-runner.py",
+      "sha256": "4cfd21f29e4ef63210a71d2f0b6e2c85e146ee9fc4aaf51ca121bb72e794a5b5",
+      "source_sha256": "4cfd21f29e4ef63210a71d2f0b6e2c85e146ee9fc4aaf51ca121bb72e794a5b5"
+    },
+    {
+      "path": "collection-mark-strategies-matrix-cpu2-launcher.py",
+      "sha256": "03d00e4335e66ec34b7387a178b5966aca204f6d125ab1c8d700a91da7e58653",
+      "source_sha256": "03d00e4335e66ec34b7387a178b5966aca204f6d125ab1c8d700a91da7e58653"
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2.json.gz",
+      "sha256": "99b1bdaa194a605e6adcff0f03aff6157e11ae0e27b454198190589c9ec8f85f",
+      "source_sha256": "2eb2ac1b67274d95b6c0f20e2c4b3b5fc0cbce634cecdc1d558f5a4ff4e53768"
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2-audit.json",
+      "sha256": "6e156bb08e0ca400ce99edf19d17a2e1dc97858b9067bce319eb4ac2d547b932",
+      "source_sha256": "6e156bb08e0ca400ce99edf19d17a2e1dc97858b9067bce319eb4ac2d547b932"
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2-protocol.json",
+      "sha256": "57d606909ff9fdf76f5e2160692b91a7bf4f5c0c6a86341b11f7fe2243f4f299",
+      "source_sha256": "57d606909ff9fdf76f5e2160692b91a7bf4f5c0c6a86341b11f7fe2243f4f299"
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2-runner.py",
+      "sha256": "43a6b41341eb2380b58db431ea77f1770905570640f6624b943a520813dc000d",
+      "source_sha256": "43a6b41341eb2380b58db431ea77f1770905570640f6624b943a520813dc000d"
+    },
+    {
+      "path": "collection-mark-shapes-chain-cpu2-launcher.py",
+      "sha256": "c29c7bcb0734c759becd881f6ca97549da7d5100eff149b97a199f31dfa04146",
+      "source_sha256": "c29c7bcb0734c759becd881f6ca97549da7d5100eff149b97a199f31dfa04146"
+    },
+    {
+      "path": "collection-mark-control.build.json",
+      "sha256": "f0dadf5eb6f5438e908324b30789a827f71382de7f393388e1fb6b9526d9a78e",
+      "source_sha256": "f0dadf5eb6f5438e908324b30789a827f71382de7f393388e1fb6b9526d9a78e"
+    },
+    {
+      "path": "collection-mark-candidate.build.json",
+      "sha256": "be5695fb22ca3865cfb1e13b5216d1938215e946de3a46b1e9bbce72126d71b9",
+      "source_sha256": "be5695fb22ca3865cfb1e13b5216d1938215e946de3a46b1e9bbce72126d71b9"
+    },
+    {
+      "path": "collection-mark-named.build.json",
+      "sha256": "408f4dc30af3de1355a20c8847137290e0bc884003a6bfd16e837de138e42ddd",
+      "source_sha256": "408f4dc30af3de1355a20c8847137290e0bc884003a6bfd16e837de138e42ddd"
+    },
+    {
+      "path": "collection-mark-strategies.build.json",
+      "sha256": "c7d24a06a7dabeae3984d98077492d64789fdd172796b304885d303c1aae7707",
+      "source_sha256": "c7d24a06a7dabeae3984d98077492d64789fdd172796b304885d303c1aae7707"
+    },
+    {
+      "path": "collection-mark-shapes.build.json",
+      "sha256": "31374785e8dc6b033facb47d279c995064f192a91156fea48522ff4640f41a6f",
+      "source_sha256": "31374785e8dc6b033facb47d279c995064f192a91156fea48522ff4640f41a6f"
+    },
+    {
+      "path": "collection-mark-strategies-collection_mark_tests.rs.gz",
+      "sha256": "ad439750ceddeaff231cf858bb6244911ffc8cd22a19467b48755fd834c0cbfd",
+      "source_sha256": "b9cecc190281b7f71cda3a07e8cbdb1a21a18fa82ec9eb8b75ca6494a2f99949"
+    },
+    {
+      "path": "collection-mark-strategies-collection.rs.gz",
+      "sha256": "4a292a45a342142cd997e89cadab5ec0767112a4cf8def6e7c30841a4895bd37",
+      "source_sha256": "d2491586e95c48f175123e57d80c314459dba0a8c2886467a0f7947c1138fb71"
+    },
+    {
+      "path": "collection-mark-shapes-collection_mark_tests.rs.gz",
+      "sha256": "d9afea49aa4dddf9a29a29ef5b596a34e54c2dc6b9c8adc3c7e17dd6c474d8df",
+      "source_sha256": "367dfa93d99ed03c32ecbfede5dfdcd54923d2eabf0c79944e35fb2a24f60f73"
+    },
+    {
+      "path": "collection-mark-shapes-collection.rs.gz",
+      "sha256": "4a292a45a342142cd997e89cadab5ec0767112a4cf8def6e7c30841a4895bd37",
+      "source_sha256": "d2491586e95c48f175123e57d80c314459dba0a8c2886467a0f7947c1138fb71"
+    },
+    {
+      "path": "collection-mark-retained-root-census.json",
+      "sha256": "740aacb5491a3cc4d9d5528dcaa8c2b46557ca4712cf12197915455d23764511",
+      "source_sha256": "740aacb5491a3cc4d9d5528dcaa8c2b46557ca4712cf12197915455d23764511"
+    },
+    {
+      "path": "collection-mark-red.log.gz",
+      "sha256": "d746dd59fbeeb9da0e8a3209fc3f81e68ee5e7372181aca02a0cc8a350b09a3e",
+      "source_sha256": "46dbe75b030343dc12a26117264978b4dd446f1b3340d8b0194171a33ef5d6b1"
+    },
+    {
+      "path": "collection-mark-v3-python-tests.log.gz",
+      "sha256": "ed8f6ca52741a3b5a695a6c3f8c0ae52e649ea5f18b520ad5b44366f80786c9b",
+      "source_sha256": "c12153e67938c4a5ec46a1753260ebea165140b5de3fd27f780225ddbe95613f"
+    },
+    {
+      "path": "collection-mark-shapes-full-native-tests.log.gz",
+      "sha256": "162ee0bf28ad8a4fd30a3cbea2036ffa68c4d7354e3a064f839909ee7b74ce91",
+      "source_sha256": "fc006364c59834052e020233a473a2e6765f8359f04d80e425ab37b35e3be9e7"
+    },
+    {
+      "path": "all-smoke-execution.json",
+      "sha256": "dbb7f09d8b52d26133d9e3b75d00b0f9bf5f172ec63059f41189c1633c1f4554",
+      "source_sha256": "dbb7f09d8b52d26133d9e3b75d00b0f9bf5f172ec63059f41189c1633c1f4554"
+    },
+    {
+      "path": "all-smoke-artifacts.json",
+      "sha256": "be9ea1bad1eb2d850cfda80d85712c77ee317441c6bfbb81023670a069ed8587",
+      "source_sha256": "be9ea1bad1eb2d850cfda80d85712c77ee317441c6bfbb81023670a069ed8587"
+    },
+    {
+      "path": "all-smoke-environment.json",
+      "sha256": "ae47691f9b24d484f46eba36991f9c17eddb85a56292662bf7834b2614f15364",
+      "source_sha256": "ae47691f9b24d484f46eba36991f9c17eddb85a56292662bf7834b2614f15364"
+    },
+    {
+      "path": "all-smoke-collection-mark.json.gz",
+      "sha256": "73729193e6dff41fa18545f5251eed60a68c6831e064a424ff162dde29942753",
+      "source_sha256": "8b84f3e3b997c34243375a2c829632222376708ea952d677416f892fefc614b1"
+    },
+    {
+      "path": "audit-mark-strategies.py",
+      "sha256": "adadc76900031c221388480947be41c67c185a993ff6633ade3643d3df9c82c8",
+      "source_sha256": "adadc76900031c221388480947be41c67c185a993ff6633ade3643d3df9c82c8"
+    },
+    {
+      "path": "README.md",
+      "sha256": "1fd2d1b9d3c3ed02330a4ef8398d36829d6ea34c708ae57d88761e3381009a0d",
+      "source_sha256": "1fd2d1b9d3c3ed02330a4ef8398d36829d6ea34c708ae57d88761e3381009a0d"
+    },
+    {
+      "path": "collection-mark-paired-audit.json.gz",
+      "sha256": "50a4d4b348381c29daccdfb4cc06a9de8903d5bddc43e63d346a44882d6e73c2",
+      "source_sha256": "faa4d6c3e0628f27de9e0d5cc8279372889faa3594164c488db116525dea70cd"
+    },
+    {
+      "path": "collection-mark-paired-candidate-1.json.gz",
+      "sha256": "7144fe6b7a4aa0d708b59fe70096662a987c606a78da00a085d52cc4cb30cd1c",
+      "source_sha256": "382a50ee9311ec0a70dee4c8ae4375098e098c583f50ecc2abf5a5b15e62d41d"
+    },
+    {
+      "path": "collection-mark-paired-candidate-2.json.gz",
+      "sha256": "39eaa1312d23f0a50444972efd03bd76774d572430dbe00cc079399d09ce3668",
+      "source_sha256": "72125da7529d249a71042b536594141e23edf893a2ad6bb085f811969c24bb90"
+    },
+    {
+      "path": "collection-mark-paired-candidate-3.json.gz",
+      "sha256": "f00995dce15ed4fcecaa9086aeb36b4b9115236e0241dbc8da8a28268a515ce2",
+      "source_sha256": "81d9263d0ca389b8bd2d1e7481bcfb44ffd9046c6fec20447040ae2335533edb"
+    },
+    {
+      "path": "collection-mark-paired-control-1.json.gz",
+      "sha256": "ecc22ef79d7bbe9bc9d7ed15dbb488cbd371154db635c96dfd22d7de2bb0bd0a",
+      "source_sha256": "2cea82308f00b474032ca68796d4993b6dc966c2da616d22c6af9dc9270935be"
+    },
+    {
+      "path": "collection-mark-paired-control-2.json.gz",
+      "sha256": "a1f9b84fbbcb0dcf19de2d1691c62fdcc9dc7c84086bba9ec11c56e748fc85ab",
+      "source_sha256": "6ad304ce77fe0ebb154c65b516bf6f65709d5f1a9530001b81b7a1477c32f71d"
+    },
+    {
+      "path": "collection-mark-paired-control-3.json.gz",
+      "sha256": "315870aeef20b7e98083a0e18d74b77c6a8a049bf9eefd6422bb8fb6973c33bf",
+      "source_sha256": "c776f1c1bc25af248d1a6d66e1f9fb784cd56b8a26e5519eef3ad76bfd705caf"
+    },
+    {
+      "path": "collection-mark-paired-protocol.json.gz",
+      "sha256": "898d88c682cf8d90bdcf48ec3894d87dfd2d3e8c205b52f9e11d5cf5704e0290",
+      "source_sha256": "5fafa4dd4cd8385db13892fb37a0d077aba134339b1cc9351864d4c3dfbb0d44"
+    },
+    {
+      "path": "collection-mark-paired-summary.json.gz",
+      "sha256": "53625c7a245e062f74e47e224c78a34ad095fbd2d7f56407111c1f2455e40c63",
+      "source_sha256": "6a40159688b8206e1f6d5acab9e7d68d1a3949e489d27e82939aceca0b967b58"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-audit.json.gz",
+      "sha256": "d190a49588bc1ec6d0303a00f219e0a0e99a9d3b7dac9bf124f75292fd87e239",
+      "source_sha256": "b7856db0afb77d3903f946633df0fdaca6dced4ccf82c0ff737e4ee46e2f9b80"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-control-1.json.gz",
+      "sha256": "3ff76b4f079d6742dd3c1893a8368425df8b8da30d9cd418ad68b84acc7d159c",
+      "source_sha256": "fb10a59cd85a8630fae1a291c8025bb1f9e269264c54ec5f81c7a6febc38136a"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-control-2.json.gz",
+      "sha256": "b93762d39c9d2e5a3a12de69c72fb17d2a27e862bcbcf07583f1e0a3da968fd9",
+      "source_sha256": "b2d699ae9f15dd8a64fc7cd3f1e35b97f93a52d9577b0bd3c1825089a04cb0a1"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-control-3.json.gz",
+      "sha256": "eaed2c2bc5e0886a48a033fb9b213f62b625c0294f73c6071aea96b99a4dd03a",
+      "source_sha256": "0995cd2a918a192afe48f072dc99ce747ce9b7c04521557046720d99b7a42393"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-named-1.json.gz",
+      "sha256": "0c84307b1807c1081e0de383a1eff224c006e0c42f0d47ff16016ed6d555a635",
+      "source_sha256": "506769363702ac6d64ced16d7e38bd817b73083cbefb831cbfb255eb44b7485f"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-named-2.json.gz",
+      "sha256": "ed404fbd1546c1094dd99f9e1ad38050daabfb4dcb0bfbdf1e7191f088314def",
+      "source_sha256": "b9aedb3c3c1a31180aebde50d32d4e9e73c993da4abe0b6ca77d244c6989a333"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-named-3.json.gz",
+      "sha256": "cc065ee7308b8fc251d1adae6f5d00005ae69cee35a6af6c129312a741f1e7da",
+      "source_sha256": "ac4f9014e934aa5b3320dcaab513acd321538c59d09cd182385cea1ef5fc24e7"
+    },
+    {
+      "path": "collection-mark-named-paired-cpu2-retry1-protocol.json.gz",
+      "sha256": "75a9fe1cf602aad0f7b72c2e9bcbcae91521801530ddb95c2e5d6933151e4c4c",
+      "source_sha256": "40e4ec3517f4a1d87f09001a9d972766dc8831d99650f856c73dcb3a5b806465"
+    },
+    {
+      "path": "discarded-filter.patch",
+      "sha256": "3bb8b84b218945014fe8161f62e788f7dbd7bd2620967f8131bc6913aac2e963"
+    }
+  ]
+}

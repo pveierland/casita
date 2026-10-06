@@ -624,6 +624,49 @@ retained. This isolates metadata collection, not graph traversal or payload
 reclamation. The first collection follows seeding and does not imply a cold OS
 cache. The paging investigation's paired results remain in the report above.
 
+### Collection graph marking
+
+The [named-root marking comparison](reports/2026-10-06-collection-mark/README.md)
+records the measured component gain and explains why it does not establish a
+speedup for the unrooted Git-ingestion fixture.
+
+```console
+$ benchmark run collection-mark --profile smoke --repetitions 1 --output benchmarks/results/collection-mark.json
+```
+
+This probe times named-root and pin marking against reopened Turso metadata.
+Each parent has one edge, pointing either to a shared leaf or to its own leaf.
+The distinct-leaf case measures the cost of avoiding repeated reads when there
+are no repeated edges. A third shape is a single-root chain of directories
+ending in one leaf; its one-element frontiers expose per-frontier overhead.
+All shapes check the exact marked set, cardinality, reopened revision and
+whether the mark set spilled. Repeat `--shape shared|distinct|chain` to select
+shapes; the default runs all three.
+
+Smoke uses 127, 128, 255 and 256 parents; standard adds 257 and 8,192. Both
+use memory limits of 256 and 250,000 keys. Shared and chain graphs contain `parents + 1`
+objects and distinct graphs contain `2 * parents`, so the small cases straddle
+the configured 256-key spill threshold in both shapes. The 255/256/257 parent
+cases also cover the traversal's 256-key frontier boundary. The 250,000-key
+limit is the production default and keeps these fixtures' mark sets in memory.
+Override with `--parents`, `--memory-limits`, `--iterations` and `--repetitions`.
+Use `--strategy legacy|current` or `--mode named|pins` to select a single path.
+
+Each process runs one strategy and mode. Named roots and pins use independent
+processes; pins therefore provide an independent unchanged-path control. The
+legacy named-root implementation is frozen from commit `3576508` and compiled
+into the same executable as the current path. Matching legacy/current cases
+run adjacently, with order reversed on even repetitions. Case-pair order uses
+a fixed shuffle. Each iteration creates fresh traversal state; first/warm
+labels distinguish iterations, not cold OS caches. Warm iterations within a
+process are subsamples, while repetitions use independent processes.
+Timing includes queue cleanup but excludes
+fixture construction, exact-set auditing and returned mark-set cleanup. Raw
+record-read counts, spill files/bytes and timings are retained. Process RSS
+includes setup and audits. This is a traversal probe, not full collection or
+ingestion throughput. It is registered in `benchmark all`, revision comparisons
+and dashboard normalization, with shapes and memory limits kept separate.
+
 ### Ordered metadata inventory
 
 The [2026-09-08 ordered-scan investigation](reports/2026-09-08-ordered-scan.md)

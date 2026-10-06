@@ -1346,14 +1346,31 @@ pub(super) async fn mark_named_roots(
         if frontier.is_empty() {
             break;
         }
+        // A missing named-root record aborts this entire pass, so provisional
+        // marks cannot escape on error. Insert before fetching to avoid reading
+        // repeated edges without adding another membership lookup.
+        let mut visited = marked.len();
+        let mut pending = Vec::new();
+        for step in frontier {
+            if marked.insert(step.1.clone()).await? {
+                pending.push(step);
+                // Admit at most one object beyond the limit. Below, an earlier
+                // missing record still precedes a later object-limit error.
+                if marked.len() > max_objects {
+                    break;
+                }
+            }
+        }
+        let frontier = pending;
+        if frontier.is_empty() {
+            continue;
+        }
         let keys: Vec<_> = frontier.iter().map(|(_, key)| key.clone()).collect();
         let found = snapshot.object_batch(&keys).await?;
 
         for ((from, key), record) in frontier.into_iter().zip(found) {
-            if !marked.insert(key.clone()).await? {
-                continue;
-            }
-            if marked.len() > max_objects {
+            visited += 1;
+            if visited > max_objects {
                 return Err(RepositoryError::LimitExceeded(format!(
                     "collection mark exceeded {max_objects} objects"
                 )));

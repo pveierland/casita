@@ -1,0 +1,3465 @@
+{
+  "source": "/tmp/mnos-ingest/evidence/collection-mark-strategies-matrix-cpu2.json",
+  "sha256": "5115c0f7c6a2c725552fdb4607e4c206c2d022b526d9c609bd699b507dc161fd",
+  "processes": 384,
+  "exact_mark_audits": 1536,
+  "note": "Medians of independent process means; warm iterations are subsamples. No end-to-end claim.",
+  "rows": [
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.287236,
+      "current_ms": 1.146532,
+      "median_change_percent": -10.93070734504007,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.340098,
+          "current": 1.099703,
+          "change_percent": -17.938613444688368
+        },
+        {
+          "repetition": 2,
+          "current": 1.193361,
+          "legacy": 1.234374,
+          "change_percent": -3.322574843604953
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.124334,
+          "current": 1.091343,
+          "change_percent": -2.9342704214228132
+        },
+        {
+          "repetition": 4,
+          "current": 1.576353,
+          "legacy": 1.386549,
+          "change_percent": 13.68895004792472
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.619062,
+      "current_ms": 0.6096868333333333,
+      "median_change_percent": -1.5144148189788265,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.625914,
+          "current": 0.601182,
+          "change_percent": -3.9513415581054256
+        },
+        {
+          "repetition": 2,
+          "current": 0.6181916666666666,
+          "legacy": 0.61221,
+          "change_percent": 0.9770612480466845
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.591608,
+          "current": 0.5463043333333334,
+          "change_percent": -7.657717046873369
+        },
+        {
+          "repetition": 4,
+          "current": 0.7767766666666667,
+          "legacy": 0.7285686666666666,
+          "change_percent": 6.6168093970552455
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.1595455000000001,
+      "current_ms": 1.1591165,
+      "median_change_percent": -0.0369972545277486,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.155772,
+          "current": 1.206625,
+          "change_percent": 4.399916246456925
+        },
+        {
+          "repetition": 2,
+          "current": 1.346581,
+          "legacy": 1.299152,
+          "change_percent": 3.6507660381541074
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.163319,
+          "current": 1.111608,
+          "change_percent": -4.44512640127085
+        },
+        {
+          "repetition": 4,
+          "current": 1.006195,
+          "legacy": 1.026915,
+          "change_percent": -2.017693772123308
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.6168675,
+      "current_ms": 0.5913453333333333,
+      "median_change_percent": -4.137382284958557,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.6262626666666666,
+          "current": 0.5926556666666666,
+          "change_percent": -5.3662786860465435
+        },
+        {
+          "repetition": 2,
+          "current": 0.681487,
+          "legacy": 0.6531306666666666,
+          "change_percent": 4.341601884666257
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.6074723333333334,
+          "current": 0.590035,
+          "change_percent": -2.8704736621750215
+        },
+        {
+          "repetition": 4,
+          "current": 0.498092,
+          "legacy": 0.5023363333333333,
+          "change_percent": -0.8449186434852041
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.20052,
+      "current_ms": 1.2978535,
+      "median_change_percent": 8.107611701595975,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.119217,
+          "current": 1.103797,
+          "change_percent": -1.3777489083886318
+        },
+        {
+          "repetition": 2,
+          "current": 1.426987,
+          "legacy": 1.257507,
+          "change_percent": 13.477459767619582
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.191605,
+          "current": 1.293478,
+          "change_percent": 8.549225624263057
+        },
+        {
+          "repetition": 4,
+          "current": 1.302229,
+          "legacy": 1.209435,
+          "change_percent": 7.672508237317421
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.6167818333333333,
+      "current_ms": 0.6414601666666666,
+      "median_change_percent": 4.001144651093536,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.5933613333333334,
+          "current": 0.6014756666666666,
+          "change_percent": 1.3675197350237145
+        },
+        {
+          "repetition": 2,
+          "current": 0.7310923333333333,
+          "legacy": 0.6707753333333334,
+          "change_percent": 8.992131493604916
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.595587,
+          "current": 0.624045,
+          "change_percent": 4.778143243556365
+        },
+        {
+          "repetition": 4,
+          "current": 0.6588753333333334,
+          "legacy": 0.6379766666666666,
+          "change_percent": 3.2757728861557256
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.015842,
+      "current_ms": 1.007267,
+      "median_change_percent": -0.8441273347626899,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.965584,
+          "current": 0.844271,
+          "change_percent": -12.563692024722862
+        },
+        {
+          "repetition": 2,
+          "current": 1.128428,
+          "legacy": 0.978992,
+          "change_percent": 15.264271822445941
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.052692,
+          "current": 1.168632,
+          "change_percent": 11.013667815467375
+        },
+        {
+          "repetition": 4,
+          "current": 0.886106,
+          "legacy": 1.072473,
+          "change_percent": -17.3773139277166
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.4947035,
+      "current_ms": 0.47517516666666665,
+      "median_change_percent": -3.9474823471702503,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.4546036666666667,
+          "current": 0.455642,
+          "change_percent": 0.22840408238384846
+        },
+        {
+          "repetition": 2,
+          "current": 0.4947083333333333,
+          "legacy": 0.4959696666666667,
+          "change_percent": -0.25431662823466317
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.5353933333333334,
+          "current": 0.548182,
+          "change_percent": 2.388648843840646
+        },
+        {
+          "repetition": 4,
+          "current": 0.4482776666666667,
+          "legacy": 0.49343733333333334,
+          "change_percent": -9.152057133901504
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.1970109999999998,
+      "current_ms": 1.005217,
+      "median_change_percent": -16.02274331647745,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.222829,
+          "current": 0.998314,
+          "change_percent": -18.3602940394773
+        },
+        {
+          "repetition": 2,
+          "current": 1.087421,
+          "legacy": 1.224752,
+          "change_percent": -11.212963930656993
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.171193,
+          "current": 1.01212,
+          "change_percent": -13.582133772998983
+        },
+        {
+          "repetition": 4,
+          "current": 0.988157,
+          "legacy": 1.075757,
+          "change_percent": -8.14310294982976
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.58461,
+      "current_ms": 0.4039448333333333,
+      "median_change_percent": -30.903536830821686,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.6105543333333334,
+          "current": 0.41880633333333334,
+          "change_percent": -31.405558773639044
+        },
+        {
+          "repetition": 2,
+          "current": 0.4388616666666667,
+          "legacy": 0.5999613333333333,
+          "change_percent": -26.85167488571485
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.5692586666666666,
+          "current": 0.388157,
+          "change_percent": -31.81359850472193
+        },
+        {
+          "repetition": 4,
+          "current": 0.38908333333333334,
+          "legacy": 0.5450576666666667,
+          "change_percent": -28.6161158482925
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.025423,
+      "current_ms": 1.0126735,
+      "median_change_percent": -1.2433405531180775,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.96903,
+          "current": 0.83175,
+          "change_percent": -14.166744063651283
+        },
+        {
+          "repetition": 2,
+          "current": 1.124043,
+          "legacy": 0.938193,
+          "change_percent": 19.80935692336223
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.112884,
+          "current": 0.960545,
+          "change_percent": -13.688668360763568
+        },
+        {
+          "repetition": 4,
+          "current": 1.064802,
+          "legacy": 1.081816,
+          "change_percent": -1.5727258609597228
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.49166483333333333,
+      "current_ms": 0.5038446666666667,
+      "median_change_percent": 2.47726347454178,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.4448496666666667,
+          "current": 0.4321443333333333,
+          "change_percent": -2.8560959545134823
+        },
+        {
+          "repetition": 2,
+          "current": 0.497297,
+          "legacy": 0.465542,
+          "change_percent": 6.821081663952988
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.5374293333333334,
+          "current": 0.5103923333333333,
+          "change_percent": -5.030800948713898
+        },
+        {
+          "repetition": 4,
+          "current": 0.5458313333333333,
+          "legacy": 0.5177876666666666,
+          "change_percent": 5.41605535859937
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.2015845,
+      "current_ms": 1.069951,
+      "median_change_percent": -10.9549931777582,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.314733,
+          "current": 1.005245,
+          "change_percent": -23.539988727749282
+        },
+        {
+          "repetition": 2,
+          "current": 0.979689,
+          "legacy": 1.071738,
+          "change_percent": -8.58875956623727
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.356828,
+          "current": 1.147216,
+          "change_percent": -15.448678830330731
+        },
+        {
+          "repetition": 4,
+          "current": 1.134657,
+          "legacy": 1.088436,
+          "change_percent": 4.246551933232645
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.5766895000000001,
+      "current_ms": 0.40145916666666664,
+      "median_change_percent": -30.38555987812045,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.597905,
+          "current": 0.4080356666666667,
+          "change_percent": -31.75576945055374
+        },
+        {
+          "repetition": 2,
+          "current": 0.3951953333333333,
+          "legacy": 0.555474,
+          "change_percent": -28.854395825307165
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.6084283333333333,
+          "current": 0.407723,
+          "change_percent": -32.98750606069737
+        },
+        {
+          "repetition": 4,
+          "current": 0.3815013333333333,
+          "legacy": 0.5311606666666666,
+          "change_percent": -28.175906599509748
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 0.9605174999999999,
+      "current_ms": 0.9453119999999999,
+      "median_change_percent": -1.5830528855538817,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.904146,
+          "current": 0.852451,
+          "change_percent": -5.717550041696806
+        },
+        {
+          "repetition": 2,
+          "current": 1.080235,
+          "legacy": 1.039356,
+          "change_percent": 3.9331085787737807
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.016889,
+          "current": 1.030843,
+          "change_percent": 1.3722245004125444
+        },
+        {
+          "repetition": 4,
+          "current": 0.859781,
+          "legacy": 0.850648,
+          "change_percent": 1.0736520864094157
+        }
+      ]
+    },
+    {
+      "parents": 127,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.46414083333333334,
+      "current_ms": 0.45465716666666667,
+      "median_change_percent": -2.0432735035522676,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.46801733333333334,
+          "current": 0.452763,
+          "change_percent": -3.2593522177241208
+        },
+        {
+          "repetition": 2,
+          "current": 0.5540353333333333,
+          "legacy": 0.547641,
+          "change_percent": 1.167614063471012
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.46026433333333333,
+          "current": 0.4565513333333333,
+          "change_percent": -0.8067103468803793
+        },
+        {
+          "repetition": 4,
+          "current": 0.4521963333333333,
+          "legacy": 0.45389466666666667,
+          "change_percent": -0.37416904362539416
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 19.660614000000002,
+      "current_ms": 19.769669999999998,
+      "median_change_percent": 0.554692747642549,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 20.165665,
+          "current": 20.019831,
+          "change_percent": -0.7231797215712987
+        },
+        {
+          "repetition": 2,
+          "current": 18.360636,
+          "legacy": 19.155563,
+          "change_percent": -4.149849315313792
+        },
+        {
+          "repetition": 3,
+          "legacy": 18.870743,
+          "current": 19.519509,
+          "change_percent": 3.437946243028156
+        },
+        {
+          "repetition": 4,
+          "current": 20.065587,
+          "legacy": 20.309695,
+          "change_percent": -1.2019284386102336
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 18.649737333333334,
+      "current_ms": 17.723753666666667,
+      "median_change_percent": -4.965129803794199,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 18.91528866666667,
+          "current": 17.625183333333332,
+          "change_percent": -6.820436928392293
+        },
+        {
+          "repetition": 2,
+          "current": 17.822324,
+          "legacy": 18.384186,
+          "change_percent": -3.0562245181810166
+        },
+        {
+          "repetition": 3,
+          "legacy": 19.306144,
+          "current": 18.65897,
+          "change_percent": -3.3521660254890895
+        },
+        {
+          "repetition": 4,
+          "current": 17.202983333333332,
+          "legacy": 17.847909333333334,
+          "change_percent": -3.613454035176644
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 17.753413000000002,
+      "current_ms": 17.776769,
+      "median_change_percent": 0.13155780243494508,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 17.911146,
+          "current": 17.748729,
+          "change_percent": -0.9067928986788321
+        },
+        {
+          "repetition": 2,
+          "current": 17.804809,
+          "legacy": 17.59568,
+          "change_percent": 1.188524683331349
+        },
+        {
+          "repetition": 3,
+          "legacy": 17.434769,
+          "current": 17.013146,
+          "change_percent": -2.418288421257553
+        },
+        {
+          "repetition": 4,
+          "current": 18.098741,
+          "legacy": 20.974952,
+          "change_percent": -13.712598722514347
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 18.056590333333332,
+      "current_ms": 17.516767666666667,
+      "median_change_percent": -2.9896157397453216,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 18.114620666666667,
+          "current": 17.12765633333333,
+          "change_percent": -5.44844052489315
+        },
+        {
+          "repetition": 2,
+          "current": 18.010553666666667,
+          "legacy": 17.99856,
+          "change_percent": 0.06663681242646824
+        },
+        {
+          "repetition": 3,
+          "legacy": 17.08692633333333,
+          "current": 17.13700233333333,
+          "change_percent": 0.2930661666300516
+        },
+        {
+          "repetition": 4,
+          "current": 17.896533,
+          "legacy": 18.204013,
+          "change_percent": -1.6890781170063929
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.2758875,
+      "current_ms": 1.2685469999999999,
+      "median_change_percent": -0.5753250188594405,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.290027,
+          "current": 1.442191,
+          "change_percent": 11.795412034011687
+        },
+        {
+          "repetition": 2,
+          "current": 1.247793,
+          "legacy": 1.377948,
+          "change_percent": -9.445566886413715
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.261748,
+          "current": 1.289301,
+          "change_percent": 2.1837165582984763
+        },
+        {
+          "repetition": 4,
+          "current": 1.211829,
+          "legacy": 1.171475,
+          "change_percent": 3.444717130113739
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.6463138333333334,
+      "current_ms": 0.6472543333333334,
+      "median_change_percent": 0.14551754140081918,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.6637646666666667,
+          "current": 0.6475803333333334,
+          "change_percent": -2.438263762156656
+        },
+        {
+          "repetition": 2,
+          "current": 0.803996,
+          "legacy": 0.6845576666666666,
+          "change_percent": 17.447519639202547
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.61196,
+          "current": 0.618879,
+          "change_percent": 1.1306294529054295
+        },
+        {
+          "repetition": 4,
+          "current": 0.6469283333333333,
+          "legacy": 0.628863,
+          "change_percent": 2.8726977629997874
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 0.991463,
+      "current_ms": 1.042323,
+      "median_change_percent": 5.129793043209885,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.025698,
+          "current": 1.007621,
+          "change_percent": -1.762409598146808
+        },
+        {
+          "repetition": 2,
+          "current": 0.928316,
+          "legacy": 0.882563,
+          "change_percent": 5.184105837203701
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.178086,
+          "current": 1.16661,
+          "change_percent": -0.974122432487956
+        },
+        {
+          "repetition": 4,
+          "current": 1.077025,
+          "legacy": 0.957228,
+          "change_percent": 12.514991203767533
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.5452013333333333,
+      "current_ms": 0.5332925,
+      "median_change_percent": -2.1843001117630045,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.5654586666666667,
+          "current": 0.5328063333333334,
+          "change_percent": -5.774486316712791
+        },
+        {
+          "repetition": 2,
+          "current": 0.49723833333333334,
+          "legacy": 0.4925466666666667,
+          "change_percent": 0.9525324165561289
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.6321183333333333,
+          "current": 0.5867746666666667,
+          "change_percent": -7.17328770193345
+        },
+        {
+          "repetition": 4,
+          "current": 0.5337786666666666,
+          "legacy": 0.524944,
+          "change_percent": 1.6829731679315563
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.20618,
+      "current_ms": 1.163487,
+      "median_change_percent": -3.539521464458051,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.154576,
+          "current": 1.283824,
+          "change_percent": 11.194412494283611
+        },
+        {
+          "repetition": 2,
+          "current": 1.237579,
+          "legacy": 1.282742,
+          "change_percent": -3.520817124565978
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.257784,
+          "current": 1.051676,
+          "change_percent": -16.386597380790334
+        },
+        {
+          "repetition": 4,
+          "current": 1.089395,
+          "legacy": 1.127258,
+          "change_percent": -3.358858397988762
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.5530911666666667,
+      "current_ms": 0.3915666666666667,
+      "median_change_percent": -29.203955827655903,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.5586213333333334,
+          "current": 0.3879146666666667,
+          "change_percent": -30.558565611529342
+        },
+        {
+          "repetition": 2,
+          "current": 0.4251956666666667,
+          "legacy": 0.6045326666666666,
+          "change_percent": -29.665394425887094
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.547561,
+          "current": 0.39521866666666666,
+          "change_percent": -27.82198391290346
+        },
+        {
+          "repetition": 4,
+          "current": 0.38253366666666666,
+          "legacy": 0.5248813333333334,
+          "change_percent": -27.11997124429396
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 0.9396755000000001,
+      "current_ms": 0.889913,
+      "median_change_percent": -5.295711125808877,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.921151,
+          "current": 0.884346,
+          "change_percent": -3.9955447043970027
+        },
+        {
+          "repetition": 2,
+          "current": 1.006306,
+          "legacy": 0.9582,
+          "change_percent": 5.02045501982884
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.009591,
+          "current": 0.849203,
+          "change_percent": -15.886433218996586
+        },
+        {
+          "repetition": 4,
+          "current": 0.89548,
+          "legacy": 0.861956,
+          "change_percent": 3.8892936530402933
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.4552611666666667,
+      "current_ms": 0.4543961666666667,
+      "median_change_percent": -0.190000831024828,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.4022006666666667,
+          "current": 0.4137473333333333,
+          "change_percent": 2.870872085410081
+        },
+        {
+          "repetition": 2,
+          "current": 0.5049763333333334,
+          "legacy": 0.4830003333333333,
+          "change_percent": 4.549893340308264
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.4544346666666667,
+          "current": 0.4390326666666667,
+          "change_percent": -3.3892660771185357
+        },
+        {
+          "repetition": 4,
+          "current": 0.4697596666666667,
+          "legacy": 0.45608766666666667,
+          "change_percent": 2.9976693077281125
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.124113,
+      "current_ms": 1.0276635,
+      "median_change_percent": -8.580053784628404,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.009788,
+          "current": 1.066643,
+          "change_percent": 5.630389745174247
+        },
+        {
+          "repetition": 2,
+          "current": 0.988684,
+          "legacy": 1.262,
+          "change_percent": -21.65736925515055
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.071701,
+          "current": 0.983906,
+          "change_percent": -8.192117017712974
+        },
+        {
+          "repetition": 4,
+          "current": 1.121047,
+          "legacy": 1.176525,
+          "change_percent": -4.715411912199075
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 0.5553558333333334,
+      "current_ms": 0.3972791666666666,
+      "median_change_percent": -28.464032819798735,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.5366993333333334,
+          "current": 0.393916,
+          "change_percent": -26.60397068998286
+        },
+        {
+          "repetition": 2,
+          "current": 0.4006423333333333,
+          "legacy": 0.5740903333333334,
+          "change_percent": -30.212666879950955
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.536547,
+          "current": 0.376133,
+          "change_percent": -29.897474033029724
+        },
+        {
+          "repetition": 4,
+          "current": 0.4112286666666667,
+          "legacy": 0.5740123333333333,
+          "change_percent": -28.358914471640272
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.00776,
+      "current_ms": 1.0492875,
+      "median_change_percent": 4.120772803048345,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.117641,
+          "current": 1.054528,
+          "change_percent": -5.646983244172343
+        },
+        {
+          "repetition": 2,
+          "current": 1.194149,
+          "legacy": 1.108184,
+          "change_percent": 7.757285793694901
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.907336,
+          "current": 1.044047,
+          "change_percent": 15.067295908020828
+        },
+        {
+          "repetition": 4,
+          "current": 0.911605,
+          "legacy": 0.906781,
+          "change_percent": 0.531991737806603
+        }
+      ]
+    },
+    {
+      "parents": 128,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.4855593333333333,
+      "current_ms": 0.48955666666666664,
+      "median_change_percent": 0.8232430228231724,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.5036373333333333,
+          "current": 0.4989943333333333,
+          "change_percent": -0.9218935318536015
+        },
+        {
+          "repetition": 2,
+          "current": 0.5583283333333334,
+          "legacy": 0.5313956666666666,
+          "change_percent": 5.06828872647942
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.4674813333333333,
+          "current": 0.476037,
+          "change_percent": 1.8301622025549635
+        },
+        {
+          "repetition": 4,
+          "current": 0.480119,
+          "legacy": 0.4661246666666667,
+          "change_percent": 3.002272639508452
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 21.195013,
+      "current_ms": 20.8356795,
+      "median_change_percent": -1.695368150989096,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 20.637987,
+          "current": 21.261621,
+          "change_percent": 3.0217772692656686
+        },
+        {
+          "repetition": 2,
+          "current": 22.321233,
+          "legacy": 21.752039,
+          "change_percent": 2.6167385963219436
+        },
+        {
+          "repetition": 3,
+          "legacy": 20.064732,
+          "current": 20.409738,
+          "change_percent": 1.7194647802921237
+        },
+        {
+          "repetition": 4,
+          "current": 20.387339,
+          "legacy": 33.66172,
+          "change_percent": -39.4346486156976
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 19.67709483333333,
+      "current_ms": 20.155311833333336,
+      "median_change_percent": 2.4303231958301863,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 19.748707333333332,
+          "current": 19.665063,
+          "change_percent": -0.42354333335099525
+        },
+        {
+          "repetition": 2,
+          "current": 21.08896766666667,
+          "legacy": 21.415676666666666,
+          "change_percent": -1.525560014213878
+        },
+        {
+          "repetition": 3,
+          "legacy": 19.433087333333333,
+          "current": 20.07544366666667,
+          "change_percent": 3.305477520453004
+        },
+        {
+          "repetition": 4,
+          "current": 20.23518,
+          "legacy": 19.60548233333333,
+          "change_percent": 3.2118448093269025
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 20.752848,
+      "current_ms": 20.973986,
+      "median_change_percent": 1.0655790472710036,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 23.905717,
+          "current": 19.720527,
+          "change_percent": -17.507067451689483
+        },
+        {
+          "repetition": 2,
+          "current": 21.999196,
+          "legacy": 19.86758,
+          "change_percent": 10.729117486880636
+        },
+        {
+          "repetition": 3,
+          "legacy": 20.09593,
+          "current": 23.171572,
+          "change_percent": 15.304800524285266
+        },
+        {
+          "repetition": 4,
+          "current": 19.948776,
+          "legacy": 21.409766,
+          "change_percent": -6.8239419337885465
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 20.04141916666667,
+      "current_ms": 19.19008266666667,
+      "median_change_percent": -4.247885306525411,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 19.25940866666667,
+          "current": 18.907478333333334,
+          "change_percent": -1.8273164011647025
+        },
+        {
+          "repetition": 2,
+          "current": 19.674792333333333,
+          "legacy": 23.72604366666667,
+          "change_percent": -17.075123818578497
+        },
+        {
+          "repetition": 3,
+          "legacy": 20.23012566666667,
+          "current": 18.970883333333333,
+          "change_percent": -6.224589773103584
+        },
+        {
+          "repetition": 4,
+          "current": 19.409282,
+          "legacy": 19.85271266666667,
+          "change_percent": -2.2336024003974164
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 2.008238,
+      "current_ms": 2.092712,
+      "median_change_percent": 4.20637394571759,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 2.023843,
+          "current": 1.998738,
+          "change_percent": -1.2404618342430673
+        },
+        {
+          "repetition": 2,
+          "current": 2.019159,
+          "legacy": 1.992633,
+          "change_percent": 1.331203488048227
+        },
+        {
+          "repetition": 3,
+          "legacy": 2.460564,
+          "current": 2.215687,
+          "change_percent": -9.952067899879868
+        },
+        {
+          "repetition": 4,
+          "current": 2.166265,
+          "legacy": 1.914655,
+          "change_percent": 13.141270881699318
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.2093755,
+      "current_ms": 1.2267588333333332,
+      "median_change_percent": 1.4373809733480902,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.2114916666666666,
+          "current": 1.2340126666666666,
+          "change_percent": 1.8589479911128803
+        },
+        {
+          "repetition": 2,
+          "current": 1.175303,
+          "legacy": 1.1505483333333333,
+          "change_percent": 2.151553824335939
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.492918,
+          "current": 1.4118913333333332,
+          "change_percent": -5.427402353422417
+        },
+        {
+          "repetition": 4,
+          "current": 1.219505,
+          "legacy": 1.2072593333333332,
+          "change_percent": 1.0143360526238876
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.6616965000000001,
+      "current_ms": 1.7714409999999998,
+      "median_change_percent": 6.604364876498181,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.623247,
+          "current": 2.026177,
+          "change_percent": 24.82247002458653
+        },
+        {
+          "repetition": 2,
+          "current": 1.77521,
+          "legacy": 2.208751,
+          "change_percent": -19.6283329356727
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.611644,
+          "current": 1.699174,
+          "change_percent": 5.431100168523573
+        },
+        {
+          "repetition": 4,
+          "current": 1.767672,
+          "legacy": 1.700146,
+          "change_percent": 3.971776541544081
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 1.0336313333333333,
+      "current_ms": 1.0189213333333336,
+      "median_change_percent": -1.4231379724685689,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.9970033333333334,
+          "current": 1.0137973333333334,
+          "change_percent": 1.6844477283593173
+        },
+        {
+          "repetition": 2,
+          "current": 1.1112426666666668,
+          "legacy": 1.1476456666666668,
+          "change_percent": -3.171972069195572
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.0126176666666666,
+          "current": 1.0101246666666666,
+          "change_percent": -0.24619361107993676
+        },
+        {
+          "repetition": 4,
+          "current": 1.0240453333333335,
+          "legacy": 1.054645,
+          "change_percent": -2.9014186448204415
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 21.1908355,
+      "current_ms": 20.5709075,
+      "median_change_percent": -2.9254533168359464,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 21.673526,
+          "current": 20.58191,
+          "change_percent": -5.036633171732174
+        },
+        {
+          "repetition": 2,
+          "current": 20.559905,
+          "legacy": 20.708145,
+          "change_percent": -0.7158535928737164
+        },
+        {
+          "repetition": 3,
+          "legacy": 19.746338,
+          "current": 19.595928,
+          "change_percent": -0.761710854944353
+        },
+        {
+          "repetition": 4,
+          "current": 21.444251,
+          "legacy": 21.691168,
+          "change_percent": -1.1383296648663666
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 19.575351333333337,
+      "current_ms": 19.607037833333333,
+      "median_change_percent": 0.1618693808373095,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 19.63338266666667,
+          "current": 19.711698,
+          "change_percent": 0.39888864116264244
+        },
+        {
+          "repetition": 2,
+          "current": 19.502377666666668,
+          "legacy": 19.51732,
+          "change_percent": -0.07655935002005565
+        },
+        {
+          "repetition": 3,
+          "legacy": 18.84773433333333,
+          "current": 18.64934266666667,
+          "change_percent": -1.0526022022487647
+        },
+        {
+          "repetition": 4,
+          "current": 20.46106166666667,
+          "legacy": 20.759385666666667,
+          "change_percent": -1.437056013073723
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 21.678306,
+      "current_ms": 20.555878,
+      "median_change_percent": -5.177655486549549,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 22.205343,
+          "current": 22.696465,
+          "change_percent": 2.2117289519013594
+        },
+        {
+          "repetition": 2,
+          "current": 20.598595,
+          "legacy": 22.671616,
+          "change_percent": -9.143684331985868
+        },
+        {
+          "repetition": 3,
+          "legacy": 21.151269,
+          "current": 19.641009,
+          "change_percent": -7.1402808030099685
+        },
+        {
+          "repetition": 4,
+          "current": 20.513161,
+          "legacy": 20.52953,
+          "change_percent": -0.07973392474158736
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 20.162831166666663,
+      "current_ms": 19.992979166666665,
+      "median_change_percent": -0.842401538732318,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 19.928153,
+          "current": 20.158347,
+          "change_percent": 1.155119593873044
+        },
+        {
+          "repetition": 2,
+          "current": 21.663656666666668,
+          "legacy": 20.397509333333332,
+          "change_percent": 6.207362441375208
+        },
+        {
+          "repetition": 3,
+          "legacy": 21.31271633333333,
+          "current": 19.710984333333332,
+          "change_percent": -7.515381779350538
+        },
+        {
+          "repetition": 4,
+          "current": 19.827611333333333,
+          "legacy": 19.48349,
+          "change_percent": 1.7662201860823457
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 2.0434010000000002,
+      "current_ms": 1.646192,
+      "median_change_percent": -19.438622179396027,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.949014,
+          "current": 1.74363,
+          "change_percent": -10.537841185337815
+        },
+        {
+          "repetition": 2,
+          "current": 1.503802,
+          "legacy": 2.333175,
+          "change_percent": -35.546969258628266
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.830883,
+          "current": 1.548754,
+          "change_percent": -15.409449975776724
+        },
+        {
+          "repetition": 4,
+          "current": 1.875114,
+          "legacy": 2.137788,
+          "change_percent": -12.28718656854656
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.0811408333333334,
+      "current_ms": 0.810374,
+      "median_change_percent": -25.04454785030319,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.0780066666666668,
+          "current": 0.852319,
+          "change_percent": -20.935646656483264
+        },
+        {
+          "repetition": 2,
+          "current": 0.7360393333333334,
+          "legacy": 1.0552083333333333,
+          "change_percent": -30.247012833168796
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.084275,
+          "current": 0.768429,
+          "change_percent": -29.12969495746006
+        },
+        {
+          "repetition": 4,
+          "current": 0.9152183333333334,
+          "legacy": 1.2561966666666669,
+          "change_percent": -27.14370626680006
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.5776094999999999,
+      "current_ms": 1.612024,
+      "median_change_percent": 2.181433364847263,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.592646,
+          "current": 1.591803,
+          "change_percent": -0.05293078311187083
+        },
+        {
+          "repetition": 2,
+          "current": 1.511278,
+          "legacy": 1.580355,
+          "change_percent": -4.370979938051899
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.490678,
+          "current": 1.632245,
+          "change_percent": 9.496819568008652
+        },
+        {
+          "repetition": 4,
+          "current": 1.740963,
+          "legacy": 1.574864,
+          "change_percent": 10.546878968596651
+        }
+      ]
+    },
+    {
+      "parents": 255,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.890757,
+      "current_ms": 0.9034230000000001,
+      "median_change_percent": 1.4219366224458518,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.915961,
+          "current": 0.923066,
+          "change_percent": 0.7756880478535733
+        },
+        {
+          "repetition": 2,
+          "current": 0.88378,
+          "legacy": 0.865553,
+          "change_percent": 2.1058213650694935
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.8608703333333334,
+          "current": 0.861572,
+          "change_percent": 0.08150666128192707
+        },
+        {
+          "repetition": 4,
+          "current": 2.0813426666666666,
+          "legacy": 0.939939,
+          "change_percent": 121.4338022644732
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 42.6691445,
+      "current_ms": 42.414034,
+      "median_change_percent": -0.5978805129313036,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 42.639595,
+          "current": 40.712253,
+          "change_percent": -4.520075765259968
+        },
+        {
+          "repetition": 2,
+          "current": 44.115815,
+          "legacy": 42.698694,
+          "change_percent": 3.3188860530488196
+        },
+        {
+          "repetition": 3,
+          "legacy": 42.894458,
+          "current": 40.591932,
+          "change_percent": -5.36788691909803
+        },
+        {
+          "repetition": 4,
+          "current": 44.417132,
+          "legacy": 41.490243,
+          "change_percent": 7.054403127983622
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 40.76410333333334,
+      "current_ms": 40.312927,
+      "median_change_percent": -1.1067981298251817,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 40.52888433333334,
+          "current": 39.975864666666666,
+          "change_percent": -1.3645075006711527
+        },
+        {
+          "repetition": 2,
+          "current": 40.820731,
+          "legacy": 40.255464333333336,
+          "change_percent": 1.4041986001850582
+        },
+        {
+          "repetition": 3,
+          "legacy": 40.99932233333334,
+          "current": 39.212186,
+          "change_percent": -4.3589411522549915
+        },
+        {
+          "repetition": 4,
+          "current": 40.64998933333334,
+          "legacy": 42.081121,
+          "change_percent": -3.400887696567456
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 43.292843500000004,
+      "current_ms": 44.1043915,
+      "median_change_percent": 1.8745546247152634,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 40.643341,
+          "current": 44.400045,
+          "change_percent": 9.243098395872519
+        },
+        {
+          "repetition": 2,
+          "current": 43.808738,
+          "legacy": 43.469774,
+          "change_percent": 0.7797694094291652
+        },
+        {
+          "repetition": 3,
+          "legacy": 43.115913,
+          "current": 43.050996,
+          "change_percent": -0.15056389969059225
+        },
+        {
+          "repetition": 4,
+          "current": 46.470757,
+          "legacy": 43.867245,
+          "change_percent": 5.934979504639504
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 41.79493166666667,
+      "current_ms": 41.07383683333333,
+      "median_change_percent": -1.7253164548380995,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 39.57793133333334,
+          "current": 39.51063766666667,
+          "change_percent": -0.17002825665624055
+        },
+        {
+          "repetition": 2,
+          "current": 42.566129,
+          "legacy": 41.595727,
+          "change_percent": 2.332936746122982
+        },
+        {
+          "repetition": 3,
+          "legacy": 41.99413633333334,
+          "current": 39.581544666666666,
+          "change_percent": -5.745067948335558
+        },
+        {
+          "repetition": 4,
+          "current": 43.430823,
+          "legacy": 43.98218933333334,
+          "change_percent": -1.2536127502763228
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 1.9710955000000001,
+      "current_ms": 2.026045,
+      "median_change_percent": 2.787764469047782,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.975478,
+          "current": 1.977082,
+          "change_percent": 0.08119553849752492
+        },
+        {
+          "repetition": 2,
+          "current": 2.060622,
+          "legacy": 1.998449,
+          "change_percent": 3.1110626290688392
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.966713,
+          "current": 2.03587,
+          "change_percent": 3.516374783712739
+        },
+        {
+          "repetition": 4,
+          "current": 2.01622,
+          "legacy": 1.902166,
+          "change_percent": 5.996006657673414
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.2001353333333333,
+      "current_ms": 1.2374209999999999,
+      "median_change_percent": 3.106788512184444,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.2133186666666667,
+          "current": 1.2421946666666668,
+          "change_percent": 2.379918878140286
+        },
+        {
+          "repetition": 2,
+          "current": 1.2798186666666667,
+          "legacy": 1.234904,
+          "change_percent": 3.6370978364850037
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.1787253333333332,
+          "current": 1.2009593333333333,
+          "change_percent": 1.8862748912950034
+        },
+        {
+          "repetition": 4,
+          "current": 1.2326473333333332,
+          "legacy": 1.186952,
+          "change_percent": 3.849804653712474
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.7744564999999999,
+      "current_ms": 1.8201865000000002,
+      "median_change_percent": 2.5771271372389437,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.77696,
+          "current": 1.782794,
+          "change_percent": 0.32831352422113547
+        },
+        {
+          "repetition": 2,
+          "current": 1.857579,
+          "legacy": 1.771953,
+          "change_percent": 4.832295213247773
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.621404,
+          "current": 1.703249,
+          "change_percent": 5.047785746180478
+        },
+        {
+          "repetition": 4,
+          "current": 2.07377,
+          "legacy": 1.819873,
+          "change_percent": 13.951358144222148
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 1.0822473333333331,
+      "current_ms": 1.0654553333333334,
+      "median_change_percent": -1.551586174694486,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.0848313333333333,
+          "current": 1.069698,
+          "change_percent": -1.3949941219741024
+        },
+        {
+          "repetition": 2,
+          "current": 1.0847163333333332,
+          "legacy": 1.0796633333333332,
+          "change_percent": 0.4680162643293073
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.0432836666666667,
+          "current": 1.0140733333333334,
+          "change_percent": -2.79984574345552
+        },
+        {
+          "repetition": 4,
+          "current": 1.0612126666666668,
+          "legacy": 1.0947363333333333,
+          "change_percent": -3.0622594359859368
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 40.187427,
+      "current_ms": 38.938238,
+      "median_change_percent": -3.108407512628264,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 42.081829,
+          "current": 40.326191,
+          "change_percent": -4.171962202498369
+        },
+        {
+          "repetition": 2,
+          "current": 40.339913,
+          "legacy": 40.788042,
+          "change_percent": -1.0986774015776302
+        },
+        {
+          "repetition": 3,
+          "legacy": 39.586812,
+          "current": 36.722952,
+          "change_percent": -7.234378964388455
+        },
+        {
+          "repetition": 4,
+          "current": 37.550285,
+          "legacy": 38.819488,
+          "change_percent": -3.2694995874237076
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 38.10642516666667,
+      "current_ms": 38.6872445,
+      "median_change_percent": 1.5242031515498855,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 39.783475,
+          "current": 39.46118766666667,
+          "change_percent": -0.8101035249769795
+        },
+        {
+          "repetition": 2,
+          "current": 38.607777,
+          "legacy": 37.931907,
+          "change_percent": 1.781798104693233
+        },
+        {
+          "repetition": 3,
+          "legacy": 38.28094333333333,
+          "current": 38.387595,
+          "change_percent": 0.2786025039612783
+        },
+        {
+          "repetition": 4,
+          "current": 38.766712,
+          "legacy": 37.90898766666666,
+          "change_percent": 2.2625883362417776
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 39.6881255,
+      "current_ms": 40.0624525,
+      "median_change_percent": 0.9431712767588474,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 39.142837,
+          "current": 43.081118,
+          "change_percent": 10.061307002351395
+        },
+        {
+          "repetition": 2,
+          "current": 40.725299,
+          "legacy": 40.233414,
+          "change_percent": 1.2225783275562785
+        },
+        {
+          "repetition": 3,
+          "legacy": 38.556598,
+          "current": 39.399606,
+          "change_percent": 2.186416965521687
+        },
+        {
+          "repetition": 4,
+          "current": 39.084709,
+          "legacy": 42.655197,
+          "change_percent": -8.370581432316449
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 38.35829966666667,
+      "current_ms": 39.0855475,
+      "median_change_percent": 1.8959334476582823,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 38.419276,
+          "current": 38.45481866666666,
+          "change_percent": 0.09251258838574028
+        },
+        {
+          "repetition": 2,
+          "current": 41.17688833333334,
+          "legacy": 39.527191,
+          "change_percent": 4.173575939998719
+        },
+        {
+          "repetition": 3,
+          "legacy": 37.879378333333335,
+          "current": 38.440961,
+          "change_percent": 1.4825551299306294
+        },
+        {
+          "repetition": 4,
+          "current": 39.71627633333333,
+          "legacy": 38.29732333333334,
+          "change_percent": 3.7050970576968822
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 2.0038715,
+      "current_ms": 1.7583795,
+      "median_change_percent": -12.25088534868627,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 2.006192,
+          "current": 1.701941,
+          "change_percent": -15.165597310725998
+        },
+        {
+          "repetition": 2,
+          "current": 1.773274,
+          "legacy": 2.001551,
+          "change_percent": -11.405005418298108
+        },
+        {
+          "repetition": 3,
+          "legacy": 2.034927,
+          "current": 1.748147,
+          "change_percent": -14.092888835815742
+        },
+        {
+          "repetition": 4,
+          "current": 1.768612,
+          "legacy": 1.974926,
+          "change_percent": -10.446669900543103
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.1692276666666666,
+      "current_ms": 0.7911456666666666,
+      "median_change_percent": -32.33604633029837,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.5249456666666668,
+          "current": 0.7807636666666666,
+          "change_percent": -48.80055835869126
+        },
+        {
+          "repetition": 2,
+          "current": 0.8015276666666666,
+          "legacy": 1.14454,
+          "change_percent": -29.969449152789185
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.126536,
+          "current": 0.756856,
+          "change_percent": -32.8156401570833
+        },
+        {
+          "repetition": 4,
+          "current": 0.876064,
+          "legacy": 1.1939153333333332,
+          "change_percent": -26.622602496101056
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.6344435,
+      "current_ms": 1.6185355000000001,
+      "median_change_percent": -0.9732976392270443,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.637163,
+          "current": 1.677457,
+          "change_percent": 2.4612088106071406
+        },
+        {
+          "repetition": 2,
+          "current": 1.931901,
+          "legacy": 1.631724,
+          "change_percent": 18.39630967001773
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.596898,
+          "current": 1.559614,
+          "change_percent": -2.334776548032491
+        },
+        {
+          "repetition": 4,
+          "current": 1.522296,
+          "legacy": 1.661929,
+          "change_percent": -8.401863136150812
+        }
+      ]
+    },
+    {
+      "parents": 256,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.9416180000000001,
+      "current_ms": 0.9217975,
+      "median_change_percent": -2.1049406447200436,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 0.9474683333333334,
+          "current": 0.949065,
+          "change_percent": 0.1685192644960809
+        },
+        {
+          "repetition": 2,
+          "current": 0.942094,
+          "legacy": 0.95436,
+          "change_percent": -1.2852592313173261
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.9060806666666666,
+          "current": 0.8878226666666666,
+          "change_percent": -2.0150523757634486
+        },
+        {
+          "repetition": 4,
+          "current": 0.901501,
+          "legacy": 0.9357676666666667,
+          "change_percent": -3.6618776099338057
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 43.743809,
+      "current_ms": 44.1712545,
+      "median_change_percent": 0.9771565617434197,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 45.099268,
+          "current": 47.754802,
+          "change_percent": 5.888197564536957
+        },
+        {
+          "repetition": 2,
+          "current": 42.01691,
+          "legacy": 44.035585,
+          "change_percent": -4.584190263397192
+        },
+        {
+          "repetition": 3,
+          "legacy": 43.081153,
+          "current": 46.325599,
+          "change_percent": 7.531010138006278
+        },
+        {
+          "repetition": 4,
+          "current": 41.167374,
+          "legacy": 43.452033,
+          "change_percent": -5.257887473297274
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 41.283012,
+      "current_ms": 42.50609683333333,
+      "median_change_percent": 2.962683133036248,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 42.51774366666666,
+          "current": 43.857969,
+          "change_percent": 3.152155353869479
+        },
+        {
+          "repetition": 2,
+          "current": 41.92601166666667,
+          "legacy": 40.04828033333334,
+          "change_percent": 4.688669070692764
+        },
+        {
+          "repetition": 3,
+          "legacy": 44.623827,
+          "current": 43.086182,
+          "change_percent": -3.445793656380025
+        },
+        {
+          "repetition": 4,
+          "current": 41.10417533333334,
+          "legacy": 39.365385,
+          "change_percent": 4.417054052267844
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 41.38298,
+      "current_ms": 41.901951,
+      "median_change_percent": 1.2540687016739493,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 41.417181,
+          "current": 37.693987,
+          "change_percent": -8.989491583215193
+        },
+        {
+          "repetition": 2,
+          "current": 42.931078,
+          "legacy": 40.76915,
+          "change_percent": 5.302852769802646
+        },
+        {
+          "repetition": 3,
+          "legacy": 45.274144,
+          "current": 41.530216,
+          "change_percent": -8.269461704234537
+        },
+        {
+          "repetition": 4,
+          "current": 42.273686,
+          "legacy": 41.348779,
+          "change_percent": 2.2368423502904244
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 41.153507000000005,
+      "current_ms": 40.72495883333333,
+      "median_change_percent": -1.0413405755836824,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 41.18330366666667,
+          "current": 35.61100966666666,
+          "change_percent": -13.530468670268824
+        },
+        {
+          "repetition": 2,
+          "current": 40.84928033333333,
+          "legacy": 41.123710333333335,
+          "change_percent": -0.6673279180686165
+        },
+        {
+          "repetition": 3,
+          "legacy": 42.163183,
+          "current": 44.125212,
+          "change_percent": 4.653417651129432
+        },
+        {
+          "repetition": 4,
+          "current": 40.60063733333334,
+          "legacy": 40.232085,
+          "change_percent": 0.9160657056012322
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 2.192601,
+      "current_ms": 2.2881479999999996,
+      "median_change_percent": 4.357701195976826,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 2.201498,
+          "current": 2.098753,
+          "change_percent": -4.667049436338355
+        },
+        {
+          "repetition": 2,
+          "current": 2.341541,
+          "legacy": 2.266053,
+          "change_percent": 3.331254829432506
+        },
+        {
+          "repetition": 3,
+          "legacy": 2.183704,
+          "current": 2.642715,
+          "change_percent": 21.019836021731876
+        },
+        {
+          "repetition": 4,
+          "current": 2.234755,
+          "legacy": 2.177748,
+          "change_percent": 2.617704160444645
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.3227768333333332,
+      "current_ms": 1.3270490000000001,
+      "median_change_percent": 0.3229695712088754,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.3245983333333333,
+          "current": 1.2949366666666668,
+          "change_percent": -2.23929518256476
+        },
+        {
+          "repetition": 2,
+          "current": 1.34524,
+          "legacy": 1.333905,
+          "change_percent": 0.8497606651148404
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.3209553333333333,
+          "current": 1.4950733333333333,
+          "change_percent": 13.181217835778458
+        },
+        {
+          "repetition": 4,
+          "current": 1.308858,
+          "legacy": 1.2729156666666668,
+          "change_percent": 2.82362251282946
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.88021,
+      "current_ms": 1.8163445,
+      "median_change_percent": -3.3967216427952196,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.737177,
+          "current": 1.736072,
+          "change_percent": -0.0636089471596657
+        },
+        {
+          "repetition": 2,
+          "current": 1.896617,
+          "legacy": 1.924741,
+          "change_percent": -1.4611836085998031
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.835679,
+          "current": 1.720909,
+          "change_percent": -6.252182434946418
+        },
+        {
+          "repetition": 4,
+          "current": 2.341214,
+          "legacy": 2.015938,
+          "change_percent": 16.135218444218037
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 1.084551,
+      "current_ms": 1.0791845,
+      "median_change_percent": -0.49481306088879906,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.0845343333333333,
+          "current": 1.0600816666666668,
+          "change_percent": -2.254669669286613
+        },
+        {
+          "repetition": 2,
+          "current": 1.0896036666666666,
+          "legacy": 1.0845676666666668,
+          "change_percent": 0.4643324851715036
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.0654156666666668,
+          "current": 1.0687653333333333,
+          "change_percent": 0.3143999822291521
+        },
+        {
+          "repetition": 4,
+          "current": 1.3117973333333333,
+          "legacy": 1.2675393333333334,
+          "change_percent": 3.4916470705182556
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 39.84356,
+      "current_ms": 39.614754000000005,
+      "median_change_percent": -0.5742609345148697,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 39.896028,
+          "current": 38.884122,
+          "change_percent": -2.5363577547118266
+        },
+        {
+          "repetition": 2,
+          "current": 39.987194,
+          "legacy": 39.791092,
+          "change_percent": 0.4928288974828998
+        },
+        {
+          "repetition": 3,
+          "legacy": 38.856648,
+          "current": 39.918007,
+          "change_percent": 2.73147338905817
+        },
+        {
+          "repetition": 4,
+          "current": 39.311501,
+          "legacy": 40.162049,
+          "change_percent": -2.1177903547700105
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 38.6434215,
+      "current_ms": 37.122985,
+      "median_change_percent": -3.9345286752106134,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 37.28826933333334,
+          "current": 37.871648666666665,
+          "change_percent": 1.5645116916483515
+        },
+        {
+          "repetition": 2,
+          "current": 37.288832,
+          "legacy": 37.99528,
+          "change_percent": -1.8593046294171356
+        },
+        {
+          "repetition": 3,
+          "legacy": 39.291563,
+          "current": 36.957138,
+          "change_percent": -5.941288209888718
+        },
+        {
+          "repetition": 4,
+          "current": 36.498261,
+          "legacy": 39.53331333333334,
+          "change_percent": -7.677202028938646
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 37.9362145,
+      "current_ms": 39.586511,
+      "median_change_percent": 4.350187602402977,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 36.999744,
+          "current": 40.683816,
+          "change_percent": 9.957020243167092
+        },
+        {
+          "repetition": 2,
+          "current": 44.153958,
+          "legacy": 38.872685,
+          "change_percent": 13.586077215916536
+        },
+        {
+          "repetition": 3,
+          "legacy": 39.014869,
+          "current": 38.489206,
+          "change_percent": -1.3473401640794802
+        },
+        {
+          "repetition": 4,
+          "current": 28.74759,
+          "legacy": 30.821985,
+          "change_percent": -6.730244661399976
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 36.2608545,
+      "current_ms": 38.698031,
+      "median_change_percent": 6.721232948330003,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 34.65160433333334,
+          "current": 39.171467,
+          "change_percent": 13.043732761079552
+        },
+        {
+          "repetition": 2,
+          "current": 40.09058233333334,
+          "legacy": 38.57616266666666,
+          "change_percent": 3.9257913747218653
+        },
+        {
+          "repetition": 3,
+          "legacy": 37.87010466666666,
+          "current": 38.224595,
+          "change_percent": 0.9360690614762524
+        },
+        {
+          "repetition": 4,
+          "current": 28.851846666666667,
+          "legacy": 29.00934266666667,
+          "change_percent": -0.5429147492575725
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 2.2683204999999997,
+      "current_ms": 1.9421605,
+      "median_change_percent": -14.378920439153099,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 2.161645,
+          "current": 1.939264,
+          "change_percent": -10.287581910998334
+        },
+        {
+          "repetition": 2,
+          "current": 1.945057,
+          "legacy": 2.217117,
+          "change_percent": -12.270890530359924
+        },
+        {
+          "repetition": 3,
+          "legacy": 2.319524,
+          "current": 1.534665,
+          "change_percent": -33.83707174403025
+        },
+        {
+          "repetition": 4,
+          "current": 2.133749,
+          "legacy": 2.405797,
+          "change_percent": -11.308019753952648
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 1.2736218333333333,
+      "current_ms": 0.9021706666666667,
+      "median_change_percent": -29.164949669126017,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.2589186666666667,
+          "current": 0.8620086666666666,
+          "change_percent": -31.527850885786645
+        },
+        {
+          "repetition": 2,
+          "current": 0.9423326666666666,
+          "legacy": 1.288325,
+          "change_percent": -26.855982250855437
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.1510883333333333,
+          "current": 0.7653236666666666,
+          "change_percent": -33.51303766145952
+        },
+        {
+          "repetition": 4,
+          "current": 1.0180156666666667,
+          "legacy": 1.359004,
+          "change_percent": -25.091047070746917
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 1.7004695,
+      "current_ms": 1.843958,
+      "median_change_percent": 8.438169576108233,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.963726,
+          "current": 1.861206,
+          "change_percent": -5.220687611204422
+        },
+        {
+          "repetition": 2,
+          "current": 1.665383,
+          "legacy": 1.615081,
+          "change_percent": 3.114518714541248
+        },
+        {
+          "repetition": 3,
+          "legacy": 1.593289,
+          "current": 1.82671,
+          "change_percent": 14.65026118927577
+        },
+        {
+          "repetition": 4,
+          "current": 1.882451,
+          "legacy": 1.785858,
+          "change_percent": 5.408772701972953
+        }
+      ]
+    },
+    {
+      "parents": 257,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 0.9511043333333333,
+      "current_ms": 0.9787393333333334,
+      "median_change_percent": 2.9055697709995387,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 1.1277943333333333,
+          "current": 1.074103,
+          "change_percent": -4.760737995077702
+        },
+        {
+          "repetition": 2,
+          "current": 0.9645856666666667,
+          "legacy": 0.9242386666666667,
+          "change_percent": 4.365430862735309
+        },
+        {
+          "repetition": 3,
+          "legacy": 0.9354396666666667,
+          "current": 0.9558633333333334,
+          "change_percent": 2.1833227085017892
+        },
+        {
+          "repetition": 4,
+          "current": 0.992893,
+          "legacy": 0.966769,
+          "change_percent": 2.7021966984874357
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 481.1693485,
+      "current_ms": 485.8247815,
+      "median_change_percent": 0.9675248464003028,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 491.589675,
+          "current": 494.196819,
+          "change_percent": 0.5303496254269291
+        },
+        {
+          "repetition": 2,
+          "current": 477.452744,
+          "legacy": 475.15516,
+          "change_percent": 0.48354394383509636
+        },
+        {
+          "repetition": 3,
+          "legacy": 477.857546,
+          "current": 506.078356,
+          "change_percent": 5.905695167153424
+        },
+        {
+          "repetition": 4,
+          "current": 475.344254,
+          "legacy": 484.481151,
+          "change_percent": -1.8859138237144801
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 510.9213751666667,
+      "current_ms": 507.5790475,
+      "median_change_percent": -0.6541765189558513,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 513.207442,
+          "current": 514.8413343333333,
+          "change_percent": 0.31836879195787926
+        },
+        {
+          "repetition": 2,
+          "current": 502.34919633333334,
+          "legacy": 550.8828086666666,
+          "change_percent": -8.810151917937315
+        },
+        {
+          "repetition": 3,
+          "legacy": 508.63530833333334,
+          "current": 512.374678,
+          "change_percent": 0.7351769736394509
+        },
+        {
+          "repetition": 4,
+          "current": 502.783417,
+          "legacy": 503.655938,
+          "change_percent": -0.1732375088169813
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 437.24563049999995,
+      "current_ms": 439.5470835,
+      "median_change_percent": 0.5263524297242972,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 443.939495,
+          "current": 436.498736,
+          "change_percent": -1.67607502459316
+        },
+        {
+          "repetition": 2,
+          "current": 444.455733,
+          "legacy": 436.17058,
+          "change_percent": 1.899521283622585
+        },
+        {
+          "repetition": 3,
+          "legacy": 438.320681,
+          "current": 442.595431,
+          "change_percent": 0.975256287302595
+        },
+        {
+          "repetition": 4,
+          "current": 344.945818,
+          "legacy": 348.758612,
+          "change_percent": -1.0932472686868144
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 462.0877135,
+      "current_ms": 464.82748,
+      "median_change_percent": 0.5929104842992139,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 488.067312,
+          "current": 472.1880113333333,
+          "change_percent": -3.2535062841222873
+        },
+        {
+          "repetition": 2,
+          "current": 466.23120366666666,
+          "legacy": 464.8856383333333,
+          "change_percent": 0.2894400735108382
+        },
+        {
+          "repetition": 3,
+          "legacy": 459.2897886666667,
+          "current": 463.4237563333333,
+          "change_percent": 0.9000782879731828
+        },
+        {
+          "repetition": 4,
+          "current": 356.9455663333333,
+          "legacy": 433.90075333333334,
+          "change_percent": -17.73566568133638
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 60.383911499999996,
+      "current_ms": 60.5943605,
+      "median_change_percent": 0.3485183300853345,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 59.971152,
+          "current": 61.323293,
+          "change_percent": 2.2546523701929333
+        },
+        {
+          "repetition": 2,
+          "current": 64.509472,
+          "legacy": 65.624091,
+          "change_percent": -1.6984905741399214
+        },
+        {
+          "repetition": 3,
+          "legacy": 46.408472,
+          "current": 47.889244,
+          "change_percent": 3.1907363810641964
+        },
+        {
+          "repetition": 4,
+          "current": 59.865428,
+          "legacy": 60.796671,
+          "change_percent": -1.5317335385024666
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 58.1278285,
+      "current_ms": 58.40200833333333,
+      "median_change_percent": 0.4716842868701443,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 57.960136,
+          "current": 58.672894,
+          "change_percent": 1.229738315313833
+        },
+        {
+          "repetition": 2,
+          "current": 62.86544033333334,
+          "legacy": 62.108387666666665,
+          "change_percent": 1.218921783527449
+        },
+        {
+          "repetition": 3,
+          "legacy": 45.632134666666666,
+          "current": 46.86597033333334,
+          "change_percent": 2.7038745298233025
+        },
+        {
+          "repetition": 4,
+          "current": 58.13112266666666,
+          "legacy": 58.295521,
+          "change_percent": -0.282008515428378
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 54.6613525,
+      "current_ms": 54.0793265,
+      "median_change_percent": -1.0647852154774262,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 55.452251,
+          "current": 55.424563,
+          "change_percent": -0.04993124625364276
+        },
+        {
+          "repetition": 2,
+          "current": 52.577173,
+          "legacy": 53.209482,
+          "change_percent": -1.1883389505652375
+        },
+        {
+          "repetition": 3,
+          "legacy": 53.870454,
+          "current": 53.804,
+          "change_percent": -0.12335890096638602
+        },
+        {
+          "repetition": 4,
+          "current": 54.354653,
+          "legacy": 58.311104,
+          "change_percent": -6.785073045435741
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "distinct",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 53.0145205,
+      "current_ms": 54.02261683333333,
+      "median_change_percent": 1.901547583238683,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 53.82318166666666,
+          "current": 54.20387133333334,
+          "change_percent": 0.7072968465973162
+        },
+        {
+          "repetition": 2,
+          "current": 50.498172,
+          "legacy": 50.972169,
+          "change_percent": -0.9299133415335059
+        },
+        {
+          "repetition": 3,
+          "legacy": 52.205859333333336,
+          "current": 54.105769333333335,
+          "change_percent": 3.6392658300462344
+        },
+        {
+          "repetition": 4,
+          "current": 53.93946433333333,
+          "legacy": 55.701236333333334,
+          "change_percent": -3.1628956841406763
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 326.72641899999996,
+      "current_ms": 320.5967235,
+      "median_change_percent": -1.8760942316084828,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 323.857169,
+          "current": 378.789869,
+          "change_percent": 16.962014510785785
+        },
+        {
+          "repetition": 2,
+          "current": 310.283955,
+          "legacy": 336.440052,
+          "change_percent": -7.7743707517914595
+        },
+        {
+          "repetition": 3,
+          "legacy": 329.595669,
+          "current": 330.909492,
+          "change_percent": 0.39861658497704067
+        },
+        {
+          "repetition": 4,
+          "current": 297.923637,
+          "legacy": 320.833406,
+          "change_percent": -7.1407056034557765
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 349.42271616666665,
+      "current_ms": 334.4890423333334,
+      "median_change_percent": -4.273813104414836,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 349.922751,
+          "current": 347.69753933333334,
+          "change_percent": -0.6359151156383858
+        },
+        {
+          "repetition": 2,
+          "current": 328.950676,
+          "legacy": 348.9226813333333,
+          "change_percent": -5.723905725192346
+        },
+        {
+          "repetition": 3,
+          "legacy": 444.5437043333333,
+          "current": 340.0274086666667,
+          "change_percent": -23.51091572051528
+        },
+        {
+          "repetition": 4,
+          "current": 326.120609,
+          "legacy": 339.256491,
+          "change_percent": -3.87196187795269
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 291.0873305,
+      "current_ms": 293.8867535,
+      "median_change_percent": 0.9617124164048807,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 288.945779,
+          "current": 295.353473,
+          "change_percent": 2.2176112148708738
+        },
+        {
+          "repetition": 2,
+          "current": 292.420034,
+          "legacy": 293.128083,
+          "change_percent": -0.2415493571115812
+        },
+        {
+          "repetition": 3,
+          "legacy": 289.046578,
+          "current": 280.158108,
+          "change_percent": -3.075099543299209
+        },
+        {
+          "repetition": 4,
+          "current": 298.044583,
+          "legacy": 296.889081,
+          "change_percent": 0.38920326611810996
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 256,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 312.05132133333336,
+      "current_ms": 314.1383606666667,
+      "median_change_percent": 0.6688128492505108,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 311.30606166666666,
+          "current": 310.8649663333333,
+          "change_percent": -0.14169185494552483
+        },
+        {
+          "repetition": 2,
+          "current": 305.317844,
+          "legacy": 306.27816366666667,
+          "change_percent": -0.3135449341768459
+        },
+        {
+          "repetition": 3,
+          "legacy": 312.796581,
+          "current": 321.0185476666667,
+          "change_percent": 2.628534698295404
+        },
+        {
+          "repetition": 4,
+          "current": 317.411755,
+          "legacy": 313.52722133333333,
+          "change_percent": 1.2389781181190607
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "first",
+      "legacy_ms": 50.1305275,
+      "current_ms": 36.18182,
+      "median_change_percent": -27.824777028328697,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 52.832607,
+          "current": 35.527566,
+          "change_percent": -32.75447111667232
+        },
+        {
+          "repetition": 2,
+          "current": 36.836074,
+          "legacy": 50.065866,
+          "change_percent": -26.42477411656077
+        },
+        {
+          "repetition": 3,
+          "legacy": 48.85581,
+          "current": 37.644047,
+          "change_percent": -22.948678980043514
+        },
+        {
+          "repetition": 4,
+          "current": 33.985376,
+          "legacy": 50.195189,
+          "change_percent": -32.29355905005158
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "named",
+      "phase": "warm",
+      "legacy_ms": 49.91386333333333,
+      "current_ms": 34.327182,
+      "median_change_percent": -31.227158733922888,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 50.233498,
+          "current": 34.353381666666664,
+          "change_percent": -31.612603074811418
+        },
+        {
+          "repetition": 2,
+          "current": 34.771402,
+          "legacy": 50.495544333333335,
+          "change_percent": -31.13966299587634
+        },
+        {
+          "repetition": 3,
+          "legacy": 49.594228666666666,
+          "current": 34.30098233333334,
+          "change_percent": -30.836746017611205
+        },
+        {
+          "repetition": 4,
+          "current": 32.635013,
+          "legacy": 48.918584333333335,
+          "change_percent": -33.287086196886605
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "first",
+      "legacy_ms": 42.892753,
+      "current_ms": 42.310019,
+      "median_change_percent": -1.3585838148463036,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 41.96551,
+          "current": 42.510635,
+          "change_percent": 1.2989833794466055
+        },
+        {
+          "repetition": 2,
+          "current": 42.28513,
+          "legacy": 41.910294,
+          "change_percent": 0.8943769280167935
+        },
+        {
+          "repetition": 3,
+          "legacy": 43.819996,
+          "current": 42.334908,
+          "change_percent": -3.3890646635385435
+        },
+        {
+          "repetition": 4,
+          "current": 41.755502,
+          "legacy": 47.955424,
+          "change_percent": -12.92851044336507
+        }
+      ]
+    },
+    {
+      "parents": 8192,
+      "shape": "shared",
+      "memory_limit": 250000,
+      "mode": "pins",
+      "phase": "warm",
+      "legacy_ms": 42.750176833333335,
+      "current_ms": 41.34734533333334,
+      "median_change_percent": -3.2814636193649105,
+      "pairs": [
+        {
+          "repetition": 1,
+          "legacy": 40.70317033333333,
+          "current": 41.553520666666664,
+          "change_percent": 2.089150123613215
+        },
+        {
+          "repetition": 2,
+          "current": 41.14117,
+          "legacy": 42.819135333333335,
+          "change_percent": -3.9187277376595886
+        },
+        {
+          "repetition": 3,
+          "legacy": 42.681218333333334,
+          "current": 41.773284333333336,
+          "change_percent": -2.127244805687556
+        },
+        {
+          "repetition": 4,
+          "current": 41.01349866666666,
+          "legacy": 45.17042,
+          "change_percent": -9.202751121936291
+        }
+      ]
+    }
+  ]
+}

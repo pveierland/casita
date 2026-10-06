@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "profile": "smoke",
+  "complete": true,
+  "work_directory": "/tmp/mnos-ingest/casita/benchmarks/work/ce57598dd88641f9af79d0bb9397ee0a",
+  "finished": true,
+  "revision": "357650876f04dc42ea330f40c28805de89319abb",
+  "diff": " benchmarks/README.md                       | 39 ++++++++++++++++++++++++\n benchmarks/all.py                          |  1 +\n benchmarks/dashboard.py                    |  4 +--\n benchmarks/manifest.json                   | 11 +++++++\n benchmarks/revisions.py                    |  1 +\n crates/casita/src/repository/collection.rs | 25 +++++++++++++---\n crates/casita/src/repository/mod.rs        |  2 ++\n crates/casita/src/repository/tests.rs      | 48 +++++++++++++++++++++++++++++-\n 8 files changed, 124 insertions(+), 7 deletions(-)\n",
+  "entries": [
+    {
+      "suite": "collection-mark",
+      "status": "passed",
+      "command": [
+        "/nix/store/zw57vzaiyww9x37hdjqv7xc2p5r2q1fy-python3-3.13.13-env/bin/python3",
+        "-m",
+        "benchmarks.cli",
+        "run",
+        "collection-mark",
+        "--profile",
+        "smoke",
+        "--probe-binary",
+        "/tmp/mnos-ingest/evidence/collection-mark-all-smoke/bin/casita-lib-test",
+        "--no-build",
+        "--repetitions",
+        "1",
+        "--output",
+        "/tmp/mnos-ingest/evidence/collection-mark-all-smoke/collection-mark.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 30.154813644010574,
+      "log": "/tmp/mnos-ingest/evidence/collection-mark-all-smoke/collection-mark.log"
+    }
+  ],
+  "artifacts_unchanged": true
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "case": "normal-1",
+    "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-1/cas-7/casita.sqlite",
+    "named_roots": 0,
+    "objects": 247671
+  },
+  {
+    "case": "normal-2",
+    "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-2/cas-226/casita.sqlite",
+    "named_roots": 0,
+    "objects": 247671
+  },
+  {
+    "case": "normal-3",
+    "path": "/tmp/mnos-ingest/evidence/release-pressure-normal-3/cas-299/casita.sqlite",
+    "named_roots": 0,
+    "objects": 247671
+  },
+  {
+    "case": "deferred-1",
+    "path": "/tmp/mnos-ingest/evidence/release-pressure-deferred-1/cas-80/casita.sqlite",
+    "named_roots": 0,
+    "objects": 247671
+  }
+]

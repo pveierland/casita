@@ -1,0 +1,70 @@
+--- control/collection.rs
++++ discarded-filter/collection.rs
+@@ -1346,6 +1346,10 @@
+         if frontier.is_empty() {
+             break;
+         }
++        let frontier = unmarked_frontier(&marked, frontier).await?;
++        if frontier.is_empty() {
++            continue;
++        }
+         let keys: Vec<_> = frontier.iter().map(|(_, key)| key.clone()).collect();
+         let found = snapshot.object_batch(&keys).await?;
+ 
+@@ -1370,6 +1374,28 @@
+         }
+     }
+     Ok(marked)
++}
++
++/// Skip resolved objects and repeated edges before fetching metadata. Keep the
++/// first predecessor for strict missing-link diagnostics. This only filters:
++/// tolerant pin traversal must not mark an input whose record is still absent.
++async fn unmarked_frontier(
++    marked: &SpillSet<ObjectKey>,
++    frontier: Vec<(Option<ObjectKey>, ObjectKey)>,
++) -> Result<Vec<(Option<ObjectKey>, ObjectKey)>, RepositoryError> {
++    let keys: Vec<_> = frontier.iter().map(|(_, key)| key).collect();
++    let present = marked.contains_batch(&keys).await?;
++    let mut seen = BTreeSet::new();
++    let keep: Vec<_> = keys
++        .into_iter()
++        .zip(present)
++        .map(|(key, present)| !present && seen.insert(key))
++        .collect();
++    Ok(frontier
++        .into_iter()
++        .zip(keep)
++        .filter_map(|(step, keep)| keep.then_some(step))
++        .collect())
+ }
+ 
+ /// Extend the strict named-root mark with live operation scopes. A writer can
+@@ -1425,16 +1451,21 @@
+         }
+     }
+     loop {
+-        let mut keys = Vec::new();
+-        while keys.len() < CLOSURE_FRONTIER {
+-            let Some((_, key)) = queue.pop().await? else {
++        let mut frontier = Vec::new();
++        while frontier.len() < CLOSURE_FRONTIER {
++            let Some(step) = queue.pop().await? else {
+                 break;
+             };
+-            keys.push(key);
+-        }
+-        if keys.is_empty() {
++            frontier.push(step);
++        }
++        if frontier.is_empty() {
+             return Ok(());
+         }
++        let frontier = unmarked_frontier(marked, frontier).await?;
++        if frontier.is_empty() {
++            continue;
++        }
++        let keys: Vec<_> = frontier.into_iter().map(|(_, key)| key).collect();
+         let records = snapshot.object_batch(&keys).await?;
+         for (key, record) in keys.into_iter().zip(records) {
+             let Some(record) = record else { continue };

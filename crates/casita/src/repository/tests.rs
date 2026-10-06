@@ -2013,7 +2013,7 @@ async fn pin_marks_retain_selected_closures_and_tolerate_unpublished_inputs() {
             snapshot.as_ref(),
             &ledger.inventory().await.unwrap(),
             &mut marked,
-            100,
+            if all { 3 } else { 2 },
             &area,
         )
         .await
@@ -4023,6 +4023,52 @@ async fn interrupted_emergency_sweep_is_collectible_and_retryable() {
     let recovered = ledger.inventory().await.unwrap();
     assert!(recovered.logical_prune.is_none());
     assert!(recovered.deletions.is_empty());
+}
+
+#[tokio::test]
+async fn missing_named_root_precedes_a_later_mark_limit_error() {
+    let hidden = Arc::new(StdRwLock::new(None));
+    let repository = Repository::new(
+        MemoryBlobStore::new(),
+        HiddenObjectMetadataStore {
+            inner: MemoryMetadataStore::new().unwrap(),
+            hidden: hidden.clone(),
+        },
+    );
+    let session = repository.mutation_session().await.unwrap();
+    let first = session.stage_blob(b"first").await.unwrap();
+    let first_key = first.record().key().clone();
+    let second = session.stage_blob(b"second").await.unwrap();
+    let second_key = second.record().key().clone();
+    session
+        .publish(
+            vec![first, second],
+            vec![
+                RootChange::Set {
+                    name: "a".parse().unwrap(),
+                    target: first_key.clone(),
+                },
+                RootChange::Set {
+                    name: "b".parse().unwrap(),
+                    target: second_key,
+                },
+            ],
+        )
+        .await
+        .unwrap();
+    *hidden.write().unwrap() = Some(first_key);
+    let snapshot = repository.metadata().snapshot().await.unwrap();
+    assert!(
+        matches!(mark_named_roots(snapshot.as_ref(), 1, &repository.spill_area()).await,
+        Err(RepositoryError::Metadata(MetadataError::Corruption(message)))
+            if message.contains("named root targets missing object"))
+    );
+    *hidden.write().unwrap() = None;
+    let snapshot = repository.metadata().snapshot().await.unwrap();
+    assert!(matches!(
+        mark_named_roots(snapshot.as_ref(), 1, &repository.spill_area()).await,
+        Err(RepositoryError::LimitExceeded(_))
+    ));
 }
 
 #[tokio::test]
