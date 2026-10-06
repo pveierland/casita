@@ -1,0 +1,176 @@
+[
+  {
+    "path": "mutation-rotation-comparison.json.gz",
+    "bytes": 4382,
+    "sha256": "8236faf7e83970cdea15305b3e8b13085b5aeb73109715ba1499e63c57f0fd43",
+    "uncompressed_sha256": "32e10412421eb9d9cf76d35f0bedd4a87a376af25a986b442ef1188b3bf3a2a0"
+  },
+  {
+    "path": "mutation-rotation-comparison-audit.json.gz",
+    "bytes": 861,
+    "sha256": "5fb91958367517b55c5dc4b632c9d34cf767f884ba246f16d9e22a1e9e04ef80",
+    "uncompressed_sha256": "378d03554455ab2fdc4a9eaf53934b62ba718ea473398c7dd02afcecf01078fc"
+  },
+  {
+    "path": "mutation-rotation-comparison.md.gz",
+    "bytes": 1266,
+    "sha256": "b479c845d766da0cd4b7c8cb52afa50aaca148badf11a55f88c2ff27ca22f3c8",
+    "uncompressed_sha256": "68265d56cf607c0d5f062e665587b921a2df0024b5eb3b0408185f2b519c54b6"
+  },
+  {
+    "path": "mutation-rotation-probe.build.json.gz",
+    "bytes": 667,
+    "sha256": "2d17436e36fc1045ce87e86617655072356f86510eb2ec142d17d33ce89a6b24",
+    "uncompressed_sha256": "e47ec1c465dc572b367cce8eeed405ccb276608cfaaac6134433536eeae900f7"
+  },
+  {
+    "path": "mutation-rotation-mutation.rs.gz",
+    "bytes": 13250,
+    "sha256": "d804bdc08841a18c52904f47f083a254fb1799ee689f2d8e7c5e9edf4b1ab859",
+    "uncompressed_sha256": "9b2d645f84f7d36976f06aca1d81fe2c3ac199998eda142593de1fb91fb07ff3"
+  },
+  {
+    "path": "mutation-rotation-mutation_rotation_tests.rs.gz",
+    "bytes": 2228,
+    "sha256": "6a6a7487445a8f4c5c696e3a441f0c2fc28fb38809969f27851f70594ee48db8",
+    "uncompressed_sha256": "c4c0ffdb73165f14bb85bd9ccd215fd22276eb923818bbe617428081aa08ef5e"
+  },
+  {
+    "path": "mutation-rotation-candidate.patch.gz",
+    "bytes": 3803,
+    "sha256": "82e455779f71be0a6945fc75de706aa63970f97d5fee421c16a4bcfca2feda0d",
+    "uncompressed_sha256": "5232f54ea8040b28d9a768069e24feff4f39e300bda555f97ee4ddf541b91d63"
+  },
+  {
+    "path": "mutation-rotation-runner.py.gz",
+    "bytes": 2600,
+    "sha256": "54ff9aac9a3700795cdf464cd00db1568fe2058885c66848ba89309d9b600171",
+    "uncompressed_sha256": "ea0cabd303912d7460762b286dd8142bdbf52ac5e545afb44da7fb93b3e29dea"
+  },
+  {
+    "path": "mutation-rotation-red.log.gz",
+    "bytes": 409,
+    "sha256": "437f35fd8caff0f9b956bc2395bdbf478a8f413feb6f0c7e506bd4c79ae5433f",
+    "uncompressed_sha256": "1c8784e16cc0a46c9efd804f4b03c12818002047d63d73bbdd87983cd821fe22"
+  },
+  {
+    "path": "mutation-rotation-green.log.gz",
+    "bytes": 311,
+    "sha256": "bb971670daa14198d3735863bb0012d5996f85794de5e8af949ab02b74c174a9",
+    "uncompressed_sha256": "8cacfa0448ff7e1d38b7ead9870e1d8e194ad07cda576bbe4ef13b80a6ef0eb2"
+  },
+  {
+    "path": "mutation-rotation-focused.log.gz",
+    "bytes": 508,
+    "sha256": "3f4478b915fde98e9d4fd1cae67b27b062706c3b71b7d5225169dcc5d4668403",
+    "uncompressed_sha256": "7a2a88d2124388dfaf33c7378f70103f0a0b8f137c74dd45c6f246a4a71d3390"
+  },
+  {
+    "path": "mutation-rotation-full-native.log.gz",
+    "bytes": 18613,
+    "sha256": "7904b53eea6d6cdc8996548e671fe1f82701285d5b8783138f02fbaeb4a0a531",
+    "uncompressed_sha256": "a6ebd379e8457d6ba26ea93e0157eb7d8db72359273bdb1d96e0cd5a08e80fb7"
+  },
+  {
+    "path": "mutation-rotation-doctests.log.gz",
+    "bytes": 860,
+    "sha256": "39203158d06f24e7695ae6805d55cf2b1e685864c9a7919a4262b5b4bec71d59",
+    "uncompressed_sha256": "64fbf6245fecee654538af821ab2d8634d5aa03dcc18c838b2562ebc223ba4f0"
+  },
+  {
+    "path": "mutation-rotation-python-tests.log.gz",
+    "bytes": 556,
+    "sha256": "9e4a80239862f87659d59dee35f29ab3797a1e475e94293a14cf740590af8032",
+    "uncompressed_sha256": "e7f70679454b6fc253b497bb474ddb109682f2fa37fed851b845b755ca0f901d"
+  },
+  {
+    "path": "mutation-rotation-python-tests-fixed.log.gz",
+    "bytes": 269,
+    "sha256": "d60cc7ecb1b10f4a42c8c9655f7c8618c5120d4c777b145a711bc681fb64a6ee",
+    "uncompressed_sha256": "fc9f9245d70330906645a0f1b3156af20fd1b5b1ecc5aeedfe35501a77d888d1"
+  },
+  {
+    "path": "mutation-rotation-parser-red.log.gz",
+    "bytes": 995,
+    "sha256": "9919b7eec59716a2618c64c052f2cc1a3cbeffe3a56665f735c560f9f4396bf3",
+    "uncompressed_sha256": "414c09e274ea27004a982c90402c8d3d8559f562c97a285396708dcf46d849be"
+  },
+  {
+    "path": "mutation-rotation-parser-green.log.gz",
+    "bytes": 270,
+    "sha256": "0d043972a071ce3fb7dc5f676dcadd969c065ba146c0139995b380647c5025ee",
+    "uncompressed_sha256": "b63494f8092a70174220a4199ea6fd3eae422e516b8a9ae6ed27ab7cc2dcc253"
+  },
+  {
+    "path": "mutation-rotation-release-build.log.gz",
+    "bytes": 128,
+    "sha256": "177ba2d1985cb09aa941573c850f0f25b582aba717d7cf9f3dabd64f16fc3fb8",
+    "uncompressed_sha256": "92b16522e82ebcfc91a70b115aeec28cfe7278f6244b36e4f73e8f5dd558d1b7"
+  },
+  {
+    "path": "mutation-rotation-release-build.jsonl.gz",
+    "bytes": 28143,
+    "sha256": "213312b32637d897f106c033ddb137472939911fa0addcbb791ed74ad48e56f7",
+    "uncompressed_sha256": "b27d91a2d9171bd79808c987662bb73621257929303d6fe5c4a1117be1007db1"
+  },
+  {
+    "path": "git-publication-rotation-full-cas.log.gz",
+    "bytes": 2680,
+    "sha256": "e3219afa8f7acc57a90d455d1736f914be3d17ebca3648e4e2adb7c6523dc753",
+    "uncompressed_sha256": "ece32192460169a507754ddc49a94ebbc244bd1c7f7448705eb56db3fff9caf6"
+  },
+  {
+    "path": "save-mutation-rotation-build.py.gz",
+    "bytes": 727,
+    "sha256": "0350d19c073747943ea2dfc71e054253eff0e78566a9cfd8df5ee2a24535f4bb",
+    "uncompressed_sha256": "d43469fd4a5ee8549318d0042a525c4e153584457cd177f36c3d2a6a4f4b83aa"
+  },
+  {
+    "path": "summarize-mutation-rotation.py.gz",
+    "bytes": 1077,
+    "sha256": "0fb66fea83bcbacb8281c39a6168bbe2ecb35b1205ac6d0f456e90be604b57b6",
+    "uncompressed_sha256": "ffc0c1e08a11b922fdc040001d3a3b015e2419efd39f19d5f914c170cc7178e5"
+  },
+  {
+    "path": "git-publication-rotation-wide-near-audit.json.gz",
+    "bytes": 947,
+    "sha256": "a8f216281846be001b87fea134fd375a0e9caed45e53d3233c493ab91882a73f",
+    "uncompressed_sha256": "689f81645b8d88d6703e0e7093b5647f7701fc2e8371ab6da7fab2241ce456c2"
+  },
+  {
+    "path": "git-publication-rotation-wide-week-audit.json.gz",
+    "bytes": 948,
+    "sha256": "85c81439184d69f7a2c648bfb693b28fb7b83629a13b235a6f6f1f948c429da7",
+    "uncompressed_sha256": "8fb4143ecc34acaadaa0bdc7b7d8bd3b7e2ceb772c020f5c6ca2d122f2bedff1"
+  },
+  {
+    "path": "git-publication-rotation-wide-release-audit.json.gz",
+    "bytes": 965,
+    "sha256": "588261d12183d9bfda4aad703a658a9688815cd0201173d458a16678f267eb81",
+    "uncompressed_sha256": "5cf416aa31fc7d78d306b07d84351e8599dc58e3a5034267d17d55d7f670d82b"
+  },
+  {
+    "path": "git-publication-rotation-wide-week-confirm1-audit.json.gz",
+    "bytes": 970,
+    "sha256": "91cc7394959e72d268b304b5812b80f24805785dacafee74eb43552e517355be",
+    "uncompressed_sha256": "27d4b0b8a465fd02460b0ef80ab5ccc01ac5ef5309071833200411f842651f61"
+  },
+  {
+    "path": "test_mutation_rotation.py.gz",
+    "bytes": 830,
+    "sha256": "f20d54c0f2c454978910b4411d5fba9f9056aa1503c9e000ff87f17d76556030",
+    "uncompressed_sha256": "447cea98bf2679e2f7e38c2bfe5631991c0e67b690182274480ae401466325f0"
+  },
+  {
+    "path": "publication.rs.gz",
+    "bytes": 7599,
+    "sha256": "85ab9839a60f05bea0baf8b274610f5203b8c55ef9cbc241ff4f6177b243f852",
+    "uncompressed_sha256": "93a7b85fa3767140cc126bd6e0a837c84b95323385a9e3333d2a45e689bb6b23"
+  },
+  {
+    "path": "mutation_catalog_tests.rs.gz",
+    "bytes": 2618,
+    "sha256": "e006b4406db86a2f0f2995e0bef275eaa548f6b0504a9da7fe1b0216ca93f98e",
+    "uncompressed_sha256": "0e1a7787e578c1e533d06a31047ce56dde961c42f53ff4dbb5e4e3320a89a2d6"
+  }
+]

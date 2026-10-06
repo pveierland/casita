@@ -85,6 +85,8 @@ mod collection_mark_tests;
 mod collection_timing;
 #[cfg(test)]
 mod mutation_catalog_tests;
+#[cfg(all(test, feature = "experimental"))]
+mod mutation_rotation_tests;
 mod publication;
 #[cfg(test)]
 mod publication_retry_tests;
