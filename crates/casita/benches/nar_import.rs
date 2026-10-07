@@ -4,6 +4,8 @@ use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
 use sha2::{Digest, Sha256};
 use std::time::{Duration, Instant};
 
+#[path = "../../../benchmarks/fixtures/nar_decoder.rs"]
+mod decoder_fixture;
 #[path = "../../../benchmarks/fixtures/nar_import.rs"]
 mod fixture;
 
@@ -174,5 +176,58 @@ fn sequences(c: &mut Criterion) {
     }
     group.finish();
 }
-criterion_group!(benches, imports, sequences);
+fn decoder_pools(c: &mut Criterion) {
+    let mut group = c.benchmark_group("nar_decoder_pool");
+    group
+        .sample_size(10)
+        .warm_up_time(Duration::from_millis(100))
+        .measurement_time(Duration::from_secs(1));
+    for threads in [1, 2] {
+        let runtime = tokio::runtime::Builder::new_current_thread()
+            .max_blocking_threads(threads)
+            .enable_all()
+            .build()
+            .unwrap();
+        for size in [8 * 1024 * 1024, 32 * 1024 * 1024] {
+            let archive = decoder_fixture::archive(size);
+            let hash = Sha256::digest(&archive);
+            group.bench_with_input(
+                BenchmarkId::new(format!("workers-{threads}"), size),
+                &archive,
+                |b, bytes| {
+                    b.iter_custom(|count| {
+                        runtime.block_on(async {
+                            let mut elapsed = Duration::ZERO;
+                            for _ in 0..count {
+                                let directory = tempfile::tempdir().unwrap();
+                                let repo = Repository::local(directory.path()).await.unwrap();
+                                let start = Instant::now();
+                                let report =
+                                    repo.import(NarImport::new(bytes.as_slice())).await.unwrap();
+                                elapsed += start.elapsed();
+                                assert_eq!(report.nar_size(), bytes.len() as u64);
+                                assert_eq!(report.nar_sha256(), hash.as_slice());
+                                assert_eq!(report.stats().hash_payload_bytes, size as u64);
+                                let scrub = scrub_nar(
+                                    report.reader(),
+                                    report.root(),
+                                    &NarRequirements::default(),
+                                )
+                                .await
+                                .unwrap();
+                                assert_eq!(scrub.nar_sha256(), hash.as_slice());
+                                drop(scrub);
+                                drop(report);
+                                repo.flush().await.unwrap();
+                            }
+                            elapsed
+                        })
+                    });
+                },
+            );
+        }
+    }
+    group.finish();
+}
+criterion_group!(benches, imports, sequences, decoder_pools);
 criterion_main!(benches);

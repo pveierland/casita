@@ -1,0 +1,29 @@
+{
+  "artifact_hash_pairs": 113,
+  "benchmark_correctness_cases": 4,
+  "blocking_threads_default": 64,
+  "decoder_capacity": 16,
+  "matrices": {
+    "nar-decoder-admission-initial": {
+      "passed": 8,
+      "timeouts": 0
+    },
+    "nar-decoder-pool-probe": {
+      "passed": 8,
+      "timeouts": 0
+    },
+    "nar-decoder-pool-probe-large": {
+      "passed": 6,
+      "timeouts": 2
+    }
+  },
+  "permanent_tests": {
+    "mnos_admission": 8,
+    "mnos_oracle": 18,
+    "native_integration": 2,
+    "native_library": 54,
+    "preexisting_ignored": 1
+  },
+  "scope": "fixture liveness and targeted correctness; no production speed, memory, universal pool guarantee or OOM claim",
+  "source_records": 43
+}

@@ -2107,6 +2107,34 @@ The [hash-reuse investigation](reports/2026-09-10-hash-reuse.md) retains the
 correctness results and raw timing data. Its shared-host timings are
 inconclusive; use an isolated paired run before making a speedup claim.
 
+## NAR decoder blocking-pool capacity
+
+The existing `nar_import` target also includes
+`nar_decoder_pool/workers-{1,2}/{8388608,33554432}`. These cases import a
+deterministic regular-file NAR into a fresh durable repository. They cover the
+8 MiB success and 32 MiB stall observed with the former decoder and one blocking
+worker; these sizes are not a universal buffer threshold. Only the import is
+timed. Every sample checks payload-byte counts, NAR size and SHA-256, then scrubs
+the stored tree against the same canonical archive outside the timed interval.
+
+The target is registered through `core-primitives` in `manifest.json` and already
+included in `benchmark all`. Run a constrained-pool check with an external
+watchdog, since a blocked synchronous decoder can prevent runtime shutdown:
+
+```sh
+devenv shell timeout 600 cargo bench --bench nar_import -- nar_decoder_pool
+devenv shell cargo test --test nar_decoder_admission
+```
+
+The integration tests own and reap watchdog children, cover both pool limits
+and sizes, and include two concurrent repository imports on one blocking worker.
+NAR decoders use separate native threads with 16 process-wide admission slots,
+shared across repositories and runtimes. Queued work can be cancelled; active
+workers retain their slot until pipe closure lets them finish. A stalled input
+therefore occupies a slot until completion or abandonment. Sixteen is a resource
+bound, not a measured optimum, and these cases do not establish a general
+production throughput improvement or an optimal I/O-pool size.
+
 ## Repeated durable NAR imports
 
 The `nar_import` Criterion target includes `nar_import_sequence/{15,16,17,18,19,32}`,

@@ -1,0 +1,793 @@
+[
+  {
+    "source": "/tmp/mnos-ingest/archive-nar-decoder-admission.py",
+    "file": "artifacts/archive-nar-decoder-admission.py.gz",
+    "bytes": 1162,
+    "sha256": "bf20c9744ffc51c178ed709eda4f05ef533080aabfc8666e4e4673d01c3ad6ca",
+    "compressed_sha256": "6795d2a2668a24a5039a4a1a967feabcb29cb6862f80b13110906188df32a4c8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/audit-nar-decoder-admission.py",
+    "file": "artifacts/audit-nar-decoder-admission.py.gz",
+    "bytes": 7494,
+    "sha256": "c48852a7b1b43bbf220c23f761c9f3f10afc43b157f345a045d4fd5618db9cff",
+    "compressed_sha256": "70a2be513fcdd287425c78f04c7581f09d96d0978b8152f17ec81bf0d429a4f9"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-build-command-error.log",
+    "file": "artifacts/nar-decoder-admission-benchmark-build-command-error.log.gz",
+    "bytes": 274,
+    "sha256": "281812d7866c822746e151bc7ad8d4aa3736183293b497808d4992f87bd6d6cc",
+    "compressed_sha256": "fd3773003f134e9d69ec714282013670f5e7510f21fc762f1cd4df82e57824e4"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-build.jsonl",
+    "file": "artifacts/nar-decoder-admission-benchmark-build.jsonl.gz",
+    "bytes": 411402,
+    "sha256": "960698320b3191fa34887adfa93ab8052fdb4dee4726ae5d31a44590ba5c005f",
+    "compressed_sha256": "2b04e9c892288f778f4e6657ff464b4bff18332c601398ec3ea7b9839277b53c"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-build.log",
+    "file": "artifacts/nar-decoder-admission-benchmark-build.log.gz",
+    "bytes": 140,
+    "sha256": "be26359aac1095ec2ca00626a468b8775a54d76f86635c42762c1517a00252e8",
+    "compressed_sha256": "8293a057d1855f9fe7c665f3aac6317809b0a40149efd6dc0d0f734f4e99d4cc"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-results.json",
+    "file": "artifacts/nar-decoder-admission-benchmark-results.json.gz",
+    "bytes": 415,
+    "sha256": "f32f2aacbc68bbf81eb51bcf66c1a4e28cd18a98bfc5a7ec50ab8c53120b565c",
+    "compressed_sha256": "9494b05db3b0b58b52b8f426292809749c8dd76a550dc22dd95fad47e3919d27"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-runner.log",
+    "file": "artifacts/nar-decoder-admission-benchmark-runner.log.gz",
+    "bytes": 415,
+    "sha256": "f32f2aacbc68bbf81eb51bcf66c1a4e28cd18a98bfc5a7ec50ab8c53120b565c",
+    "compressed_sha256": "9494b05db3b0b58b52b8f426292809749c8dd76a550dc22dd95fad47e3919d27"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-benchmark-tests.log",
+    "file": "artifacts/nar-decoder-admission-benchmark-tests.log.gz",
+    "bytes": 207,
+    "sha256": "c9ad5b60bcbd28f9c5dc08bf71744655aad9f7c3fd6415affc004338499a3368",
+    "compressed_sha256": "281ef9e59e3c2287b6d7f19cf7dc880c13995694340c145850b7c3a2879c459d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-build.json",
+    "file": "artifacts/nar-decoder-admission-build.json.gz",
+    "bytes": 3952,
+    "sha256": "98f5e363b53b57603061cf021ec7a2cf2a1952b1c0840ada30bbe8bac5e5c11e",
+    "compressed_sha256": "e1f912ea42278f5d49ed8e1abf974aebeffa978cdbd6b010298efec54f9cc6c8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-cache-cleanup-2.json",
+    "file": "artifacts/nar-decoder-admission-cache-cleanup-2.json.gz",
+    "bytes": 240,
+    "sha256": "c18476fd5dbf0e8cffb33acd0d626a92678d1fb55d269dab90c310e32bc5c4fc",
+    "compressed_sha256": "f4e4a44b645490bf733eda8baad9fc333451cc16e113e042b5de41a573f5a311"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-cache-cleanup-3.json",
+    "file": "artifacts/nar-decoder-admission-cache-cleanup-3.json.gz",
+    "bytes": 256,
+    "sha256": "aae896d6302b781b8bd54792c47a3cc55ea19843b3a7a171189b663a08da1a0c",
+    "compressed_sha256": "3e2f5102957b4a7312f32af932f68f766cfed261abac495166d0c716f07cb6c9"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-cache-cleanup-4.json",
+    "file": "artifacts/nar-decoder-admission-cache-cleanup-4.json.gz",
+    "bytes": 1090,
+    "sha256": "2a013051d6ec1f82ba6f66e270ad74647847470f69311e5771d869a3a6f1eec5",
+    "compressed_sha256": "3f2ab39657f7c8b8de7c9f9258a42c0b668b50e186e23353f32577384505ee8c"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-cache-cleanup-5.json",
+    "file": "artifacts/nar-decoder-admission-cache-cleanup-5.json.gz",
+    "bytes": 268,
+    "sha256": "a20038436c496e86c606cf45884a00151ddba0140e984caa10819e8e7d2e26b3",
+    "compressed_sha256": "2595cd977182d35759df9f590012a8c68e35b88a245d668ae977567901430e4d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-cache-cleanup.json",
+    "file": "artifacts/nar-decoder-admission-cache-cleanup.json.gz",
+    "bytes": 355,
+    "sha256": "99416cfc64bc015401c347680e629434d9113e3917b3c44b3831926565bdae64",
+    "compressed_sha256": "2c3434e263fef81acac633a9a856742b2bfba19c423addc954a10a3513e198fd"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-delivered-sources.json",
+    "file": "artifacts/nar-decoder-admission-delivered-sources.json.gz",
+    "bytes": 861930,
+    "sha256": "c2fb34f94a917bd592426e3292f40c3ce535cf5588668888ca81d862360465a2",
+    "compressed_sha256": "ebd1a912f7d57bfb8255e9087279096c12c6fbedf84eb180a2136d6c9c5dc901"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-format.log",
+    "file": "artifacts/nar-decoder-admission-format.log.gz",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compressed_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-33554432-direct-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-33554432-direct-stderr.log.gz",
+    "bytes": 91,
+    "sha256": "673594d34d52cc8e7647c00280e8d21ff33d6e5e1a8788896d48f4becf56a80b",
+    "compressed_sha256": "dfdf1216535a880faefb3fca5646814d6eb24a65b76541a9ae32630bb63a010c"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-33554432-direct-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-33554432-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "5bca6be0c7a66e88ba94fde87bce0f0aaaed88db2c880bdb43ad2db2877bf85a",
+    "compressed_sha256": "155383911978ae53b49e74d41a8602b459aee795cdddef45fefafdc09dcc9cb1"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-33554432-server-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-33554432-server-stderr.log.gz",
+    "bytes": 115,
+    "sha256": "c18a472ae186c5ec6cf6819340115ae88305e53771e164d8f029e59c3c78a3ce",
+    "compressed_sha256": "d4aedfef49527399cb7cbd1566569673d222cc1b5bbc5f91c1b6b6bc56b0b942"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-33554432-server-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-33554432-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "2b7f9b83fd71bd66b57b3cfaa87dea3f57ad5472156fa85d2f4b893a09e664e4",
+    "compressed_sha256": "02dd6ba781efa32db537f9ff203bd03bc10c0fd20e3c89777c4219f81fe46baf"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-8388608-direct-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-8388608-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "e3d9492ece047ba0c73f0b036078d5dd32dadf2f8c9c488f4d16c6a80a2683cb",
+    "compressed_sha256": "8c4719097bb248d2b15464f68692b01d9cd414644e473cef66a0a7b0d4d13290"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-8388608-direct-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-8388608-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "2944bf09669257f5dc3bff8a18563a0e017ff78a6797e3bd207cc7b7dcbc6087",
+    "compressed_sha256": "737c7d41b79573d271851db741c1bad295fb11d80199b1b65cb02d8794dcc5fc"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-8388608-server-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-8388608-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "bde49e4e6ad9ddb6b5e9396be5d9bdd7e1a008fbe1a6cde3081ba691cd87e08d",
+    "compressed_sha256": "309d9dd172a886bec440d0760d193a3fc1aa88f1605c6973ed5203210dda7301"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-1-8388608-server-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-1-8388608-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "4f298a53a1c556a2ef20fd4af5e6d8d6819881e1cf624b94c6b42e34199e1e94",
+    "compressed_sha256": "5a5f64a06c646275ed85b6851df9f1295ed73093b836bafbb25492c8767c2309"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-33554432-direct-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-33554432-direct-stderr.log.gz",
+    "bytes": 91,
+    "sha256": "f44fd0f52db04b55b91fb8e13af5b445448d0aec49b47aa252df4c5edd2d5bd5",
+    "compressed_sha256": "dc3b9d858cfcb1a0111ae298d2d27007625c5fe8f4e02d0cf5cc21263a2e7f7f"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-33554432-direct-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-33554432-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "5087cfe779c07cf7ea8d1feaae1021c4bb6fcdedcfac77b94c5186f92b4a3186",
+    "compressed_sha256": "d8ecb14b4e1b24c36322e4019a040d07e48a3254abc99105c93429b50b98dad9"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-33554432-server-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-33554432-server-stderr.log.gz",
+    "bytes": 115,
+    "sha256": "a2e01cfcaeead19bebaafb38bde885ced79a7005898e02ad1cf7993bb561fa98",
+    "compressed_sha256": "1ae89b20ce9ad57b1bf2444cb3bd680d94dd5c51b9b75a5ffd4ba0923f682a4e"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-33554432-server-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-33554432-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "e61b6db7b7c374795a8bad6d28b8c8a37e063a141b6704d161b615271a9e8b22",
+    "compressed_sha256": "9d9315a723d6a6e4ee42892f523d6b62476a5ed489c84d58a4a2b7aa8344a6f3"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-8388608-direct-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-8388608-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "76b771c66c68724c789f59bd338d900b2d6d8996e6bca8137873638950c940cc",
+    "compressed_sha256": "861ae881f2989d97d58483205058fab4d8128d39f051f3ebe1c1cdb98641c3e5"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-8388608-direct-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-8388608-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "4dd8c29127a03c92a7c0266ef93b9a51b35636c63d89325d9e293e38b908e054",
+    "compressed_sha256": "eb34b6097928b0687970b32f112ed1cfe3989eba5536a5850b621ad6b7cda944"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-8388608-server-stderr.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-8388608-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "ebaecfb22ef6526960e64f4a17fa1abd8ad7e770cb17c99f0c10afb1dd77d5a7",
+    "compressed_sha256": "0e550b02f8e780973790d9a0a1777b08428a844a95717d04187e020c15ca549d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-2-8388608-server-stdout.log",
+    "file": "artifacts/nar-decoder-admission-initial-2-8388608-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "b025fc2263b46eef1383d67a42c60480aad17de9905d972080bfa9b7294a1168",
+    "compressed_sha256": "4de9df225a26ba9cbb299995cc4460e32f9581268257567bc0ffb05a36855f84"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-mnos.rs",
+    "file": "artifacts/nar-decoder-admission-initial-mnos.rs.gz",
+    "bytes": 23102,
+    "sha256": "dce8a24ca5a94903de65dfa88de0723ffd769844a71d7f43c88186aefae0e55e",
+    "compressed_sha256": "1e6adedd33956025c269871d15278c8d0666c75d11122e209b521040f1bbe1c8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-protocol.json",
+    "file": "artifacts/nar-decoder-admission-initial-protocol.json.gz",
+    "bytes": 527,
+    "sha256": "4ef3f1a180064527ef67ecd3dc9a576f10c104691c13825bf86c8ffaa808fa3f",
+    "compressed_sha256": "b86053a4c7db4929f53980280ef588e105982a017899c854de891b07019304b6"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-results.json",
+    "file": "artifacts/nar-decoder-admission-initial-results.json.gz",
+    "bytes": 6387,
+    "sha256": "1f4db7a9114e989e4eb0123d1fad64c43cba009ddde0d5519d52886cc37ee316",
+    "compressed_sha256": "0ad0353553ec760f8df569670d4d56cf786a847255f8a06098b57c5c2abea0de"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-runner.log",
+    "file": "artifacts/nar-decoder-admission-initial-runner.log.gz",
+    "bytes": 944,
+    "sha256": "1bfb363b960d03cdbe40e088b0d617a5e307bb666df91b9d3533ee27d94d1737",
+    "compressed_sha256": "0914926c9b0db4109585c75c87b91aa28e1c4254223e61af83a136bf116f8ac5"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-initial-sources.json",
+    "file": "artifacts/nar-decoder-admission-initial-sources.json.gz",
+    "bytes": 68609,
+    "sha256": "2f1bfbe18567a85459a854d5307cda10c83cff1ac5e6243f51fa4a1ac8d50021",
+    "compressed_sha256": "f8566c50b454a00ac53f3349377df48a30f8293fc46601f51a90526e698fca88"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-build.log",
+    "file": "artifacts/nar-decoder-admission-mnos-build.log.gz",
+    "bytes": 947,
+    "sha256": "9e3f2d801f5c3f681a9b5deeff297bbf37df9a60a5212640aee933963907570e",
+    "compressed_sha256": "ee0e90e231d1c84aa3d1e7e3875972869422d782ddd102c4b4ad124aa87d93d0"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-final-build.log",
+    "file": "artifacts/nar-decoder-admission-mnos-final-build.log.gz",
+    "bytes": 947,
+    "sha256": "11965e01655086b15ef3c88697839375463ea31380d51208dc0883e425ce19c9",
+    "compressed_sha256": "cd275a8f46a55e8e93c44aedc19af77990d31a889a69b006dd3aaf22ace0bb8b"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-final-results.json",
+    "file": "artifacts/nar-decoder-admission-mnos-final-results.json.gz",
+    "bytes": 1246,
+    "sha256": "d7f86e020eb49fa67bee4eb6885513a4535914c2174344ee08915123291ea2ed",
+    "compressed_sha256": "bbb13d70e76c6d895c3cdef24c83b367666c10f13a17e4f511774aca0c6ee5fb"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-final-runner.log",
+    "file": "artifacts/nar-decoder-admission-mnos-final-runner.log.gz",
+    "bytes": 393,
+    "sha256": "bbb5d8ab4159b75fcdfa7e375a76f1b8f11caf34aa6509a7b6ce00554a79ee70",
+    "compressed_sha256": "4f2270f1f671b60a9e5fe6136dd3407e5c0d2265798cd0f53f658060fda02efb"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-final-tests.log",
+    "file": "artifacts/nar-decoder-admission-mnos-final-tests.log.gz",
+    "bytes": 2288,
+    "sha256": "fe9c2fe52222c144ad37350e10c48629418c2df6f9ac4b521ef3024560cc04b1",
+    "compressed_sha256": "afab685c5233fd65d52e3824c884361d50677a5bc6c3a7bf4837fbb77803b73b"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-oracle-build.log",
+    "file": "artifacts/nar-decoder-admission-mnos-oracle-build.log.gz",
+    "bytes": 681,
+    "sha256": "95568c2a1347658eac2009a87c07dce5ca23b620045eb5c30116645d1ca9ea62",
+    "compressed_sha256": "557dd532e6c28c19a31e0c301a68f8d3c5eaa519ef8821d620347b921c63fa8a"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-oracle-results.json",
+    "file": "artifacts/nar-decoder-admission-mnos-oracle-results.json.gz",
+    "bytes": 2054,
+    "sha256": "2ae7b152e182440d3f7a250199c2192e05ccfb0befbefb3cc23d8cd0faaf552b",
+    "compressed_sha256": "265961e0a267ece8b347d61dbe159f469bd7f1589eafc88d7a37ffcde74bd6ac"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-oracle-runner.log",
+    "file": "artifacts/nar-decoder-admission-mnos-oracle-runner.log.gz",
+    "bytes": 1149,
+    "sha256": "d27cf1b496247f10ac7072cd42af0fb0862801336736eaef9313f340d32bca2c",
+    "compressed_sha256": "e03b71e727a3d1518a385379aace08927c4dbc2d333e4da36fcb396808ab401b"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-mnos-oracle-tests.log",
+    "file": "artifacts/nar-decoder-admission-mnos-oracle-tests.log.gz",
+    "bytes": 1895,
+    "sha256": "9b8058a204fd3e600f4c3a9cf3f1e748bb37d7041bdb651b8684b8d2371ff3cb",
+    "compressed_sha256": "6e39333474dac2ee0f0e9cfc6ae96e051003a051d5644e711878f47925f63965"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-build-initial.jsonl",
+    "file": "artifacts/nar-decoder-admission-native-build-initial.jsonl.gz",
+    "bytes": 412100,
+    "sha256": "35433d489f11120e8e5c20081f7cb2f0c773a2d6529b17d25339679dc55b558c",
+    "compressed_sha256": "0547259a87a1648873b4aa27f0248c1600c67bbc6dc7aec6b0c98c73142b77a2"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-build-initial.log",
+    "file": "artifacts/nar-decoder-admission-native-build-initial.log.gz",
+    "bytes": 143,
+    "sha256": "d809e9501798f4b36c76ea2a3743ef08146d441fb329923f4e0c05d0add55090",
+    "compressed_sha256": "0d3bdcfca9c0a8783c7dd44126d933f64ae295552060842bd00fe6d46b37eb2d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-build.jsonl",
+    "file": "artifacts/nar-decoder-admission-native-build.jsonl.gz",
+    "bytes": 412097,
+    "sha256": "1097459be06889805af85ca61787b292aad23b94d80dbad0af37ffface69774f",
+    "compressed_sha256": "e15c668887bc2407c7493f4c44d5ef272b8a620dbcce2b1594bfa16e80503dd7"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-build.log",
+    "file": "artifacts/nar-decoder-admission-native-build.log.gz",
+    "bytes": 142,
+    "sha256": "860b166322bfcefad2b1fe64d40bc966bbadc23cb16920dd82c39fa3c1f11cc1",
+    "compressed_sha256": "838af9c3d57d8279f847c7a562ce61b3763a439e7dcb708bd96859edfb6d7189"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-casita.log",
+    "file": "artifacts/nar-decoder-admission-native-casita.log.gz",
+    "bytes": 4947,
+    "sha256": "353716f2883c8138b9250f2d3ecf850092c95c61fc5e1e4b65a027cde3e85eb6",
+    "compressed_sha256": "6d41f9b113896824e51844a70499dc1365467ff1db01d67f6c21ae4df8230003"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-nar_decoder_admission-initial.log",
+    "file": "artifacts/nar-decoder-admission-native-nar_decoder_admission-initial.log.gz",
+    "bytes": 2259,
+    "sha256": "d6797746d60d321895a92cb2e95e4abf8c76af8544c3041c616709b995bcb523",
+    "compressed_sha256": "bc4f3048b7e693d4068de080700a3f1dc244d2df239adb2a3d79b76aeb38b288"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-nar_decoder_admission.log",
+    "file": "artifacts/nar-decoder-admission-native-nar_decoder_admission.log.gz",
+    "bytes": 624,
+    "sha256": "7a75d349f0203ed918df4265c74e98ba412d3c2a7b1dc5e990a4553c40cc735f",
+    "compressed_sha256": "ad050a9946a939d80f90088d83ee9a74808220eda203adef32d8bfcdcb59f642"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-results-initial.json",
+    "file": "artifacts/nar-decoder-admission-native-results-initial.json.gz",
+    "bytes": 424,
+    "sha256": "625576494a77e751d46ec9e1e929a487aeddd9196656c02115d80b82d38665d0",
+    "compressed_sha256": "72bac843170907f3ee9f0538c5220ee92820ba67c6f07a941fd84f934d4b68c5"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-results.json",
+    "file": "artifacts/nar-decoder-admission-native-results.json.gz",
+    "bytes": 827,
+    "sha256": "5151063ccce76f24e31b0fd64f49bcd1c514eb25908aa36d3556af09667a09f9",
+    "compressed_sha256": "8ccfd6488cb08ea0061aa245acc7d8f2018c4f7854510eedc61ac424ef838133"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-runner-initial.log",
+    "file": "artifacts/nar-decoder-admission-native-runner-initial.log.gz",
+    "bytes": 2875,
+    "sha256": "ef83ce0471033c4ea292127d6c67f77a5f3ef1b99be07934d1674452ee98950b",
+    "compressed_sha256": "be3f82a4f3ea39f15388880ead53ecdeec68d99ca90d3061532bc498ec19bb66"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-native-runner.log",
+    "file": "artifacts/nar-decoder-admission-native-runner.log.gz",
+    "bytes": 692,
+    "sha256": "3442380d08a71276ab7d3e2455a4745500344854f10ecc82bd4f521e29de90a9",
+    "compressed_sha256": "d78300719c2a7cd5eebd0307658276743b09f0798e3310c44174f40f93fb6608"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-admission-sources.json",
+    "file": "artifacts/nar-decoder-admission-sources.json.gz",
+    "bytes": 861930,
+    "sha256": "0cdb87edf50427f0beefe6a2af9f778bbe32eaae69f60e33b2b7d8d96a430395",
+    "compressed_sha256": "614444836d5a7c000531733a06dd523a449cba58b3156ac22802542a1bfa0308"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-2097152-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-2097152-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "f63c459de01f2cd50495b6e631e2069f193ed223924d1f9008fd2ffa2330f15a",
+    "compressed_sha256": "20d0139462c10cad187b308a736976ec63ebe3950d164ea31a952589ead5b351"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-2097152-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-2097152-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "c868e3107835fadd83704c75a5931e967bb42cba8dbd041f6a138e78de5adb66",
+    "compressed_sha256": "d656fecdf44bd69ec17d9181e36a6135d1638bbb8bf532ee181cdfe1634f5c31"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-2097152-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-2097152-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "2de7c6bb8c4002274ec1f8e0f18a4cda2e1eb3f186c733041e50610d5620f22d",
+    "compressed_sha256": "ecdf67a3db0b733c6823ae798fc53dcf0350d529f0a15448879df60ea85f30d1"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-2097152-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-2097152-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "55920ac3fba76aafdcff1ab3e05744be4d3a182f0ac1207308a8e760bf82b80d",
+    "compressed_sha256": "6967bffedd590ba9d85cf046c6f8c67e54b2fa4c64b2fd2ce2e1c3883d35eb5f"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-31-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-31-direct-stderr.log.gz",
+    "bytes": 85,
+    "sha256": "9619bee2b90644a08d689fba646186b8b4d9225311db1ecb39e8c3f09d2f9354",
+    "compressed_sha256": "9dd3a49612f7cfb505f72081aa8c8e2bee142c5716b25e6efe695580405f945e"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-31-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-31-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "18909379608bf2725f13dc5bd09e747aa60f811e220df60a9b149c262b7098d0",
+    "compressed_sha256": "dcb53741c37d2764aa18791047cd44889bde3abc9b91b61d33fec825bcca2541"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-31-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-31-server-stderr.log.gz",
+    "bytes": 109,
+    "sha256": "2276a54167d2d942af0ca03b852e6a1351a7d8dc125a2769a8dd493bc7566ff7",
+    "compressed_sha256": "8ae0cb61be9b9ab8edff2972134af49e0cabab0dedbb9bfe0a294b73cba105f8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-1-31-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-1-31-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "d9cd2bca2cf12d3bfd1c2a63e8943d933890e702566f5185bb73321901c961e6",
+    "compressed_sha256": "801a49a6610da302d88a6b707bba4c53fe93df726199a82bad24ee64f16e2213"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-2097152-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-2097152-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "9e19794eaf4ee75c661342a549075dc7c209b9b636de9194681ffcd737982b1c",
+    "compressed_sha256": "c21bc2b98e69696a328692f09a57ba41b0641c5d6a8178335209a13270aa3d57"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-2097152-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-2097152-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "349c267667dfd96359855840123d225870b26ef2f9bc6c4094db65d2c2150b29",
+    "compressed_sha256": "87ae67947ac6208367c1abfdce03563c6389c7acd29270ee88d53e23b33f8b1a"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-2097152-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-2097152-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "dffa8c376e66c623a1339e9f22aecf681b765e4f2f65efdbe4ac4e1ba2fa5e36",
+    "compressed_sha256": "19e4a7208757d451ecac3b7bd417f4e393a267e496ff60eb9811f0ae005c8a31"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-2097152-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-2097152-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "9d8644e10207ebccd7d1954d8342c8f0bc937055c5db5b156243d0459cbe5a07",
+    "compressed_sha256": "c6f5862b79e8b365329ec2b0aa036b41fc895f77ff8b2f81f18d072caf9c9193"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-31-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-31-direct-stderr.log.gz",
+    "bytes": 85,
+    "sha256": "5962e2a98316957e73e32c9839392dd927f4a946e61eb2f27738b8790582b037",
+    "compressed_sha256": "fba8cffdd1690419cae90ada0953c16ff2e4651099835862805f03803ca8a38a"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-31-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-31-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "296a0234d6184d0b3005523033e805d22aa4a6bf996afbfccca03c03c89ceb7f",
+    "compressed_sha256": "56aadc6ac4725c0474652ce8a8bfbdfebe5e85922bd0fafe367a3ecc073f5f63"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-31-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-31-server-stderr.log.gz",
+    "bytes": 109,
+    "sha256": "5214bd9d78019907340d0d4df5834ac5cc74bb1610140d984c69aea13dfa6a18",
+    "compressed_sha256": "ac35c5e96cedd6f1df46ac6037dbb762ef278318d71bf994fd4e14901c75635f"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-2-31-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-2-31-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "c075bf1a2d7737b69f065b6e78a087ed8f671dc6ce430779f96978324f4e0bfe",
+    "compressed_sha256": "fb81bfa7d7818cef94457cee8cd3d2ebc371c92b38b31f86ca4331c5843bfb86"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-build.log",
+    "file": "artifacts/nar-decoder-pool-probe-build.log.gz",
+    "bytes": 270,
+    "sha256": "3e03ebce111c66c52828662c12e5880cd54e433a1e504be2568578b08a1d2f43",
+    "compressed_sha256": "7309c50274d5d9a2a889aabbe0f7e727b3a800fab269d8c384b8306871de4e1a"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-cache-cleanup.json",
+    "file": "artifacts/nar-decoder-pool-probe-cache-cleanup.json.gz",
+    "bytes": 889,
+    "sha256": "8cb9f5eca059219f44cad9876fd2fbcbfaadb31729327399088722c07cdd311b",
+    "compressed_sha256": "3b2b48a2604173844724d4629d19baef3b641e4c6b0c1f5ba8bb51e445f70b13"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-control.build.json",
+    "file": "artifacts/nar-decoder-pool-probe-control.build.json.gz",
+    "bytes": 686,
+    "sha256": "e302b255e64441e6344c943a6c4a2ab33aa716e26c79869f81bb1c8e41d39113",
+    "compressed_sha256": "f0670f02a37b8ccd620128ecefd4c159de2326196ae1bf9be0184d7470363b46"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-control.rs",
+    "file": "artifacts/nar-decoder-pool-probe-control.rs.gz",
+    "bytes": 22118,
+    "sha256": "7205065c3b3f22526fb408c45a423a853bc2741e535c395e1477e595d13eeb69",
+    "compressed_sha256": "1c27f109c2b935916e55c040938aef64c14e2000c2b76e22b863dff0e5732ded"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-fragment.rs",
+    "file": "artifacts/nar-decoder-pool-probe-fragment.rs.gz",
+    "bytes": 2085,
+    "sha256": "783da218923460f81b77f736e0bdd4676bee8fa214fbaf7727791aadc8994f18",
+    "compressed_sha256": "fc33b2ed70a1609f9ea779eb2406b7502767c31e8b2c19686fbf7366bef43471"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-33554432-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-33554432-direct-stderr.log.gz",
+    "bytes": 76,
+    "sha256": "fa12d204d60096160cd32217af995f2981c02aff3570ad75b643739f6e54a1f7",
+    "compressed_sha256": "e366c26fe50b996823db8b9f157189e7a6f954578ed2b0bfe4efbeddae992917"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-33554432-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-33554432-direct-stdout.log.gz",
+    "bytes": 48,
+    "sha256": "a9b8f9bdc9310d113803438f962e962e98d945936a8e7a1ff681dbfcd693d1dd",
+    "compressed_sha256": "ae6002fc0d749d828e6dd622ce2fca7e7793f227d9807ca2be3e748665a187bf"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-33554432-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-33554432-server-stderr.log.gz",
+    "bytes": 100,
+    "sha256": "700ec0c891ff6ac9601e19cd2dfe6823eb9e08a292db7d9d13c789e590ad188a",
+    "compressed_sha256": "f9c134bc6cf8e0bb963677c3774700d002feababd5c6726da67280a9a9c74a8d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-33554432-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-33554432-server-stdout.log.gz",
+    "bytes": 48,
+    "sha256": "a9b8f9bdc9310d113803438f962e962e98d945936a8e7a1ff681dbfcd693d1dd",
+    "compressed_sha256": "ae6002fc0d749d828e6dd622ce2fca7e7793f227d9807ca2be3e748665a187bf"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-8388608-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-8388608-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "e3d9492ece047ba0c73f0b036078d5dd32dadf2f8c9c488f4d16c6a80a2683cb",
+    "compressed_sha256": "8c4719097bb248d2b15464f68692b01d9cd414644e473cef66a0a7b0d4d13290"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-8388608-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-8388608-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "882e052651fac412682973f1e661dcbe84ab5fe94c7f56653ec2359a266d2855",
+    "compressed_sha256": "51b220ec02ac7d1ec1c0bf7d2690a3ab0dfeafbd8ccaedfd185347434eb777c4"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-8388608-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-8388608-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "bde49e4e6ad9ddb6b5e9396be5d9bdd7e1a008fbe1a6cde3081ba691cd87e08d",
+    "compressed_sha256": "309d9dd172a886bec440d0760d193a3fc1aa88f1605c6973ed5203210dda7301"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-1-8388608-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-1-8388608-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "1748c0bd44227157cf5bbbc343ed3a7c2138ded97f0fd405673ef062b31523b2",
+    "compressed_sha256": "0f8905fa01580d0cdd23eb0df599b37522e021b994bd8d332ce23cc58d188a86"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-33554432-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-33554432-direct-stderr.log.gz",
+    "bytes": 91,
+    "sha256": "f44fd0f52db04b55b91fb8e13af5b445448d0aec49b47aa252df4c5edd2d5bd5",
+    "compressed_sha256": "dc3b9d858cfcb1a0111ae298d2d27007625c5fe8f4e02d0cf5cc21263a2e7f7f"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-33554432-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-33554432-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "afc645b0cc9d7a53837d70f896ecc20ce38301c195e089f6cf12d75287770d43",
+    "compressed_sha256": "74b133656990d47c203b29c363b0151ea57899f072547c4fdae1deeec6e8caf7"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-33554432-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-33554432-server-stderr.log.gz",
+    "bytes": 115,
+    "sha256": "a2e01cfcaeead19bebaafb38bde885ced79a7005898e02ad1cf7993bb561fa98",
+    "compressed_sha256": "1ae89b20ce9ad57b1bf2444cb3bd680d94dd5c51b9b75a5ffd4ba0923f682a4e"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-33554432-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-33554432-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "f3c5a5741c268912ddb6f96640bfe5f630900a0b5c88d840323b512ee750e3f0",
+    "compressed_sha256": "11e3001ef78d630c07a4b605376a46a6b3c392099ee1c56b50ac10fb29e38865"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-8388608-direct-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-8388608-direct-stderr.log.gz",
+    "bytes": 90,
+    "sha256": "76b771c66c68724c789f59bd338d900b2d6d8996e6bca8137873638950c940cc",
+    "compressed_sha256": "861ae881f2989d97d58483205058fab4d8128d39f051f3ebe1c1cdb98641c3e5"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-8388608-direct-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-8388608-direct-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "12b3640b6788f35ec8006e2cc7f06f931f6e2f6c86299aa1db84b4b753598e34",
+    "compressed_sha256": "9d886f1ddc60c17d0d694d7141f13dd55abde690332e5c68a612febcdb079119"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-8388608-server-stderr.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-8388608-server-stderr.log.gz",
+    "bytes": 114,
+    "sha256": "ebaecfb22ef6526960e64f4a17fa1abd8ad7e770cb17c99f0c10afb1dd77d5a7",
+    "compressed_sha256": "0e550b02f8e780973790d9a0a1777b08428a844a95717d04187e020c15ca549d"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-2-8388608-server-stdout.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-2-8388608-server-stdout.log.gz",
+    "bytes": 147,
+    "sha256": "f740f89ec41bbb520c885c0477ab61d2a3857cae262fe6f7243c457d07c71706",
+    "compressed_sha256": "059b648a4b2f6d2fd7bdab23502e467ddfd7688b5094d8cbb20bd37d511b17e8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-protocol.json",
+    "file": "artifacts/nar-decoder-pool-probe-large-protocol.json.gz",
+    "bytes": 324,
+    "sha256": "51b73348977e46eea8802f2bd7cccce8e7ea31ce41e8385b38f7b23b35cca613",
+    "compressed_sha256": "a3a6dde2a62cd935a2c390d6bfd1bd5599c3cb318b5e5e4856623e995472f2ac"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-results.json",
+    "file": "artifacts/nar-decoder-pool-probe-large-results.json.gz",
+    "bytes": 5872,
+    "sha256": "35802429adaef47f160d248485ca642710f7ffe070de3e2702386c4e4f2f275b",
+    "compressed_sha256": "168c0d91e289be58cdcc9f827ac1334d523afedd9b8368450dae251862cf68f6"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-large-runner.log",
+    "file": "artifacts/nar-decoder-pool-probe-large-runner.log.gz",
+    "bytes": 1123,
+    "sha256": "b19871f38ed009a29c6da2704e458efeab3c6f7c20c8c0de3da813de940baf66",
+    "compressed_sha256": "d55c1b688bb3f0450ff91df8dc5ab1c8212ab530b43ee5cba915d6dc73554a0f"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-results.json",
+    "file": "artifacts/nar-decoder-pool-probe-results.json.gz",
+    "bytes": 6064,
+    "sha256": "30c165e3cfe88ac0cc2e4e509cc2767163c50b1863ae918a0d385225523865de",
+    "compressed_sha256": "049cb69a8117c21ef40f7dbae5b41235dac2ff11a341c95edde97729c86c39b0"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-runner.log",
+    "file": "artifacts/nar-decoder-pool-probe-runner.log.gz",
+    "bytes": 1101,
+    "sha256": "eb57ac0012a39cbc900bf55aca89d4d3ed1e2f5051a4f3f9dcecfaae158554e6",
+    "compressed_sha256": "3ca952ce8655dfe1aa4bf275481eed6f2b556a10290b589c07dee5118dfbffdb"
+  },
+  {
+    "source": "/tmp/mnos-ingest/evidence/nar-decoder-pool-probe-sources.json",
+    "file": "artifacts/nar-decoder-pool-probe-sources.json.gz",
+    "bytes": 621268,
+    "sha256": "7ae4929be1d12c988ec2b8cd8e70e8811db7450422fe9337b4dd60bd4e23a18a",
+    "compressed_sha256": "ff03bcaba9c68bee5ef87927de5c2473619215739f0506fdf93c88ef8c29f234"
+  },
+  {
+    "source": "/tmp/mnos-ingest/freeze-nar-decoder-admission.py",
+    "file": "artifacts/freeze-nar-decoder-admission.py.gz",
+    "bytes": 3039,
+    "sha256": "a9f31a801597ab9950e0d8c345c7b92abeebabbd15985df636c8c17693ee6c17",
+    "compressed_sha256": "551934c19642557defee650ce5e1be3c69dc88d0f85101e1e0cee74f84c3cbcc"
+  },
+  {
+    "source": "/tmp/mnos-ingest/nar-decoder-admission-plan.txt",
+    "file": "artifacts/nar-decoder-admission-plan.txt.gz",
+    "bytes": 8140,
+    "sha256": "ebf29b2effa2d54460fcbc4ac5fa8903810291ee0bc3c1b4c4cb335db6897281",
+    "compressed_sha256": "bb3d4764817a090bad48e8c52c1216ffd8a57f0a4822ce8ef52b448136f9c67e"
+  },
+  {
+    "source": "/tmp/mnos-ingest/review71-evidence-interim.txt",
+    "file": "artifacts/review71-evidence-interim.txt.gz",
+    "bytes": 3902,
+    "sha256": "110ea7418c0eb01da47e2df9beadf9407e68c2b21e3bdd12d7b7232274c0eb80",
+    "compressed_sha256": "8c29cb62e5cce5b758e8ce63a77130c10f8b89cba9b40f82201b734b52fad6e7"
+  },
+  {
+    "source": "/tmp/mnos-ingest/review71-nar-decoder-investigation.txt",
+    "file": "artifacts/review71-nar-decoder-investigation.txt.gz",
+    "bytes": 6835,
+    "sha256": "2f330b114a115fe57f89fe1eb98fbe55cdb8091410098116c9c3eede97f69ae7",
+    "compressed_sha256": "26e7f56e916dd3bebfadc3d79aa0f228f4a7b0cf70a9155eedb57a4d2ae23184"
+  },
+  {
+    "source": "/tmp/mnos-ingest/review71-source-final.txt",
+    "file": "artifacts/review71-source-final.txt.gz",
+    "bytes": 4026,
+    "sha256": "aa81f60e2f71f26f07fbad68fd085801086f6cee575765ad5eee3a1f72c08725",
+    "compressed_sha256": "754ddda22a5e531ec747e83b623f1edae937d653b7767248cd450a43a1cec1ed"
+  },
+  {
+    "source": "/tmp/mnos-ingest/review71-source.txt",
+    "file": "artifacts/review71-source.txt.gz",
+    "bytes": 4125,
+    "sha256": "885635cce7f48221c358c44ff3349ccd58526a94bf1faa0cbd4223a000767427",
+    "compressed_sha256": "482bf30d9949d32c468355e506497a116f218af0b07324ee41eab95a5949ccff"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-admission-benchmark.py",
+    "file": "artifacts/run-nar-decoder-admission-benchmark.py.gz",
+    "bytes": 1852,
+    "sha256": "a8245ca3de16dd45405eedaf0b7f780f4f5050797c3cb323597322dca4ad492f",
+    "compressed_sha256": "0c66ebda5bebb403cea26f7fc575b42be5b28618956054b1f6fcdd2cdfadf2a8"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-admission-initial.py",
+    "file": "artifacts/run-nar-decoder-admission-initial.py.gz",
+    "bytes": 2677,
+    "sha256": "b41c646fd641cfd3c00638aee614d1637ceb5ab2c651135d68644615876211ed",
+    "compressed_sha256": "cb019540be40a593538be83d8009ff1eb0b786d0b31208a0ea5065d62bb1e6da"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-admission-mnos.py",
+    "file": "artifacts/run-nar-decoder-admission-mnos.py.gz",
+    "bytes": 2670,
+    "sha256": "7691da3d149d205cc69bec344fa22f6c4438326d0827fbf3482ceb85803ac243",
+    "compressed_sha256": "6c640e2fb47d6ba8c7a946deb6f37d4bfed1d7520e922a88b72980d955eec37c"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-admission-native.py",
+    "file": "artifacts/run-nar-decoder-admission-native.py.gz",
+    "bytes": 1979,
+    "sha256": "05fb23bb00e3278f952473213cf7f8bb4f3b614f30fb98b5dc921d786590f69a",
+    "compressed_sha256": "8f35bdcfe91b690f8f107579ea1a16d057101222e83afe22b8e55f6d38c11f92"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-pool-probe-large.py",
+    "file": "artifacts/run-nar-decoder-pool-probe-large.py.gz",
+    "bytes": 2534,
+    "sha256": "00722789060f40933026ee965cf4d7dbb4ad71d4ed71f41c2851a31df08c4913",
+    "compressed_sha256": "fa525ad32e5c86eca529760edd0a0c3957cccf2fa6210bee87e6774decc851fe"
+  },
+  {
+    "source": "/tmp/mnos-ingest/run-nar-decoder-pool-probe.py",
+    "file": "artifacts/run-nar-decoder-pool-probe.py.gz",
+    "bytes": 4120,
+    "sha256": "981202bf13ea8ba0b5177bdae03f1ee292f93149723dc1602cf8c86b6c69af38",
+    "compressed_sha256": "68b3f14ceb3c92614ba6401429f12cd026ed9eff99174c985f81ab41c144e838"
+  }
+]
