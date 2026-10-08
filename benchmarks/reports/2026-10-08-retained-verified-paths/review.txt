@@ -1,0 +1,42 @@
+Review closure — bounded retained verified path investigation
+
+pm-review-work, followed by pm-fix-no-commit for findings, applied before commit.
+
+Complete: PASS for this investigation. Permanent ignored Rust probe, manifest,
+benchmark all build/dispatch, strict result parser, raw72samples, twelve numerical
+comparisons and failure history are retained. Broad ingestion goal remains open.
+
+Edge cases: PASS for benchmark scope. Empty shared identity; distinct nonempty
+fixtures; 16383/16384/16385; multi-chunk actual flat manifests; widths1/64;
+authenticated full readback; warmed pin-ledger invariance; final pin release.
+Parser rejects14 changed-order/membership/layout/timing/correctness cases.
+No claim about error/cancellation behavior of a future production routing change.
+
+Correct: PASS. Rust benchmark passed through the registered all-suite runner;
+36 runner/CLI tests pass, rustfmt check passes, git diff check passes. Archive
+verifier independently checks42 retained byte identities,57 hash references,
+72samples and12 summaries; three external large identities are not replayed.
+No confidence interval, isolated HEAD cost or native ingestion effect claimed.
+
+Consistent: PASS. Original Cargo success/ownership-guard rejection stays failed;
+subsequent fresh cached Cargo qualification has identical ELF and clean ownership.
+Initial registry-test failure is preserved alongside the corrected36-test run.
+Benchmark scripts and measured evidence were not overwritten.
+
+Production ready: PASS as benchmark/report material. Runtime behavior is unchanged.
+No accepted optimization is inferred from this microbenchmark. wait4 maximum RSS
+is described separately from a simultaneous family RSS sum and per-path memory.
+
+Goals met: PASS for resolving whether to switch all retained verified reads to
+the existing scoped path. Reject blanket routing: large concurrent median+83.80%
+and all three fixed pairs adverse. Small-read gains are a candidate only, needing
+separate correctness/resource/native qualification. Original OOM/F5 remains open.
+
+Fixed findings: explicit both-path warming and empty alias disclosure; actual
+layout validation; sample order and fixture-shape validation rather than sets;
+special command registration in corpus checks; precise compressed-cache and
+wait4 terminology. No pending finding within this commit's scope.
+
+Independent reviews: Copernicus accepted design/prelaunch and final result claims;
+Rawls accepted all six dimensions of corpus/report scope. Both reviewed read-only
+without running workloads or archive replay. Parent ran the recorded verifier.

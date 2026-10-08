@@ -176,7 +176,7 @@ def build_commands(selected, build_dir):
             names.add("casita-lib-test")
         elif suite in {"casitar", "casitar-scaling", "casitar-import-profile", "casitar-pin-profile", "casitar-quiet-import", "fault-and-recovery", "generations", "process-contention"}:
             names.add("casita")
-    if "fsck" in selected:
+    if "fsck" in selected or "retained-verified-paths" in selected:
         names.add("casita-lib-test")
     prefix = ["cargo", "--config", f'build.build-dir="{build_dir}"']
     commands = []
@@ -287,6 +287,33 @@ def pin_protocol_s3_matrix(path):
         "failed_cases": sum(row.get("status") != "ok" for row in samples),
         "unaudited_cases": sum(row.get("fresh_readback") is not True for row in samples),
     }
+
+
+def retained_verified_samples(path):
+    prefix = "retained_verified_sample "
+    rows = [json.loads(line.split(prefix, 1)[1]) for line in path.read_text().splitlines() if prefix in line]
+    expected = [(size, width, sample, mode) for size in (0, 4096, 16383, 16384, 16385, 524289)
+                for width in (1, 64) for sample, mode in enumerate(
+                    ("unscoped", "scoped", "scoped", "unscoped", "unscoped", "scoped"))]
+    observed = [(row["size"], row["concurrency"], row["sample"], row["path"]) for row in rows]
+    if observed != expected:
+        raise common.BenchmarkError("retained verified paths must report all 72 samples in order")
+    for row in rows:
+        chunks = row["chunk_counts"]
+        if (not isinstance(chunks, list) or not chunks or
+                any(type(n) is not int or n < 0 for n in chunks) or chunks != sorted(set(chunks))):
+            raise common.BenchmarkError("retained verified paths have invalid chunk counts")
+        if row["size"] == 0:
+            layout, distinct, valid_chunks = "flat-manifest", 1, chunks == [0]
+        elif row["size"] <= 16385:
+            layout, distinct, valid_chunks = "bare", 64, chunks == [1]
+        else:
+            layout, distinct, valid_chunks = "flat-manifest", 64, all(n >= 2 for n in chunks)
+        if (row["correctness"] != "passed" or row["reads"] != 64 or
+                type(row["elapsed_ns"]) is not int or row["elapsed_ns"] <= 0 or
+                row["layout"] != layout or row["distinct_payloads"] != distinct or not valid_chunks):
+            raise common.BenchmarkError("retained verified paths have invalid correctness or layout evidence")
+    return rows
 
 
 def retained_wal_samples(path):
@@ -493,6 +520,20 @@ def main(argv=None):
                     samples.extend({**row, "repetition": repetition} for row in rows)
                 record.update(status="passed" if all(run["status"] == "passed" for run in runs) else "failed", runs=runs)
                 save(output / "root-prefix.json", {"schema_version": 1, "samples": samples})
+                continue
+            if suite == "retained-verified-paths":
+                runs, samples = [], []
+                probe = "repository::retention::retained_verified_bench::benchmark_retained_verified_paths"
+                for repetition in range(args.repetitions):
+                    log = output / f"retained-verified-paths-{repetition}.log"
+                    run = execute([str(binary_dir / "casita-lib-test"), probe, "--exact", "--ignored",
+                                   "--nocapture", "--test-threads=1"], log, args.timeout, run_environment)
+                    runs.append(run)
+                    record["runs"] = runs
+                    rows = retained_verified_samples(log) if run["status"] == "passed" else []
+                    samples.extend({**row, "repetition": repetition} for row in rows)
+                record.update(status="passed" if all(run["status"] == "passed" for run in runs) else "failed", runs=runs)
+                save(output / "retained-verified-paths.json", {"schema_version": 1, "samples": samples})
                 continue
             if suite == "retained-readers":
                 environment = {**run_environment, "CASITA_BENCH_RETAINED_ITERATIONS": "3" if args.profile == "smoke" else "30"}

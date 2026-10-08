@@ -3183,6 +3183,32 @@ revisions on either side of a deliberate witness change.
 
 ### Verified manifest reads
 
+`benchmark run retained-verified-paths` compares the existing scoped and
+unscoped verified payload paths under the same local retained snapshot and pin.
+It is also included in `benchmark all`. Both variants include opening, proof
+generation, the same authentication decoder and consumption to EOF; metadata
+lookup, reader wrapping, fixture setup and final byte comparisons are excluded.
+Both routes are warmed before the six ABBAAB samples per size/concurrency pair.
+The screen excludes initial catalog-cache and pin-resource admission costs and
+does not measure production ingestion speed.
+
+The fixture has 64 reads at concurrency 1/64, sizes
+0/4096/16383/16384/16385/524289, local pack target 128 KiB and compressed chunk cache
+disabled. Payloads are deterministic and distinct except for the shared empty
+payload. Physical bare/flat layout and chunk counts are checked and emitted.
+Every sample checks full bytes and authenticated EOF, and verifies that warmed
+reads did not update the pin ledger; final teardown checks pin release. Scoped
+bare opens buffer earlier and manifest opens prepare pinned locations, so this
+comparison includes more differences than filesystem existence checks alone.
+
+See [the retained-path screen](reports/2026-10-08-retained-verified-paths/README.md)
+for the observed small-payload gains, multi-chunk regression and retained build
+history. The screen does not qualify a production routing change.
+
+```sh
+cargo test --release -p casita --no-default-features --features native,git,experimental,cli --lib repository::retention::retained_verified_bench::benchmark_retained_verified_paths -- --exact --ignored --nocapture --test-threads=1
+```
+
 `verified_manifest_reads` measures warmed authenticated reads for memory-loose and
 local-packed stores, with concurrency 1/64 and explicit chunk counts 0/1/2/63/64/65.
 It checks the absent single-chunk, empty flat and 64/65 flat/page shapes directly.

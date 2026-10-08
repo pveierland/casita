@@ -1,0 +1,17 @@
+[
+  {
+    "original_path": "/tmp/mnos-ingest/evidence/retained-verified-screen-bin/casita-lib-test",
+    "sha256": "136e6c5db40509a4af7684127384367a313cd34167145b5240bf0bcb86e92807",
+    "bytes": 409393888
+  },
+  {
+    "original_path": "/tmp/mnos-ingest/evidence/retained-verified-screen-run/bin/casita-lib-test",
+    "sha256": "136e6c5db40509a4af7684127384367a313cd34167145b5240bf0bcb86e92807",
+    "bytes": 409393888
+  },
+  {
+    "original_path": "/tmp/mnos-ingest/evidence/single-group-retained-unit.gz",
+    "sha256": "b1bbf45ec5fb8f2e35a73e9ef440d1009f3ba62b163751026afbabaf55f4bc52",
+    "bytes": 125210466
+  }
+]

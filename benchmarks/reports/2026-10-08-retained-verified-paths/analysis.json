@@ -1,0 +1,280 @@
+{
+  "scope": "Summarize one warmed existing-path screen without a production-speed claim.",
+  "input_sha256": {
+    "/tmp/mnos-ingest/evidence/retained-verified-screen-run/retained-verified-paths.json": "eef48a2fc2a28a9b0cd401c6372d91f24141494994b172316fcd114cc0c12706",
+    "/tmp/mnos-ingest/evidence/retained-verified-screen-guard/result.json": "074c13817aa8570645e353711cec8810ded0073a1d11d97a9b0ca532b8199eb5",
+    "/tmp/mnos-ingest/analyze-retained-verified-screen.py": "28477c46728a45d1b1a1a50d9d9a052b54d04f3e304039c489091bdd3206d96a"
+  },
+  "observations": [
+    {
+      "size": 0,
+      "concurrency": 1,
+      "unscoped_ns": [
+        3604599,
+        3678890,
+        3733267
+      ],
+      "scoped_ns": [
+        1544131,
+        1694756,
+        1616612
+      ],
+      "unscoped_median_ns": 3678890,
+      "scoped_median_ns": 1616612,
+      "median_change_percent": -56.05707156234625,
+      "paired_change_percent": [
+        -57.16219751489694,
+        -53.93295260255131,
+        -56.69712345781859
+      ]
+    },
+    {
+      "size": 0,
+      "concurrency": 64,
+      "unscoped_ns": [
+        1603097,
+        1614719,
+        1635626
+      ],
+      "scoped_ns": [
+        863555,
+        814998,
+        866723
+      ],
+      "unscoped_median_ns": 1614719,
+      "scoped_median_ns": 863555,
+      "median_change_percent": -46.519796942997516,
+      "paired_change_percent": [
+        -46.132080591505066,
+        -49.52694555523283,
+        -47.00970759819177
+      ]
+    },
+    {
+      "size": 4096,
+      "concurrency": 1,
+      "unscoped_ns": [
+        4714159,
+        4457968,
+        4728126
+      ],
+      "scoped_ns": [
+        2622663,
+        2629178,
+        2554965
+      ],
+      "unscoped_median_ns": 4714159,
+      "scoped_median_ns": 2622663,
+      "median_change_percent": -44.36625917793609,
+      "paired_change_percent": [
+        -44.36625917793609,
+        -41.022950366624436,
+        -45.962417245225694
+      ]
+    },
+    {
+      "size": 4096,
+      "concurrency": 64,
+      "unscoped_ns": [
+        2564330,
+        2894780,
+        2600730
+      ],
+      "scoped_ns": [
+        1278639,
+        1383022,
+        1311277
+      ],
+      "unscoped_median_ns": 2600730,
+      "scoped_median_ns": 1311277,
+      "median_change_percent": -49.580425495918455,
+      "paired_change_percent": [
+        -50.13750180359003,
+        -52.22358866649625,
+        -49.580425495918455
+      ]
+    },
+    {
+      "size": 16383,
+      "concurrency": 1,
+      "unscoped_ns": [
+        7260432,
+        9276488,
+        7639065
+      ],
+      "scoped_ns": [
+        5143049,
+        5337419,
+        5240175
+      ],
+      "unscoped_median_ns": 7639065,
+      "scoped_median_ns": 5240175,
+      "median_change_percent": -31.40292692888462,
+      "paired_change_percent": [
+        -29.163319758383523,
+        -42.46293424839228,
+        -31.40292692888462
+      ]
+    },
+    {
+      "size": 16383,
+      "concurrency": 64,
+      "unscoped_ns": [
+        4999845,
+        5108611,
+        5019395
+      ],
+      "scoped_ns": [
+        3216890,
+        3189623,
+        3218848
+      ],
+      "unscoped_median_ns": 5019395,
+      "scoped_median_ns": 3216890,
+      "median_change_percent": -35.9108019990457,
+      "paired_change_percent": [
+        -35.660205466369455,
+        -37.56379180172458,
+        -35.87179331373602
+      ]
+    },
+    {
+      "size": 16384,
+      "concurrency": 1,
+      "unscoped_ns": [
+        10320476,
+        9498189,
+        9149597
+      ],
+      "scoped_ns": [
+        5622552,
+        5886140,
+        5387970
+      ],
+      "unscoped_median_ns": 9498189,
+      "scoped_median_ns": 5622552,
+      "median_change_percent": -40.80395747020826,
+      "paired_change_percent": [
+        -45.52041979459087,
+        -38.02881791465721,
+        -41.112488342382726
+      ]
+    },
+    {
+      "size": 16384,
+      "concurrency": 64,
+      "unscoped_ns": [
+        4423137,
+        4476735,
+        4535178
+      ],
+      "scoped_ns": [
+        2785384,
+        2621445,
+        2630829
+      ],
+      "unscoped_median_ns": 4476735,
+      "scoped_median_ns": 2630829,
+      "median_change_percent": -41.233309543674125,
+      "paired_change_percent": [
+        -37.02695620777742,
+        -41.44292659717406,
+        -41.990612055359236
+      ]
+    },
+    {
+      "size": 16385,
+      "concurrency": 1,
+      "unscoped_ns": [
+        11371198,
+        11243260,
+        12437196
+      ],
+      "scoped_ns": [
+        11690632,
+        11914441,
+        13095004
+      ],
+      "unscoped_median_ns": 11371198,
+      "scoped_median_ns": 11914441,
+      "median_change_percent": 4.777359430378403,
+      "paired_change_percent": [
+        2.809149924220833,
+        5.969629804878651,
+        5.289037818492215
+      ]
+    },
+    {
+      "size": 16385,
+      "concurrency": 64,
+      "unscoped_ns": [
+        6089255,
+        6651937,
+        6400178
+      ],
+      "scoped_ns": [
+        6427259,
+        6582749,
+        6591340
+      ],
+      "unscoped_median_ns": 6400178,
+      "scoped_median_ns": 6582749,
+      "median_change_percent": 2.85259253727006,
+      "paired_change_percent": [
+        5.550826825284871,
+        -1.0401180889115458,
+        2.9868231789803357
+      ]
+    },
+    {
+      "size": 524289,
+      "concurrency": 1,
+      "unscoped_ns": [
+        89834399,
+        94625306,
+        92757498
+      ],
+      "scoped_ns": [
+        98646575,
+        100137510,
+        103681354
+      ],
+      "unscoped_median_ns": 92757498,
+      "scoped_median_ns": 100137510,
+      "median_change_percent": 7.9562430629597225,
+      "paired_change_percent": [
+        9.809355990682356,
+        5.825295825199239,
+        11.77679027090619
+      ]
+    },
+    {
+      "size": 524289,
+      "concurrency": 64,
+      "unscoped_ns": [
+        64298228,
+        61190018,
+        60712090
+      ],
+      "scoped_ns": [
+        124784711,
+        102380256,
+        112468498
+      ],
+      "unscoped_median_ns": 61190018,
+      "scoped_median_ns": 112468498,
+      "median_change_percent": 83.80203450830821,
+      "paired_change_percent": [
+        94.07177286440927,
+        67.31528988927573,
+        85.24893147312173
+      ]
+    }
+  ],
+  "limitations": [
+    "One process; three observations per path and shape; no confidence intervals or native ingestion confirmation.",
+    "Warmed protected catalog and per-pin resources; not cold admission.",
+    "Same existing authentication decoder; different opening, buffering, plan and proof paths.",
+    "No path-specific allocation or peak-memory measurement."
+  ]
+}

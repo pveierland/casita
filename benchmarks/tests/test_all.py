@@ -335,10 +335,10 @@ class AllSuiteTests(unittest.TestCase):
         self.assertEqual(selected, set(runner.CORE_BENCHES))
 
     def test_every_suite_has_a_bounded_configuration(self):
-        self.assertEqual(set(runner.SMOKE) | {"core-primitives", "online-holds", "retained-readers", "transfer-holds", "remote-pin-cost", "root-prefix"}, {entry["id"] for entry in cli.entrypoints()})
+        self.assertEqual(set(runner.SMOKE) | {"core-primitives", "online-holds", "retained-readers", "retained-verified-paths", "transfer-holds", "remote-pin-cost", "root-prefix"}, {entry["id"] for entry in cli.entrypoints()})
         for entry in cli.entrypoints():
             identifier = entry["id"]
-            if identifier in {"core-primitives", "online-holds", "retained-readers", "transfer-holds", "remote-pin-cost", "root-prefix"}:
+            if identifier in {"core-primitives", "online-holds", "retained-readers", "retained-verified-paths", "transfer-holds", "remote-pin-cost", "root-prefix"}:
                 continue
             args = runner.suite_arguments(identifier, pathlib.Path("/binaries"), "smoke", 1)
             module = importlib.import_module(entry["target"])

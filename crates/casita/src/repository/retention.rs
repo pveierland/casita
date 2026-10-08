@@ -2,6 +2,10 @@
 
 use super::*;
 
+#[cfg(test)]
+#[path = "retained_verified_bench.rs"]
+mod retained_verified_bench;
+
 impl<PS, SS> Repository<PS, SS>
 where
     PS: BlobStore,

@@ -1509,6 +1509,19 @@
       ]
     },
     {
+      "id": "retained-verified-paths",
+      "suite_id": "repository-e2e",
+      "title": "Warmed scoped and unscoped verified reads sharing one retained catalog and pin",
+      "kind": "command",
+      "target": [
+        "cargo", "test", "--release", "-p", "casita", "--no-default-features",
+        "--features", "native,git,experimental,cli", "--lib",
+        "repository::retention::retained_verified_bench::benchmark_retained_verified_paths",
+        "--", "--exact", "--ignored", "--nocapture", "--test-threads=1"
+      ],
+      "profiles": ["experiment"]
+    },
+    {
       "id": "metadata-kv",
       "suite_id": "state-and-publication",
       "title": "Local metadata short reads and snapshot controls across idle-pool limits, prefix scans, and checked commits",
