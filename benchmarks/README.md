@@ -3179,3 +3179,23 @@ against its declaration, and the harness holds every artifact exactly to it,
 rejects an unknown or changing one, and records it with the artifact.
 `benchmark revisions` therefore checks every revision strictly, including
 revisions on either side of a deliberate witness change.
+
+
+### Verified manifest reads
+
+`verified_manifest_reads` measures warmed authenticated reads for memory-loose and
+local-packed stores, with concurrency 1/64 and explicit chunk counts 0/1/2/63/64/65.
+It checks the absent single-chunk, empty flat and 64/65 flat/page shapes directly.
+Each timed iteration reads 64 prepared blobs (one repeated identity for empty
+content). Fixture hashes and final output comparisons are outside timing;
+authentication remains inside. Backend and packing vary together. The target is
+part of the `benchmark all` core corpus; `--test` checks all 24 cases without
+claiming a throughput comparison.
+
+```sh
+cargo bench -p casita --features native,experimental --bench verified_manifest_reads -- --test
+cargo bench -p casita --features native,experimental --bench verified_manifest_reads
+```
+
+See [the missing-manifest report](reports/2026-10-08-missing-manifest-probe/README.md)
+for the matched production workload, retained failures and raw-evidence reference.

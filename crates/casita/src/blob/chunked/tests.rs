@@ -199,6 +199,9 @@ async fn verified_reads_reject_substitution_and_repair_missing_outboards() {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum ChaosFault {
     ReadChunk,
+    ReadManifest,
+    PauseMissingManifest,
+    RemoveManifestOnHead,
     WriteManifest,
     WriteOutboard,
     PauseManifest,
@@ -447,6 +450,9 @@ struct ChaosObjectStore {
     metadata_write_bytes: AtomicUsize,
     bao_multipart_completed: Arc<AtomicUsize>,
     chunk_heads: AtomicUsize,
+    manifest_target: std::sync::Mutex<Option<Path>>,
+    manifest_reads: AtomicUsize,
+    manifest_heads: AtomicUsize,
 }
 
 #[derive(Debug)]
@@ -541,6 +547,9 @@ impl ChaosObjectStore {
             bao_multipart_completed: Arc::new(AtomicUsize::new(0)),
             paused_chunk_puts: AtomicUsize::new(0),
             chunk_heads: AtomicUsize::new(0),
+            manifest_target: std::sync::Mutex::new(None),
+            manifest_reads: AtomicUsize::new(0),
+            manifest_heads: AtomicUsize::new(0),
         }
     }
 
@@ -570,13 +579,18 @@ impl ChaosObjectStore {
         }
         match self.fault {
             ChaosFault::ReadChunk => operation == "get" && location.as_ref().starts_with("chunks/"),
+            ChaosFault::ReadManifest => {
+                operation == "get" && location.as_ref().starts_with("blobs/")
+            }
             ChaosFault::WriteManifest => {
                 operation == "put" && location.as_ref().starts_with("blobs/")
             }
             ChaosFault::WriteOutboard => {
                 operation == "put" && location.as_ref().starts_with("bao/")
             }
-            ChaosFault::PauseManifest
+            ChaosFault::PauseMissingManifest
+            | ChaosFault::RemoveManifestOnHead
+            | ChaosFault::PauseManifest
             | ChaosFault::PauseChunk
             | ChaosFault::PauseChunkUploads
             | ChaosFault::PauseDelete
@@ -677,6 +691,15 @@ impl ObjectStore for ChaosObjectStore {
         location: &object_store::path::Path,
         options: GetOptions,
     ) -> object_store::Result<GetResult> {
+        let target_manifest = self.manifest_target.lock().unwrap().as_ref() == Some(location);
+        if target_manifest {
+            let counter = if options.head {
+                &self.manifest_heads
+            } else {
+                &self.manifest_reads
+            };
+            counter.fetch_add(1, Ordering::SeqCst);
+        }
         self.pause_before_chunk_get(location).await;
         if self.should_fail("get", location) {
             return Err(self.injected_error("get"));
@@ -685,7 +708,25 @@ impl ObjectStore for ChaosObjectStore {
         if head && location.as_ref().starts_with("chunks/") {
             self.chunk_heads.fetch_add(1, Ordering::SeqCst);
         }
-        let result = self.inner.get_opts(location, options).await?;
+        if head
+            && target_manifest
+            && self.armed.load(Ordering::SeqCst)
+            && self.fault == ChaosFault::RemoveManifestOnHead
+        {
+            self.inner.delete(location).await?;
+        }
+        let result = self.inner.get_opts(location, options).await;
+        if !head
+            && target_manifest
+            && self.armed.load(Ordering::SeqCst)
+            && self.fault == ChaosFault::PauseMissingManifest
+            && matches!(&result, Err(object_store::Error::NotFound { .. }))
+            && !self.paused_once.swap(true, Ordering::SeqCst)
+        {
+            self.reached.notify_one();
+            self.resume.notified().await;
+        }
+        let result = result?;
         if !head {
             let counter = if location.as_ref().starts_with("chunks/") {
                 &self.chunk_read_bytes
@@ -1579,6 +1620,46 @@ async fn put_manifest_verifies_binding_and_ceiling() {
     // and the true manifest commits.
     store.put_manifest(&blob, manifest).await.unwrap();
     assert_eq!(read_blob(&store, &blob).await.unwrap(), data);
+}
+
+#[tokio::test]
+async fn verified_bare_blob_does_not_repeat_a_missing_manifest_probe() {
+    let objects = Arc::new(ChaosObjectStore::new(ChaosFault::ReadChunk));
+    let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+    let payload = b"one authenticated chunk";
+    let id = store.put_slice(payload).await.unwrap();
+    *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+    let reads = objects.manifest_reads.load(Ordering::SeqCst);
+    let heads = objects.manifest_heads.load(Ordering::SeqCst);
+    let mut reader = store
+        .open_verified(&id, payload.len() as u64)
+        .await
+        .unwrap()
+        .unwrap();
+    let mut actual = Vec::new();
+    reader.read_to_end(&mut actual).await.unwrap();
+    assert_eq!(actual, payload);
+    assert_eq!(objects.manifest_reads.load(Ordering::SeqCst) - reads, 1);
+    assert_eq!(
+        objects.manifest_heads.load(Ordering::SeqCst) - heads,
+        0,
+        "a missing manifest must not cause a second backend request"
+    );
+}
+
+#[tokio::test]
+async fn verified_missing_blob_does_not_repeat_a_missing_manifest_probe() {
+    let objects = Arc::new(ChaosObjectStore::new(ChaosFault::ReadChunk));
+    let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+    let id = BlobId::new(blake3::hash(b"not stored").into());
+    *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+    assert!(store.open_verified(&id, 10).await.unwrap().is_none());
+    assert_eq!(objects.manifest_reads.load(Ordering::SeqCst), 1);
+    assert_eq!(
+        objects.manifest_heads.load(Ordering::SeqCst),
+        0,
+        "a missing manifest must not cause a second backend request"
+    );
 }
 
 #[tokio::test]
@@ -3835,4 +3916,218 @@ fn cancelled_chunk_hash_keeps_chunk_budget_until_cpu_completion() {
     // 32 KiB maximum-size chunk exceeds the bound for hashing a lone chunk
     // inline, and the one-unit budget forces its group to flush alone.
     check_cancelled_upload_budget(64 * 1024, 16 * 1024);
+}
+
+mod manifest_probe {
+    use super::*;
+
+    async fn chunks(
+        store: &ChunkedBlobStore,
+        count: usize,
+        chunk_size: usize,
+    ) -> (BlobId, Vec<u8>, Vec<ChunkMeta>) {
+        let mut payload = Vec::new();
+        let mut manifest = Vec::new();
+        for index in 0..count {
+            let bytes = vec![(index + 1) as u8; chunk_size];
+            let meta = ChunkMeta {
+                digest: ChunkId::new(blake3::hash(&bytes).into()),
+                size: bytes.len() as u64,
+            };
+            store
+                .put_chunk(&meta, zstd::encode_all(bytes.as_slice(), 0).unwrap().into())
+                .await
+                .unwrap();
+            payload.extend_from_slice(&bytes);
+            manifest.push(meta);
+        }
+        (
+            BlobId::new(blake3::hash(&payload).into()),
+            payload,
+            manifest,
+        )
+    }
+
+    async fn read(store: &ChunkedBlobStore, id: &BlobId, payload: &[u8]) {
+        let mut reader = store
+            .open_verified(id, payload.len() as u64)
+            .await
+            .unwrap()
+            .unwrap();
+        let mut actual = Vec::new();
+        reader.read_to_end(&mut actual).await.unwrap();
+        assert_eq!(actual, payload);
+    }
+
+    #[tokio::test]
+    async fn bare_with_outboard_uses_one_manifest_probe() {
+        let objects = Arc::new(ChaosObjectStore::new(ChaosFault::ReadChunk));
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+        let (id, payload, manifest) = chunks(&store, 1, 131072).await;
+        store.put_manifest(&id, manifest).await.unwrap();
+        store.build_outboard(&id).await.unwrap();
+        assert!(matches!(
+            objects.inner.head(&store.blob_path(&id)).await,
+            Err(object_store::Error::NotFound { .. })
+        ));
+        assert!(objects.inner.head(&store.outboard_path(&id)).await.is_ok());
+        *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+        objects.manifest_reads.store(0, Ordering::SeqCst);
+        objects.manifest_heads.store(0, Ordering::SeqCst);
+        read(&store, &id, &payload).await;
+        assert_eq!(objects.manifest_reads.load(Ordering::SeqCst), 1);
+        assert_eq!(objects.manifest_heads.load(Ordering::SeqCst), 0);
+        let mut reader = store
+            .open_verified(&id, payload.len() as u64 - 1)
+            .await
+            .unwrap()
+            .unwrap();
+        assert!(reader.read_to_end(&mut Vec::new()).await.is_err());
+    }
+
+    #[tokio::test]
+    async fn prefix_errors_cannot_fall_back_to_a_valid_bare_chunk() {
+        let objects = Arc::new(ChaosObjectStore::new(ChaosFault::ReadManifest));
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+        let id = store.put_slice(b"valid bare payload").await.unwrap();
+        *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+        objects.arm();
+        assert!(store.open_verified(&id, 18).await.is_err());
+        objects.disarm();
+        read(&store, &id, b"valid bare payload").await;
+    }
+
+    #[tokio::test]
+    async fn fresh_read_discovers_publication_after_overlapping_prefix_miss() {
+        let objects = Arc::new(ChaosObjectStore::new(ChaosFault::PauseMissingManifest));
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+        let (id, payload, manifest) = chunks(&store, 2, 1024).await;
+        *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+        objects.arm();
+        let reader_store = store.clone();
+        let size = payload.len() as u64;
+        let overlapping = tokio::spawn(async move {
+            let Some(mut reader) = reader_store.open_verified(&id, size).await.unwrap() else {
+                return None;
+            };
+            let mut bytes = Vec::new();
+            reader.read_to_end(&mut bytes).await.unwrap();
+            Some(bytes)
+        });
+        tokio::time::timeout(
+            std::time::Duration::from_secs(10),
+            objects.wait_until_paused(),
+        )
+        .await
+        .unwrap();
+        tokio::time::timeout(
+            std::time::Duration::from_secs(10),
+            store.put_manifest(&id, manifest),
+        )
+        .await
+        .unwrap()
+        .unwrap();
+        objects.resume();
+        if let Some(bytes) = tokio::time::timeout(std::time::Duration::from_secs(10), overlapping)
+            .await
+            .unwrap()
+            .unwrap()
+        {
+            assert_eq!(bytes, payload);
+        }
+        objects.disarm();
+        read(&store, &id, &payload).await;
+    }
+
+    #[tokio::test]
+    async fn flat_manifest_removed_before_head_keeps_bare_fallback() {
+        let objects = Arc::new(ChaosObjectStore::new(ChaosFault::RemoveManifestOnHead));
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+        let (id, payload, manifest) = chunks(&store, 1, 1024).await;
+        // Legacy flat self-chunk representation, deliberately bypassing elision.
+        objects
+            .inner
+            .put(&store.blob_path(&id), encode_manifest(&manifest).into())
+            .await
+            .unwrap();
+        *objects.manifest_target.lock().unwrap() = Some(store.blob_path(&id));
+        objects.arm();
+        read(&store, &id, &payload).await;
+        assert!(matches!(
+            objects.inner.head(&store.blob_path(&id)).await,
+            Err(object_store::Error::NotFound { .. })
+        ));
+    }
+
+    #[tokio::test]
+    async fn malformed_manifest_never_uses_bare_fallback() {
+        let objects = Arc::new(object_store::memory::InMemory::new());
+        let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+        let id = store.put_slice(b"valid bare payload").await.unwrap();
+        let root = pages::Root {
+            kind: pages::OUTBOARD,
+            height: 0,
+            span: 18,
+            hash: id.digest(),
+        };
+        let mut wrong_span = root;
+        wrong_span.kind = pages::CHUNKS;
+        wrong_span.span = 19;
+        for bytes in [
+            vec![],
+            vec![0; 7],
+            vec![0; 9],
+            1u64.to_le_bytes().to_vec(),
+            b"CASPAGE1".to_vec(),
+            root.encode(),
+            wrong_span.encode(),
+        ] {
+            objects
+                .put(&store.blob_path(&id), bytes.into())
+                .await
+                .unwrap();
+            assert!(store.open_verified(&id, 18).await.is_err());
+        }
+    }
+
+    #[tokio::test]
+    async fn verified_formats_cover_empty_bare_flat_and_paged_boundaries() {
+        for count in [0, 1, 2, 63, 64, 65] {
+            let objects = Arc::new(object_store::memory::InMemory::new());
+            let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 16384);
+            let (id, payload, manifest) = chunks(&store, count, 1024).await;
+            store.put_manifest(&id, manifest).await.unwrap();
+            store.build_outboard(&id).await.unwrap();
+            let path = store.blob_path(&id);
+            match objects.get(&path).await {
+                Err(object_store::Error::NotFound { .. }) => assert_eq!(count, 1),
+                Ok(object) => {
+                    assert_ne!(count, 1, "a single self chunk must elide its manifest");
+                    let bytes = object.bytes().await.unwrap();
+                    if count <= 64 {
+                        assert_eq!(bytes.len(), 8 + 40 * count);
+                        assert_eq!(
+                            u64::from_le_bytes(bytes[..8].try_into().unwrap()),
+                            count as u64
+                        );
+                    } else {
+                        assert_eq!(
+                            pages::Root::decode(&bytes).unwrap().unwrap().kind,
+                            pages::CHUNKS
+                        );
+                    }
+                }
+                Err(error) => panic!("fixture: {error}"),
+            }
+            let loose = pages::loose_descriptor(&store, &path, pages::CHUNKS)
+                .await
+                .unwrap();
+            let descriptor = pages::descriptor(&store, &path, pages::CHUNKS)
+                .await
+                .unwrap();
+            assert_eq!(loose, descriptor);
+            assert_eq!(loose.is_some(), count > 64);
+            read(&store, &id, &payload).await;
+        }
+    }
 }

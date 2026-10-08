@@ -390,3 +390,8 @@ required-features = ["native", "experimental"]
 name = "local_range_read"
 harness = false
 required-features = ["native", "experimental"]
+
+[[bench]]
+name = "verified_manifest_reads"
+harness = false
+required-features = ["native", "experimental"]

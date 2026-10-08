@@ -1654,6 +1654,8 @@
         "--bench",
         "manifest_reads",
         "--bench",
+        "verified_manifest_reads",
+        "--bench",
         "nar_associations",
         "--bench",
         "nar_import",
