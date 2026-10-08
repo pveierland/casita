@@ -142,5 +142,93 @@ fn verified_manifest_reads(c: &mut Criterion) {
     }
     group.finish();
 }
-criterion_group!(benches, verified_manifest_reads);
+criterion_group!(benches, verified_manifest_reads, verified_bare_group_reads);
 criterion_main!(benches);
+
+// Each fixture is one self-addressed chunk. Both sides of the Bao group
+// boundary are measured; larger reads retain the proof encode/decode path.
+fn verified_bare_group_reads(c: &mut Criterion) {
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(4)
+        .max_blocking_threads(64)
+        .enable_all()
+        .build()
+        .unwrap();
+    let mut group = c.benchmark_group("verified_bare_group_reads");
+    group
+        .sample_size(10)
+        .warm_up_time(Duration::from_secs(1))
+        .measurement_time(Duration::from_secs(1));
+    for backend in ["memory-loose", "local-packed"] {
+        for size in [1usize, 16383, 16384, 16385, 32768] {
+            let directory = tempfile::tempdir().unwrap();
+            let objects: Arc<dyn ObjectStore> = if backend == "memory-loose" {
+                Arc::new(InMemory::new())
+            } else {
+                Arc::new(LocalFileSystem::new_with_prefix(directory.path()).unwrap())
+            };
+            let store = if backend == "memory-loose" {
+                ChunkedBlobStore::new(objects.clone(), Path::default(), 262144)
+            } else {
+                runtime
+                    .block_on(ChunkedBlobStore::local_packed(directory.path()))
+                    .unwrap()
+            };
+            let fixtures: Vec<_> = runtime.block_on(async {
+                let mut fixtures = Vec::new();
+                for ordinal in 0..64usize {
+                    let bytes: Vec<_> = (0..size)
+                        .map(|offset| (offset.wrapping_mul(73) ^ ordinal.wrapping_mul(17)) as u8)
+                        .collect();
+                    let id = store.put_slice(&bytes).await.unwrap();
+                    assert_eq!(id, BlobId::new(blake3::hash(&bytes).into()));
+                    let hex = id.digest().to_hex();
+                    let path = Path::from(format!("blobs/b3/{}/{}", &hex[..2], hex));
+                    assert!(matches!(
+                        objects.head(&path).await,
+                        Err(object_store::Error::NotFound { .. })
+                    ));
+                    fixtures.push((id, bytes));
+                }
+                store.flush().await.unwrap();
+                fixtures
+            });
+            for concurrency in [1usize, 64] {
+                group.bench_function(
+                    BenchmarkId::new(format!("{backend}/readers_{concurrency}"), size),
+                    |b| {
+                        b.iter_custom(|iterations| {
+                            runtime.block_on(async {
+                                let mut elapsed = Duration::ZERO;
+                                for _ in 0..iterations {
+                                    let started = Instant::now();
+                                    let actual: Vec<Vec<u8>> = stream::iter(fixtures.iter())
+                                        .map(|(id, expected)| async {
+                                            let mut reader = store
+                                                .open_verified(id, expected.len() as u64)
+                                                .await?
+                                                .unwrap();
+                                            let mut bytes = Vec::with_capacity(expected.len());
+                                            reader.read_to_end(&mut bytes).await?;
+                                            Ok::<_, casita::experimental::Error>(bytes)
+                                        })
+                                        .buffered(concurrency)
+                                        .try_collect()
+                                        .await
+                                        .unwrap();
+                                    elapsed += started.elapsed();
+                                    assert_eq!(actual.len(), fixtures.len());
+                                    for (actual, (_, expected)) in actual.iter().zip(&fixtures) {
+                                        assert_eq!(actual, expected);
+                                    }
+                                }
+                                elapsed
+                            })
+                        });
+                    },
+                );
+            }
+        }
+    }
+    group.finish();
+}

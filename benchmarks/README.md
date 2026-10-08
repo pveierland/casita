@@ -3189,7 +3189,7 @@ It checks the absent single-chunk, empty flat and 64/65 flat/page shapes directl
 Each timed iteration reads 64 prepared blobs (one repeated identity for empty
 content). Fixture hashes and final output comparisons are outside timing;
 authentication remains inside. Backend and packing vary together. The target is
-part of the `benchmark all` core corpus; `--test` checks all 24 cases without
+part of the `benchmark all` core corpus; `--test` checks all 44 cases without
 claiming a throughput comparison.
 
 ```sh
@@ -3199,3 +3199,14 @@ cargo bench -p casita --features native,experimental --bench verified_manifest_r
 
 See [the missing-manifest report](reports/2026-10-08-missing-manifest-probe/README.md)
 for the matched production workload, retained failures and raw-evidence reference.
+
+The `verified_bare_group_reads` group adds 20 cases: one self-addressed chunk
+of 1/16383/16384/16385/32768 bytes, both backends, and concurrency 1/64. It
+checks physical manifest absence and crosses the 16 KiB Bao group boundary.
+Each iteration reads 64 blobs through authenticated EOF; fixture construction,
+flush and output comparisons remain outside timing. Select only this group with
+`-- verified_bare_group_reads` after the usual cargo bench arguments.
+
+See [the single-group report](reports/2026-10-08-single-group-verified-reads/README.md)
+for the mixed boundary screen, rejected native optimization and restored-source
+correctness checks.

@@ -442,6 +442,7 @@ struct ChaosObjectStore {
     reached: Arc<Notify>,
     resume: Arc<Notify>,
     paused_once: AtomicBool,
+    active_paused_chunk_gets: AtomicUsize,
     manifest_puts: AtomicUsize,
     chunk_puts: AtomicUsize,
     paused_chunk_puts: AtomicUsize,
@@ -539,6 +540,7 @@ impl ChaosObjectStore {
             reached: Arc::new(Notify::new()),
             resume: Arc::new(Notify::new()),
             paused_once: AtomicBool::new(false),
+            active_paused_chunk_gets: AtomicUsize::new(0),
             manifest_puts: AtomicUsize::new(0),
             chunk_puts: AtomicUsize::new(0),
             chunk_read_bytes: AtomicUsize::new(0),
@@ -614,6 +616,14 @@ impl ChaosObjectStore {
             && location.as_ref().starts_with("chunks/")
             && !self.paused_once.swap(true, Ordering::SeqCst)
         {
+            struct PendingGet<'a>(&'a AtomicUsize);
+            impl Drop for PendingGet<'_> {
+                fn drop(&mut self) {
+                    self.0.fetch_sub(1, Ordering::SeqCst);
+                }
+            }
+            self.active_paused_chunk_gets.fetch_add(1, Ordering::SeqCst);
+            let _pending = PendingGet(&self.active_paused_chunk_gets);
             self.reached.notify_one();
             self.resume.notified().await;
         }
@@ -4128,6 +4138,117 @@ mod manifest_probe {
             assert_eq!(loose, descriptor);
             assert_eq!(loose.is_some(), count > 64);
             read(&store, &id, &payload).await;
+        }
+    }
+}
+
+mod single_group_verified {
+    use super::*;
+
+    #[tokio::test]
+    async fn bare_group_boundary_preserves_proofs_sizes_and_authentication() {
+        for size in [1usize, 16383, 16384, 16385, 32768] {
+            let objects = Arc::new(object_store::memory::InMemory::new());
+            let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 262144);
+            let bytes: Vec<_> = (0..size)
+                .map(|i| (i.wrapping_mul(31) % 251) as u8)
+                .collect();
+            let id = store.put_slice(&bytes).await.unwrap();
+            assert!(matches!(
+                objects.head(&store.blob_path(&id)).await,
+                Err(object_store::Error::NotFound { .. })
+            ));
+            let mut proof = store.open_proof(&id, size as u64).await.unwrap().unwrap();
+            let mut encoded = Vec::new();
+            proof.read_to_end(&mut encoded).await.unwrap();
+            let tree = bao_tree::BaoTree::new(size as u64, crate::verified::BLOCK_SIZE);
+            assert_eq!(encoded.len() as u64, size as u64 + tree.outboard_size());
+            if tree.outboard_size() == 0 {
+                assert_eq!(encoded, bytes);
+            }
+            let mut decoded =
+                crate::verified::stream::decode(std::io::Cursor::new(encoded), id, size as u64);
+            let mut actual = Vec::new();
+            decoded.read_to_end(&mut actual).await.unwrap();
+            assert_eq!(actual, bytes);
+            for declared in [size as u64, 0, size as u64 - 1, size as u64 + 1] {
+                let mut reader = store.open_verified(&id, declared).await.unwrap().unwrap();
+                let mut actual = Vec::new();
+                let result = reader.read_to_end(&mut actual).await;
+                if declared == size as u64 {
+                    result.unwrap();
+                    assert_eq!(actual, bytes);
+                } else {
+                    assert!(result.is_err());
+                    assert!(actual.is_empty());
+                }
+            }
+            // A valid zstd frame of the right length but a wrong digest must
+            // fail before any output, and subsequent reads must keep failing.
+            let bad = vec![253; size];
+            objects
+                .put(
+                    &store.chunk_path(&single_chunk_id(id)),
+                    zstd::encode_all(bad.as_slice(), 0).unwrap().into(),
+                )
+                .await
+                .unwrap();
+            let mut reader = store
+                .open_verified(&id, size as u64)
+                .await
+                .unwrap()
+                .unwrap();
+            let mut actual = Vec::new();
+            assert!(reader.read_to_end(&mut actual).await.is_err());
+            assert!(actual.is_empty());
+            assert!(reader.read(&mut [0; 1]).await.is_err());
+        }
+    }
+
+    #[tokio::test]
+    async fn bare_group_read_is_lazy_and_drop_releases_pending_io() {
+        for size in [16384usize, 16385] {
+            let objects = Arc::new(ChaosObjectStore::new(ChaosFault::PauseChunk));
+            let store = ChunkedBlobStore::new(objects.clone(), Path::default(), 262144);
+            let bytes = vec![73; size];
+            let id = store.put_slice(&bytes).await.unwrap();
+            objects.arm();
+            let mut reader = tokio::time::timeout(
+                std::time::Duration::from_secs(3),
+                store.open_verified(&id, size as u64),
+            )
+            .await
+            .unwrap()
+            .unwrap()
+            .unwrap();
+            assert!(
+                !objects.paused_once.load(Ordering::SeqCst),
+                "opening must not fetch plaintext"
+            );
+            let mut pending = Box::pin(async move { reader.read_to_end(&mut Vec::new()).await });
+            tokio::time::timeout(std::time::Duration::from_secs(3), async {
+                tokio::select! {
+                    result = &mut pending => panic!("read finished before storage resumed: {result:?}"),
+                    _ = objects.reached.notified() => {},
+                }
+            }).await.unwrap();
+            assert_eq!(objects.active_paused_chunk_gets.load(Ordering::SeqCst), 1);
+            drop(pending);
+            assert_eq!(objects.active_paused_chunk_gets.load(Ordering::SeqCst), 0);
+            objects.disarm();
+            let actual = tokio::time::timeout(std::time::Duration::from_secs(3), async {
+                let mut reader = store
+                    .open_verified(&id, size as u64)
+                    .await
+                    .unwrap()
+                    .unwrap();
+                let mut actual = Vec::new();
+                reader.read_to_end(&mut actual).await.unwrap();
+                actual
+            })
+            .await
+            .unwrap();
+            assert_eq!(actual, bytes);
         }
     }
 }
