@@ -118,6 +118,7 @@ class Runtime:
         self.reap_natural()
         members = []
         for pid in self.family.members():
+            before = None
             try:
                 before = identity(pid)
                 if before is None: continue
@@ -143,6 +144,18 @@ class Runtime:
                     user_ticks=int(stat[11]), system_ticks=int(stat[12]),
                     waited_child_user_ticks=int(stat[13]), waited_child_system_ticks=int(stat[14]), io=io))
             except (FileNotFoundError, ProcessLookupError):
+                continue
+            except PermissionError as error:
+                # An exiting process can retain readable stat/status files
+                # while its io file already rejects access. Recheck ownership
+                # and liveness; permission failures for live owners still fail.
+                after = identity(pid)
+                expected = self.family.seen[pid]
+                if after is not None and after[0] == expected and after[1] != 'Z':
+                    raise
+                self.event('process-sample-unavailable', pid=pid, start_ticks=expected,
+                           before=before, after=after, path=error.filename,
+                           reason='reused' if after is not None and after[0] != expected else 'exited')
                 continue
         fs = os.statvfs(self.out)
         available = fs.f_bavail*fs.f_frsize
