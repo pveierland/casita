@@ -282,29 +282,46 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--configuration', required=True, type=Path)
     parser.add_argument('--mode', choices=('sustained','pressure'), default='sustained')
+    parser.add_argument('--pressure-case', choices=('both','recent','aged'), default='both',
+                        help='single-case selection is diagnostic only; both is the paired benchmark')
     parser.add_argument('--profile', choices=('smoke','standard'), default='standard')
     parser.add_argument('--repetitions', type=int, default=1)
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args(argv)
     if args.repetitions < 1:
         parser.error('repetitions must be positive')
-    context = load_configuration(args.configuration)
-    context['interrupt_state'] = {'stopped': False}
+    if args.mode != 'pressure' and args.pressure_case != 'both':
+        parser.error('--pressure-case requires --mode pressure')
     output = args.output.resolve()
     assert not output.exists(), 'preserve existing report'
     artifacts = output.with_name(output.stem+'-artifacts')
+    modes = ['sustained'] if args.mode == 'sustained' else (
+        ['recent', 'aged'] if args.pressure_case == 'both' else [args.pressure_case])
+    epochs = ['first', 'reopened'] if args.mode == 'sustained' else ['first']
+    # The last repetition has the longest decimal case prefix. Check bytes,
+    # including the reopened server, before creating artifacts or any child.
+    for mode in modes:
+        for epoch in epochs:
+            sock = artifacts / f'{args.repetitions - 1:02d}-{mode}' / f'server-{epoch}.sock'
+            if len(os.fsencode(sock)) >= 104:
+                parser.error(f'Unix socket path is too long: {sock}; choose a shorter --output')
+    context = load_configuration(args.configuration)
+    context['interrupt_state'] = {'stopped': False}
     artifacts.mkdir(parents=True)
     sources = artifacts/'driver-sources'
     sources.mkdir()
     for path in context['sources']:
         (sources/path.name).write_bytes(path.read_bytes())
     report = dict(schema_version=1, suite_id='native-git', mode=args.mode, profile=args.profile,
+                  pressure_case=args.pressure_case, paired_controls=args.mode=='pressure' and args.pressure_case=='both',
                   complete=False, success=False, repetitions=args.repetitions,
                   input_sha256=context['inputs'], cases=[], errors=[])
     # Each terminal case has its own immutable result; the aggregate is emitted once.
     try:
         for repetition in range(args.repetitions):
             modes = ['sustained'] if args.mode=='sustained' else (['recent','aged'] if repetition%2==0 else ['aged','recent'])
+            if args.mode=='pressure' and args.pressure_case!='both':
+                modes = [args.pressure_case]
             for mode in modes:
                 assert not context['interrupt_state']['stopped'], 'interrupted between cases'
                 name = f'{repetition:02d}-{mode}'
