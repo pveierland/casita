@@ -13,6 +13,8 @@ from benchmarks import build_manifest, cli
 from benchmarks import storage
 from benchmarks.suites import repository as common
 
+SERVER_INGEST = {"server-ingest-sustained", "server-ingest-pressure"}
+
 CORE_BENCHES = ("write_path", "hash_inputs", "tar_import", "filesystem_import", "dedup", "repairing", "optimization", "metadata_verification", "retained_wal", "object_reads", "local_range_read", "compression_handoff", "git_fetch_fairness", "verified_io", "overwrite_pages", "manifest_reads", "verified_manifest_reads", "nar_associations", "nar_import", "bao_packing", "cdcs", "sliced_transfer")
 
 # Bounded defaults. Frontier sizes remain explicit opt-in suite arguments.
@@ -234,6 +236,8 @@ def build_binaries(output, build_dir, selected=None):
 
 def suite_arguments(identifier, binary_dir, profile, repetitions):
     from benchmarks.revisions import SUITE_BUILD_SPECS
+    if identifier in SERVER_INGEST:
+        return ["--profile", profile, "--repetitions", str(repetitions)]
     if identifier in {"pin-protocol", "pin-protocol-s3", "pin-http"}:
         return ["--profile", profile, "--repetitions", str(repetitions)]
     if identifier in {"obrador-reads", "filesystem-transports", "erofs-transports", "pack-read-planning", "native-fskit", "native-fskit-portable", "native-fskit-repository", "native-fskit-launch", "native-fskit-launch-uncached", "native-fskit-launch-eager", "native-fskit-launch-enumeration-uncached", "native-fskit-launch-density-enumeration-uncached", "native-fskit-launch-density", "native-fskit-launch-density-phases", "native-fskit-launch-capabilities", "native-fskit-launch-zero-times", "native-fskit-first-launch", "native-fskit-workloads", "native-fskit-workloads-readers-16", "native-fskit-workloads-uncached", "native-fskit-workloads-read-trace", "native-fskit-first-launch-uncached", "native-fskit-launch-density-filename-bytes", "native-fskit-launch-profile", "native-fskit-launch-explicit-xattrs", "native-fskit-launch-density-explicit-xattrs"}:
@@ -259,7 +263,10 @@ def suite_arguments(identifier, binary_dir, profile, repetitions):
     return arguments
 
 
-def execute(command, log, timeout, environment=None):
+def execute(command, log, timeout, environment=None, cleanup_timeout=0):
+    if cleanup_timeout:
+        from benchmarks.suites._server_ingest_process import execute_owned
+        return execute_owned(command, log, timeout, environment, cleanup_timeout)
     started = time.monotonic()
     with log.open("w") as handle:
         process = subprocess.Popen(command, stdout=handle, stderr=subprocess.STDOUT, env=environment, start_new_session=True)
@@ -371,6 +378,8 @@ def main(argv=None):
     parser.add_argument("--bin-dir", type=pathlib.Path, help="retain prebuilt binaries in the shared artifact store instead of compiling")
     parser.add_argument("--build-dir", type=pathlib.Path, default=cli.ROOT / "target" / "benchmark-build")
     parser.add_argument("--nixpkgs", type=pathlib.Path)
+    parser.add_argument("--server-ingest-config", type=pathlib.Path,
+                        help="qualified external Mnos server, WAL observer and corpus configuration")
     parser.add_argument("--cdcs-store-names", help="comma-separated Nix store names with rebuilt copies for the cdcs-corpus suite")
     parser.add_argument("--obrador-source", type=pathlib.Path, default=os.environ.get("CASITA_OBRADOR_SOURCE"))
     parser.add_argument("--timeout", type=int, default=3600)
@@ -474,6 +483,9 @@ def main(argv=None):
                 continue
             if suite == "obrador-reads" and args.obrador_source is None:
                 record.update(status="skipped", reason="--obrador-source is required for the external application workload")
+                continue
+            if suite in SERVER_INGEST and args.server_ingest_config is None:
+                record.update(status="skipped", reason="--server-ingest-config is required for the external server workload")
                 continue
             if suite == "nixpkgs" and args.nixpkgs is None:
                 record.update(status="skipped", reason="--nixpkgs is required for the committed external corpus")
@@ -589,6 +601,8 @@ def main(argv=None):
                     collect_criterion(output, output / "criterion")
                 continue
             arguments = suite_arguments(suite, binary_dir, args.profile, args.repetitions)
+            if suite in SERVER_INGEST:
+                arguments += ["--configuration", str(args.server_ingest_config.resolve())]
             if suite == "nixpkgs":
                 arguments += ["--nixpkgs", str(args.nixpkgs.resolve())]
             if suite in ("git-fetch-s3", "git-fetch-local", "git-pack-cached") and args.nixpkgs is not None:
@@ -611,7 +625,11 @@ def main(argv=None):
                     environment.pop("AWS_SESSION_TOKEN", None)
                     environment.pop("AWS_PROFILE", None)
                     command += ["--s3-url", "s3://casita-bench/all", "--latency-label", "loopback-rustfs"]
-                record.update(execute(command, output / f"{suite}.log", args.timeout, environment))
+                record.update(execute(command, output / f"{suite}.log", args.timeout, environment,
+                                      **({"cleanup_timeout": 30} if suite in SERVER_INGEST else {})))
+        except (KeyboardInterrupt, SystemExit):
+            record.update(status="interrupted")
+            raise
         except Exception as error:
             record.update(status="failed", error=str(error))
         finally:

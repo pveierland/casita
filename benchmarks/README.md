@@ -1,5 +1,65 @@
 # Benchmark suite
 
+## Actual server ingestion and pressure collection
+
+`server-ingest-sustained` runs the Mnos evaluation server with live retained
+roots, deferred file reads/hashes, cancellation and recovery, passive WAL
+observation, and persisted identity/read checks after restarting the server.
+Standard covers 64 distinct verified revisions at minimum 75-second intervals,
+then 120 seconds each with roots held and released. Smoke covers four revisions
+and short idle periods; it establishes correctness, not sustained behavior.
+
+`server-ingest-pressure` compares independent fresh repositories containing the
+same live historical roots. Standard retains revisions 0/15/16/31/32/47/48 and
+imports revision 49; smoke retains 0/1 and imports 2. Preparation sets only the
+owned repository's advisory collection stamp into the future. The measured
+import starts with a recent stamp or one aged 120 seconds. Both cases are
+required, with order reversed on alternating repetitions. The recent stamp must
+remain unchanged; the aged stamp must advance during the import. Old-root reads
+must overlap the import and return the verified content. This controls collection
+admission for attribution; it does not change production collection policy.
+
+These Linux suites require an explicit JSON configuration with absolute paths:
+
+```json
+{
+  "server_build": "/path/to/qualified-server-build",
+  "observer_binary": "/path/to/wal-observer",
+  "observer_sha256": "<verified observer SHA-256>",
+  "corpus_dir": "/path/to/verified-64-revision-corpus",
+  "reads_dir": "/path/to/verified-read-fixtures"
+}
+```
+
+The build directory contains `mnos-eval`, `mnos-eval.build.json`, and the
+successful `result.json` build proof. It must use the release profile and default
+features. Both fixture directories contain `fixtures.json` and successful
+`result.json` proofs with input digests; the corpus binds 64 distinct Git trees
+and CppNix NAR hashes, and the reads bind `.version`, `default.nix` and
+`lib/default.nix` as bytes, text and SHA-256. All referenced inputs, native
+libraries and the Git executable resolved through PATH must match those proofs.
+Use the native build environment that qualified the executable and observer;
+the observer must match the engine's shared-memory layout. No build or corpus
+download is implicit. The output retains driver sources, input fingerprints,
+wire messages, samples, collection-stamp transitions and cleanup evidence.
+
+```sh
+python3 -m benchmarks.cli run server-ingest-sustained --configuration /path/config.json --profile smoke --output /path/fresh-smoke.json
+python3 -m benchmarks.cli run server-ingest-pressure --configuration /path/config.json --profile standard --repetitions 2 --output /path/fresh-pressure.json
+python3 -m benchmarks.cli all --suites server-ingest-sustained,server-ingest-pressure --server-ingest-config /path/config.json --profile standard --timeout 18000 --output /path/fresh-all
+```
+
+`benchmark all` explicitly records these cases as skipped without configuration;
+a skipped case does not satisfy its completion ledger. Pressure cases require
+the filesystem already to be at least 80% used; they never fill it deliberately.
+Each case requires at least 2 GiB available at launch (3,707,665,532 bytes for
+standard sustained), and enforces 4 GiB sampled family RSS, 1 GiB physical WAL,
+768 MiB available disk, 256 MiB logs, and bounded import/runtime limits. Reserve
+additional space for successive retained artifacts. Sampling is every 0.5 s;
+RSS sums can double-count shared mappings, and process I/O counters can include
+reaped children. Persisted NAR identities plus three read checks are not a fresh
+independent full-tree hash. A single pressure pair supports attribution only.
+
 ## WAL3 commit preparation
 
 `benchmark run wal3-commit-preparation --iterations 100 --output /tmp/wal3-commit-preparation.json`

@@ -950,6 +950,26 @@
       ]
     },
     {
+      "id": "server-ingest-sustained",
+      "suite_id": "native-git",
+      "title": "Actual server imports with retained roots, cancellation, WAL observation and reopen",
+      "kind": "module",
+      "target": "benchmarks.suites.server_ingest",
+      "default_arguments": ["--mode", "sustained"],
+      "profiles": ["smoke", "standard"],
+      "correctness": ["qualified CppNix identities", "fresh deferred reads and hashes", "cancellation recovery", "reopened roots", "empty owned process family"]
+    },
+    {
+      "id": "server-ingest-pressure",
+      "suite_id": "native-git",
+      "title": "Actual server collection cooldown controls with live historical roots",
+      "kind": "module",
+      "target": "benchmarks.suites.server_ingest",
+      "default_arguments": ["--mode", "pressure"],
+      "profiles": ["smoke", "standard"],
+      "correctness": ["both recent and expired collection stamps", "observed collection transition", "qualified CppNix identities", "old reads overlap new import", "empty owned process family"]
+    },
+    {
       "id": "git-ingest-scheduling",
       "suite_id": "native-git",
       "title": "Native Git staging with controlled upload latency and resource-bound gates",
