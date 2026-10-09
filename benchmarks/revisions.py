@@ -198,6 +198,7 @@ SUITE_BUILD_SPECS["git-view-source-window-oversized-32"] = SUITE_BUILD_SPECS["gi
 SUITE_BUILD_SPECS["git-view-source-window-oversized-128"] = SUITE_BUILD_SPECS["git-ingest-concurrency"]
 SUITE_BUILD_SPECS["metadata-scan"] = SUITE_BUILD_SPECS["metadata-collection"]
 SUITE_BUILD_SPECS["collection-mark"] = SUITE_BUILD_SPECS["metadata-collection"]
+SUITE_BUILD_SPECS["collection-inventory"] = SUITE_BUILD_SPECS["metadata-collection"]
 SUITE_BUILD_SPECS["memory-snapshots"] = SUITE_BUILD_SPECS["metadata-collection"]
 SUITE_BUILD_SPECS["memory-publication"] = SUITE_BUILD_SPECS["metadata-collection"]
 SUITE_BUILD_SPECS["memory-index-lifecycle"] = SUITE_BUILD_SPECS["metadata-collection"]

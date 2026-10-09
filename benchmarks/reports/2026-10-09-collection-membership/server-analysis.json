@@ -1,0 +1,1472 @@
+{
+  "valid_complete_evidence": true,
+  "server_gates_pass": true,
+  "gates": [
+    {
+      "mode": "recent",
+      "metric": "wall_seconds",
+      "median_paired_ratio": 1.0133669864122683,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 4.852054088492878,
+      "candidate_median": 4.853783191996627
+    },
+    {
+      "mode": "recent",
+      "metric": "sampled_cpu_seconds",
+      "median_paired_ratio": 1.013776576250696,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 14.175,
+      "candidate_median": 14.435
+    },
+    {
+      "mode": "recent",
+      "metric": "family_rss_bytes",
+      "median_paired_ratio": 1.010451346232128,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 1136093184.0,
+      "candidate_median": 1147746304.0
+    },
+    {
+      "mode": "recent",
+      "metric": "physical_wal_bytes",
+      "median_paired_ratio": 1.0213247045272882,
+      "limit": 1.1,
+      "passed": true,
+      "baseline_median": 121624492.0,
+      "candidate_median": 123159192.0
+    },
+    {
+      "mode": "recent",
+      "metric": "write_bytes",
+      "median_paired_ratio": 0.9977511244377811,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 2742272.0,
+      "candidate_median": 2725888.0
+    },
+    {
+      "mode": "aged",
+      "metric": "wall_seconds",
+      "median_paired_ratio": 0.792850625120213,
+      "limit": 0.9,
+      "passed": true,
+      "baseline_median": 66.76260116649792,
+      "candidate_median": 52.97029167646542
+    },
+    {
+      "mode": "aged",
+      "metric": "sampled_cpu_seconds",
+      "median_paired_ratio": 0.7745509995782262,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 86.185,
+      "candidate_median": 66.805
+    },
+    {
+      "mode": "aged",
+      "metric": "family_rss_bytes",
+      "median_paired_ratio": 1.0164354986200244,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 1132552192.0,
+      "candidate_median": 1151764480.0
+    },
+    {
+      "mode": "aged",
+      "metric": "physical_wal_bytes",
+      "median_paired_ratio": 1.0002757224803476,
+      "limit": 1.1,
+      "passed": true,
+      "baseline_median": 124570292.0,
+      "candidate_median": 124059412.0
+    },
+    {
+      "mode": "aged",
+      "metric": "write_bytes",
+      "median_paired_ratio": 1.0070797896694397,
+      "limit": 1.05,
+      "passed": true,
+      "baseline_median": 629299200.0,
+      "candidate_median": 629297152.0
+    }
+  ],
+  "pairs": [
+    {
+      "mode": "recent",
+      "repetition": 1,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 3.968911196978297,
+          "family_rss_bytes": 1151397888,
+          "physical_wal_bytes": 116525992,
+          "write_bytes": 2764800,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 11.65,
+          "process_io_delta": {
+            "rchar": 431172155,
+            "wchar": 2302028,
+            "syscr": 105563,
+            "syscw": 26945,
+            "read_bytes": 81920,
+            "write_bytes": 2764800,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000262858,
+            0.003492862
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 113862373376,
+            "available_bytes": 15141756928
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 5.087266187008936,
+          "family_rss_bytes": 1150513152,
+          "physical_wal_bytes": 122767792,
+          "write_bytes": 2732032,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 15.07,
+          "process_io_delta": {
+            "rchar": 435187707,
+            "wchar": 2267598,
+            "syscr": 106603,
+            "syscw": 26761,
+            "read_bytes": 0,
+            "write_bytes": 2732032,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000269655,
+            0.00446422
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 113440292864,
+            "available_bytes": 14719676416
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 1.281778788823013,
+        "sampled_cpu_seconds": 1.2935622317596567,
+        "family_rss_bytes": 0.9992315983820877,
+        "physical_wal_bytes": 1.0535657314979134,
+        "write_bytes": 0.9881481481481481
+      }
+    },
+    {
+      "mode": "recent",
+      "repetition": 2,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.856191363011021,
+          "family_rss_bytes": 1144979456,
+          "physical_wal_bytes": 121614192,
+          "write_bytes": 2744320,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.32,
+          "process_io_delta": {
+            "rchar": 413339539,
+            "wchar": 2295596,
+            "syscr": 101082,
+            "syscw": 28724,
+            "read_bytes": 0,
+            "write_bytes": 2744320,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000363279,
+            0.004450911
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 111354560512,
+            "available_bytes": 12633944064
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.679088841017801,
+          "family_rss_bytes": 1133993984,
+          "physical_wal_bytes": 123777192,
+          "write_bytes": 2715648,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 13.75,
+          "process_io_delta": {
+            "rchar": 436818115,
+            "wchar": 2269651,
+            "syscr": 106846,
+            "syscw": 28686,
+            "read_bytes": 4096,
+            "write_bytes": 2715648,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000365125,
+            0.003826195
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 110931415040,
+            "available_bytes": 12210798592
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 1.0378497882837157,
+        "sampled_cpu_seconds": 1.0414545454545454,
+        "family_rss_bytes": 1.00968741647222,
+        "physical_wal_bytes": 0.982525051949797,
+        "write_bytes": 1.0105580693815988
+      }
+    },
+    {
+      "mode": "recent",
+      "repetition": 3,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 5.010270352009684,
+          "family_rss_bytes": 1113669632,
+          "physical_wal_bytes": 122289872,
+          "write_bytes": 2732032,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.38,
+          "process_io_delta": {
+            "rchar": 434260059,
+            "wchar": 2281318,
+            "syscr": 106322,
+            "syscw": 28508,
+            "read_bytes": 0,
+            "write_bytes": 2732032,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000403543,
+            0.003989133
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 110508756992,
+            "available_bytes": 11788140544
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.60998186096549,
+          "family_rss_bytes": 1151074304,
+          "physical_wal_bytes": 124885472,
+          "write_bytes": 2719744,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 13.64,
+          "process_io_delta": {
+            "rchar": 414583611,
+            "wchar": 2258454,
+            "syscr": 101457,
+            "syscw": 27179,
+            "read_bytes": 0,
+            "write_bytes": 2719744,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000301285,
+            0.003479562
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 110086352896,
+            "available_bytes": 11365736448
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.9201064088520428,
+        "sampled_cpu_seconds": 0.9485396383866481,
+        "family_rss_bytes": 1.0335868653730158,
+        "physical_wal_bytes": 1.0212249792852837,
+        "write_bytes": 0.9955022488755623
+      }
+    },
+    {
+      "mode": "recent",
+      "repetition": 4,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.668351111991797,
+          "family_rss_bytes": 1127510016,
+          "physical_wal_bytes": 119500632,
+          "write_bytes": 2719744,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 13.78,
+          "process_io_delta": {
+            "rchar": 413624883,
+            "wchar": 2266420,
+            "syscr": 101155,
+            "syscw": 28167,
+            "read_bytes": 4096,
+            "write_bytes": 2719744,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000372141,
+            0.003859461
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 107997024256,
+            "available_bytes": 9276407808
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.837648116983473,
+          "family_rss_bytes": 1115004928,
+          "physical_wal_bytes": 128576992,
+          "write_bytes": 2506752,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 13.97,
+          "process_io_delta": {
+            "rchar": 435717315,
+            "wchar": 2279635,
+            "syscr": 106577,
+            "syscw": 27874,
+            "read_bytes": 1499136,
+            "write_bytes": 2506752,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000334835,
+            0.003854708
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 107575103488,
+            "available_bytes": 8854487040
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.965004274619039,
+        "sampled_cpu_seconds": 0.9863994273443092,
+        "family_rss_bytes": 1.0112152759920359,
+        "physical_wal_bytes": 0.9294091434336867,
+        "write_bytes": 1.0849673202614378
+      }
+    },
+    {
+      "mode": "recent",
+      "repetition": 5,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.866460060002282,
+          "family_rss_bytes": 1150328832,
+          "physical_wal_bytes": 112636712,
+          "write_bytes": 2772992,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.45,
+          "process_io_delta": {
+            "rchar": 431183395,
+            "wchar": 2260462,
+            "syscr": 105481,
+            "syscw": 28967,
+            "read_bytes": 16384,
+            "write_bytes": 2772992,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000448777,
+            0.004246937
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 107153170432,
+            "available_bytes": 8432553984
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.851375020982232,
+          "family_rss_bytes": 1122783232,
+          "physical_wal_bytes": 124728912,
+          "write_bytes": 2707456,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.55,
+          "process_io_delta": {
+            "rchar": 432255411,
+            "wchar": 2252942,
+            "syscr": 105798,
+            "syscw": 28019,
+            "read_bytes": 0,
+            "write_bytes": 2707456,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000296215,
+            0.003801207
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 106731065344,
+            "available_bytes": 8010448896
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.9969002028509316,
+        "sampled_cpu_seconds": 1.0069204152249136,
+        "family_rss_bytes": 0.9760541514445845,
+        "physical_wal_bytes": 1.1073557615921885,
+        "write_bytes": 0.9763663220088626
+      }
+    },
+    {
+      "mode": "recent",
+      "repetition": 6,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 5.060158516978845,
+          "family_rss_bytes": 1181347840,
+          "physical_wal_bytes": 123550592,
+          "write_bytes": 2752512,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.84,
+          "process_io_delta": {
+            "rchar": 416818387,
+            "wchar": 2288478,
+            "syscr": 102058,
+            "syscw": 27850,
+            "read_bytes": 0,
+            "write_bytes": 2752512,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000337171,
+            0.004180287
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 104644808704,
+            "available_bytes": 5924192256
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "recent",
+          "wall_seconds": 4.913568251999095,
+          "family_rss_bytes": 1138192384,
+          "physical_wal_bytes": 120959112,
+          "write_bytes": 2752512,
+          "collection_finished_after_start_seconds": null,
+          "sampled_cpu_seconds": 14.54,
+          "process_io_delta": {
+            "rchar": 430172867,
+            "wchar": 2300803,
+            "syscr": 105260,
+            "syscw": 27953,
+            "read_bytes": 0,
+            "write_bytes": 2752512,
+            "cancelled_write_bytes": 0
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000267754,
+            0.003829261
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 104224972800,
+            "available_bytes": 5504356352
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 1.029833769973605,
+        "sampled_cpu_seconds": 1.0206327372764787,
+        "family_rss_bytes": 1.037915783488497,
+        "physical_wal_bytes": 1.0214244297692927,
+        "write_bytes": 1.0
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 1,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 65.61911085899919,
+          "family_rss_bytes": 1143824384,
+          "physical_wal_bytes": 124349872,
+          "write_bytes": 617484288,
+          "collection_finished_after_start_seconds": 60.80408743,
+          "sampled_cpu_seconds": 84.63,
+          "process_io_delta": {
+            "rchar": 23019975346,
+            "wchar": 17583724558,
+            "syscr": 5610473,
+            "syscw": 1234786,
+            "read_bytes": 0,
+            "write_bytes": 617484288,
+            "cancelled_write_bytes": 377069568
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000313898,
+            0.003730344
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 113018425344,
+            "available_bytes": 14297808896
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 52.15057768597035,
+          "family_rss_bytes": 1152409600,
+          "physical_wal_bytes": 124527032,
+          "write_bytes": 590241792,
+          "collection_finished_after_start_seconds": 47.509211682,
+          "sampled_cpu_seconds": 64.98,
+          "process_io_delta": {
+            "rchar": 23051605816,
+            "wchar": 17576739132,
+            "syscr": 5618119,
+            "syscw": 360063,
+            "read_bytes": 0,
+            "write_bytes": 590241792,
+            "cancelled_write_bytes": 385486848
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000326864,
+            0.003821608
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 112601567232,
+            "available_bytes": 13880950784
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.7947467895142665,
+        "sampled_cpu_seconds": 0.7678128323289615,
+        "family_rss_bytes": 1.0075057116460284,
+        "physical_wal_bytes": 1.0014246898460821,
+        "write_bytes": 0.9558814749955225
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 2,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 51.89389441802632,
+          "family_rss_bytes": 1139519488,
+          "physical_wal_bytes": 122561792,
+          "write_bytes": 629317632,
+          "collection_finished_after_start_seconds": 47.117537332,
+          "sampled_cpu_seconds": 65.32,
+          "process_io_delta": {
+            "rchar": 23017376200,
+            "wchar": 17578518021,
+            "syscr": 5609763,
+            "syscw": 579956,
+            "read_bytes": 0,
+            "write_bytes": 629317632,
+            "cancelled_write_bytes": 523296768
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000311753,
+            0.003808559
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 112191766528,
+            "available_bytes": 13471150080
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 65.62837563297944,
+          "family_rss_bytes": 1164197888,
+          "physical_wal_bytes": 122668912,
+          "write_bytes": 629301248,
+          "collection_finished_after_start_seconds": 60.83135261,
+          "sampled_cpu_seconds": 84.69,
+          "process_io_delta": {
+            "rchar": 23023329935,
+            "wchar": 17580562014,
+            "syscr": 5611294,
+            "syscw": 837907,
+            "read_bytes": 0,
+            "write_bytes": 629301248,
+            "cancelled_write_bytes": 372842496
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000325555,
+            0.003767947
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 111772315648,
+            "available_bytes": 13051699200
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.7907234320141957,
+        "sampled_cpu_seconds": 0.7712835045459911,
+        "family_rss_bytes": 0.978802229196279,
+        "physical_wal_bytes": 0.9991267551146129,
+        "write_bytes": 1.0000260352256602
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 3,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 66.50451668695314,
+          "family_rss_bytes": 1123966976,
+          "physical_wal_bytes": 128832432,
+          "write_bytes": 642646016,
+          "collection_finished_after_start_seconds": 61.560136784,
+          "sampled_cpu_seconds": 86.18,
+          "process_io_delta": {
+            "rchar": 23011680976,
+            "wchar": 17581465501,
+            "syscr": 5608344,
+            "syscw": 952519,
+            "read_bytes": 0,
+            "write_bytes": 642646016,
+            "cancelled_write_bytes": 335028224
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000320913,
+            0.004406031
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 109664284672,
+            "available_bytes": 10943668224
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 53.08765494695399,
+          "family_rss_bytes": 1151119360,
+          "physical_wal_bytes": 123591792,
+          "write_bytes": 629276672,
+          "collection_finished_after_start_seconds": 48.063642544,
+          "sampled_cpu_seconds": 66.78,
+          "process_io_delta": {
+            "rchar": 23023115509,
+            "wchar": 17577320550,
+            "syscr": 5611134,
+            "syscw": 435830,
+            "read_bytes": 0,
+            "write_bytes": 629276672,
+            "cancelled_write_bytes": 549314560
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000424609,
+            0.004172907
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 109247352832,
+            "available_bytes": 10526736384
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.7982563830490739,
+        "sampled_cpu_seconds": 0.7748897656068693,
+        "family_rss_bytes": 1.0241576350371349,
+        "physical_wal_bytes": 0.9593220440020879,
+        "write_bytes": 0.9791964103610035
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 4,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 54.058155977982096,
+          "family_rss_bytes": 1154043904,
+          "physical_wal_bytes": 126698272,
+          "write_bytes": 624660480,
+          "collection_finished_after_start_seconds": 49.276636536,
+          "sampled_cpu_seconds": 67.62,
+          "process_io_delta": {
+            "rchar": 23015706663,
+            "wchar": 17578600638,
+            "syscr": 5609375,
+            "syscw": 591713,
+            "read_bytes": 47779840,
+            "write_bytes": 624660480,
+            "cancelled_write_bytes": 271147008
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000308988,
+            0.00400688
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 108830507008,
+            "available_bytes": 10109890560
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 67.1910238309647,
+          "family_rss_bytes": 1141137408,
+          "physical_wal_bytes": 117440512,
+          "write_bytes": 590045184,
+          "collection_finished_after_start_seconds": 62.303048741,
+          "sampled_cpu_seconds": 86.19,
+          "process_io_delta": {
+            "rchar": 23041577430,
+            "wchar": 17579490140,
+            "syscr": 5615717,
+            "syscw": 702378,
+            "read_bytes": 53940224,
+            "write_bytes": 590045184,
+            "cancelled_write_bytes": 385486848
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000308981,
+            0.003902049
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 108416626688,
+            "available_bytes": 9696010240
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.8045443110671819,
+        "sampled_cpu_seconds": 0.7845457709711104,
+        "family_rss_bytes": 1.0113102032318968,
+        "physical_wal_bytes": 1.07882935660226,
+        "write_bytes": 1.058665500437336
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 5,
+      "variants": {
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 67.26079157099593,
+          "family_rss_bytes": 1113440256,
+          "physical_wal_bytes": 128861272,
+          "write_bytes": 652935168,
+          "collection_finished_after_start_seconds": 62.287821275,
+          "sampled_cpu_seconds": 86.36,
+          "process_io_delta": {
+            "rchar": 23030507875,
+            "wchar": 17578136547,
+            "syscr": 5613043,
+            "syscw": 534367,
+            "read_bytes": 98304,
+            "write_bytes": 652935168,
+            "cancelled_write_bytes": 220733440
+          },
+          "sample_enclosure_slack_seconds": [
+            0.00032041,
+            0.004043505
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 106308964352,
+            "available_bytes": 7588347904
+          }
+        },
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 53.20022312505171,
+          "family_rss_bytes": 1137446912,
+          "physical_wal_bytes": 117473592,
+          "write_bytes": 662163456,
+          "collection_finished_after_start_seconds": 48.165801262,
+          "sampled_cpu_seconds": 66.95,
+          "process_io_delta": {
+            "rchar": 23012889267,
+            "wchar": 17577045972,
+            "syscr": 5608638,
+            "syscw": 398410,
+            "read_bytes": 0,
+            "write_bytes": 662163456,
+            "cancelled_write_bytes": 328404992
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000310288,
+            0.004159228
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 105892130816,
+            "available_bytes": 7171514368
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.7909544607261596,
+        "sampled_cpu_seconds": 0.7752431681333951,
+        "family_rss_bytes": 1.021560794008152,
+        "physical_wal_bytes": 0.9116283750481681,
+        "write_bytes": 1.0141335441132189
+      }
+    },
+    {
+      "mode": "aged",
+      "repetition": 6,
+      "variants": {
+        "candidate": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 52.852928405976854,
+          "family_rss_bytes": 1222483968,
+          "physical_wal_bytes": 126904272,
+          "write_bytes": 655495168,
+          "collection_finished_after_start_seconds": 47.923972548,
+          "sampled_cpu_seconds": 66.83,
+          "process_io_delta": {
+            "rchar": 23040681598,
+            "wchar": 17577445405,
+            "syscr": 5615536,
+            "syscw": 449511,
+            "read_bytes": 0,
+            "write_bytes": 655495168,
+            "cancelled_write_bytes": 473370624
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000310366,
+            0.004246343
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 105474781184,
+            "available_bytes": 6754164736
+          }
+        },
+        "baseline": {
+          "sampling_gaps": [],
+          "mode": "aged",
+          "wall_seconds": 67.0206856460427,
+          "family_rss_bytes": 1088102400,
+          "physical_wal_bytes": 124790712,
+          "write_bytes": 629297152,
+          "collection_finished_after_start_seconds": 62.302035873,
+          "sampled_cpu_seconds": 86.32,
+          "process_io_delta": {
+            "rchar": 23013379210,
+            "wchar": 17583552458,
+            "syscr": 5608803,
+            "syscw": 1211206,
+            "read_bytes": 0,
+            "write_bytes": 629297152,
+            "cancelled_write_bytes": 346824704
+          },
+          "sample_enclosure_slack_seconds": [
+            0.000330185,
+            0.003826944
+          ],
+          "read_hash_pairs": 28,
+          "overlapping_roots": 7,
+          "filesystem": {
+            "total_bytes": 1941937934336,
+            "free_bytes": 105057820672,
+            "available_bytes": 6337204224
+          }
+        }
+      },
+      "ratios": {
+        "wall_seconds": 0.7886062026448041,
+        "sampled_cpu_seconds": 0.774212233549583,
+        "family_rss_bytes": 1.123500846979108,
+        "physical_wal_bytes": 1.0169368374146306,
+        "write_bytes": 1.0416305967963446
+      }
+    }
+  ],
+  "input_sha256": {
+    "/tmp/mnos-ingest/analyze_collection_membership_server_v4.py": "aa1b4cbf986c98f6fcd99a224859812f17798d921debe68f067c87242e9d8521",
+    "/tmp/mnos-ingest/evidence/cms3/protocol.json": "970f02ca13d28baf9d86142d0274b28018a6bbbece584e43f16aacf8795dc175",
+    "/tmp/mnos-ingest/evidence/cms3/result.json": "24b88f41e45c59279c9d59a3c7ff5c19b15d7153cdd262e918dbe8b536e015b8",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/result.json": "e29a2ac4067bf75dae5e4928b758fd13cb97212f009bbe98287343302d55408c",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark.json": "fe7dc95d3fe944cbc87e23891e8dd19e97e18665fcc59a31234ae3192f6186d4",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/result.json": "5461251c587fd1ddde35dd7288f5426b99168fc7bccb98e63ee9eed60803cd18",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "cc2995237be80434e5a8fff93df5ae1f84ebd36ede8a9e5cb5e9683351aa7c5f",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "954df31a8dec28bd5faa8ea0fc12d5a5fab675e3acd9faf89a9d6d7bde70c0f6",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "3ae814450b34385b2ba7e64e146b22f3cd2b0bd0c75917730d278bc44d280440",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference-ldd.txt": "7080ab21a7ddfc6684bf89acbc992b13aaf24eaceaff50e3f0beb1c29d3cc187",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference-resolution.txt": "636d24a773cb963cf635b0a2f2566bb2ffc83759141173871627161a1480dc63",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference-resolution.log": "23a8aa5df6d5012d2745bde7db26e88bf1580d3ccaec2eda9dfdb4c1b603a1cb",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference-build.txt": "d1c6354a53c2b8b0eebb52afa803a7d99992b23972545ca307ee164cdd76acc0",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference-build.log": "276c321641c942048748f6d20e7b5639db63f8c105eb8fba776fb1f6fad68f76",
+    "/tmp/mnos-ingest/mnos-nix-xp/nix/reference-nix.nix": "f76a01fbf0b3ab1af8709848f1b5690e683ce62677de242add95638005b8c978",
+    "/tmp/mnos-ingest/mnos-nix-xp/flake.lock": "9f419e8c1eb3aa5fe29777055fa7901f4fb8d32eca4760f9cf9d7981d2cc658c",
+    "/nix/store/v2s32a5zyxbq681gvdab224xmln4hzg4-nix-2.34.8/bin/nix-instantiate": "f6b457269b635c7744426ca5eb8f2b63f5de919012217bb593357fca0b1763c9",
+    "/nix/store/hd3akpv03rsvr62h5yk68xxq330mrlx8-libarchive-3.8.4-lib/lib/libarchive.so.13": "9adf6a856ac9b8e70c8170b22694c38229dae27b875a7fe6be536742c1378a27",
+    "/nix/store/xdxxfabbd8w0dadijsd8rkgvnhpn3rkf-zlib-1.3.1/lib/libz.so.1": "571e464d7a9f48f7da70eb0cfc54e0a8bb5412ed78409350de3e798f13e81864",
+    "/nix/store/ka7244lkykijn9k6p4c8a2acz8yz9pnd-brotli-1.1.0-lib/lib/libbrotlidec.so.1": "17606077182f08337299d5ede51f1aafd925456912a3108df962d9a7bab4a95c",
+    "/nix/store/y1pzkk1f1j93c8y3835zzcdyzk2w4w6x-libgit2-1.9.2-lib/lib/libgit2.so.1.9": "5bd97e06057e0f1b6a96ac3235724a91b2ca5ed9e2b2726c70ca95f6d0f8fb8e",
+    "/nix/store/6lyiyj6j012vphfg6x6xky561h975bkd-curl-8.18.0/lib/libcurl.so.4": "e1546015adfb040327066a9e040e0fd15c23fd5fdfec40b8a1b051f514fd2d01",
+    "/tmp/mnos-ingest/evidence/ingestion-scenarios.json": "e612071818c0a414c7a9c572fff3be088a2276206231d1bc5340ebca0a18423e",
+    "/tmp/mnos-ingest/mnos-nix-xp/docs/reports/evidence/git-ingestion/2026-10-06-wider-updates.json": "f6f559a5bb5d01f128c3355dcf5ca613554c14a45cf040e41aa6ccc75b800f4f",
+    "/tmp/mnos-ingest/mnos-nix-xp/docs/reports/evidence/git-ingestion/2026-10-06-object-reader-nar-batches.json": "2ec334177cf421be367547f5a1460c74c949f9c8fb52e3a11c520ff045011ece",
+    "/tmp/mnos-ingest/prepare_sustained_server_corpus_v1.py": "7ada6ef16fc04848b6537a4b8e3a39eb18535a76febbe1379eac765c42cec01e",
+    "/tmp/mnos-ingest/evidence/tcp-cancellation-reference.json": "fb53c9d206e24165343deaae035ebc3f1654c35d28bcd18717fff8f552ff1461",
+    "/tmp/mnos-ingest/evidence/git-queued-fixtures.json": "a9f9118a18671637b7df36e46b2fb3de8f10252cf88b09102ac0921b80136187",
+    "/nix/store/v2s32a5zyxbq681gvdab224xmln4hzg4-nix-2.34.8/bin/nix": "f6b457269b635c7744426ca5eb8f2b63f5de919012217bb593357fca0b1763c9",
+    "/nix/store/bqz9b72r66apn6lrn5qxpklscld1mdik-git-with-svn-2.54.0/bin/git": "73e19ca6dfc6b1e48a7b2cd032cad734bf0541790a1472dafc00fa3c7e59543b",
+    "/tmp/mnos-ingest/sustained-server-corpus-plan-v1.txt": "0631d80b9cbaf94163bac414041772e4adacc574fd28e68a0510c2f8c6a7020d",
+    "/tmp/mnos-ingest/mnos-nix-xp/docs/reports/probes/git-ingestion/pool_process.py": "5ec3921ba01d5fb5ab78503780634c917ee87f417a3f459d9fca14c08ec6c8b9",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/result.json": "ea43cbb4d52be73a0200ae4e2ef166f8f7b47af9996f91d183715538593f0812",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/fixtures.json": "d07144f1bb14302db19828267343cd974ab3c41304fca8b198cd11ef58794806",
+    "/tmp/mnos-ingest/prepare_sustained_server_read_fixtures_v2.py": "2eb4fbe64b656c2eb1ad4dfdf41e0498f9c51e824498cbc583abe344e76c8b63",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/selection.json": "5302f30b365d191d8ab352ed56016cc4a497a67b0d16c905182867c4827f6cd1",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-00-tree.gz": "db308d42d3f606d4f4efa69c504b28c1440bf53ebe66efb73f0291634269966b",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-01-tree.gz": "0a1eff0118bae2fa6d85b4a8f41aaf70fbe6ddad2055f6dc5d09ebd8f36bb120",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-02-tree.gz": "d8776eec1539d1992c9e134c0604d23664a387dc670f0ca739efefc292263b4f",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-03-tree.gz": "1370b536cc80357bd1442ddf39a3da10eaf9be03e2c71ddd0ae5d9d0542f0dbe",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-04-tree.gz": "9838e589dc48de58792314a92aec29d234d7eb74aba9b8984afa304584923aa6",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-05-tree.gz": "5a93fd1b1993aa2b9f612bfc1e42ec6e4e9d4b3278037564d84ab240ade472e9",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-06-tree.gz": "247dc742ec60eccd142e094c8d4af3a245301e0c89bccfb2d75123e9c78fb2f6",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-07-tree.gz": "6c1fd76ba60795b6c736deae4c78db58d6e5fcfce467638aa4148e6cc11cd7f2",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-08-tree.gz": "b9d21c8c931ab86010362b7257596969b23f5e9f383373c07e79793b14e36206",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-09-tree.gz": "d1b8ad06fbcd3610ee0416ae59920eb6d0860e5bfaf0c802fe9bf2d3b876d6c8",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-10-tree.gz": "ccc8026e42b2ebf9f8e134f7e11ded91a72c9d25b3b51df2b9dc71359bb227a3",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-11-tree.gz": "8479b0a577c73352e681de3dc7023355b4f6c684213ecabefa1fdefecc91463b",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-12-tree.gz": "e315a705c9f5675ee17002bfa13d615bcaf02120f001db66762f5ba732349ee6",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-13-tree.gz": "db08bfd9a1f5b097de8b4aaa09a120369a2e0319c86d1a902756b5355ff65bc0",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-14-tree.gz": "b854d261fd5bad56c752d4cc2e05b19a666e661a49bf4cae74a4c186fdb98574",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-15-tree.gz": "5838ce56b0c24d7f72b185319030dc05a0aed9d23a4f0d75283cacfcdab1fcbe",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-16-tree.gz": "35c48bc1307c06aaf232ad7b922250185a37851967fac6bee48f6be1ee4a7fcb",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-17-tree.gz": "426d1353b9f9b97033c73635c57e612165c17393bb8f753cd367a5f5e8b18353",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-18-tree.gz": "244bae430cb87984b4cfaead2339e5296587b4483cf8ea4fbcbb2ecbbdc18aa6",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-19-tree.gz": "97132fae8e5b7b793292e8c4e4372f60759b53f857fe09f7f13968d41deef945",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-20-tree.gz": "4e27d96d3d5a94ddc4aa77cd409e25cf18c8b18b5403b3f607f228174fc60516",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-21-tree.gz": "c1b664bc9bd90bfe06072521cab9188a0e8830738b1be2c011fc1961d390bc3c",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-22-tree.gz": "a912af058ab24efbb6c6d4a8c8a0616f1dcd03db8df8d9e7bf502509664f636c",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-23-tree.gz": "2e80ee3b4c92b6f40f564a70538a011dbe08ab29b985a4ba92f8fb289f6d4f00",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-24-tree.gz": "c0a46e2d3e4cf9d17e8445f1744776ea39cabd49227ea00fd99587b6ef0c3230",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-25-tree.gz": "c0fe9950473ca0fd21769ecf0c3f64833d7745ad9b94237df282f6c812c7e10c",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-26-tree.gz": "fa5801c2c7893fb3312851d2c4f8c597a56b88e293a80741c95316db9a27ec8c",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-27-tree.gz": "9ca3b2c07079791c421f79e005c4144af0801cec843f6f816cde99366b235758",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-28-tree.gz": "2f6aef64dbea8dbe13d6735a227ad5293e584935af181a731d32093f8c923e88",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-29-tree.gz": "1540f473d64de28c699ebae2ebed46db9f26d5a0bdb50039fc2dc4785dafbb91",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-30-tree.gz": "b8817fb528b4b8d82a3d13c21c8b460ec85c96e59bb17106b809f6d9249e42e1",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-31-tree.gz": "4af7d19e26345759d4ad8dac81c882fc61b73888ec2c25264de37cfcc5de7159",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-32-tree.gz": "ff1d12a8c02862e509ac0fe35d2971f32dde388b27fe10280289b5a3ee719f3f",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-33-tree.gz": "700b3ade598f203f69b6abeaf1c3599403ec75e5ffbb04cb0a6afe54efc33466",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-34-tree.gz": "2d6be2b620380763d2d61ba482cec77920bee76345c107e7f64275e57eba349a",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-35-tree.gz": "12f87d9c4de03a957e92cc0eda9ae46d52e2b7d3ce45397890f36bd3cd1ec082",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-36-tree.gz": "21f698f2871fdf7676ad82de188eed33d0c23dae4f299e6ee62488c6f2bb2b06",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-37-tree.gz": "8040b5c9e9ad670394149fbd1a852e6f3601aef4a56f3cb6ca635dc488ecc522",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-38-tree.gz": "6d60477b8aedf8950362e6be2eaed43a6c4507243788e5e9419e5e6799aa66de",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-39-tree.gz": "c64b3370aeeb8088f132fc3641d41bb4156db1803550c96779ac9e1c01114f2a",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-40-tree.gz": "8ea8ad6e0153c3dde7563228cf00c02b3495c5967b4a83664569e0c3a6072ea7",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-41-tree.gz": "bf65070d88fe7200e9d05d059c9d07962b8eb6c50e5b933483fb097633b68569",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-42-tree.gz": "f40727008a09ccc4ea98ee1706efbf43b6ebc563e6e66011ec3411d1f85618c0",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-43-tree.gz": "8f65e3fc76ec606af5ca867f5c54f4cbb022a323c3a01a4663fcf58d590f99e2",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-44-tree.gz": "6a2ec42cba110d654d1af86a115e30bc33f8e10381341efe8a6d647c02614cac",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-45-tree.gz": "a7c2ed8947244b88538d001d9eec4882f8bc8fb2d90c51c180f6404399289a8d",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-46-tree.gz": "b2abb94f2dfb5705d2fbd8eb681246a267d5de3a8950397d8cb25a8a7f245703",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-47-tree.gz": "b71b5a23f319b4f8c552a9a8ef7ba77e21bbb80fb6e14d419513ded00b9dc254",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-48-tree.gz": "724ff383c12c9d5f11506c5626ec0f0cc1191b9fe53bfb4e7670361f56a9b68f",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-49-tree.gz": "8d92b5c51ec8c67c6b312425072c9b01685cbacfd938c4a98a1300e056fcf16b",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-50-tree.gz": "eb565f36fae48bd87ea7ffd6ba6a87d38b24c6f155f917fad39b71a36c473859",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-51-tree.gz": "cb5fe0c1897ad92c01005b34b7d464161d6ff4ac1cd50fbb6f6436f4327ad503",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-52-tree.gz": "a0ee9a1b79a30e6510d01e4e8d17b11cea48f344094e5ff390eaa098f591a6ab",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-53-tree.gz": "a9379c54fc49c2f82273e10ef920245e49ded79819ef00dfd4db4928ef901fdb",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-54-tree.gz": "a5e7aec2fa8957508ea123dec130d705d679edb874bf751ce46c3b33693efe53",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-55-tree.gz": "7432da8ed2a221dff24b63e02d8531e4c8c2137cd40f33e045ae8ae99d800431",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-56-tree.gz": "b2c9e0bf07849cba44b3e2c2947960f7ef4e7c801931817e6cf2af5a7b461018",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-57-tree.gz": "e67cce1068e9505f1cfae5f60c62798b561dd2489d9595f31c8ba34297d2d4f8",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-58-tree.gz": "92ca2296c0ef0c8e5cbed66271986f47ea7e10eea8950078c1ed5edb0c4491d1",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-59-tree.gz": "af10691810524e2bca6b68203b635a8de93c14701fcfc74212309d042ed27041",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-60-tree.gz": "b911bd1cccca39bdacb6981553239e872960179d41b765d8910d6155c15bd615",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-61-tree.gz": "90001d17f2e32716ebcfffd5d2cb7df5f6e27283a4e15b62ccdcc247fa4a4224",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-62-tree.gz": "7f197f59e7aa286c735f61a61cbe5bedd94cd0e6ce4181d2057e3d5074ee1688",
+    "/tmp/mnos-ingest/evidence/sustained-server-corpus-v1/revision-63-tree.gz": "fa832e25936453b96bb582a57e64aa9c4b1780ea1c8173c04f42a258d9d55298",
+    "/tmp/mnos-ingest/evidence/sustained-server-read-fixtures-v2/result.json": "9d646fc9f734a25c21606ed7f6ebf4ef42ffc704d471b288a34566b55bbfb6e0",
+    "/tmp/mnos-ingest/evidence/sustained-server-read-fixtures-v2/fixtures.json": "f5fbba2261f736a2c96f3d1a4950c7bf527227852c4c07f88e90e44603876ede",
+    "/tmp/mnos-ingest/evidence/cms3/baseline-configuration.json": "6df74b34fbc5a06bdca417bbcf44a2ba4364c453cbe0e9612e99ecc691745ca8",
+    "/tmp/mnos-ingest/evidence/sustained-server-default-v2/mnos-eval": "2c4c62c83e633976d0b8a038003948b4f67ada77b49148705af603fc57f1f0ee",
+    "/tmp/mnos-ingest/evidence/sustained-server-default-v2/mnos-eval.build.json": "dc0c42655780e7a8d219e2f9c7de01812afd9bbd9b06530c30adf866e70588ca",
+    "/tmp/mnos-ingest/evidence/sustained-server-default-v2/result.json": "d570d7a78cb7e571453c01a33b38f877b12c2b005a4f0d4bf517709a706a23f2",
+    "/tmp/mnos-ingest/evidence/sustained-wal-observer-green-v1/wal-observer": "88cf6e7e44dc4bdaeff20589de44db1cf17970d1cfca563a6ae5d5c02f62aad5",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "e8fe90f3d30265f12ce270a009d9ceca245e03cec646972e58b77cb78dda4b8a",
+    "/tmp/mnos-ingest/evidence/cms3/00-r1-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "f8d4a7db823fd5670591c563a8eefdf4eacbb0b17c760b3638e35677bce4ccfe",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/result.json": "75143b5d7ee3cb48cc608ec29595ab68395e3a265f3ad1357f19c4a57d084d43",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark.json": "4d2d756b7cf9e6ed0fb60ae62c544323dbe567757753ba9bde394e81ff71c290",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/result.json": "cb1b9b43bc9ec7dd4fa1f69ecd300d983d4dc1015ad3b6e42c94a82008d37924",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "c2c4f50a7d53a24e75e7c972cdaf38d93d77e53973710c8e0dd4307361593f88",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "2b1ebc1885db0aabdc261a343ee4880f11ec6de0cf47f6167f7673f4faf380b5",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "b53e3c3c3c463e2934930ce8fa5fd6f3a6f26150f67f976ab4e85899e6d0f961",
+    "/tmp/mnos-ingest/evidence/cms3/candidate-configuration.json": "cb03de01f408a3091832aabef6fb69b61df2188255c91b096ac77e64a143d012",
+    "/tmp/mnos-ingest/evidence/collection-membership-server-candidate-build-v1/mnos-eval": "6126b1fc7b33560d09e1334bfba161e2c3d0e7418389f7953e61b3a2e914fdb2",
+    "/tmp/mnos-ingest/evidence/collection-membership-server-candidate-build-v1/mnos-eval.build.json": "5f6df931903c3baae4c000c13645523b0c19cc19b65efa9e50ce5567404912a4",
+    "/tmp/mnos-ingest/evidence/collection-membership-server-candidate-build-v1/result.json": "b6afb0192f66b427c91483c816440e92266750a3fcec531ddd2cae48217fc3ba",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "c2b5408e9600391f1bc8beeee3827a2b1dc97089aabedb29db5df17d42374b62",
+    "/tmp/mnos-ingest/evidence/cms3/01-r1-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "be72ea681e683d20ba3cc7db7c0730999bbf76593683de7c7c3c84f7e072ba74",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/result.json": "2ad8c5a3bea40ecabd393066ac9a237c93fe7df2ecab899bbff96255c7375478",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark.json": "42e2f2d9d4c043daaeea286c42cd14fb9ce31a9369fa4a88617626a0fe784ed7",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/result.json": "b8e2a4c59f55bd1befe9942c37bfe6dfbbf47f2c0a417f92b5635d96c1d82e15",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "d16d09823bc278aa79c2bb91826a42206f04874969eb05fb8e5f214c18f80b64",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "371b1d83f774dfff2d8aeb1936e42056ef92d2d670d6f54e2c8126ca548b008a",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "6886377397f37cab9db476b8aeb7c7dc61e03613905d052b7b86cdd3731bccb9",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "6dce46968cab9da12149743fb4fa04d2a6be22335c7be1bbc869edac908235f4",
+    "/tmp/mnos-ingest/evidence/cms3/02-r1-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "27a4959e7e0c5e7ada3874c513fe4d6cfae5c86746612d75be9a3ae47d37e139",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/result.json": "e64b805197bb16bb5802029235e2490f387c80597efe3da6490eb091b87a79de",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark.json": "0be34820df8bb89fea1a63b3586472a418de0d94370a5e1734b579e3230fcd87",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/result.json": "01a0e1faf3b76fe53202b348557c10277025d39c47bc1b5d189d0bdc3b3a4c93",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "27c84f04a457f2bad406c2d75f8d7603556f6041a61e03e84bf10e2d37a530b9",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "b6e474b7579a8b1e78a7ad55bf944d60b3239ee2357cceb5f55a3cd11d721c3b",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "82439f32f578a0825a04081d4879efe96be94ecda10d96685d66a747fd24c32d",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "87d7b9a6e699a07908cbc301c99428298351d606d0fbac0599163a435d4b7e56",
+    "/tmp/mnos-ingest/evidence/cms3/03-r1-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "b51c28be6a0e46b85e4fd8cd3400db0f10d480c6443d285d6292e20332803284",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/result.json": "e8b87ff140aa4a5c99baf346804833ec07114f17da2e1077811e00699b9ad6d8",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark.json": "e6153645c0fde8413cf14530bc496f141a43fa03a14710c0126a9afc40facb23",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/result.json": "1e2d91283f86b9c0167a6bcab2fd4d06957818b68c1873376d194114c4e329c8",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "79de7c3af4753257a9bb2cbba4bbd5e64fa1d357ece09c33b2d670e81b03cdb8",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "84e409058bb0a538fbe8d6cad35bcc1fab3602639d54a7bb432f8ce4ab12a4f1",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "f69024b91c292ba35f5e4d4a08bc0f8be51868ffd7dfde3e79d3e68201a2ab4b",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "a77933f1942d0a79528400810cc1c345c33d026d42d704c856c5571b72c72a43",
+    "/tmp/mnos-ingest/evidence/cms3/04-r2-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "fb237e60ed53e8d4c550694c725013ba7b4a3a075e9bad99ee24aaebafd82677",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/result.json": "16cfe302cccbd8d288b6c1babcfcb5e7d4d71da14f384dd57cd75b063dbb6213",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark.json": "d6cc4c51ee8c61df7d2a25db069f83ca63f8731bf8bcaf79a291641974e6fec4",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/result.json": "5a008ed2890c8d1990814b681c41962e5d28559d1e5cdc9929f8be00def5b0fb",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "d54d7177eed54bb0a31473d374af3a887a844b8e01007ac060b9a6ec0502b831",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "6ed9b3ed242d82aa7df85a688c3adf52694ba3c74a759a36fb72942246b8beb9",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "8d5e6aa7db27cc843e5f923f7b6dabaf19fcc3f72e6f2d37244d5ea547df47a1",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "15a63e7bb89aacb81d74ba6a2fa839f49a856124c36b08669f1897dee438ed4c",
+    "/tmp/mnos-ingest/evidence/cms3/05-r2-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "6064dffb5c7fe9551781af33bbff7c2f8e60fa10a08ca3bab9611f80e5020845",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/result.json": "5abbf1d4f58cf0903f4b860421cbebe51225f3c7fe4f52c945caa75a2f2f1bd5",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark.json": "040ad0e1b8d63b8802b4c1992da359e2c9cb74f09bec82103095f41521c0cf2f",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/result.json": "c295eb8510c7c8298d5c5943a4aa84e774b4da07bd4cc648d9f7ba4a3554e834",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "32182c70af8ecd6aa08cc6ad5ed82868a839717c833dad6501f2aaf194a3867e",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "5c2f0f1faf2395be6e121d0fe0ff4979d735180b0cff1d961fb2d5f1b76b1fc6",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "1cf0d0439d4661c01fa86b0829e5138884c5297f3c9269b66c78e2e362850920",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "f656e4c47c985c9427c36a741e5bb49e1887200c596f16a512d8fa1b1b2bd867",
+    "/tmp/mnos-ingest/evidence/cms3/06-r2-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "c2ee2cd1e9c28c8ba38be73a05bbac0c2a640e58538bd9219f7318c6c028b424",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/result.json": "788f406b2b265df8ca51a179912bc2141b8a98d48861736f421f5e56b7f41f2b",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark.json": "077a62ebe8d0e635fe30ed0f96a744a598460a4a63e611c1523192fe1321086a",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/result.json": "4deac4466123873bf76a5b40c106d48bbed4bd93b1dc844482f263c65d2f03fa",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "b90bad4d4ecf950c87d648fceeed311b2dbe8720296136e59ab517e4ef4c1211",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "e7b69d80fd83f0924f9741f88464bc38c01c76118b67c56585212d12e7299bc7",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "499a051be4296634d102b2ecbe2c4dc135f1a7b40380ac410ef66c1584f31dd6",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "5418f11d4a9a7ef26e64517fbbb06893fc0ee9d9edc3beabb26adf3a0bc8c95e",
+    "/tmp/mnos-ingest/evidence/cms3/07-r2-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "29a57bdb7eb8d2382f678443fe8bc949b05dbd02312adb7aca52b97eeecb9749",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/result.json": "7efc2e40c4569cc86d44c6e09638190b3ce57d0e9c3e71ef176d39e7730166b0",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark.json": "7f29dac766c29fac211fd06b0d089777d864829c94f61bad24f56640c367ac03",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/result.json": "d575c9705a0490ba71bcb0f2118029c0d0c7086df48838b3d43578e3c4fab0bf",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "148509bafd8ea3ecf1444ed0a2f3a7434daf320691e09d225aedf9b086fe3e93",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "d881ecea41d0b201b2248e090df0104f95d89643be7953f6c3c2a7a7186fae58",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "3e84444c6bf79f19b687740c33e9191a3d0c70d0058f5107971cdaf852e38862",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "28bdab64f4e1df8f615abed8b7211249207d559e71819504b4750a1849e9a464",
+    "/tmp/mnos-ingest/evidence/cms3/08-r3-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "060bf3776901a3ea09c0b65c0c2effdb563931b95091eca3c5b5bdba5e4e00c5",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/result.json": "8df72b8a61ddce49d77bb5ec163fc4a701f01b456a5f80092a1e2a6a3b6ba987",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark.json": "71556b07a2f1d24ef8ed4738b36e081b3304a878dde014e7b1e773d4c3d46774",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/result.json": "423daa3680fbec0d10bfeeddc8a4a449da424cf7cba4db2e13b791678ef4bd4d",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "75faa7078b047463d669c44a983e3710cb8559506561ca19b5ceb857607f10b6",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "f5e3b74e18a74e3767d0138216e43a5e668a8fdd563351dbc9d44cd63b9d4beb",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "69ddc416b060c1259179dfe06a2e7d0d5291928e2b4198d82ae9a028143cd98f",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "182944f56b3939820658bb9dfcf34ebe6adf6855f83b8af2080d5216a6364086",
+    "/tmp/mnos-ingest/evidence/cms3/09-r3-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "4ebf5d32cbd9c7650c43bdc0b616ef2c5b95023e59b07c7d3e58e5fdd2ce2971",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/result.json": "baa4627095f6d04669f88bd65f3b99191e95e8017e64d9b5f49a1375cce0b7f8",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark.json": "7139f96ad3f4bb896597d8b8e9f1b3f17119bd12563ce7df7086d1339cc2c6eb",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/result.json": "42fb104b07f90d9b842909a4beee8657baadb690c585bfe8822c977d9608c2b0",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "9b10a38a9338f610966483304fdca434602ff879f0535f677a3469fd2af5b36f",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "c2dc672b8569ad5f5ecbb456367836c6d114d9416b692e392ba9663ac5b40b68",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "ddcaa7da57824b054b2fe04dac7d96275cfd04184ac15c7d599168777206c5f8",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "3fc6677c98e51854adf7272de8d474e4f7c2f42ca08954f5745cfa910b1bac6a",
+    "/tmp/mnos-ingest/evidence/cms3/10-r3-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "551eeb76f5c05a338f2e9bdcfb611b89259e50b9703cf88ee60321d0b1073337",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/result.json": "18112b29fecc4a4ae225bd72299d69a72433bb6c7879d1fa6669f32c5a5cc110",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark.json": "a14af8961dfed5f30518e22b8983edb3a320a698d2e8298efb2d8b17ae04897e",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/result.json": "933a2f903b41be6212f2de69242539ce99d8f7c10918209bfcbf6c2786ecfcf9",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "1073a82748a426c64e8386c70eb98fc2e1cdce7e82e2cfb34c96c117c0b87bf2",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "f4fe7378040358b3b0e26aabaa4746036f0326fcd697a8552cbefd2028deb64f",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "b775f015b4986f252d438980e140e4744b9839bb497559c7597553485b01a33e",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "2551dcc908ccb1095342fb1088784337fab69e3d3d21e4ff9f9ad72d6548d65c",
+    "/tmp/mnos-ingest/evidence/cms3/11-r3-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "f5b6c130699c8a55b3d88ee62448b5b904e3fea7c437d49a7dc0f08b69a15962",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/result.json": "11b2060f6204fa46972b2ae3ae779e8006c931f8e9078e90a87d1c6ee139b19c",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark.json": "b70db73f641ea65ab39fd5fa5c536412094196e95e5ec150e03ac0afb2185692",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/result.json": "43c4b91c13a78c68b1fad4ed0fe5137e59794031f2bdf6a103377bb96ba80fd5",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "f323f77344471c8032ff0f3f5cff6d98f8def563f7422bcc894b1d2ff572ffad",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "b9d5bcfd262674f9ce51f15c3f3ecd65f12effcb431c622578bdfc9414ba52db",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "e9de971e1ecba26edcffe73c6d7311d10ec6c360c949c39ef3890f997676b563",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "41bf501203f1025022af7b700360eb1b49153cc982fe9e263ae45f5da3dc24ea",
+    "/tmp/mnos-ingest/evidence/cms3/12-r4-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "dac4f15991badc5c4378e80756e9fd07f4d5d68292ab16cb3dac75a429fc167b",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/result.json": "7378ef9f1ffe687fd3b8e7a4b34abe08615fa2972d5accff5aaaaeed876a2ba8",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark.json": "a4df1d34dbd735a30bd8d0fd629360ff0771a462b32ed5f287ee5e34f3cfef3a",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/result.json": "ea23ea84cfa927250938b16fef251233ad6c864a9df890b8fabf6d2b82c7c259",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "2d1d60362e1b9a61ddb8f7e1bc9517fe1d2ec02ced62989860f0a2d6971f122c",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "4ce6f94812169982cf9d4a73725764b2f31d7320d0e0836a704274371ab66f15",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "4873d009f2752fb5f5002fbbdf2c6d8e92c513c54b04f0f29355c3638f805393",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "fc7033421e87b7bc80a78ac970ed5b63f22269950ad8fe440459a6516f62bb71",
+    "/tmp/mnos-ingest/evidence/cms3/13-r4-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "7e6302c80d23d8eb7bc9f7ecea4516e5330d13978dba30dd8493ce92c43103e7",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/result.json": "53f29b722139fc0df201db50af64bf2c9cb92c7420c18cee1abfeddc55dbb093",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark.json": "dbe8377b4df52268685f7a530b6b89ee8a5f2abb5d0a9931df0d8e929f4e3093",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/result.json": "7fe94e8ae4cbb1fc2f2c6a6dbcb390279daabf7cf3754666181ab0079597d976",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "0bf8f112f324ffb446e7b5946ba7d53b1ad5845039ed8d1a40bea541894269ad",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "6bb6766d36e9e8e16c7209d2f0e3435961b9e94cf960096894c15ea41d5ae7b7",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "98bd31922a1e33bdb5c9962486d6a066539012762ff289a5f8d919f9d8384dc2",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "f6473c0d89c4ecebd7133cf7109c19e323248283c2fbd9c9120b8bca7245df48",
+    "/tmp/mnos-ingest/evidence/cms3/14-r4-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "8920a621c74ea7a5436dcf07245be63e3bebb8050515db7cbd2fd1d03bd4b748",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/result.json": "6d96b82eee7aadddcd9d228d48d480553f77b0f034d67acc421ff004111afe39",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark.json": "4fc9df35f6d643ff241251015a4cbf018f85753c3a959aaa3c37366efd734f42",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/result.json": "d659f9d6004fc624092fa80847df8fb81d9e7e1d48d0d304796e19a257d317a4",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "104e0135aee8ee38ce8ca2b3d923e02e0f22737a8677273e92e93c84ae3a9f03",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "862d7a5da7658cf909a0b8fd52941e282fbc62dddb7c003383ca908f70e10342",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "aa9c4474123d89f4364de26b7f4cac77a4cb9b91c56da36f4a842b6d5da41aad",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "508f180484da6c38a37d5a404b1e4e42ef74189c214527e629e89e0e2c381449",
+    "/tmp/mnos-ingest/evidence/cms3/15-r4-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "c599322c9238b46cf5cc3fda28ea28db65485a8aa80e52422bc0c63bdb844cce",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/result.json": "7277220f91041c56ecb5a867783f01012bc88faa060980435a3b33f66fd1157a",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark.json": "6e92be9373b2752a1a915c944772c569c4f45d1cd531e32368ac18297daca1bd",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/result.json": "3b9276b320f9576c0ac53c8a3bcb59e0fdca5a1b77857c083b203f642432f70a",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "09c265b9ed1327e56b37c247a5dead43ba1b8747022a0fcf88ae56c24a08c135",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "ead585ca4b03e0c3c650ec39f872ae9b52034eabd992a576edc61cd5516961c5",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "a3e8ae2d6bcc9e33a4034edc87f4c6102e82edf675ee432f5b09f3cc55dff4db",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "87ff7663d32cbcee8e25c196a702ff07a115bf76f92f4e9abcbc7894612773ee",
+    "/tmp/mnos-ingest/evidence/cms3/16-r5-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "9334ade022469cbfaa5067a96b2249b1aefb3f00bc0c913a86242c0d4247d6f6",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/result.json": "1b938c56151f1105e17fb9fa1a49492b5ca690a50a3b13fef7a63951d2fa4d71",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark.json": "c41631f9f5b3465e43d56a8586df05d6170d4dc1bb2ebd0aaf7ee6be47b89a4b",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/result.json": "d158582a872086e02d859346e8224bd0b05aea47a9480d3d2afd951539760d4d",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "4afdc569fb7a847005c58b4fca79dee7c8d951977baa62748861112e3fd6442c",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "4e3a422e3f2424d4ac53e0370b39dfc78f65bfbae4e8a4b476f7c7ff356d85fc",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "40e9c5a98b2908e21fa20d96d5128ab740d02f1827da1013d0e7ced801bf4064",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "47bd51eff9d7257a39fafa0837730aab390d433a1f41ac415c7a6e06d73b190f",
+    "/tmp/mnos-ingest/evidence/cms3/17-r5-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "93757071a92cef01d21313374dcb45c9b5da63c78ecafb7c8aa132874a873a30",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/result.json": "832c1c82fda8c2b5d66401330e1814fa8e0ccb3ef3b9ceb57e80ba0df238c454",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark.json": "c8263c01c770b1e68a798a3cc1364ccdc8c778b3cfb5bc042a202f6e0b539d4e",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/result.json": "10cbbcbeb921d4fccfd70766a00ea46e1e029b714da9ac29bc013565457ed524",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "0b6a52d877d3368494c724550fb9dbdb093b3a485ce2e2189b3ba83a25095a13",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "d08eebaca07fed5c829ccf5dc7b1a59f7afbb393439df57bd9ea73f571d0160b",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "534297ac7389097a021dea207adcecf775a130957b4affaaa511d1f4225238ed",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "076edd6b67b7e261dd0fd07bad509298bfc795b66e37b7bf8469cf6c1900003a",
+    "/tmp/mnos-ingest/evidence/cms3/18-r5-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "beef13d2c11fccb9372236c5599aea19966a31b2e4a1cfe5080137ab068dc9de",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/result.json": "6d2f8213d8892caae719ef97f75429ae8280160324d0cf7cea4a566a86f80d9f",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark.json": "3a2281894b03e850eca4da703fc9ba3219f918a66ad9cf0b310051f3f58100e1",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/result.json": "286b34b3e38453163ce0abb2f8590d16afaedc9e9937cb61f823b2ae275c8011",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "a61eb6d7fcfdfb8b39e6df1ede2155d3e4f15e6ee50b00e490f5a1c112cf0994",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "36c56742d17afeb62e2e830d3335f897b358514ccc3dca7e18e891f5456649d3",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "19ca53fcdabcbaa00259ccf7c00ca2775b7dfd507d95bf79fd866c34f822a2f5",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "00c1dec440a7f74271d924bd82707bd9b0af6ccd2923c48e791b9f986e784546",
+    "/tmp/mnos-ingest/evidence/cms3/19-r5-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "a4540c63e007623ebc4c50a0ba355399734b869b8483bcf54cbde75b3f770a2a",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/result.json": "b3201e940fad5417b98c94db862c20257563a0d29181d002fad619fc1cb941e3",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark.json": "32083ad439f5ab0cf1a7ac780636159631d9d2b9da5be38b00705f875e2891c5",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/result.json": "1abb53e478152f36a6e732e5eb4d14226875b29392f875b06f7eec584000c662",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/protocol.json": "75e8bf1f085fd6580c2cbd4b87947ea7004037d88103fcb2a8590ace590e9583",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/events.jsonl": "0ba128d3e8c4188476c661c43f81592506da434bedfc4208b61110f045171333",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/resources.jsonl": "cebce276b1dc2c931c63a4ab372416764a8b7d0e983c52a50e605f13192df78e",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/wire.jsonl": "ac3fc0a6b366d6a22bf3777188360c22e8b40e3df232b77e94cc2432d385d992",
+    "/tmp/mnos-ingest/evidence/cms3/20-r6-aged-candidate/benchmark-artifacts/00-aged/observer-first.jsonl": "11ec1a7a53a68df1e77e8ebf99deaebdd88b208cdab3b0a99d2619a204692f9c",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/result.json": "b60d8dfab4a9db6983d914a401e4f03e42063882d2204609184fe4656a1a43ee",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark.json": "48ee316cd3d6d581f4f1d46edf4fa025b38e80abcf8ef9471f6f15fc5627e529",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/result.json": "6976741163324d8c4a25afe920263a4022476e094ce1bfd05c5bb6e504246f99",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/protocol.json": "2297063d4638089967a3542ed0783277ef5edac3de92b350a3c09aed9bc1be33",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/events.jsonl": "8cdbcbcd5fbeee49047a73ae69856b4f3090b1a38f70afd2e3bf86c0253324e0",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/resources.jsonl": "2f8057f555e8a80dfe88f6a4ce0bc2ad3e515cd8b8929ca68ccaa42b4ff0a193",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/wire.jsonl": "b1d74194a4b593d2f3d5606b5b4a71c3f5dda6b1d231f09f3b25a790739999ca",
+    "/tmp/mnos-ingest/evidence/cms3/21-r6-aged-baseline/benchmark-artifacts/00-aged/observer-first.jsonl": "81e3266d32ecf2dc3c687580d8ccd8ab8596b7170fef0f925f414eac44fd6582",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/result.json": "fc92dc47d6d550826f41f75961826aecc3b3801dce5625160264bae64eca1b2c",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark.json": "743c06a2c93b5cc0f86e842a8412efa2c3f15bfea1062508c20a4ed84b3ce486",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/result.json": "ff8ac2c1f3194912fd738a72da3ef10a33c22f37d4823a75ef86d77d9cb01f7f",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/protocol.json": "e1161c86f7bb673ecd4001bf33d12be5611b3e66b69cdaf7a5e7411b2f763ef5",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/events.jsonl": "23709340ad8ebfb22d2d6f80356db86b76183b801dd6bf576603befc4a6dcc50",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/resources.jsonl": "4bd7f379efa6a822a87d55af7d39f431613a153aed87c77a109d201898730b41",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/wire.jsonl": "26077ee0820e6827a77344b2bd24d69e32ace95ff779d189687b9272dc9153fb",
+    "/tmp/mnos-ingest/evidence/cms3/22-r6-recent-candidate/benchmark-artifacts/00-recent/observer-first.jsonl": "20c1954bf81623e66b83d6c8a0a0ab80b07c8bbbe9a0a7e8462f08b1013e3411",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/result.json": "7acdfe5803ce1cd129556ebf9012a484d033f0c03263bfccb50e06d305408b94",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark.json": "68064144b8a2a722406aa704628fee9b0b96ec0dedf13d001a1a7956535c68e5",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/result.json": "c893d773be2173a1c7f648d671ec31624c6eb7ad4eecefb22297e39c7aafb092",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/protocol.json": "900ed5e2c914edd04108fa7a5a1db4923ab5cbb08e6c13c13a033d25cc6d8b9d",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/events.jsonl": "8d5c9c933e4cfc9f5f77df989dfc0b669e2e5744efd4ffb5906959e8ab9dd72a",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/resources.jsonl": "efc501d552456c8b7229269d90c29730aef006fb08bcb27299a64609d12a2d3c",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/server_ingest.py": "5ada7e7f5681d23dc0c12b7f497774b4e91e1ee76bf131e0268c9dd1954ad730",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_workload.py": "5f9eb9918db218543713faa8239e2215b95810a880a4e09bbbe81284156d14ea",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_runtime.py": "c8b9e5f4aa1cee51b978aa71001a2e344fc9bab2ab90e70c8b543888859a92cf",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_process.py": "5a371eac73bbbe23f30ade91621c22dfccfec2eb89e184bbfc5e1971f01c23b9",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/_server_ingest_protocol.py": "80e630750f11f697b2e7c75fa641476a781839cd45cf931c90b70298000d63e4",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/all.py": "462d321668ddd2711e59ea91469e1f3796d91328898d2fd5ccd9977d14fc67bc",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/cli.py": "35d09765255c9532b206f1c6b1360ea30ff6f7057b56a437288584f93109bb15",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/driver-sources/manifest.json": "eec40d1c36b21149363a4683432cd15a5f7eb3b0bda53bcf93858fac24a9f42b",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/wire.jsonl": "a3d1af4c9e1cdc116daeae96c4e1b4074deaaa260b810df89944e0bb732be7f4",
+    "/tmp/mnos-ingest/evidence/cms3/23-r6-recent-baseline/benchmark-artifacts/00-recent/observer-first.jsonl": "d72c82f9eb4eb3c497f857395bddf0c8945e165d01f12d4de395f51de380f347"
+  },
+  "limitations": [
+    "CPU uses server utime+stime over enclosing samples and excludes waited-child CPU; process I/O may include reaped children.",
+    "RSS is sampled owned-family sum; shared mappings may be counted more than once.",
+    "Physical WAL length is sampled by passive filesystem stat, not endpoint size or backlog frames.",
+    "No confidence interval claim; all six paired observations are retained.",
+    "Sampling gaps from confirmed exited/reused processes are retained per case; a final descendant I/O sample may be unavailable, and no metrics are fabricated."
+  ]
+}

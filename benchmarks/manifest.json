@@ -1601,6 +1601,17 @@
       ]
     },
     {
+      "id": "collection-inventory",
+      "suite_id": "collection-and-fsck",
+      "title": "Full collection planning across physical inventory and spill boundaries",
+      "kind": "module",
+      "target": "benchmarks.suites.collection_inventory",
+      "profiles": [
+        "smoke",
+        "standard"
+      ]
+    },
+    {
       "id": "collection-mark",
       "suite_id": "collection-and-fsck",
       "title": "Collection marks over shared graphs, deep chains, snapshot coverage and spill boundaries",
