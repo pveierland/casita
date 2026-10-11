@@ -261,6 +261,19 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   which needs that pool to store the archive; with one worker, a 32 MiB file
   never finished importing. Decoders now run on their own threads, at most 16
   per process; further imports wait for a decoder slot.
+- A standalone repository keeps a pack it flushed when it reloads the pack
+  catalog after another writer published, including when the reload overlaps
+  its own catalog publication. The reload could drop the pack from reads and
+  from the catalogs the writer published afterwards, and a publication it
+  overlapped could omit the other writer's packs.
+- A standalone catalog publication that rebases after contending with another
+  writer keeps entries held only in that writer's deferred catalog runs, and
+  one cancelled while loading those runs leaves its changes for the next flush
+  to publish.
+- Inventory repair of a standalone repository, which runs when a read finds a
+  catalogued pack deleted, keeps packs any writer flushed while it lists the
+  store, and its checkpoint keeps the packs it recovered when it overlaps a
+  publication, contends with another writer, or is cancelled.
 - Catalog synchronization preserves flushed and prepared payload changes across
   concurrent publication, retries, and cancellation. Readers capture a coherent
   catalog view and retry deferred-run loading when synchronization replaces it.
