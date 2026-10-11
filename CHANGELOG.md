@@ -164,6 +164,10 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   directory and blocks. A lookup's shard-cache hit checks the shard's magic and
   length against its reference; a full shard read verifies a cached shard again
   and fetches it anew if that fails.
+- Collection reads each object record once while marking named roots, even
+  when many roots or parents share the object.
+- Collection no longer reads the records of dependencies that a snapshot pin's
+  generation scan has already marked.
 - Bounded metadata reads during verification size their scratch buffer from
   the payload's length hint instead of always allocating 64 KiB.
 - A `GitClosureImport` run through `Repository::import` replaces its mutation
