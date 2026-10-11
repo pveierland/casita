@@ -261,6 +261,9 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
   which needs that pool to store the archive; with one worker, a 32 MiB file
   never finished importing. Decoders now run on their own threads, at most 16
   per process; further imports wait for a decoder slot.
+- Catalog synchronization preserves flushed and prepared payload changes across
+  concurrent publication, retries, and cancellation. Readers capture a coherent
+  catalog view and retry deferred-run loading when synchronization replaces it.
 - A chunked writer waiting on the shared chunk memory budget keeps its
   place in the queue while its own uploads complete.
 - A lone loose chunk whose blob identity is known at EOF is protected
