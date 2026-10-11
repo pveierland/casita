@@ -61,7 +61,7 @@ class RevisionArgumentTests(unittest.TestCase):
             {
                 "metadata-collection", "output-import", "filesystem-outputs", "filesystem-reuse",
                 "mutation-catalog", "mutation-rotation", "catalog-wal", "cleanup-batches", "catalog-marking", "held-catalog-gc",
-                "collection-mark",
+                "collection-mark", "collection-inventory",
                 "memory-snapshots",
                 "memory-publication",
                 "memory-index-lifecycle",
