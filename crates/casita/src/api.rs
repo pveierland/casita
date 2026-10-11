@@ -344,7 +344,8 @@ impl Error {
             | ErrorKind::DestinationConflict
             | ErrorKind::Cancelled
             | ErrorKind::Unsupported
-            | ErrorKind::Corrupt => RetryDisposition::Never,
+            | ErrorKind::Corrupt
+            | ErrorKind::RestartRequired => RetryDisposition::Never,
             ErrorKind::Busy | ErrorKind::StaleRevision => RetryDisposition::Retry,
             _ => RetryDisposition::Unknown,
         };
