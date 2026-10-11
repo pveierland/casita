@@ -104,6 +104,7 @@ SMOKE = {
     "metadata-scan": ["--profile", "smoke"],
     "metadata-collection": ["--profile", "smoke"],
     "collection-mark": ["--profile", "smoke"],
+    "collection-inventory": ["--profile", "smoke"],
     "held-catalog-gc": ["--profile", "smoke"],
     "catalog-marking": ["--profile", "smoke"],
     "cleanup-batches": ["--profile", "smoke"],

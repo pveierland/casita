@@ -81,6 +81,10 @@ pub use retention::{OwnedRetentionHold, RetentionHold};
 pub use root_policy::RootRetention;
 
 #[cfg(test)]
+mod collection_inventory_fault_tests;
+#[cfg(test)]
+mod collection_inventory_tests;
+#[cfg(test)]
 mod collection_mark_tests;
 mod collection_timing;
 #[cfg(test)]

@@ -173,6 +173,11 @@ and will use [Semantic Versioning](https://semver.org/) for tagged releases.
 - Verified reads of a blob without a manifest, such as one stored as a single
   chunk, take one manifest request instead of two: when the manifest read finds
   nothing, the reader no longer checks for it again before using the bare chunk.
+- Collection planning checks logical objects, payload manifests, stale
+  payloads and chunks against the live and pinned inventories in batches
+  of up to 256 instead of one lookup per item. A spilled inventory answers
+  each batch in bounded disk jobs rather than one job per lookup.
+  Collection results are unchanged.
 - Bounded metadata reads during verification size their scratch buffer from
   the payload's length hint instead of always allocating 64 KiB.
 - A `GitClosureImport` run through `Repository::import` replaces its mutation
