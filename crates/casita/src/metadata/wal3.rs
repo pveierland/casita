@@ -1311,28 +1311,38 @@ impl MetadataSnapshot for Wal3Snapshot {
         &self,
         keys: &[ObjectKey],
     ) -> Result<Vec<Option<ObjectRecord>>, MetadataError> {
-        let mut records = Vec::with_capacity(keys.len());
-        for key in keys {
-            records.push(self.object(key).await?);
+        // Before the first checkpoint all records are already in memory.
+        if self.state.base_objects.objects.is_empty() {
+            return Ok(keys
+                .iter()
+                .map(|key| self.state.objects.get(key).cloned())
+                .collect());
         }
-        Ok(records)
+        Ok(lookup_state_objects(&self.shards, &self.state, keys)
+            .await?
+            .into_iter()
+            .map(|found| found.map(|(record, _, _)| record))
+            .collect())
     }
 
     async fn validated_closures(&self, keys: &[ObjectKey]) -> Result<Vec<bool>, MetadataError> {
-        let mut validated = Vec::with_capacity(keys.len());
-        for key in keys {
+        let mut validated = vec![false; keys.len()];
+        let mut missing = Vec::new();
+        let mut indices = Vec::new();
+        for (index, key) in keys.iter().enumerate() {
             if self.state.validated.contains(key) {
-                validated.push(true);
-            } else if self.state.objects.contains_key(key) {
-                validated.push(false);
-            } else {
-                validated.push(
-                    self.shards
-                        .lookup(self.state.base_objects.as_ref(), key)
-                        .await?
-                        .is_some_and(|(_, validated, _)| validated),
-                );
+                validated[index] = true;
+            } else if !self.state.objects.contains_key(key) {
+                missing.push(key.clone());
+                indices.push(index);
             }
+        }
+        let records = self
+            .shards
+            .lookup_batch(&self.state.base_objects, &missing)
+            .await?;
+        for (index, record) in indices.into_iter().zip(records) {
+            validated[index] = record.is_some_and(|(_, validated, _)| validated);
         }
         Ok(validated)
     }
@@ -1963,10 +1973,37 @@ async fn apply_mutation(
         result.objects_removed =
             usize::try_from(previous.saturating_sub(retained.len() as u64)).unwrap_or(usize::MAX);
     } else {
+        let mut prefetched = if state.base_objects.objects.is_empty() {
+            None
+        } else {
+            let keys = mutation
+                .objects
+                .iter()
+                .map(|verified| verified.record().key().clone())
+                .collect::<Vec<_>>();
+            Some(
+                lookup_state_objects(shards, &state, &keys)
+                    .await?
+                    .into_iter(),
+            )
+        };
         for verified in mutation.objects {
             let record = verified.into_record();
-            match lookup_state_object(shards, &state, record.key()).await? {
-                Some((existing, _, _)) if existing == record => {}
+            let previous = if let Some(prefetched) = &mut prefetched {
+                let previous = prefetched.next().flatten();
+                // Earlier records in this mutation may have inserted this key.
+                state
+                    .objects
+                    .get(record.key())
+                    .cloned()
+                    .or_else(|| previous.map(|(record, _, _)| record))
+            } else {
+                lookup_state_object(shards, &state, record.key())
+                    .await?
+                    .map(|(record, _, _)| record)
+            };
+            match previous {
+                Some(existing) if existing == record => {}
                 Some(_) => return Err(MetadataError::ImmutableConflict(record.key().clone())),
                 None => {
                     if let Some(delta) = delta.as_deref_mut() {
@@ -2186,9 +2223,36 @@ async fn apply_delta(
         ));
     }
     let generation = next_generation(state.generation)?;
+    let mut prefetched = if state.base_objects.objects.is_empty() {
+        None
+    } else {
+        let keys = delta
+            .objects
+            .iter()
+            .map(|record| record.key().clone())
+            .collect::<Vec<_>>();
+        Some(
+            lookup_state_objects(shards, state, &keys)
+                .await?
+                .into_iter(),
+        )
+    };
     for record in &delta.objects {
-        match lookup_state_object(shards, state, record.key()).await? {
-            Some((existing, _, _)) if existing == *record => {}
+        let previous = if let Some(prefetched) = &mut prefetched {
+            let previous = prefetched.next().flatten();
+            // Preserve sequential immutable-conflict checks for duplicate keys.
+            state
+                .objects
+                .get(record.key())
+                .cloned()
+                .or_else(|| previous.map(|(record, _, _)| record))
+        } else {
+            lookup_state_object(shards, state, record.key())
+                .await?
+                .map(|(record, _, _)| record)
+        };
+        match previous {
+            Some(existing) if existing == *record => {}
             Some(_) => {
                 return Err(MetadataError::Corruption(format!(
                     "wal3 delta changes immutable object {}",
@@ -2273,6 +2337,36 @@ async fn lookup_state_object(
         let validated = validated || state.validated.contains(key);
         (record, validated, generation)
     }))
+}
+
+async fn lookup_state_objects(
+    shards: &ObjectShardStorage,
+    state: &StateData,
+    keys: &[ObjectKey],
+) -> Result<Vec<Option<(ObjectRecord, bool, u64)>>, MetadataError> {
+    let mut found = vec![None; keys.len()];
+    let mut missing = Vec::new();
+    let mut indices = Vec::new();
+    for (index, key) in keys.iter().enumerate() {
+        if let Some(record) = state.objects.get(key) {
+            found[index] = Some((
+                record.clone(),
+                state.validated.contains(key),
+                state.object_birth(key)?,
+            ));
+        } else {
+            missing.push(key.clone());
+            indices.push(index);
+        }
+    }
+    let records = shards.lookup_batch(&state.base_objects, &missing).await?;
+    for (index, record) in indices.into_iter().zip(records) {
+        found[index] = record.map(|(record, validated, generation)| {
+            let validated = validated || state.validated.contains(record.key());
+            (record, validated, generation)
+        });
+    }
+    Ok(found)
 }
 
 async fn lookup_state_root(
@@ -3471,6 +3565,88 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn batch_state_lookup_matches_point_lookup_with_overlay_and_births() {
+        let directory = tempfile::tempdir().unwrap();
+        let storage = Arc::new(chroma_storage::Storage::Local(
+            chroma_storage::local::LocalStorage::new(directory.path().to_str().unwrap()),
+        ));
+        let shards = ObjectShardStorage::new(storage, "batch-state".to_owned(), 0);
+        let entries = vec![(logical_record(1), false, 7), (logical_record(2), true, 9)];
+        let encoded = encode_object_shard(&entries).unwrap();
+        shards.put(&encoded).await.unwrap();
+        let mut state = StateData::empty().unwrap();
+        state.base_objects = Arc::new(StateShardMap {
+            objects: vec![encoded.reference],
+            object_count: 2,
+            validated_count: 1,
+            ..StateShardMap::default()
+        });
+        state.validated.insert(logical_record(1).key().clone());
+        // Shadow a shard record, and include an overlay-only key.
+        for index in [2, 3] {
+            let record = logical_record(index);
+            state.births.insert(record.key().clone(), 13);
+            state.objects.insert(record.key().clone(), record);
+        }
+        let keys = [3, 0, 2, 1, 1, 4].map(|index| logical_record(index).key().clone());
+        let batch = lookup_state_objects(&shards, &state, &keys).await.unwrap();
+        for (key, found) in keys.iter().zip(&batch) {
+            assert_eq!(
+                *found,
+                lookup_state_object(&shards, &state, key).await.unwrap()
+            );
+        }
+        assert_eq!(batch[2], Some((logical_record(2), false, 13)));
+        assert_eq!(batch[3], Some((logical_record(1), true, 7)));
+        assert_eq!(shards.stats().get_requests, 3); // One batch, two point reads.
+    }
+
+    #[tokio::test]
+    async fn delta_batch_preserves_duplicate_immutable_conflicts() {
+        let directory = tempfile::tempdir().unwrap();
+        let storage = Arc::new(chroma_storage::Storage::Local(
+            chroma_storage::local::LocalStorage::new(directory.path().to_str().unwrap()),
+        ));
+        let shards = ObjectShardStorage::new(storage, "duplicates".to_owned(), 0);
+        let record = logical_record(1);
+        let conflicting =
+            ObjectRecord::new(record.key().clone(), record.payload(), 99, Vec::new()).unwrap();
+        for checkpointed in [false, true] {
+            for second in [record.clone(), conflicting.clone()] {
+                let mut state = StateData::empty().unwrap();
+                if checkpointed {
+                    let encoded = encode_object_shard(&[
+                        (logical_record(0), false, 0),
+                        (logical_record(2), false, 0),
+                    ])
+                    .unwrap();
+                    shards.put(&encoded).await.unwrap();
+                    state.base_objects = Arc::new(StateShardMap {
+                        objects: vec![encoded.reference],
+                        object_count: 2,
+                        ..StateShardMap::default()
+                    });
+                }
+                let delta = StateDelta {
+                    expected: state.revision,
+                    revision: fresh_revision(Some(state.revision)).unwrap(),
+                    objects: vec![record.clone(), second.clone()],
+                    roots: Vec::new(),
+                    validated: Vec::new(),
+                    payload_catalog: None,
+                };
+                let result = apply_delta(&shards, &mut state, &delta).await;
+                if second == record {
+                    result.unwrap();
+                    assert_eq!(state.objects.len(), 1);
+                } else {
+                    assert!(matches!(result, Err(MetadataError::Corruption(_))));
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
     async fn delta_recovery_classifies_invalid_validation_as_corruption() {
         let mut state = StateData::empty().unwrap();
         let revision = fresh_revision(Some(state.revision)).unwrap();
@@ -3779,27 +3955,50 @@ mod tests {
 
     #[tokio::test]
     async fn duplicate_idempotent_objects_produce_a_canonical_reopenable_delta() {
-        let directory = tempfile::tempdir().unwrap();
-        let storage = Arc::new(chroma_storage::Storage::Local(
-            chroma_storage::local::LocalStorage::new(directory.path().to_str().unwrap()),
-        ));
-        let store = Wal3MetadataStore::open(storage.clone(), "casita/state", "first")
-            .await
-            .unwrap();
-        let object = verified_blob(b"idempotent delta object").await;
-        let key = object.record().key().clone();
-        let mut mutation = MetadataMutation::new();
-        mutation.add_object(object.clone()).add_object(object);
-        let revision = store.opened_snapshot().revision();
-        let committed = store.commit(&revision, mutation).await.unwrap();
-        drop(store);
+        for checkpointed in [false, true] {
+            let directory = tempfile::tempdir().unwrap();
+            let storage = Arc::new(chroma_storage::Storage::Local(
+                chroma_storage::local::LocalStorage::new(directory.path().to_str().unwrap()),
+            ));
+            let store = Wal3MetadataStore::open(storage.clone(), "casita/state", "first")
+                .await
+                .unwrap();
+            if checkpointed {
+                let mut seed = MetadataMutation::new();
+                seed.add_object(verified_blob(b"checkpoint seed").await);
+                let revision = store.opened_snapshot().revision();
+                store.commit(&revision, seed).await.unwrap();
+                for _ in 0..MAX_TAIL_DELTAS {
+                    let revision = store.snapshot().await.unwrap().revision();
+                    store
+                        .commit(&revision, MetadataMutation::new())
+                        .await
+                        .unwrap();
+                }
+                assert!(
+                    !store
+                        .snapshot()
+                        .await
+                        .unwrap()
+                        .retention_resources()
+                        .is_empty()
+                );
+            }
+            let object = verified_blob(b"idempotent delta object").await;
+            let key = object.record().key().clone();
+            let mut mutation = MetadataMutation::new();
+            mutation.add_object(object.clone()).add_object(object);
+            let revision = store.snapshot().await.unwrap().revision();
+            let committed = store.commit(&revision, mutation).await.unwrap();
+            drop(store);
 
-        let reopened = Wal3MetadataStore::open(storage, "casita/state", "second")
-            .await
-            .unwrap();
-        let snapshot = reopened.opened_snapshot();
-        assert_eq!(snapshot.revision(), committed.revision);
-        assert!(snapshot.object(&key).await.unwrap().is_some());
+            let reopened = Wal3MetadataStore::open(storage, "casita/state", "second")
+                .await
+                .unwrap();
+            let snapshot = reopened.opened_snapshot();
+            assert_eq!(snapshot.revision(), committed.revision);
+            assert!(snapshot.object(&key).await.unwrap().is_some());
+        }
     }
 
     #[tokio::test]

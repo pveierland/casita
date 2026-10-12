@@ -333,6 +333,8 @@ where
 
 #[cfg(test)]
 mod closure_benchmarks;
+#[cfg(all(test, feature = "s3"))]
+mod wal3_publication_benchmark;
 #[cfg(all(test, unix))]
 mod collection_benchmark;
 #[cfg(test)]

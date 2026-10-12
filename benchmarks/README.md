@@ -21,6 +21,16 @@ accept `--probe-binary`. Both runners retain raw timings and correctness gates.
 
 ## Raw blob closures
 
+`benchmark run wal3-publication-checkpoints --output /tmp/wal3-publication.json`
+measures full raw-blob publication before and after an actual object-shard
+checkpoint, with 511, 512 and 513 new objects per batch. Each case runs with a
+warm handle and a reopened handle, records shard/fragment/manifest work, and
+checks every resulting object plus fsck (only the expected unrooted-object
+findings are allowed). Payload staging is outside the timed
+region. WAL3 uses a local transport here; this isolates checkpoint CPU and I/O
+costs without claiming remote-network latency. The probe requires `s3` and is
+included in `benchmark all --suites wal3-publication-checkpoints`.
+
 `benchmark run raw-blob-closures --blobs 8192 --output /tmp/raw-blob-closures.json`
 publishes raw blobs in batches of 512, 1024 and 4096 to memory, local Turso and
 local-storage WAL3 repositories. Each batch is published as an import's

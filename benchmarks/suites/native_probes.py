@@ -18,6 +18,7 @@ PROBES = {
     "logical-state": "metadata::wal3_shard::tests::benchmark_logical_state_shards_scale",
     "wal3-commit-preparation": "metadata::wal3::commit_benchmarks::benchmark_commit_preparation",
     "raw-blob-closures": "repository::closure_benchmarks::benchmark_raw_blob_closures",
+    "wal3-publication-checkpoints": "repository::wal3_publication_benchmark::benchmark_wal3_publication_checkpoints",
     "concurrent-publication": "repository::closure_benchmarks::benchmark_concurrent_publication",
 }
 
@@ -75,6 +76,14 @@ def main(argv=None):
             if args.probe == "raw-blob-closures" and not any(key.startswith("wal3_") for key in metrics):
                 raise common.BenchmarkError("raw-blob-closures probe binary lacks the s3 feature: "
                                             "no WAL3 case ran")
+            if args.probe == "wal3-publication-checkpoints":
+                for batch in (511, 512, 513):
+                    for temperature in ("warm", "reopened"):
+                        prefix = f"wal3_b{batch}_{temperature}"
+                        if (metrics.get(prefix + "_validated") != 1 or
+                                any(prefix + "_" + phase + "_nanos" not in metrics
+                                    for phase in ("before", "after"))):
+                            raise common.BenchmarkError(f"missing checkpoint case: {prefix}")
             samples.append({"status": "ok", "implementation": "casita", "operation": args.probe,
                 "repetition": repetition, **timing, "metrics": metrics, "stdout": output})
     common.write_atomic(args.output, json.dumps({"schema_version": 1,

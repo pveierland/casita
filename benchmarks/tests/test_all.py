@@ -12,6 +12,15 @@ from benchmarks import all as runner
 from benchmarks import cli
 
 class AllSuiteTests(unittest.TestCase):
+    def test_wal3_checkpoint_probe_builds_and_receives_the_library_probe(self):
+        commands = runner.build_commands(["wal3-publication-checkpoints"], pathlib.Path("/build"))
+        self.assertEqual(len(commands), 1)
+        self.assertIn("--lib", commands[0])
+        arguments = runner.suite_arguments("wal3-publication-checkpoints", pathlib.Path("/binaries"), "smoke", 1)
+        self.assertIn("/binaries/casita-lib-test", arguments)
+        entry, = [entry for entry in cli.entrypoints() if entry["id"] == "wal3-publication-checkpoints"]
+        self.assertEqual(entry["default_arguments"], ["--probe", "wal3-publication-checkpoints"])
+
     def setUp(self):
         patcher = mock.patch.object(runner.build_manifest, 'write',
             side_effect=lambda root, executable, command, **kwargs: stamp(executable))
