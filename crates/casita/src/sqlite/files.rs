@@ -759,10 +759,13 @@ mod tests {
         drop(db);
         std::fs::remove_file(&path).unwrap();
         std::fs::write(&log, &frames).unwrap();
-        let orphan = std::fs::metadata(&log).unwrap().ino();
+        // Keep the old inode allocated so a newly created WAL cannot reuse it.
+        let orphan = std::fs::File::open(&log).unwrap();
+        let orphan_inode = orphan.metadata().unwrap().ino();
 
         let db = TursoDb::open(&path).unwrap();
-        assert_ne!(std::fs::metadata(&log).unwrap().ino(), orphan);
+        assert_eq!(orphan.metadata().unwrap().nlink(), 0);
+        assert_ne!(std::fs::metadata(&log).unwrap().ino(), orphan_inode);
         db.write(|_| Box::pin(async { Ok(()) })).await.unwrap();
     }
 
